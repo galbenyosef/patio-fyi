@@ -1,0 +1,3322 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import {
+  $ as e,
+  Dn as t,
+  En as n,
+  F as r,
+  G as i,
+  Gn as a,
+  Jn as o,
+  K as s,
+  Lt as c,
+  P as l,
+  Q as u,
+  R as d,
+  Rt as f,
+  Un as p,
+  Ut as m,
+  Wn as h,
+  _ as g,
+  an as _,
+  en as v,
+  gt as y,
+  lt as b,
+  mn as x,
+  rt as S,
+  tn as C,
+  v as ee,
+  wn as w,
+  zn as T,
+  zt as E,
+} from "./graphics-quality-BsjABS0s.js";
+import { nt as te } from "./cube-soldier-BRpW8Tqo.js";
+import { S as D, g as ne } from "./sim-D8F3HPJq.js";
+import { i as O, n as k, t as A } from "./knife-pose-sWCbR3uv.js";
+import { c as re, o as j, r as ie, s as M, t as ae } from "./defs-BsSJWPNa.js";
+import { c as N, d as P, u as oe } from "./attachments-DZaUzy_Q.js";
+import {
+  C as se,
+  D as ce,
+  L as le,
+  P as ue,
+  S as de,
+  V as fe,
+  b as pe,
+  f as me,
+  k as he,
+  m as ge,
+  w as _e,
+  x as ve,
+  z as ye,
+} from "./rifle-pose-CdM47EZt.js";
+import { t as be } from "./load-backoff-Cpa3_Evg.js";
+import "./gadget-defs-Ko74xZW2.js";
+import {
+  c as xe,
+  l as Se,
+  n as Ce,
+  o as we,
+  r as Te,
+  s as Ee,
+  t as De,
+} from "./sim-CbSN8jt0.js";
+import {
+  a as Oe,
+  n as ke,
+  o as Ae,
+  s as je,
+  t as F,
+} from "./javelin-BUaEG5R2.js";
+import { a as I, d as Me, t as Ne } from "./ammo-box-CWU_ijOn.js";
+import { n as Pe } from "./static-bake-DEfkgcUk.js";
+import { a as Fe, i as Ie, n as Le, r as Re } from "./beacon-itgUvZ40.js";
+import { t as ze } from "./melee-B7zsK4jg.js";
+import { n as Be, t as Ve } from "./pointer-lock-policy-DsB7e7Fn.js";
+import { i as He } from "./input-glyphs-CoM_yJmy.js";
+import { i as Ue, r as We, t as Ge } from "./grenade-view-BrGxzfLZ.js";
+import {
+  a as Ke,
+  d as qe,
+  i as Je,
+  p as Ye,
+  r as Xe,
+  s as Ze,
+  t as Qe,
+  u as $e,
+} from "./weapon-drops-DbIZUUXu.js";
+function L(e, t = 0.85, n = 0.05) {
+  return new m({ color: e, roughness: t, metalness: n, flatShading: !0 });
+}
+function R(e, t, n, r, i) {
+  let a = new f(t, n);
+  return (
+    a.position.set(...r),
+    (a.name = i || ``),
+    (a.castShadow = a.receiveShadow = !0),
+    e.add(a),
+    a
+  );
+}
+function et(e, t, n, r) {
+  let i = 0,
+    a = r,
+    o = 1,
+    s = 1;
+  for (let r = 0; r < 3; r++) {
+    let c = 1 / (t[r] || 1e-12),
+      l = (n[r] - e[r]) * c,
+      u = (n[r + 3] - e[r]) * c,
+      d = -Math.sign(t[r]);
+    if (l > u) {
+      let e = l;
+      ((l = u), (u = e), (d = -d));
+    }
+    if ((l > i && ((i = l), (o = r), (s = d)), (a = Math.min(a, u)), a < i))
+      return null;
+  }
+  let c = [e[0] + t[0] * i, e[1] + t[1] * i, e[2] + t[2] * i],
+    l = [0, 0, 0];
+  return ((l[o] = s), { point: c, normal: l, dist: i });
+}
+function tt(e) {
+  let r = document.createElement(`canvas`);
+  ((r.width = 512), (r.height = 128));
+  let i = r.getContext(`2d`);
+  ((i.fillStyle = `#101518`),
+    i.fillRect(0, 0, 512, 128),
+    (i.strokeStyle = `#d89528`),
+    (i.lineWidth = 6),
+    i.strokeRect(5, 5, 502, 118),
+    (i.fillStyle = `#f4efe3`),
+    (i.font = `700 54px Arial`),
+    (i.textAlign = `center`),
+    (i.textBaseline = `middle`),
+    i.fillText(e, 256, 66));
+  let a = new d(r);
+  a.colorSpace = x;
+  let o = new n(new t({ map: a, transparent: !0 }));
+  return (o.scale.set(5.2, 1.3, 1), (o.userData.texture = a), o);
+}
+function nt(e) {
+  let t = new b();
+  ((t.name = `weapons_firing_range`), e.scene.add(t));
+  let n = e.debugGround(720);
+  (n.material.color.set(7303257), (n.material.roughness = 1));
+  let i = e.scene.children.find((e) => e.isGridHelper);
+  i?.material && ((i.material.opacity = 0.22), (i.material.transparent = !0));
+  let a = L(8749429),
+    o = L(5067073),
+    c = L(3159608, 0.78, 0.18),
+    l = L(6445124),
+    d = L(4603699),
+    f = L(13206823, 0.6, 0.18),
+    p = L(9189676),
+    m = L(14209472),
+    h = e.scene.getObjectByName(`debugSun`),
+    g = e.scene.children.find((e) => e.isHemisphereLight),
+    _ = (t) => {
+      let r = (((+t || 0) % 24) + 24) % 24,
+        i = Math.max(0, Math.sin(((r - 5.5) / 14.5) * Math.PI)),
+        a = 1 - i,
+        s = Math.max(0, 1 - Math.abs(r - 12.5) / 7);
+      if (h) {
+        let e = (r / 24) * Math.PI * 2;
+        (h.position.set(Math.cos(e) * 90, 28 + i * 82, Math.sin(e) * 70),
+          h.color.set(i < 0.18 ? 8956372 : i < 0.45 ? 16757867 : 16773332),
+          (h.intensity = 0.68 + i * 1.95));
+      }
+      (g &&
+        ((g.intensity = 0.88 + i * 0.2),
+        g.color.set(i < 0.25 ? 9283535 : 11061480),
+        g.groundColor.set(i < 0.25 ? 5593957 : 5660227)),
+        f.emissive.setHex(i < 0.18 ? 4924676 : 0),
+        (f.emissiveIntensity = i < 0.18 ? 1.4 : 1),
+        n.material.emissive.setHex(i < 0.18 ? 1054754 : 0),
+        (n.material.emissiveIntensity = a * 0.7),
+        o.emissive.setHex(i < 0.18 ? 1054492 : 0),
+        (o.emissiveIntensity = a * 0.75),
+        l.emissive.setHex(i < 0.18 ? 1051913 : 0),
+        d.emissive.setHex(i < 0.18 ? 723982 : 0),
+        e.scene.background.set(
+          i < 0.12 ? 3359839 : s > 0.5 ? 9021892 : 10190456,
+        ));
+    },
+    v = e.events.on(`env:timeOfDay`, ({ tod: e }) => _(e));
+  (_(e.world.time.tod), R(t, new r(44, 0.06, 330), o, [0, 0.015, -158]));
+  for (let e of [-13, -6.5, 0, 6.5, 13])
+    R(t, new r(0.07, 0.018, 324), d, [e, 0.058, -158]);
+  for (let e of [-21.5, 21.5])
+    R(t, new r(0.16, 0.04, 326), f, [e, 0.065, -158]);
+  for (let e = -15, n = 0; e >= -321; e -= 21, n++)
+    for (let r of [-1, 1]) {
+      let i = 1.25 + ((n * 7 + (r > 0 ? 3 : 0)) % 5) * 0.15,
+        a = R(t, new u(2.8 + (n % 3) * 0.35, 0), n % 2 ? l : d, [
+          r * (24.2 + Math.sin(n * 2.17 + r) * 1.4),
+          i * 0.35,
+          e + Math.sin(n * 1.31) * 2.1,
+        ]);
+      (a.scale.set(1.35 + (n % 4) * 0.16, i / 2.8, 1.15 + ((n + 2) % 3) * 0.18),
+        (a.rotation.y = (n * 0.73 + r) * 0.28));
+    }
+  R(t, new r(44, 0.2, 7), a, [0, 0.09, 3]);
+  for (let e = -20; e <= 20; e += 4) {
+    R(t, new r(0.09, 0.025, 6), e % 8 ? m : f, [e, 0.205, 3]);
+    let n = tt(String(Math.round((e + 20) / 4 + 1)).padStart(2, `0`));
+    (n.position.set(e + 1.9, 0.25, 0.55),
+      n.scale.set(0.48, 0.12, 1),
+      (n.material.depthTest = !1),
+      t.add(n));
+  }
+  for (let e = -20; e >= -320; e -= 20) {
+    let n = R(t, new r(40, 0.025, e % 100 ? 0.055 : 0.13), e % 100 ? a : f, [
+      0,
+      0.065,
+      e,
+    ]);
+    n.receiveShadow = !1;
+  }
+  for (let e of [-9, 9]) R(t, new r(0.22, 3.5, 0.22), c, [e, 1.75, 5]);
+  let y = R(t, new r(19, 0.22, 5.2), c, [0, 3.45, 4.6]);
+  y.rotation.x = -0.045;
+  let x = R(t, new r(19.2, 0.42, 0.16), f, [0, 3.25, 2.05]);
+  x.castShadow = !1;
+  for (let e of [-18, 0, 18]) {
+    let n = R(t, new r(19, 8.5, 1.3), d, [e, 3.5, -326]);
+    n.rotation.z = e / 620;
+  }
+  R(t, new u(14, 0), l, [0, 1.5, -339]).scale.set(3.7, 0.52, 0.82);
+  for (let e of [-34, 34]) {
+    let n = R(t, new r(2.4, 7.5, 2.4), c, [e, 3.75, -320]);
+    (R(t, new r(4.6, 0.28, 4.6), f, [e, 7.55, -320]),
+      (n.rotation.y = 0.12 * Math.sign(e)));
+  }
+  let S = [],
+    C = [5, 25, 50, 100, 200, 300];
+  for (let n = 0; n < C.length; n++) {
+    let i = C[n],
+      a = [-5.8, 0, -4, 6, -5, 3][n],
+      o = 1.55,
+      l = R(t, new r(0.12, 1.45, 0.12), c, [a, 0.72, -i]),
+      u = (n > 3 ? f : m).clone(),
+      d = R(t, new s(0.52, 0.72, 1.55, 10), u, [a, o, -i]);
+    d.rotation.x = Math.PI / 2;
+    let h = R(t, new w(0.29, 8, 6), p, [a, 2.5, -i]),
+      g = tt(`${i} M`);
+    (g.position.set(a, 3.42, -i),
+      g.scale.multiplyScalar(i === 5 ? 0.22 : i === 25 ? 0.62 : 0.92),
+      t.add(g));
+    let _ = e.world.spawn(`prop`, {
+        pos: [a, o, -i],
+        hp: i >= 200 ? 180 : 100,
+        maxHp: i >= 200 ? 180 : 100,
+        ext: { target: !0, distance: i },
+      }),
+      v = `weapon-target-${_.id}`,
+      y = {
+        id: v,
+        entity: _,
+        x: a,
+        z: -i,
+        plate: d,
+        head: h,
+        stand: l,
+        phase: n * 1.7,
+        moving: n === 2 || n === 4,
+        down: 0,
+        flash: 0,
+      },
+      b = {
+        id: v,
+        mask: `target`,
+        get aabb() {
+          let e = y.plate.position.x;
+          return [e - 0.75, 0.05, y.z - 0.28, e + 0.75, 2.84, y.z + 0.28];
+        },
+        raycast(e, t, n) {
+          let r = et(e, t, this.aabb, n);
+          return r
+            ? ((r.entityId = _.id),
+              (r.targetId = _.id),
+              (r.surface = `metal`),
+              (r.part =
+                r.point[1] > 2.14
+                  ? `head`
+                  : r.point[1] < 0.75
+                    ? `limb`
+                    : `torso`),
+              r)
+            : null;
+        },
+      };
+    (e.world.map.addCollider(b), S.push(y));
+  }
+  for (let e of [-25, -50, -100, -200, -300])
+    for (let n of [-18, 18]) R(t, new r(0.18, 1.7, 0.18), c, [n, 0.85, e]);
+  return (
+    e.setCameraFocus([0, 1.5, -35]),
+    {
+      targets: S,
+      update(e, t) {
+        for (let n of S) {
+          if (n.moving && n.down <= 0) {
+            let e = n.x + Math.sin(t * (n.z < -100 ? 0.45 : 0.8) + n.phase) * 4;
+            ((n.plate.position.x = e),
+              (n.head.position.x = e),
+              (n.stand.position.x = e),
+              (n.entity.pos[0] = e));
+          }
+          ((n.flash = Math.max(0, n.flash - e * 5)),
+            n.plate.material.emissive.setHex(n.flash > 0 ? 5319176 : 0),
+            n.down > 0 &&
+              ((n.down -= e),
+              (n.plate.rotation.z +=
+                (Math.PI / 2 - n.plate.rotation.z) * Math.min(1, e * 10)),
+              (n.head.visible = n.down < 0.15),
+              n.down <= 0 &&
+                ((n.entity.hp = n.entity.maxHp),
+                (n.plate.rotation.z = 0),
+                (n.head.visible = !0))));
+        }
+      },
+      hit(e, t) {
+        let n = S.find((t) => t.entity.id === e);
+        if (!n || n.down > 0) return { kill: !1 };
+        ((n.entity.hp -= t), (n.flash = 1));
+        let r = n.entity.hp <= 0;
+        return (r && (n.down = 2.4), { kill: r, hp: Math.max(0, n.entity.hp) });
+      },
+      dispose() {
+        v?.();
+        for (let t of S)
+          (e.world.map.removeCollider(t.id), e.world.despawn(t.entity.id));
+        (e.scene.remove(t),
+          t.traverse((e) => {
+            (e.geometry?.dispose?.(),
+              e.material &&
+                (e.material.map?.dispose?.(), e.material.dispose?.()),
+              e.userData.texture?.dispose?.());
+          }));
+      },
+    }
+  );
+}
+var z = (e) => ((e = Math.max(0, Math.min(1, e))), e * e * (3 - 2 * e)),
+  rt = [
+    [0, 0.3, -0.6, -0.32],
+    [0.07, 0.2, -0.22, -0.38],
+    [0.13, 0.22, -0.11, -0.32],
+    [A, 0.08, -0.07, -0.47],
+    [0.27, 0.07, -0.08, -0.5],
+    [0.4, 0.2, -0.24, -0.38],
+    [0.54, 0.3, -0.62, -0.3],
+    [k, 0.3, -0.7, -0.3],
+  ],
+  it = [
+    [0, -0.32, -0.62, -0.3],
+    [0.1, -0.16, -0.18, -0.5],
+    [A, -0.12, -0.12, -0.52],
+    [0.3, -0.13, -0.15, -0.48],
+    [0.46, -0.32, -0.62, -0.3],
+    [k, -0.32, -0.7, -0.3],
+  ],
+  at = [
+    [0, 1.05, 0.9, -0.25],
+    [0.07, 1, 0.6, -0.2],
+    [0.13, 0.95, 0.42, -0.15],
+    [A, 0.62, 0.1, -0.1],
+    [0.27, 0.6, 0.06, -0.1],
+    [0.4, 0.7, -0.25, -0.3],
+    [k, 0.8, -0.4, -0.4],
+  ];
+function ot(e, t) {
+  (O(rt, e, t.r),
+    O(it, e, t.l),
+    O(at, e, t.b),
+    t.right.fromArray(t.r),
+    t.left.fromArray(t.l),
+    (t.lower = z(e / 0.07) * (1 - z((e - 0.38) / (k - 0.38)))));
+  let n = Math.sin(Math.PI * z((e - 0.08) / 0.3));
+  return (
+    (t.pitch = -0.022 * n),
+    (t.roll = 0.018 * n - 0.01 * Math.sin(Math.PI * z(e / 0.14))),
+    (t.push = 0.06 * n),
+    t
+  );
+}
+var B = pe.upper,
+  V = ve;
+function st(e) {
+  let t = new b();
+  ((t.name = `knife_hands`), (t.visible = !1), e.add(t));
+  let n = de(),
+    r = n.material(),
+    i = n.fist().translate(0, 0.036, 0);
+  function a(e) {
+    let n = se(t, e > 0 ? `right` : `left`),
+      a = new b(),
+      o = new f(i, r);
+    return (
+      a.add(o),
+      t.add(a),
+      {
+        side: e,
+        sleeve: n,
+        hand: a,
+        shoulder: new T(0.27 * e, -0.4, 0.05),
+        pole: new T(e * 0.9, -1, 0.25).normalize(),
+        back: new T(e * 0.55, 0.35, 0.75).normalize(),
+      }
+    );
+  }
+  let o = a(1),
+    s = a(-1),
+    l = te();
+  ((l.rotation.order = `YXZ`),
+    t.add(l),
+    t.traverse((e) => {
+      e.isMesh &&
+        ((e.frustumCulled = !1), (e.renderOrder = 20), (e.castShadow = !1));
+    }));
+  let u = new T(),
+    d = new T(),
+    p = new T(),
+    m = new T(),
+    h = new T(),
+    g = new T(),
+    _ = new c(),
+    v = new T();
+  function y(e, t) {
+    u.subVectors(t, e.shoulder);
+    let n = Math.min(
+      B + V - 0.002,
+      Math.max(Math.abs(B - V) + 0.01, u.length()),
+    );
+    u.normalize();
+    let r = (B * B - V * V + n * n) / (2 * n),
+      i = Math.sqrt(Math.max(0, B * B - r * r));
+    (d.copy(e.pole).addScaledVector(u, -e.pole.dot(u)).normalize(),
+      p.copy(e.shoulder).addScaledVector(u, r).addScaledVector(d, i));
+    let a = g.copy(e.shoulder).addScaledVector(u, n);
+    e.sleeve.pose(e.shoulder, p, a);
+    let o = u.subVectors(a, p).normalize();
+    (h.copy(e.back).addScaledVector(o, -e.back.dot(o)).normalize(),
+      m.crossVectors(o, h),
+      _.makeBasis(m, o, h),
+      e.hand.quaternion.setFromRotationMatrix(_),
+      e.hand.position.copy(a));
+  }
+  let x = {
+    r: [0, 0, 0],
+    l: [0, 0, 0],
+    b: [0, 0, 0],
+    right: new T(),
+    left: new T(),
+    lower: 0,
+    pitch: 0,
+    roll: 0,
+    push: 0,
+  };
+  return {
+    root: t,
+    knife: l,
+    pose: x,
+    update(e, n = !0) {
+      return (
+        (t.visible = n && e >= 0 && e < 0.62),
+        t.visible
+          ? (ot(e, x),
+            y(o, x.right),
+            y(s, x.left),
+            v
+              .set(0, 0.036, -0.004)
+              .applyQuaternion(o.hand.quaternion)
+              .add(o.hand.position),
+            l.position.copy(v),
+            l.rotation.set(x.b[1], x.b[0], x.b[2]),
+            t.updateMatrixWorld(!0),
+            x)
+          : null
+      );
+    },
+    dispose() {
+      (e.remove(t),
+        i.dispose(),
+        r.dispose(),
+        o.sleeve.dispose(),
+        s.sleeve.dispose());
+    },
+  };
+}
+function ct(e) {
+  let t = st(e.camera),
+    n = () => e.modules.get(`player`)?.getLocalEntity?.(),
+    r = () => e.world.time.tick,
+    i = -1,
+    a = !1,
+    o = -1 / 0,
+    s = null,
+    c = (e) => {
+      ((i = 0), (o = e));
+    },
+    l = e.events.on(`melee:swing`, (e) => {
+      let t = n();
+      t && e?.entityId === t.id && !(r() - o < ze.ticks) && c(e.tick ?? r());
+    });
+  return {
+    input(e, t, n) {
+      let i = !!(e & p.MELEE),
+        s = a;
+      ((a = i),
+        i && !s && !n && t && (r() < o + ze.ticks + ze.recover || c(r())));
+    },
+    busy: () => i >= 0,
+    lower: () => s?.lower ?? 0,
+    cancel() {
+      ((i = -1), (s = t.update(-1)));
+    },
+    present(e, n) {
+      return (
+        i >= 0 && ((i += e), i >= 0.62 && (i = -1)),
+        (s = t.update(i, n)),
+        s
+      );
+    },
+    dispose() {
+      (l?.(), t.dispose());
+    },
+  };
+}
+var lt = 4;
+function ut(e) {
+  let t = 0,
+    n = Array.from({ length: lt }, (t, n) => {
+      let r = new C(16761466, 0, 60, 1.6);
+      return (
+        (r.name = `rocket:ignition-light${n}`),
+        r.position.set(0, -1e3, 0),
+        e.add(r),
+        { light: r, intensity: 0, owner: null, stamp: 0 }
+      );
+    });
+  return {
+    tick(e) {
+      for (let t of n)
+        t.intensity &&
+          ((t.intensity = Math.max(0, t.intensity - e * 90)),
+          (t.light.intensity = t.intensity),
+          t.intensity || ((t.owner = null), t.light.position.set(0, -1e3, 0)));
+    },
+    ignite(e, r, i) {
+      let a = n.find((e) => !e.intensity);
+      a ||= n.reduce((e, t) =>
+        t.intensity < e.intensity ||
+        (t.intensity === e.intensity && t.stamp < e.stamp)
+          ? t
+          : e,
+      );
+      let o = Math.hypot(r[0], r[1], r[2]) || 1;
+      return (
+        (a.intensity = 28),
+        (a.owner = i),
+        (a.stamp = ++t),
+        (a.light.intensity = a.intensity),
+        a.light.position.set(
+          e[0] - (r[0] / o) * 0.75,
+          e[1] - (r[1] / o) * 0.75,
+          e[2] - (r[2] / o) * 0.75,
+        ),
+        a
+      );
+    },
+    follow(e, t, n, r) {
+      if (!e?.intensity || e.owner !== r) return;
+      let i = Math.hypot(n[0], n[1], n[2]) || 1;
+      e.light.position.set(
+        t[0] - (n[0] / i) * 0.75,
+        t[1] - (n[1] / i) * 0.75,
+        t[2] - (n[2] / i) * 0.75,
+      );
+    },
+    release(e, t) {
+      e &&
+        e.owner === t &&
+        ((e.intensity = 0),
+        (e.owner = null),
+        (e.light.intensity = 0),
+        e.light.position.set(0, -1e3, 0));
+    },
+    dispose() {
+      for (let t of n) e.remove(t.light);
+    },
+  };
+}
+function dt(e) {
+  let t = new Map(),
+    n = ut(e.scene),
+    a = (() => {
+      let e = new s(0.042, 0.042, 0.36, 12);
+      e.rotateX(Math.PI / 2);
+      let t = new i(0.042, 0.18, 12);
+      (t.rotateX(-Math.PI / 2), t.translate(0, 0, -0.27));
+      let n = [
+          e,
+          t,
+          ...[0, 1, 2, 3].map((e) => {
+            let t = new r(0.006, 0.055, 0.08);
+            return (
+              t.translate(0, 0.062, 0.15),
+              t.rotateZ((e * Math.PI) / 2 + Math.PI / 4),
+              t
+            );
+          }),
+        ].map((e) => {
+          let t = e.index ? e.toNonIndexed() : e;
+          return (t !== e && e.dispose(), t.deleteAttribute(`uv`), t);
+        }),
+        a = ee(n);
+      return (n.forEach((e) => e.dispose()), a);
+    })(),
+    o = new m({ color: 6054214, roughness: 0.55, metalness: 0.2 }),
+    c = new i(0.07, 0.7, 8, 1, !0);
+  (c.rotateX(Math.PI / 2), c.translate(0, 0, 0.35));
+  let l = new E({
+      color: 16752704,
+      transparent: !0,
+      opacity: 0.65,
+      blending: 2,
+      depthWrite: !1,
+      side: 2,
+      toneMapped: !1,
+    }),
+    u = new w(0.06, 8, 6),
+    d = new E({ color: 16773570, toneMapped: !1 }),
+    p = 0,
+    h = () => e.modules.get(`player`)?.getLocalEntity?.()?.id,
+    g = (t) => {
+      let n = e.modules.get(`player`)?.getLocalEntity?.();
+      if (!n || !t?.pos || t.kind !== `rocket`) return;
+      let r = Math.hypot(
+        n.pos[0] - t.pos[0],
+        n.pos[1] - t.pos[1],
+        n.pos[2] - t.pos[2],
+      );
+      r < 30 &&
+        (p = Math.max(p, Math.min(1.2, (t.scale ?? 1) * 0.9 * (1 - r / 30))));
+    },
+    _ = new w(0.22, 6, 5),
+    v = new E({ color: 16773560, toneMapped: !1 }),
+    y = [],
+    b = [
+      e.events.on(`explosion`, g),
+      e.events.on(`javelin:flares`, (t) => {
+        if (Array.isArray(t?.pos)) {
+          e.modules
+            .get(`audio`)
+            ?.play(`rocket_launch`, { pos: t.pos, volume: 0.45, pitch: 2.1 });
+          for (let n = 0; n < 8; n++) {
+            let r = (n - 3.5) * 0.42,
+              i = [Math.cos(r) * 9, -4 - (n % 3) * 2, Math.sin(r) * 9],
+              a = new f(_, v);
+            (a.position.fromArray(t.pos),
+              e.scene.add(a),
+              y.push({
+                mesh: a,
+                vel: [
+                  (t.vel?.[0] ?? 0) * 0.4 + i[0],
+                  i[1],
+                  (t.vel?.[2] ?? 0) * 0.4 + i[2],
+                ],
+                life: 2.6,
+                smoke: 0,
+              }));
+          }
+        }
+      }),
+      e.events.on(`rocket:launch`, (t) => {
+        (t.entityId != null &&
+          t.entityId === h() &&
+          (p = Math.max(p, t.weaponId === 10 ? 0.45 : 0.6)),
+          t.weaponId === 10 &&
+            e.modules
+              .get(`audio`)
+              ?.play(`tank_cannon`, { pos: t.pos, volume: 0.5, pitch: 1.7 }),
+          e.modules
+            .get(`audio`)
+            ?.play(t.weaponId === 8 ? `kite_launch` : `rocket_launch`, {
+              pos: t.pos,
+              volume: t.weaponId === 10 ? 0.5 : 0.85,
+              pitch: t.weaponId === 9 ? 0.78 : t.weaponId === 10 ? 1.5 : 1,
+            }));
+      }),
+      e.events.on(`rocket:dud`, (t) => {
+        let n = e.modules.get(`player`)?.getLocalEntity?.();
+        n &&
+          Math.hypot(...n.pos.map((e, n) => e - t.pos[n])) < 10 &&
+          e.events.emit(`ui:message`, {
+            kind: `warning`,
+            text: `ROCKET UNARMED · ${t.armingDistance ?? 5} M MINIMUM`,
+            ttl: 2,
+          });
+      }),
+    ];
+  return {
+    update(r = 1 / 60) {
+      (n.tick(r),
+        p > 0.01
+          ? (e.modules.get(`player`)?.shakeView?.(p),
+            (p = Math.max(0, p - r * 2.4)))
+          : (p = 0));
+      for (let t = y.length - 1; t >= 0; t--) {
+        let n = y[t];
+        ((n.life -= r), (n.vel[1] -= 7 * r));
+        for (let e = 0; e < 3; e++) n.vel[e] *= 1 - 1.2 * r;
+        ((n.mesh.position.x += n.vel[0] * r),
+          (n.mesh.position.y += n.vel[1] * r),
+          (n.mesh.position.z += n.vel[2] * r),
+          n.mesh.scale.setScalar(
+            Math.max(0.05, Math.min(1, n.life)) *
+              (1 + 0.35 * Math.sin(n.life * 40)),
+          ),
+          (n.smoke -= r) <= 0 &&
+            ((n.smoke = 0.07),
+            e.modules
+              .get(`effects`)
+              ?.spawn?.(`smoke`, n.mesh.position.toArray(), [0, 1, 0], {
+                count: 1,
+                scale: 0.7,
+              })),
+          n.life <= 0 && (e.scene.remove(n.mesh), y.splice(t, 1)));
+      }
+      let i = new Set();
+      for (let r of e.world.sorted()) {
+        if (r.type !== `projectile` || ![8, 9, 10].includes(r.weapon)) continue;
+        i.add(r.id);
+        let s = t.get(r.id);
+        if (!s) {
+          s = new f(a, o);
+          let n = new f(c, l);
+          ((n.position.z = 0.18),
+            n.add(new f(u, d)),
+            s.add(n),
+            e.scene.add(s),
+            t.set(r.id, s));
+        }
+        if (
+          (s.position.fromArray(r.pos),
+          s.scale.setScalar(r.weapon === 9 ? 1.35 : r.weapon === 10 ? 1.25 : 1),
+          r.weapon === 10)
+        ) {
+          let t = Math.hypot(r.vel[0], r.vel[1], r.vel[2]) > 30,
+            i = s.children[0];
+          ((i.visible = t),
+            n.follow(s.userData.ignitionLight, r.pos, r.vel, r.id),
+            t &&
+              i.scale.set(
+                1.5,
+                1.5,
+                2.2 + 0.5 * Math.sin((e.world.time?.tick ?? 0) * 0.9),
+              ),
+            t &&
+              !s.userData.lit &&
+              ((s.userData.lit = !0),
+              (s.userData.ignitionLight = n.ignite(r.pos, r.vel, r.id)),
+              e.modules
+                .get(`audio`)
+                ?.play(`rocket_launch`, { pos: r.pos, volume: 1, pitch: 0.9 }),
+              e.modules
+                .get(`effects`)
+                ?.spawn?.(`smoke`, [r.pos[0], r.pos[1], r.pos[2]], [0, 1, 0], {
+                  count: 12,
+                  scale: 2.2,
+                })));
+        }
+        if (
+          (s.lookAt(
+            r.pos[0] - r.vel[0],
+            r.pos[1] - r.vel[1],
+            r.pos[2] - r.vel[2],
+          ),
+          r.weapon !== 10)
+        ) {
+          let t = e.world.time?.tick ?? 0,
+            n = 1 + 0.25 * Math.sin(t * 1.9 + r.id) + 0.15 * Math.sin(t * 3.7);
+          s.children[0].scale.set(0.9, 0.9, n * (r.weapon === 9 ? 0.95 : 0.75));
+        }
+        let p = e.world.time?.tick ?? 0,
+          m = r.weapon === 10;
+        s.userData.lt !== p &&
+          (!m || s.userData.lit) &&
+          ((s.userData.lt = p),
+          e.modules
+            .get(`effects`)
+            ?.spawn?.(`smoke`, [r.pos[0], r.pos[1], r.pos[2]], [0, 1, 0], {
+              count: m ? 2 : 1,
+              scale: m ? 1.25 : 0.8,
+            }));
+      }
+      for (let [r, a] of t)
+        i.has(r) ||
+          (n.release(a.userData.ignitionLight, r),
+          e.scene.remove(a),
+          t.delete(r));
+    },
+    dispose() {
+      b.forEach((e) => e());
+      for (let [r, i] of t)
+        (n.release(i.userData.ignitionLight, r), e.scene.remove(i));
+      for (let t of y) e.scene.remove(t.mesh);
+      ((y.length = 0),
+        _.dispose(),
+        v.dispose(),
+        t.clear(),
+        n.dispose(),
+        a.dispose(),
+        o.dispose(),
+        c.dispose(),
+        l.dispose(),
+        u.dispose(),
+        d.dispose());
+    },
+  };
+}
+function ft(e, t, n) {
+  let r = D(t, [0, 0, 0]),
+    i = o(t.yaw, t.pitch),
+    a = e.map.raycast(r, i, n.range)?.dist ?? null,
+    s = Me(n.id).armingDistance;
+  return {
+    active: !0,
+    distance: a,
+    armingDistance: s,
+    tooClose: a != null && a < s + 0.6,
+  };
+}
+var pt = Object.freeze({ maxFov: 30, kickBraced: 0.7, kickBipod: 0.55 }),
+  H = {
+    clear: -0.04,
+    hits: [-0.12, -0.24, -0.4],
+    bipodHits: [-0.12, -0.24, -0.4, -0.6],
+    reach: 0.9,
+  };
+function mt(e, t, n, r = !1) {
+  let i = e?.map,
+    a = (e, t, n) =>
+      i.isOccluded ? i.isOccluded(e, t, n) : !!i.raycast(e, t, n);
+  if (!i?.raycast && !i?.isOccluded) return !1;
+  let o = [-Math.sin(n), 0, -Math.cos(n)];
+  if (a([t[0], t[1] + H.clear, t[2]], o, H.reach)) return !1;
+  for (let e of r ? H.bipodHits : H.hits)
+    if (a([t[0], t[1] + e, t[2]], o, H.reach)) return !0;
+  return !1;
+}
+function ht() {
+  let e = `free`;
+  return {
+    reset() {
+      e = `free`;
+    },
+    step(t, n, r) {
+      let i =
+        r.scoped && (r.bipod ? r.braced || r.stance === h.PRONE : r.braced);
+      return ((e = r.scoped && i ? (r.bipod ? `bipod` : `braced`) : `free`), t);
+    },
+    kickScale() {
+      return e === `bipod` ? pt.kickBipod : e === `braced` ? pt.kickBraced : 1;
+    },
+    status: () => ({ state: e }),
+  };
+}
+function gt(e = document.body) {
+  let t = e.appendChild(document.createElement(`div`));
+  t.style.cssText = `position:fixed;left:50%;bottom:22%;transform:translateX(-50%);display:none;pointer-events:none;z-index:40;font:600 11px/1 system-ui,sans-serif;letter-spacing:.14em;color:rgba(232,224,204,.88);text-shadow:0 1px 2px #000`;
+  let n = ``;
+  return {
+    update(e, r) {
+      let i = e
+        ? r.state === `bipod`
+          ? `BIPOD`
+          : r.state === `braced`
+            ? `BRACED`
+            : ``
+        : ``;
+      i !== n &&
+        ((n = i),
+        (t.textContent = i),
+        (t.style.display = i ? `block` : `none`));
+    },
+    dispose() {
+      t.remove();
+    },
+  };
+}
+var _t = `salient.loadout.v1`;
+function vt(e, t) {
+  let n = P(null),
+    r = !1,
+    i = !0,
+    a = 0,
+    o = new Map(),
+    s = [];
+  try {
+    n = P(JSON.parse(localStorage.getItem(_t)));
+  } catch {}
+  let c = () => (
+      (a = e.world.time.tick + 60),
+      e.modules.get(`netcode`)?.sendRpc?.(`weapon:configure`, n)
+    ),
+    l = (i) => {
+      if (!Number.isInteger(i?.entityId) || !Number.isInteger(i.revision))
+        return;
+      let a = o.get(i.entityId);
+      (a && a.revision >= i.revision) ||
+        (o.set(i.entityId, { ...i, config: P(i.config) }),
+        i.entityId === e.modules.get(`player`)?.getLocalEntity?.()?.id &&
+          N(P(i.config)) === N(n) &&
+          (r = !1),
+        t?.());
+    };
+  (s.push(e.events.on(`weapon:equipment`, l)),
+    s.push(
+      e.events.on(`weapon:inventory`, (e) => {
+        e.equipment && l(e.equipment);
+      }),
+    ),
+    s.push(
+      e.events.on(`weapon:configuration`, (e) => {
+        e.key === N(n) && ((i = !1), (r = !!e.pending), t?.());
+      }),
+    ),
+    s.push(e.events.on(`world:despawn`, ({ id: e }) => o.delete(e))));
+  let u = e.modules.get(`netcode`)?.getClient?.();
+  return (
+    u &&
+      s.push(
+        u.on(`connected`, () => {
+          (o.clear(), (i = !0), c());
+        }),
+      ),
+    s.push(e.events.on(`player:local`, () => c())),
+    {
+      classId(e) {
+        let t = o.get(e?.id);
+        return t?.owner === e?.owner &&
+          [`assault`, `sniper`, `support`, `engineer`, `medic`].includes(
+            t?.classId,
+          )
+          ? t.classId
+          : null;
+      },
+      definition(t, n = e.modules.get(`player`)?.getLocalEntity?.()) {
+        let r = o.get(n?.id),
+          i = r && r.owner === n?.owner,
+          a = oe(t, i ? r.config : null);
+        return i && n.id !== e.modules.get(`player`)?.getLocalEntity?.()?.id
+          ? le(a, r.camos?.[t] ?? null, r.wears?.[t] ?? null)
+          : a;
+      },
+      tick() {
+        i && e.world.time.tick >= a && c();
+      },
+      configure(e) {
+        ((n = P(e)), (r = !0), (i = !0));
+        let a = !0;
+        try {
+          localStorage.setItem(_t, JSON.stringify(n));
+        } catch {
+          a = !1;
+        }
+        return (c(), t?.(), { saved: a });
+      },
+      status() {
+        let t = e.modules.get(`player`)?.getLocalEntity?.(),
+          i = o.get(t?.id);
+        return {
+          desired: P(n),
+          active: P(i?.config),
+          pending: r || N(n) !== N(P(i?.config)),
+        };
+      },
+      dispose() {
+        for (let e of s) e();
+        o.clear();
+      },
+    }
+  );
+}
+function yt(t, n, { name: r, castShadow: i = !1, receiveShadow: a = !1 } = {}) {
+  let o = new b();
+  ((o.name = r), t.add(o));
+  let s = n.filter((e) => !e.material.transparent && e.material.opacity === 1),
+    c = n.filter((e) => !s.includes(e)),
+    l = new Map(),
+    u = (e) => (typeof i == `function` ? i(e) : i),
+    d = [],
+    p = 0,
+    m = [],
+    h = new Float64Array(),
+    g = !1,
+    _ = () => {
+      for (let e of d) (e.removeFromParent(), e.dispose());
+      d = [];
+    },
+    v = (t) => {
+      (_(),
+        (p = Math.max(8, 2 ** Math.ceil(Math.log2(t)))),
+        (h = new Float64Array(p * 16)),
+        (d = s.map((t, n) => {
+          let i = new y(t.geometry, t.material, p);
+          return (
+            (i.name = `${r}:${n}`),
+            (i.castShadow = u(t)),
+            (i.receiveShadow = a),
+            i.instanceMatrix.setUsage(e),
+            (i.count = 0),
+            o.add(i),
+            i
+          );
+        })));
+    };
+  return {
+    group: o,
+    sync(e) {
+      if (g) return;
+      let t = e.filter((e) => e.visible),
+        n = new Set(e);
+      for (let [e, t] of l) n.has(e) || (t.removeFromParent(), l.delete(e));
+      if (c.length) {
+        for (let t of e)
+          if (!l.has(t)) {
+            let e = new b();
+            e.name = r + `:individual`;
+            for (let t of c) {
+              let n = new f(t.geometry, t.material);
+              ((n.castShadow = u(t)), (n.receiveShadow = a), e.add(n));
+            }
+            (t.add(e), l.set(t, e));
+          }
+      }
+      let i = t.length !== m.length || t.length > p;
+      t.length > p && v(t.length);
+      for (let e = 0; e < t.length; e++) {
+        let n = t[e];
+        (n.updateMatrix(), n !== m[e] && (i = !0));
+        for (let t = 0; t < 16; t++)
+          h[e * 16 + t] !== n.matrix.elements[t] && (i = !0);
+      }
+      if (i) {
+        for (let e = 0; e < t.length; e++) {
+          h.set(t[e].matrix.elements, e * 16);
+          for (let n of d) n.setMatrixAt(e, t[e].matrix);
+        }
+        for (let e of d)
+          ((e.count = t.length),
+            e.count &&
+              ((e.instanceMatrix.needsUpdate = !0),
+              e.computeBoundingBox(),
+              e.computeBoundingSphere()));
+        ((o.visible = t.length > 0), (m = t));
+      }
+    },
+    dispose() {
+      if (!g) {
+        ((g = !0), _(), o.removeFromParent());
+        for (let e of l.values()) e.removeFromParent();
+        (l.clear(), (m = []), (h = new Float64Array()));
+      }
+    },
+  };
+}
+var bt = {
+  medkit: `MEDKIT DOWN · heals everyone within 4 m`,
+  ammo: `AMMO BOX DOWN · resupplies everyone within 4 m`,
+};
+function xt(e) {
+  let t = new Map(),
+    n = new Map(),
+    i = new Map(),
+    a = new r(0.05, 0.03, 0.035),
+    o = new m({ color: 7208858, emissive: 3133790, emissiveIntensity: 1 }),
+    s = new m({ color: 16761418, emissive: 14719512, emissiveIntensity: 1 }),
+    c = (t) => {
+      let r = t === 213 ? `medkit` : `ammo`;
+      if (!n.has(r)) {
+        let t = ge(r);
+        (n.set(r, t),
+          i.set(
+            r,
+            yt(e.scene, t.parts, {
+              name: `placed-` + r,
+              castShadow: (e) => e.material.name === `poly`,
+            }),
+          ));
+      }
+      return n.get(r);
+    },
+    l = new v(2.8, 2.8);
+  l.rotateX(-Math.PI / 2);
+  let u = document.createElement(`canvas`);
+  u.width = u.height = 128;
+  {
+    let e = u.getContext(`2d`),
+      t = e.createRadialGradient(64, 64, 0, 64, 64, 64);
+    (t.addColorStop(0, `rgba(255,190,90,1)`),
+      t.addColorStop(0.18, `rgba(255,170,70,.75)`),
+      t.addColorStop(0.5, `rgba(255,150,50,.22)`),
+      t.addColorStop(1, `rgba(255,140,40,0)`),
+      (e.fillStyle = t),
+      e.fillRect(0, 0, 128, 128));
+  }
+  let p = new d(u);
+  p.colorSpace = x;
+  let h = new E({
+      map: p,
+      transparent: !0,
+      opacity: 0.55,
+      blending: 2,
+      depthWrite: !1,
+      polygonOffset: !0,
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits: -2,
+    }),
+    g = document.createElement(`div`);
+  ((g.id = `ammo-box-hint`),
+    (g.hidden = !0),
+    (g.style.cssText = `position:absolute;left:50%;bottom:150px;transform:translateX(-50%);padding:6px 14px;background:#14180fd9;border-left:3px solid #ffc24a;color:#ffe2a0;font:600 14px/1.4 system-ui;letter-spacing:.06em;pointer-events:none`),
+    e.ui?.append?.(g));
+  let _ = null,
+    y = e.events.on(`gadget:status`, (t) => {
+      (_ && t.life < _.life) ||
+        ((_ = t),
+        [`sync`, `placed`].includes(t.reason)
+          ? t.reason === `placed` &&
+            bt[t.gadget] &&
+            e.events.emit(`ui:message`, {
+              kind: `info`,
+              text: bt[t.gadget],
+              ttl: 3,
+            })
+          : e.events.emit(`ui:message`, {
+              kind: `warn`,
+              text: t.reason,
+              ttl: 3,
+            }));
+    }),
+    S = (n, r) => {
+      (e.scene.remove(r),
+        t.delete(n),
+        r.traverse((e) => {
+          e.geometry === l && e.material.dispose();
+        }));
+    },
+    C = (e, t, n, r, i, a) => {
+      let o = new f(t, n);
+      return (o.position.set(r, i, a), e.add(o), o);
+    },
+    ee = (e) => {
+      let t = new b();
+      ((t.name = `placed-kit-markers`), (t.userData.kind = e));
+      let n = c(e);
+      if ((C(t, a, e === 213 ? o : s, ...n.lamp), e !== 213)) {
+        let e = C(t, l, h.clone(), 0, 0.03, 0);
+        ((e.name = `glow`), (e.renderOrder = 2));
+      }
+      return t;
+    };
+  return {
+    status: () => _,
+    update() {
+      let n = new Set();
+      for (let r of e.world.byType(`prop`)) {
+        if ((r.weapon !== 213 && r.weapon !== 214) || r.hp <= 0) continue;
+        n.add(r.id);
+        let i = t.get(r.id);
+        (i && i.userData.kind !== r.weapon && (S(r.id, i), (i = null)),
+          i || ((i = ee(r.weapon)), e.scene.add(i), t.set(r.id, i)),
+          i.position.fromArray(r.pos),
+          i.rotation.set(0, r.yaw, 0));
+      }
+      let r = e.modules?.get?.(`player`)?.getLocalEntity?.(),
+        a = !1,
+        c = 0.85 + 0.15 * Math.sin((performance.now() / 1e3) * Math.PI * 0.8);
+      for (let e of t.values()) {
+        if (e.userData.kind !== 214) continue;
+        let t = e.getObjectByName(`glow`),
+          n =
+            (r?.hp > 0
+              ? Math.hypot(r.pos[0] - e.position.x, r.pos[2] - e.position.z)
+              : 1 / 0) <= Ne.radius &&
+            Math.abs(r.pos[1] - e.position.y) <= Ne.height;
+        ((a ||= n), (t.material.opacity = (n ? 0.65 : 0.42) * c));
+      }
+      if (
+        (g.hidden !== !a && (g.hidden = !a),
+        a &&
+          g.textContent !== `RESUPPLYING` &&
+          ((g.textContent = `RESUPPLYING`),
+          (g.style.borderLeftColor = `#7dff9a`)),
+        t.size)
+      ) {
+        let e =
+          0.6 +
+          0.6 * Math.abs(Math.sin((performance.now() / 1e3) * Math.PI * 2));
+        o.emissiveIntensity = s.emissiveIntensity = e;
+      }
+      for (let [e, r] of t) n.has(e) || S(e, r);
+      for (let [e, n] of i)
+        n.sync(
+          [...t.values()].filter(
+            (t) => (t.userData.kind === 213 ? `medkit` : `ammo`) === e,
+          ),
+        );
+    },
+    dispose() {
+      (y(), g.remove());
+      for (let [e, n] of t) S(e, n);
+      for (let e of [l, p, h, a, o, s]) e.dispose();
+      for (let e of i.values()) e.dispose();
+      i.clear();
+      for (let e of n.values())
+        (e.parts.forEach((e) => e.geometry.dispose()),
+          e.materials.forEach((e) => e.dispose()));
+      n.clear();
+    },
+  };
+}
+var St = `BEACON PLANTED · YOU CAN DEPLOY ON IT WHILE IT STANDS`,
+  Ct = `BEACON MOVED · YOUR OLD ONE IS GONE`;
+function wt(e) {
+  let r = new Map(),
+    i = new Set(),
+    a = null,
+    o = null,
+    s = -1,
+    c = 0,
+    l = new w(0.016, 10, 8),
+    u = new m({ color: 5904912, roughness: 0.3 }),
+    p = new E({ color: 16734778 }),
+    h = document.createElement(`canvas`);
+  h.width = h.height = 64;
+  {
+    let e = h.getContext(`2d`),
+      t = e.createRadialGradient(32, 32, 0, 32, 32, 32);
+    (t.addColorStop(0, `rgba(255,190,160,1)`),
+      t.addColorStop(0.25, `rgba(255,90,50,.7)`),
+      t.addColorStop(1, `rgba(255,60,30,0)`),
+      (e.fillStyle = t),
+      e.fillRect(0, 0, 64, 64));
+  }
+  let g = new d(h);
+  g.colorSpace = x;
+  let _ = new t({ map: g, transparent: !0, blending: 2, depthWrite: !1 }),
+    v = () => e.modules?.get?.(`audio`),
+    y = () => e.modules?.get?.(`effects`),
+    S = () => {
+      a ||
+        ((a = ge(`beacon`)),
+        (o = yt(e.scene, a.parts, {
+          name: `placed-beacon`,
+          castShadow: !0,
+          receiveShadow: !0,
+        })));
+      let t = new b();
+      t.name = `placed-beacon-markers`;
+      let r = new f(l, u);
+      (r.position.fromArray(a.lamp), (r.name = `lamp`), t.add(r));
+      let i = new n(_.clone());
+      return (
+        i.position.fromArray(a.lamp),
+        i.scale.setScalar(0.2),
+        (i.name = `glow`),
+        t.add(i),
+        t
+      );
+    },
+    C = (t, n) => {
+      (e.scene.remove(n),
+        n.getObjectByName(`glow`)?.material.dispose(),
+        r.delete(t));
+    },
+    ee = [
+      e.events.on(`player:local`, (e) => {
+        e?.playerId != null && (s = e.playerId);
+      }),
+      e.events.on(`net:connected`, (e) => {
+        e?.playerId != null && (s = e.playerId);
+      }),
+      e.events.on(`beacon:status`, (t) => {
+        t?.reason === `planted`
+          ? e.events.emit(`ui:message`, {
+              kind: `info`,
+              text: t.moved ? Ct : St,
+              ttl: 3.5,
+            })
+          : t?.reason === `destroyed`
+            ? e.events.emit(`ui:message`, {
+                kind: `warn`,
+                text: `BEACON DESTROYED`,
+                ttl: 4,
+              })
+            : t?.reason &&
+              e.events.emit(`ui:message`, {
+                kind: `warn`,
+                text: t.reason,
+                ttl: 3,
+              });
+      }),
+      e.events.on(`beacon:planted`, (e) => {
+        e?.pos && v()?.play?.(`beacon_plant`, { pos: e.pos });
+      }),
+      e.events.on(`beacon:destroyed`, (e) => {
+        e?.pos &&
+          (y()?.spawn?.(`scrape`, e.pos, [0, 1, 0], { scale: 1.5 }),
+          y()?.spawn?.(`smoke`, e.pos, [0, 1, 0], { count: 4, scale: 0.7 }),
+          v()?.play?.(`beacon_destroyed`, { pos: e.pos }));
+      }),
+    ];
+  return {
+    mine: () => (s >= 0 ? Le(e.world, s) : null),
+    update() {
+      Fe(e.world, i);
+      let t = performance.now() / 1e3,
+        n = new Set();
+      for (let i of e.world.entities.values()) {
+        if (!Ie(i)) continue;
+        n.add(i.id);
+        let a = r.get(i.id);
+        (a ||
+          ((a = S()),
+          e.scene.add(a),
+          r.set(i.id, a),
+          (a.userData.phase = (i.id * 0.37) % 1)),
+          a.position.fromArray(i.pos),
+          a.rotation.set(0, i.yaw ?? 0, 0));
+        let o = i.maxHp > 0 && i.hp < i.maxHp * 0.5,
+          s = (t + a.userData.phase) % 1 < 0.12;
+        o && (s = s ? Math.random() > 0.35 : Math.random() < 0.04);
+        let l = a.getObjectByName(`lamp`),
+          d = a.getObjectByName(`glow`);
+        ((l.material = s ? p : u),
+          (d.visible = s),
+          (d.material.opacity = o ? 0.6 : 0.9),
+          o &&
+            t > c &&
+            Math.random() < 0.01 &&
+            ((c = t + 1.5),
+            y()?.spawn?.(
+              `impact`,
+              [i.pos[0], i.pos[1] + 0.3, i.pos[2]],
+              [0, 1, 0],
+              { surface: `metal` },
+            )));
+      }
+      for (let [e, t] of r) n.has(e) || C(e, t);
+      o?.sync([...r.values()]);
+    },
+    dispose() {
+      ee.forEach((e) => e?.());
+      for (let [e, t] of r) C(e, t);
+      Re(e.world, i);
+      for (let e of [l, u, p, g, _]) e.dispose();
+      (o?.dispose(),
+        (o = null),
+        (a &&=
+          (a.parts.forEach((e) => e.geometry.dispose()),
+          a.materials.forEach((e) => e.dispose()),
+          null)));
+    },
+  };
+}
+var Tt = `.sl-drop{position:absolute;left:50%;top:70%;transform:translateX(-50%);display:flex;align-items:center;gap:var(--g12);
+ padding:var(--g8) var(--g14) var(--g8) var(--g8);background:var(--smoke2);border-left:var(--s3) solid var(--ink);z-index:5;
+ opacity:0;transition:opacity .12s;pointer-events:none;max-width:calc(100% - 2 * var(--safe))}
+.sl-drop.on{opacity:1}
+.sl-drop canvas{width:calc(118px * var(--ui));height:calc(46px * var(--ui));flex:none;display:block}
+.sl-drop .tx{display:flex;flex-direction:column;gap:var(--g5);min-width:0}
+.sl-drop b{font-size:var(--fs-body);font-weight:700;letter-spacing:.06em;color:var(--ink);white-space:nowrap}
+.sl-drop .k{font-size:var(--fs-micro);font-weight:700;letter-spacing:var(--tr-caps);text-transform:uppercase;color:var(--ink2);white-space:nowrap}
+.sl-drop .k i{font-style:normal;display:inline-block;padding:1px 5px;margin-right:6px;border:1px solid var(--ink2);color:var(--ink)}
+.sl-drop .r{font-size:var(--fs-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);white-space:nowrap}`;
+function Et(e, { bodies: t, catalog: n, inventory: r }) {
+  let i = new Map(),
+    a = new Map(),
+    o = new Set(),
+    s = be(),
+    u = !1,
+    d = (e) => {
+      (e.model.dispose(),
+        e.gun.traverse((e) => e.geometry?.dispose()),
+        e.bake?.dispose());
+    },
+    p = (t) => {
+      if (!n || n.has(t) || o.has(t) || u || !s.allows(t)) return;
+      o.add(t);
+      let r;
+      try {
+        r = n.ensure(t, { priority: `remote` });
+      } catch (e) {
+        r = Promise.reject(e);
+      }
+      Promise.resolve(r)
+        .then(
+          () => {
+            if ((s.success(t), u)) return;
+            let n = a.get(t);
+            if (n) {
+              for (let [n, r] of i)
+                r.userData.weapon === t && (e.scene.remove(r), i.delete(n));
+              (a.delete(t), d(n));
+            }
+          },
+          () => {
+            u || s.fail(t);
+          },
+        )
+        .finally(() => o.delete(t));
+    },
+    m = (e) => {
+      let n = a.get(e);
+      if (n) return n;
+      p(e);
+      let r = We(j[e], t),
+        i = r.group;
+      ((i.rotation.z = Math.PI / 2), i.updateMatrixWorld(!0));
+      let o = new l().setFromObject(i),
+        s = o.getCenter(new T());
+      (i.position.set(-s.x, 0.012 - o.min.y, -s.z), i.updateMatrixWorld(!0));
+      let u = new Map();
+      i.traverse((e) => {
+        if (!e.isMesh || Array.isArray(e.material)) return;
+        let t = e.geometry.index
+          ? e.geometry.toNonIndexed()
+          : e.geometry.clone();
+        for (let e of Object.keys(t.attributes))
+          [`position`, `normal`, `uv`].includes(e) || t.deleteAttribute(e);
+        (t.attributes.uv ||
+          t.setAttribute(
+            `uv`,
+            new S(new Float32Array(t.attributes.position.count * 2), 2),
+          ),
+          (t.morphAttributes = {}),
+          t.applyMatrix4(e.matrixWorld),
+          u.has(e.material) || u.set(e.material, []),
+          u.get(e.material).push(t));
+      });
+      let d = new b();
+      for (let [e, t] of u) {
+        let n = ee(t, !1);
+        if ((t.forEach((e) => e.dispose()), !n)) continue;
+        let r = new f(n, e);
+        ((r.castShadow = r.receiveShadow = !0), d.add(r));
+      }
+      let m = d.children.map((e) => ({
+          geometry: e.geometry,
+          material: e.material,
+          matrix: new c(),
+          cast: !0,
+          mesh: e,
+        })),
+        h = Pe(m, { cell: 0, name: `drop-baked` });
+      if (h.meshes.length) {
+        let e = new Set(h.rest.map((e) => e.mesh));
+        for (let t of m)
+          e.has(t.mesh) ||
+            (t.mesh.removeFromParent(), t.mesh.geometry.dispose());
+        for (let e of h.meshes) d.add(e);
+      }
+      return ((n = { model: r, gun: d, bake: h }), a.set(e, n), n);
+    },
+    h = e.ui?.querySelector?.(`.sl`) ?? e.ui ?? document.body,
+    _ = document.createElement(`style`);
+  ((_.textContent = Tt), h.appendChild(_));
+  let v = document.createElement(`div`);
+  ((v.className = `sl-drop`),
+    (v.innerHTML = `<canvas></canvas><div class="tx"><b></b><span class="k"></span><span class="r"></span></div>`),
+    h.appendChild(v));
+  let y = v.querySelector(`canvas`),
+    x = v.querySelector(`b`),
+    C = v.querySelector(`.k`),
+    w = v.querySelector(`.r`),
+    E = () => (g() ? `USE` : He(`use`, `F`)),
+    te = null,
+    D = null,
+    ne = ``,
+    O = new Map();
+  function k(t) {
+    let n = O.get(t),
+      r = y.getContext(`2d`);
+    if (n) {
+      ((y.width = n.width),
+        (y.height = n.height),
+        r.clearRect(0, 0, y.width, y.height),
+        r.drawImage(n, 0, 0));
+      return;
+    }
+    (r.clearRect(0, 0, y.width, y.height),
+      (te ??= Ue(e)),
+      te
+        .thumb(y, j[t])
+        .then(() => {
+          if (u || !y.width) return;
+          let e = document.createElement(`canvas`);
+          ((e.width = y.width),
+            (e.height = y.height),
+            e.getContext(`2d`).drawImage(y, 0, 0),
+            O.set(t, e),
+            D != null && D !== t && k(D));
+        })
+        .catch(() => {}));
+  }
+  let A = [
+    e.events.on(`weapon:pickup`, (t) => {
+      let n = j[t?.weapon]?.name;
+      n &&
+        e.events.emit(`ui:message`, {
+          kind: `info`,
+          text:
+            t.kind === `swap`
+              ? `Picked up ${n}`
+              : t.kind === `ammo`
+                ? `+${t.amount} ${n} rounds`
+                : `${n} ammo full`,
+          ttl: 2.5,
+        });
+    }),
+  ];
+  function re() {
+    let t = e.modules.get(`player`)?.getLocalEntity?.(),
+      n = r(),
+      i = t && n && Qe(e.world, t) ? Je(e.world, t) : null;
+    if (!i) {
+      D != null && (v.classList.remove(`on`), (D = null));
+      return;
+    }
+    let a = j[i.weapon],
+      o = (n.loadout ?? []).includes(i.weapon),
+      s = o ? null : j[n.loadout?.[Ke(n, i.weapon)]],
+      c = E(),
+      l = `${i.weapon}|${o}|${s?.id}|${c}`;
+    (l !== ne &&
+      ((ne = l),
+      (x.textContent = a.name),
+      (C.innerHTML = `<i>${c}</i>Hold · ${o ? `Take ammo` : `Pick up`}`),
+      (w.textContent = s ? `Replaces ${s.name}` : ``)),
+      D !== i.weapon && ((D = i.weapon), v.classList.add(`on`), k(i.weapon)));
+  }
+  return {
+    update() {
+      let t = new Set();
+      for (let n of e.world.byType(`pickup`)) {
+        if (!Xe(j[n.weapon])) continue;
+        t.add(n.id);
+        let r = i.get(n.id);
+        if (
+          (r &&
+            r.userData.weapon !== n.weapon &&
+            (e.scene.remove(r), (r = null)),
+          !r)
+        ) {
+          try {
+            ((r = new b()), r.add(m(n.weapon).gun.clone()));
+          } catch {
+            continue;
+          }
+          ((r.userData.weapon = n.weapon), e.scene.add(r), i.set(n.id, r));
+        }
+        (r.position.fromArray(n.pos), r.rotation.set(0, n.yaw, 0));
+        let a = e.camera.position.distanceToSquared(r.position);
+        r.visible = a < 3600;
+        let o = a < 625;
+        r.userData.cast !== o &&
+          ((r.userData.cast = o),
+          r.traverse((e) => {
+            e.isMesh && (e.castShadow = o);
+          }));
+      }
+      for (let [n, r] of i) t.has(n) || (e.scene.remove(r), i.delete(n));
+      re();
+    },
+    dispose() {
+      ((u = !0), A.forEach((e) => e()));
+      for (let t of i.values()) e.scene.remove(t);
+      i.clear();
+      for (let e of a.values()) d(e);
+      (a.clear(), o.clear(), s.clear(), te?.dispose(), v.remove(), _.remove());
+    },
+  };
+}
+var U = Object.freeze({
+    chargeCam: 1.5,
+    flash: 0.55,
+    clear: 1.5,
+    ringDelay: 0.02,
+    gaspDelay: 0.12,
+    lineDelay: 0.55,
+  }),
+  Dt = [
+    `You're good, get up!`,
+    `Up you get, soldier!`,
+    `Clear! You're back!`,
+    `On your feet!`,
+    `Breathe! You're okay!`,
+  ],
+  Ot = (e) => e[Math.floor(Math.random() * e.length)];
+function kt(e) {
+  let t = (t) => e.modules.get(t),
+    n = () => t(`audio`),
+    r = () => t(`player`)?.getLocalEntity?.(),
+    i = (t) => e.world.players.get(t?.owner)?.name ?? `Medic`,
+    o = (e) => [e.pos[0], e.pos[1] + 1.5, e.pos[2]],
+    s = e.renderer?.domElement ?? null,
+    c = s?.parentElement ?? document.body,
+    l = document.createElement(`div`);
+  l.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:4;opacity:0;background:radial-gradient(circle at 50% 55%,#fff 0%,#eaf6ff 45%,#9fc4dc 100%)`;
+  let u = document.createElement(`div`);
+  ((u.style.cssText = `position:absolute;left:50%;top:62%;transform:translateX(-50%);pointer-events:none;z-index:4;font:800 15px system-ui;letter-spacing:.14em;color:#e9f6ff;text-shadow:0 0 10px rgba(80,170,255,.9),0 1px 2px #000;opacity:0;transition:opacity .15s;white-space:nowrap`),
+    c.append(l, u));
+  let d = null,
+    f = 0,
+    p = 0,
+    m = -1,
+    h = 0,
+    g = (t, n = 3) =>
+      e.events.emit(`ui:message`, { kind: `squad`, text: t, ttl: n }),
+    _ = [
+      e.events.on(`medic:pads`, (t) => {
+        let a = r();
+        if (!t?.pos) return;
+        let o = a && t.entityId === a.id,
+          s = t.kind === `revive` && a && t.targetId === a.id;
+        (o || s
+          ? n()?.play?.(`defib_charge`, {
+              local: !0,
+              volume: s ? 0.9 : 0.75,
+              bus: s ? `ui` : void 0,
+            })
+          : n()?.play?.(`defib_charge`, { pos: t.pos, volume: 0.9 }),
+          t.kind === `kill` &&
+            n()?.play?.(
+              `defib_zap`,
+              o ? { local: !0, delay: 0.5 } : { pos: t.pos, delay: 0.5 },
+            ),
+          s &&
+            ((d = {
+              medicId: t.entityId,
+              since: performance.now() / 1e3,
+              name: i(e.world.get(t.entityId)),
+            }),
+            (u.textContent = `${d.name.toUpperCase()} · REVIVING`),
+            (u.style.opacity = `1`)));
+      }),
+      e.events.on(`medic:revive`, (i) => {
+        let a = r();
+        if (!i?.pos) return;
+        let s = e.world.get(i.medicId),
+          c = e.world.get(i.entityId),
+          l = [i.pos[0], i.pos[1] + 0.35, i.pos[2]];
+        if (
+          (t(`effects`)?.spawn?.(`defib`, l, [0, 1, 0]),
+          (a && i.entityId === a.id) || (m >= 0 && i.playerId === m))
+        )
+          return y(s);
+        if (a && i.medicId === a.id) {
+          (n()?.play?.(`defib_zap`, { local: !0, volume: 0.9 }),
+            c &&
+              n()?.play?.(`revive_gasp`, {
+                pos: o(c),
+                volume: 0.85,
+                delay: U.gaspDelay,
+              }));
+          return;
+        }
+        (n()?.play?.(`defib_zap`, { pos: l }),
+          c &&
+            n()?.play?.(`revive_gasp`, {
+              pos: o(c),
+              volume: 0.8,
+              delay: U.gaspDelay,
+            }));
+      }),
+      e.events.on(`player:death`, (e) => {
+        e?.victimId === r()?.id && v();
+      }),
+      e.events.on(`player:local`, (e) => {
+        e?.playerId != null && (m = e.playerId);
+      }),
+    ];
+  function v() {
+    ((d = null), (u.style.opacity = `0`));
+  }
+  function y(r) {
+    (v(),
+      e.setCamera?.(`fps`),
+      t(`player`)?.reviveRise?.({ face: r ? o(r) : null }));
+    let a = n();
+    (a?.play?.(`defib_zap`, { local: !0, volume: 1, bus: `ui` }),
+      a?.play?.(`revive_ring`, { volume: 0.9, delay: U.ringDelay }),
+      a?.play?.(`revive_gasp`, {
+        local: !0,
+        volume: 1,
+        delay: U.gaspDelay,
+        pitch: 0.97 + Math.random() * 0.06,
+      }),
+      (p = U.flash),
+      (f = U.clear),
+      (h = 0.12));
+    let s = Ot(Dt),
+      c = r ? i(r) : `Medic`;
+    (g(`${c}: "${s}"`, 4),
+      a?.play?.(`voice_revive`, {
+        local: !0,
+        volume: 0.95,
+        delay: U.lineDelay,
+        bus: `ui`,
+      }));
+  }
+  return {
+    incoming: () => !!d,
+    update(n) {
+      let i = Math.max(0, n || 0);
+      if (d) {
+        let t = r(),
+          n = e.world.get(d.medicId);
+        if (
+          !t ||
+          !(t.state & a.DEAD) ||
+          !n ||
+          performance.now() / 1e3 - d.since > U.chargeCam
+        )
+          v();
+        else {
+          let r = [t.pos[0], t.pos[1] + 0.35, t.pos[2]],
+            i = o(n),
+            a = r[0] - i[0],
+            s = r[2] - i[2],
+            c = Math.hypot(a, s) || 1,
+            l = [
+              r[0] + (a / c) * 0.5 - (s / c) * 0.45,
+              r[1],
+              r[2] + (s / c) * 0.5 + (a / c) * 0.45,
+            ];
+          e.setCamera?.({
+            pos: l,
+            look: [i[0] - (s / c) * 0.9, i[1] + 0.6, i[2] + (a / c) * 0.9],
+            fov: 75,
+          });
+        }
+      }
+      if (
+        h > 0 &&
+        (h -= i) <= 0 &&
+        s &&
+        !t(`player`)?.isInputActive?.() &&
+        document.pointerLockElement !== s &&
+        !Ve()
+      )
+        try {
+          s.requestPointerLock?.()?.catch?.(() => {});
+        } catch {}
+      if (p > 0) {
+        p = Math.max(0, p - i);
+        let e = p / U.flash;
+        l.style.opacity = (e * e * 0.92).toFixed(3);
+      } else l.style.opacity !== `0` && (l.style.opacity = `0`);
+      if (s && f > 0) {
+        f = Math.max(0, f - i);
+        let e = f / U.clear,
+          t = e * e;
+        ((s.dataset.reviveFx = `1`),
+          (s.style.filter = `saturate(${(1 + 1.6 * t).toFixed(2)}) contrast(${(1 + 0.25 * t).toFixed(2)}) brightness(${(1 + 0.35 * t).toFixed(2)})`),
+          f === 0 && ((s.style.filter = ``), delete s.dataset.reviveFx));
+      }
+    },
+    dispose() {
+      (_.forEach((e) => e?.()),
+        l.remove(),
+        u.remove(),
+        s && f > 0 && ((s.style.filter = ``), delete s.dataset.reviveFx));
+    },
+  };
+}
+var At = I.reviveWindow / 60,
+  jt = 50,
+  Mt = 80,
+  Nt = 0.2;
+function Pt(e) {
+  let t = document.createElement(`div`);
+  ((t.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden`),
+    (e.renderer?.domElement?.parentElement ?? document.body).appendChild(t));
+  let n = new Map(),
+    r = new Map(),
+    i = new T(),
+    o = document.createElement(`div`);
+  ((o.style.cssText = `position:absolute;left:50%;bottom:22%;transform:translateX(-50%);padding:3px 10px 3px 7px;border-radius:12px;background:rgba(18,40,26,.62);box-shadow:0 0 0 1px rgba(120,230,150,.55);font:800 12px system-ui;letter-spacing:.16em;color:#bff5cf;text-shadow:0 1px 2px #000;opacity:0;transition:opacity .25s;white-space:nowrap`),
+    (o.textContent = `✚ HEALING`),
+    t.appendChild(o));
+  let s = 0,
+    c = !1,
+    l = kt(e),
+    u = () => e.modules.get(`player`)?.getLocalEntity?.(),
+    d = (t) =>
+      (e.modules.get(`weapons`)?.equippedClass?.(t) ??
+        t?.ext?.loadout?.classId) === `medic`,
+    f = (e) => e && e.hp > 0 && !(e.state & a.DEAD),
+    p = [
+      e.events.on(`player:death`, (e) => {
+        e?.victimId != null && r.set(e.victimId, performance.now() / 1e3);
+      }),
+      e.events.on(`medic:call`, (e) => {
+        Number.isInteger(e?.entityId) &&
+          (m.set(
+            e.entityId,
+            performance.now() / 1e3 + (+e.durationTicks || 480) / 60,
+          ),
+          e.entityId === u()?.id &&
+            ((_.style.opacity = `1`), (h = performance.now() / 1e3 + 1.6)));
+      }),
+      e.events.on(`player:death`, (e) => {
+        e?.victimId != null && m.delete(e.victimId);
+      }),
+    ],
+    m = new Map(),
+    h = 0,
+    g = 0,
+    _ = document.createElement(`div`);
+  ((_.style.cssText = o.style.cssText.replace(`bottom:22%`, `bottom:26%`)),
+    (_.style.opacity = `0`),
+    (_.textContent = `✚ MEDIC REQUESTED`),
+    t.appendChild(_));
+  let v = (t) => {
+    if (
+      t.code !== `KeyJ` ||
+      t.repeat ||
+      t.ctrlKey ||
+      t.altKey ||
+      t.metaKey ||
+      t.target?.closest?.(`input,textarea,select,[contenteditable="true"]`) ||
+      !e.modules.get(`player`)?.isInputActive?.()
+    )
+      return;
+    let n = u();
+    if (!f(n) || e.world.match?.mode === `ffa`) return;
+    t.preventDefault();
+    let r = performance.now() / 1e3;
+    r < g || ((g = r + 1), e.modules.get(`netcode`)?.sendRpc?.(`medic`, {}));
+  };
+  window.addEventListener(`keydown`, v);
+  let y = (e) => {
+    let r = n.get(e);
+    if (r) return r;
+    ((r = document.createElement(`div`)),
+      (r.style.cssText = `position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;gap:2px;font:700 11px system-ui;color:#fff;text-shadow:0 1px 2px #000;white-space:nowrap`));
+    let i = document.createElement(`div`);
+    ((i.style.cssText = `width:22px;height:22px;border-radius:50%;background:#f4f6f5;box-shadow:0 0 0 2px rgba(0,0,0,.45);display:grid;place-items:center;color:#d8232f;font:900 17px/1 system-ui`),
+      (i.textContent = `✚`));
+    let a = document.createElement(`div`);
+    return (
+      r.append(i, a),
+      (r.label = a),
+      (r.icon = i),
+      t.appendChild(r),
+      n.set(e, r),
+      r
+    );
+  };
+  return {
+    update(p) {
+      l.update(p);
+      let g = u();
+      (s -= Math.max(0, p || 0)) <= 0 &&
+        ((s = Nt),
+        (c =
+          f(g) &&
+          g.hp < g.maxHp &&
+          !(g.state & a.IN_VEHICLE) &&
+          e.world
+            .byType(`prop`)
+            .some(
+              (e) =>
+                e.weapon === 213 &&
+                e.hp > 0 &&
+                Math.hypot(e.pos[0] - g.pos[0], e.pos[2] - g.pos[2]) <=
+                  I.medkitRadius &&
+                Math.abs(e.pos[1] - g.pos[1]) <= I.medkitHeight,
+            )),
+        (o.style.opacity = c ? `1` : `0`));
+      let v = performance.now() / 1e3,
+        b = new Set(),
+        x,
+        S;
+      for (let [e, t] of r) v - t > At && r.delete(e);
+      let C = e.modules.get(`weapons`)?.getSelected?.()?.class === `defib`;
+      if (f(g) && d(g) && !(g.state & a.IN_VEHICLE))
+        for (let [n, o] of r) {
+          let r = e.world.get(n);
+          if (
+            !r ||
+            r.type !== `soldier` ||
+            !(r.state & a.DEAD) ||
+            r.team !== g.team
+          )
+            continue;
+          let s = Math.hypot(
+            r.pos[0] - g.pos[0],
+            r.pos[1] - g.pos[1],
+            r.pos[2] - g.pos[2],
+          );
+          if (
+            s > jt ||
+            (i.set(r.pos[0], r.pos[1] + 0.7, r.pos[2]).project(e.camera),
+            i.z > 1 || Math.abs(i.x) > 1.1 || Math.abs(i.y) > 1.1) ||
+            (x === void 0 && ((x = t.clientWidth), (S = t.clientHeight)),
+            x <= 0)
+          )
+            continue;
+          let c = y(n);
+          (b.add(n),
+            (c.style.left = `${((i.x + 1) / 2) * x}px`),
+            (c.style.top = `${((1 - i.y) / 2) * S}px`));
+          let l = Math.max(0, Math.ceil(At - (v - o))),
+            u = s <= I.padsReach,
+            d = u
+              ? `${C ? `CLICK` : `PRESS 2`} · ${l}s`
+              : `${Math.round(s)} m · ${l}s`;
+          (c.label.textContent !== d && (c.label.textContent = d),
+            (c.icon.style.boxShadow = u
+              ? `0 0 0 2px #7fe0a0,0 0 10px 2px rgba(127,224,160,.8)`
+              : `0 0 0 2px rgba(0,0,0,.45)`),
+            (c.style.opacity = l <= 3 ? `.6` : `1`));
+        }
+      v >= h && (_.style.opacity = `0`);
+      for (let [e, t] of m) v >= t && m.delete(e);
+      if (f(g) && d(g))
+        for (let [n, r] of m) {
+          let a = e.world.get(n);
+          if (n === g.id || !f(a) || a.team !== g.team) continue;
+          let o = Math.hypot(
+            a.pos[0] - g.pos[0],
+            a.pos[1] - g.pos[1],
+            a.pos[2] - g.pos[2],
+          );
+          if (
+            o > Mt ||
+            (i
+              .set(a.pos[0], a.pos[1] + 2.05 * ne(), a.pos[2])
+              .project(e.camera),
+            i.z > 1 || Math.abs(i.x) > 1.1 || Math.abs(i.y) > 1.1) ||
+            (x === void 0 && ((x = t.clientWidth), (S = t.clientHeight)),
+            x <= 0)
+          )
+            continue;
+          let s = `call:` + n,
+            c = y(s);
+          (b.add(s),
+            (c.style.left = `${((i.x + 1) / 2) * x}px`),
+            (c.style.top = `${((1 - i.y) / 2) * S}px`));
+          let l = `MEDIC · ${Math.round(o)} m`;
+          (c.label.textContent !== l && (c.label.textContent = l),
+            (c.icon.style.boxShadow = `0 0 0 2px rgba(216,35,47,.85)`),
+            (c.style.opacity = String(
+              r - v < 1.5 ? (r - v) / 1.5 : 0.75 + 0.25 * Math.sin(v * 8),
+            )));
+        }
+      for (let [e, t] of n) b.has(e) || (t.remove(), n.delete(e));
+    },
+    dispose() {
+      (window.removeEventListener(`keydown`, v),
+        m.clear(),
+        l.dispose(),
+        p.forEach((e) => e?.()),
+        t.remove(),
+        n.clear(),
+        r.clear());
+    },
+  };
+}
+var W = Object.freeze({ drop: 0.95, pads: 1.2, discharge: 0.5, flash: 0.16 }),
+  G = (e) => (e <= 0 ? 0 : e >= 1 ? 1 : e * e * (3 - 2 * e)),
+  Ft = { revive: 10479615, kill: 16761707 };
+function It(e) {
+  let t = 0,
+    n = 0,
+    r = `revive`,
+    i = null,
+    a = 0,
+    o = new _(),
+    s = new c(),
+    l = new T(),
+    u = new T(0, 1, 0),
+    d = () => e.modules.get(`player`)?.getLocalEntity?.(),
+    f = [
+      e.events.on(`gadget:status`, (e) => {
+        e?.reason === `placed` && (t = W.drop);
+      }),
+      e.events.on(`beacon:status`, (e) => {
+        e?.reason === `planted` && (t = W.drop);
+      }),
+      e.events.on(`medic:pads`, (e) => {
+        e?.entityId != null &&
+          e.entityId === d()?.id &&
+          e.pos &&
+          ((n = W.pads),
+          (r = e.kind === `kill` ? `kill` : `revive`),
+          (i = e.pos.slice()),
+          (a = Math.random() * 6),
+          (t = 0));
+      }),
+      e.events.on(`player:death`, (e) => {
+        e?.victimId === d()?.id && (t = n = 0);
+      }),
+    ];
+  return {
+    active: () => t > 0 || n > 0,
+    padsActive: () => n > 0,
+    update(c, d, f, p) {
+      let m = Math.max(0, c || 0);
+      ((t = Math.max(0, t - m)), (n = Math.max(0, n - m)));
+      let h = e.camera;
+      if (!d || !h || (!t && !n)) {
+        (f?.setAction(null), f?.setGlow(0, 0));
+        return;
+      }
+      if (n > 0) {
+        let e = W.pads - n,
+          t = W.discharge,
+          c = e - t,
+          d = G(e / 0.2) * (1 - G((e - 0.85) / 0.35)),
+          m = G((e - 0.16) / 0.26) * (1 - G((e - 0.66) / 0.3)),
+          g = c >= 0 ? Math.exp(-c * 13) : 0;
+        p === `defib`
+          ? f?.setAction({
+              x: 0,
+              y: 0.03 * d - 0.15 * m + 0.045 * g,
+              z: -0.05 * d - 0.12 * m,
+              pitch: -0.2 * d - 0.55 * m + 0.2 * g,
+              roll: 0,
+            })
+          : f?.setAction(null);
+        let _ = c >= 0 && c < W.flash;
+        f?.setGlow(Ft[r], _ ? 3 : c < 0 ? 0.15 + 0.9 * G(e / t) : 0);
+        let v = 0.6 * G(e / 0.3) * (1 - G((e - 0.78) / 0.4));
+        ((h.position.y -= ((r === `revive` ? 0.38 : 0.08) * v) / 0.6),
+          l.set(i[0], i[1] + (r === `revive` ? 0.3 : 1.15), i[2]),
+          s.lookAt(h.position, l, u),
+          o.setFromRotationMatrix(s),
+          h.quaternion.slerp(o, v),
+          g > 0.02 &&
+            (h.rotateX(0.03 * g), h.rotateZ(0.025 * g * Math.sin(a + c * 70))));
+      } else {
+        f?.setGlow(0, 0);
+        let e = W.drop - t,
+          n = G(e / 0.34) * (1 - G((e - 0.52) / 0.42)),
+          r = e > 0.34 && e < 0.54 ? Math.sin(((e - 0.34) / 0.2) * Math.PI) : 0;
+        (p === `tool`
+          ? f?.setAction({
+              x: -0.03 * n,
+              y: -0.1 * n + 0.015 * r,
+              z: -0.2 * n,
+              pitch: -0.3 * n,
+              roll: 0.08 * n,
+            })
+          : f?.setAction(null),
+          (h.position.y -= 0.3 * n),
+          h.rotateX(-0.55 * n - 0.015 * r));
+      }
+      h.updateMatrixWorld();
+    },
+    dispose() {
+      f.forEach((e) => e?.());
+    },
+  };
+}
+function Lt(e) {
+  let t = document.createElement(`div`);
+  t.style.cssText = `position:absolute;left:50%;bottom:30%;transform:translateX(-50%);pointer-events:none;z-index:3;display:none;flex-direction:column;align-items:center;gap:5px;font:800 12px system-ui;letter-spacing:.16em;color:#f1f4f2;text-shadow:0 1px 2px #000`;
+  let n = document.createElement(`div`);
+  n.textContent = `REDEPLOYING`;
+  let r = document.createElement(`div`);
+  r.style.cssText = `width:150px;height:4px;border-radius:2px;background:rgba(0,0,0,.5);box-shadow:0 0 0 1px rgba(255,255,255,.25);overflow:hidden`;
+  let i = document.createElement(`div`);
+  ((i.style.cssText = `height:100%;width:0;background:#e9f0ea`),
+    r.appendChild(i),
+    t.append(n, r),
+    (e.renderer?.domElement?.parentElement ?? document.body).appendChild(t));
+  let o = 0,
+    s = !1,
+    c = !1,
+    l = 0,
+    u = 0,
+    d = () => e.modules.get(`player`)?.getLocalEntity?.(),
+    f = () => {
+      let t = d();
+      return (
+        !!t &&
+        t.hp > 0 &&
+        !(t.state & (a.DEAD | a.IN_VEHICLE)) &&
+        e.modules.get(`player`)?.isInputActive?.() &&
+        e.world.match?.phase !== `ended`
+      );
+    },
+    p = () => {
+      ((s = !1),
+        (o = 0),
+        cancelAnimationFrame(l),
+        (l = 0),
+        (t.style.display = `none`));
+    },
+    m = (t) => {
+      if (((l = 0), s)) {
+        if (!f()) return p();
+        if (
+          ((o += Math.min(0.1, (t - u) / 1e3)),
+          (u = t),
+          (i.style.width = `${Math.min(100, (o / 1) * 100)}%`),
+          o >= 1 && !c)
+        )
+          return (
+            (c = !0),
+            e.modules.get(`netcode`)?.sendRpc?.(`redeploy`, {}),
+            p()
+          );
+        l = requestAnimationFrame(m);
+      }
+    },
+    h = (e) =>
+      e.target?.closest?.(`input,textarea,select,[contenteditable="true"]`),
+    g = (e) => {
+      e.code !== `KeyU` ||
+        e.repeat ||
+        e.ctrlKey ||
+        e.altKey ||
+        e.metaKey ||
+        h(e) ||
+        !f() ||
+        (e.preventDefault(),
+        (s = !0),
+        (c = !1),
+        (o = 0),
+        (u = performance.now()),
+        (t.style.display = `flex`),
+        (i.style.width = `0`),
+        (l = requestAnimationFrame(m)));
+    },
+    _ = (e) => {
+      e.code === `KeyU` && p();
+    };
+  return (
+    window.addEventListener(`keydown`, g),
+    window.addEventListener(`keyup`, _),
+    window.addEventListener(`blur`, p),
+    {
+      dispose() {
+        (p(),
+          window.removeEventListener(`keydown`, g),
+          window.removeEventListener(`keyup`, _),
+          window.removeEventListener(`blur`, p),
+          t.remove());
+      },
+    }
+  );
+}
+function Rt(e) {
+  let t = (t) => e.modules.get(t),
+    n = e.events.on(`repair:spark`, (n) => {
+      if (!Array.isArray(n?.pos) || !n.pos.every(Number.isFinite)) return;
+      let r = n.entityId === t(`player`)?.getLocalEntity?.()?.id;
+      (t(`effects`)?.spawn?.(`weld`, n.pos, [0, 1, 0]),
+        t(`audio`)?.play?.(
+          `repair_weld`,
+          r ? { local: !0, volume: 0.55 } : { pos: n.pos, volume: 0.8 },
+        ),
+        r &&
+          n.full &&
+          e.events.emit(`ui:message`, {
+            kind: `info`,
+            text: `VEHICLE FULLY REPAIRED`,
+            ttl: 2,
+          }));
+    });
+  return {
+    dispose() {
+      n?.();
+    },
+  };
+}
+function zt() {
+  let e = new Map();
+  return {
+    update(t, n, r) {
+      if (t.modules.get(`netcode`)?.remoteHeld?.()) {
+        e.clear();
+        return;
+      }
+      let i = new Set();
+      for (let s of t.world.entities.values()) {
+        if (s.type !== `soldier` || s.id === r) continue;
+        i.add(s.id);
+        let c = j[s.weapon];
+        if (
+          !c ||
+          c.class === `launcher` ||
+          s.hp <= 0 ||
+          !(s.state & a.FIRING) ||
+          s.state & (a.RELOADING | a.IN_VEHICLE)
+        ) {
+          e.delete(s.id);
+          continue;
+        }
+        let l = (e.get(s.id) ?? 0) - n;
+        if (l <= 0) {
+          let e = D(s),
+            n = o(s.yaw, s.pitch),
+            r = t.world.map.raycast(e, n, c.range, null, null, !0);
+          (t.events.emit(`weapon:fire`, {
+            entityId: s.id,
+            weaponId: s.weapon,
+            origin: e,
+            dir: n,
+            dist: r?.dist ?? c.range,
+            tracer: !0,
+            muzzle: !0,
+            casing: !1,
+          }),
+            (l = 60 / c.rpm));
+        }
+        e.set(s.id, l);
+      }
+      for (let t of e.keys()) i.has(t) || e.delete(t);
+    },
+    dispose() {
+      e.clear();
+    },
+  };
+}
+var Bt = (e, t, n) => Math.max(t, Math.min(n, e)),
+  Vt = [1, -0.5, 0.35, -0.85],
+  Ht = 0.04;
+function Ut() {
+  let e = { yaw: 0, pitch: 0 },
+    t = null,
+    n = 1,
+    r = 0,
+    i = 0.14;
+  function a(n) {
+    if (t)
+      for (let r of [`yaw`, `pitch`]) {
+        let i = n[r] - t[r];
+        (r === `yaw` && (i = Math.atan2(Math.sin(i), Math.cos(i))),
+          i * e[r] < 0 &&
+            (e[r] =
+              Math.sign(e[r]) * Math.max(0, Math.abs(e[r]) - Math.abs(i))));
+      }
+    t = { ...n };
+  }
+  return {
+    reset() {
+      ((e = { yaw: 0, pitch: 0 }), (t = null), (n = 1), (r = 0));
+    },
+    step(o, s) {
+      a(o);
+      let c = n;
+      n += Math.max(0, s);
+      let l = Math.max(0, n - Math.max(i, c)),
+        u = 1 - Math.exp(-10 * l),
+        d = { ...o };
+      for (let t of [`yaw`, `pitch`]) {
+        let n = e[t] * u;
+        ((d[t] -= n), (e[t] -= n));
+      }
+      return (
+        n > 0.3 &&
+          Math.abs(e.pitch) + Math.abs(e.yaw) < 1e-5 &&
+          ((d.yaw -= e.yaw),
+          (d.pitch -= e.pitch),
+          (e = { yaw: 0, pitch: 0 }),
+          (r = 0)),
+        (t = { ...d }),
+        d
+      );
+    },
+    kick(o, s) {
+      if ((a(o), s.class === `launcher`)) return { ...o };
+      i = s.class === `ar` ? Ht : 0.14;
+      let c = Math.min(0.18 - e.pitch, (s.recoil?.[1] ?? 0) * 0.65),
+        l =
+          Bt(
+            e.yaw + (s.recoil?.[0] ?? 0) * 0.35 * Vt[r++ % Vt.length],
+            -0.035,
+            0.035,
+          ) - e.yaw,
+        u = { yaw: o.yaw + l, pitch: Bt(o.pitch + c, -1.55, 1.55) },
+        d = s.recoilReturn ?? 1;
+      return (
+        (e.yaw += l * d),
+        (e.pitch += (u.pitch - o.pitch) * d),
+        (n = 0),
+        (t = { ...u }),
+        u
+      );
+    },
+    stats: () => ({ ...e, quiet: n, index: r }),
+  };
+}
+var Wt = (2 * Math.atan(Math.tan((75 * Math.PI) / 360) / 2) * 180) / Math.PI;
+function Gt(e) {
+  let t = !1,
+    n = !1,
+    r = 0,
+    i = 0,
+    o = () => e.modules.get(`player`),
+    s = () => {
+      let t = o()?.getLocalEntity?.();
+      return (
+        !e.config.showcase &&
+        t?.hp > 0 &&
+        !(t.state & (a.DEAD | a.IN_VEHICLE)) &&
+        !e.modules.get(`ui`)?.isVisible?.(`spawn`)
+      );
+    },
+    c = () => !!e.config.frost && s(),
+    l = () => t || n,
+    u = () => e.postfx.setThermal(l(), i, !n || t);
+  function d(n) {
+    let i = !!n && c();
+    i !== t &&
+      ((t = i),
+      t || (r = e.world.time.sim + 0.35),
+      u(),
+      e.events.emit(`ui:thermal`, { active: t }));
+  }
+  function f(e) {
+    e.repeat ||
+      Be(e.target) ||
+      (e.code === `KeyH` && o()?.isInputActive?.()
+        ? (e.preventDefault(), d(!t))
+        : t &&
+          [
+            `Escape`,
+            `ShiftLeft`,
+            `ShiftRight`,
+            `KeyG`,
+            `KeyT`,
+            `KeyX`,
+            `KeyR`,
+            `KeyF`,
+          ].includes(e.code) &&
+          d(!1));
+  }
+  let m = () => d(!1);
+  (window.addEventListener(`keydown`, f), window.addEventListener(`blur`, m));
+  let h = [
+    e.events.on(`net:disconnected`, m),
+    e.events.on(`player:local`, m),
+    e.events.on(`explosion`, (t) => {
+      if (!l() || !t?.pos) return;
+      let n = e.camera.position.toArray(),
+        r = t.pos.map((e, t) => e - n[t]),
+        a = Math.hypot(...r);
+      if (a < 1 || a > 100) return;
+      let o = r.map((e) => e / a),
+        s = [
+          -Math.sin(e.camera.rotation.y) * Math.cos(e.camera.rotation.x),
+          Math.sin(e.camera.rotation.x),
+          -Math.cos(e.camera.rotation.y) * Math.cos(e.camera.rotation.x),
+        ];
+      o.reduce((e, t, n) => e + t * s[n], 0) < 0.75 ||
+        e.world.map.isOccluded(n, o, a, 0.5) ||
+        (i = Math.max(i, 0.85 * (1 - a / 120)));
+    }),
+  ];
+  return {
+    lower: () => {
+      ((n = !1), d(!1), u());
+    },
+    active: () => t,
+    scoped: () => n,
+    busy: () => t || e.world.time.sim < r,
+    setScope(e) {
+      n = !!e && s();
+    },
+    filter(n) {
+      return (
+        t && (!c() || n.buttons & p.SPRINT) && d(!1),
+        (t || e.world.time.sim < r) &&
+          (n.buttons &= ~(p.FIRE | p.ADS | p.MELEE | p.RELOAD)),
+        n
+      );
+    },
+    update(n) {
+      (t && (!c() || !o()?.isInputActive?.()) && d(!1),
+        (i = Math.max(0, i - n * 0.9)),
+        u(),
+        t &&
+          ((e.camera.fov = Wt),
+          e.camera.updateProjectionMatrix(),
+          o()?.setAimSensitivityScale?.(0.5)));
+    },
+    dispose() {
+      ((n = !1),
+        d(!1),
+        u(),
+        window.removeEventListener(`keydown`, f),
+        window.removeEventListener(`blur`, m),
+        h.forEach((e) => e?.()));
+    },
+  };
+}
+var Kt = (e) =>
+    e
+      ? `${e.weaponId}/${e.entity?.id ?? e.entityId ?? e.entity?.owner ?? ``}`
+      : ``,
+  qt = (e, t, n) => !!e.replay && e.replayKey === t && e.replay.weaponId === n,
+  K = null,
+  Jt = 12,
+  q = new T();
+function Yt(e, t, n, r) {
+  let i = K.lock;
+  if (!(K.selected === F.id && r && t?.hp > 0 && !K.replay && K.vm?.ads >= 1)) {
+    (K.lockShown &&
+      ((K.lockShown = !1), e.events.emit(`ui:javelinLock`, { active: !1 })),
+      (K.lockWas = !1));
+    return;
+  }
+  K.lockShown = !0;
+  let a = i.targetId == null ? null : e.world.get(i.targetId),
+    o = Ae(i, Jt),
+    s = {
+      active: !0,
+      state:
+        (K.ammo[F.id]?.mag ?? 0) <= 0
+          ? `empty`
+          : a
+            ? o
+              ? `locked`
+              : `locking`
+            : `seek`,
+      progress: Math.min(1, i.ticks / ((i.need ?? F.lockTicks) + Jt)),
+    };
+  (a &&
+    (q.fromArray(Oe(a)),
+    (s.distance = q.distanceTo(e.camera.position)),
+    q.project(e.camera),
+    q.z < 1 && ((s.x = q.x), (s.y = q.y))),
+    e.events.emit(`ui:javelinLock`, s));
+  let c = e.modules.get(`audio`);
+  ((K.lockBeep = (K.lockBeep ?? 0) - n),
+    o && !K.lockWas
+      ? c?.play?.(`ui_confirm`, { volume: 0.7 })
+      : a &&
+        K.lockBeep <= 0 &&
+        ((K.lockBeep = o ? 0.11 : 0.42 - 0.3 * s.progress),
+        c?.play?.(`ui_tick`, { volume: o ? 0.55 : 0.4, pitch: o ? 1.25 : 1 })),
+    (K.lockWas = o));
+}
+var J = (e) => le(K?.equipment?.definition(e) ?? j[e]),
+  Xt = `salient.weapons.sensBase`,
+  Y = (e, t, n) => (e < t ? t : e > n ? n : e);
+function Zt() {
+  return Object.fromEntries(
+    M.map((e) => [e.id, { mag: e.mag, reserve: e.reserve }]),
+  );
+}
+var Qt = {
+  medkit: `MEDKIT · CLICK TO DROP · HEALS EVERYONE WITHIN 4 M`,
+  ammo: `AMMO BOX · CLICK TO DROP · RESUPPLIES EVERYONE WITHIN 4 M`,
+  repair: `REPAIR TORCH · HOLD CLICK FACING A FRIENDLY VEHICLE`,
+  beacon: `RESPAWN BEACON · CLICK AT THE FLOOR TO PLANT · DEPLOY ON IT WHILE IT STANDS`,
+};
+function X(e, t, n, r = !1) {
+  e.events.emit(`ui:ammo`, {
+    mag: n.mag,
+    reserve: n.reserve,
+    magSize: t.mag,
+    mode: t.mode,
+    name: t.name,
+    reloading: r,
+    tool: t.class === `tool` || t.class === `defib`,
+  });
+}
+function Z(e, t, n) {
+  ((K.presentedDef = t), K.vm?.setWeapon(t));
+  let r = K,
+    i = ++K.presentGeneration;
+  r.catalog.has(t.id) ||
+    r.catalog
+      .ensure(t.id, { priority: `local` })
+      .then(() => {
+        if (K !== r || i !== r.presentGeneration) return;
+        let e = n();
+        if (
+          e &&
+          e.id === t.id &&
+          ((r.presentedDef = e), r.vm?.setWeapon(e), !r.replay)
+        ) {
+          let t = r.ammo[e.id]?.mag;
+          (t != null && (r.vm?.setLoaded(t > 0), r.vm?.setAmmo?.(t)),
+            r.vm?.setReload(
+              r.reloadT < 0 ? 0 : Y(1 - r.reloadT / e.reload, 0.001, 1),
+            ));
+        }
+      })
+      .catch((t) => e.warn?.(`Weapon model`, String(t)));
+}
+var Q = 31,
+  $t = (e) => {
+    let t = e.modules.get(`player`)?.getLocalEntity?.();
+    return !!t && K?.equipment?.classId(t) === `medic`;
+  };
+function en(e) {
+  let t = e.modules.get(`player`)?.getLocalEntity?.();
+  if (
+    !t ||
+    t.hp <= 0 ||
+    t.state & (a.DEAD | a.IN_VEHICLE) ||
+    e.config.showcase ||
+    e.modules.get(`weapons`)?.isThermalBusy?.()
+  )
+    return !1;
+  let n = e.world.time.sim;
+  return n - (K.padsAt ?? -1 / 0) < 0.35
+    ? !1
+    : ((K.padsAt = n),
+      (e.modules.get(`netcode`)?.sendRpc?.(`medic:pads`, { entityId: t.id }) ??
+        -1) >= 0);
+}
+var tn = () => !!K?.kitAction?.padsActive() && j[K.selected]?.class !== `defib`;
+function nn(e, t) {
+  let n = Number.isInteger(+t) ? +t : 0,
+    r = e.config.showcase === `weapons` ? j[n] : re(n),
+    i = r && !r.retired ? r : M[0];
+  ((K.selected = i.id),
+    (K.cooldown = Math.max(K.cooldown, 0.16)),
+    (K.reloadT = -1),
+    K.vm?.setReload(0),
+    Z(e, i, () => (!K.replay && K.selected === i.id ? J(i.id) : null)));
+  let o = e.modules.get(`player`)?.getLocalEntity?.();
+  (o && (o.state &= ~a.RELOADING),
+    X(e, i, K.ammo[i.id]),
+    e.events.emit(`ui:message`, { kind: `info`, text: i.name, ttl: 1.2 }));
+}
+function rn(e, t, n, r) {
+  K.reloadT >= 0 ||
+    r.mag >= n.mag ||
+    r.reserve <= 0 ||
+    ((K.reloadT = n.reload),
+    (t.state |= a.RELOADING),
+    e.events.emit(`weapon:reload`, {
+      entityId: t.id,
+      weaponId: n.id,
+      duration: n.reload,
+    }),
+    X(e, n, r, !0),
+    K.vm?.setReload(0.001));
+}
+function an(e, t, n, r) {
+  let i = Math.min(n.mag - r.mag, r.reserve);
+  ((r.mag += i),
+    (e.localServer && n.class === `launcher`) || (r.reserve -= i),
+    (K.reloadT = -1),
+    (t.state &= ~a.RELOADING),
+    K.vm?.setReload(0),
+    X(e, n, r, !1));
+}
+function on(e, t, n, r, i, o = !1) {
+  if (!o && r.mag <= 0) {
+    rn(e, t, n, r);
+    return;
+  }
+  if (n.class === `defib` || n.class === `tool`) {
+    K.cooldown = we(n);
+    return;
+  }
+  if (
+    (o || r.mag--,
+    (K.cooldown = we(n)),
+    K.shotSeq++,
+    (t.state |= a.FIRING),
+    n.class === `launcher`)
+  ) {
+    if ((K.vm?.kick(n.id === F.id ? 2.6 : 1.5), X(e, n, r), n.id === F.id)) {
+      let t = e.modules.get(`player`),
+        n = t?.getLook?.();
+      if (n) {
+        let e = K.aimRecoil.kick(n, { class: `thump`, recoil: [0.02, 0.11] });
+        t.setLook(e.yaw, e.pitch);
+      }
+    }
+    return;
+  }
+  let s = D(t, [0, 0, 0]),
+    c = K.vm?.muzzle
+      ? K.vm.muzzle.getWorldPosition(new T()).toArray()
+      : s.slice(),
+    l = o ? Ze(K.prediction.state, n) : (K.vm?.ads ?? 0),
+    u = Ee(t, n, i, l),
+    d = ie(n),
+    f = Te(t, n, e.world, K.rng, e.world.time.tick, {
+      origin: s,
+      spread: u,
+      ignoreEntityId: t.id,
+      flight: d,
+    }),
+    p = d ? xe(s, f.dir, n, e.world) : f.hit.distance,
+    m = K.scoped ? Math.min(4, Math.max(0.5, p - 1)) : 0,
+    h = m ? [s[0] + f.dir[0] * m, s[1] + f.dir[1] * m, s[2] + f.dir[2] * m] : c;
+  (d
+    ? (K.rounds ??= []).push({ shot: f, def: n, entityId: t.id, age: 0 })
+    : sn(e, t.id, n, f),
+    e.events.emit(`weapon:fire`, {
+      entityId: t.id,
+      weaponId: n.id,
+      origin: h,
+      dir: f.dir,
+      seq: K.shotSeq,
+      dist: Math.max(0.5, p - m),
+      tracer: !1,
+      muzzle: !1,
+      casing: !K.scoped,
+    }),
+    K.vm?.kick());
+  let g = e.modules.get(`player`),
+    _ = g?.getLook?.();
+  if (_) {
+    let e = K.sway?.kickScale() ?? 1,
+      t = K.aimRecoil.kick(
+        _,
+        e < 1 ? { ...n, recoil: n.recoil.map((t) => t * e) } : n,
+      );
+    g.setLook(t.yaw, t.pitch);
+  }
+  ((K.heat = Math.min(1, K.heat + 0.12)), X(e, n, r));
+}
+function sn(e, t, n, r) {
+  let i = r.hit,
+    a = i.targetId ?? i.entityId,
+    o = Ce(n, i.distance, i.part, i.pen ?? 1),
+    s = !1;
+  a != null &&
+    K.range &&
+    e.world.get(a)?.ext?.target &&
+    ((s = K.range.hit(a, o).kill),
+    e.events.emit(`ui:hitmarker`, { headshot: i.part === `head`, kill: s }));
+  for (let a of [...(i.beyond ?? []), ...(i.stop ? [i.stop] : [])]) {
+    if (a.miss) continue;
+    let i = a.targetId ?? a.entityId,
+      o = Ce(n, a.distance, a.part, a.pen ?? 1);
+    if (i != null && K.range && e.world.get(i)?.ext?.target) {
+      let t = K.range.hit(i, o);
+      ((s ||= t.kill),
+        e.events.emit(`ui:hitmarker`, {
+          headshot: a.part === `head`,
+          kill: t.kill,
+        }));
+    }
+    for (let i of Se(a, r.dir))
+      e.events.emit(`weapon:hit`, {
+        entityId: t,
+        weaponId: n.id,
+        point: i.point,
+        normal: i.normal,
+        surface: i.surface,
+        targetId: null,
+        part: null,
+        damage: 0,
+      });
+    e.events.emit(`weapon:hit`, {
+      entityId: t,
+      weaponId: n.id,
+      point: a.point,
+      normal: a.normal,
+      surface: a.surface || `dirt`,
+      targetId: i ?? null,
+      part: a.part ?? null,
+      damage: i == null ? 0 : o,
+    });
+  }
+  for (let a of Se(i, r.dir))
+    e.events.emit(`weapon:hit`, {
+      entityId: t,
+      weaponId: n.id,
+      point: a.point,
+      normal: a.normal,
+      surface: a.surface,
+      targetId: null,
+      part: null,
+      damage: 0,
+    });
+  (i.miss ||
+    e.events.emit(`weapon:hit`, {
+      entityId: t,
+      weaponId: n.id,
+      point: i.point,
+      normal: i.normal,
+      surface: i.surface || `dirt`,
+      targetId: a,
+      part: i.part,
+      damage: o,
+    }),
+    s &&
+      e.events.emit(`ui:message`, {
+        kind: `kill`,
+        text: `${Math.round(i.distance)} M  TARGET DOWN`,
+        ttl: 1.4,
+      }));
+}
+function cn(e, t) {
+  K.rounds = K.rounds.filter((n) => {
+    n.age += t;
+    let r = De(n.shot.flight, n.age);
+    return !r || ((n.shot.hit = r), sn(e, n.entityId, n.def, n.shot), !1);
+  });
+}
+function ln(e, t) {
+  let n = K.prediction.state,
+    r = J(n.selected);
+  (e.modules.get(`player`)?.setSlotCount?.(n.loadout?.length ?? ae.length),
+    K.selected !== n.selected &&
+      r.class === `tool` &&
+      !K.replay &&
+      e.events.emit(`ui:message`, { kind: `hint`, text: Qt[r.tool], ttl: 3 }),
+    (K.selected !== n.selected || K.presentedDef !== r) &&
+      ((K.selected = n.selected),
+      K.replay ||
+        Z(e, r, () => (!K.replay && K.selected === r.id ? J(r.id) : null))),
+    (K.ammo = n.ammo),
+    (K.reloadT =
+      n.reloadEndTick < 0
+        ? -1
+        : Math.max(0, (n.reloadEndTick - K.prediction.clock) / 60)),
+    K.replay ||
+      (K.vm?.setLoaded(n.ammo[n.selected].mag > 0),
+      K.vm?.setAmmo?.(n.ammo[n.selected].mag)),
+    (t.weapon = n.selected),
+    (t.ammo = n.ammo[n.selected].mag),
+    (t.state &= ~a.RELOADING),
+    K.reloadT >= 0 && (t.state |= a.RELOADING),
+    K.replay ||
+      K.vm?.setReload(
+        K.reloadT < 0 ? 0 : Y(1 - K.reloadT / r.reload, 0.001, 1),
+      ),
+    X(e, r, n.ammo[n.selected], K.reloadT >= 0));
+}
+var $ = {
+    gesture: (e) => K?.vm?.gesture?.(e),
+    getAuthoredBodies: () => K?.bodies ?? null,
+    ensureWeapon: (e, t) => K?.catalog?.ensure(e, t) ?? Promise.resolve(null),
+    prepareLoadout: (e, t = { priority: `spawn` }) => {
+      let n = Array.isArray(e) ? e : Array.isArray(e?.weapons) ? e.weapons : [];
+      return K?.catalog?.ensureMany(n, t) ?? Promise.resolve(null);
+    },
+    isThermalActive: () => K?.thermal?.active() ?? !1,
+    isThermalScoped: () => K?.thermal?.scoped() ?? !1,
+    isThermalBusy: () => K?.thermal?.busy() ?? !1,
+    filterThermalInput: (e) => K?.thermal?.filter(e) ?? e,
+    filterGrenadeInput: (e) => {
+      let t = K?.grenades?.filter(e) ?? e;
+      return (tn() && (t.buttons &= ~(p.FIRE | p.ADS | p.RELOAD)), t);
+    },
+    isAimingSightVisible: () => K?.vm?.aimingSightVisible ?? !1,
+    weaponDefs: M,
+    getViewModel: () => K?.vm?.root ?? null,
+    getSelected: () => J(K?.selected ?? 0),
+    select: (e) => {
+      K && nn(K.ctx, e);
+    },
+    configure: (e) => K?.equipment?.configure(e),
+    equipmentStatus: () => K?.equipment?.status(),
+    equippedDefinition: (e, t) => K?.equipment?.definition(e, t) ?? j[e],
+    equippedClass: (e) => K?.equipment?.classId(e) ?? null,
+    fireWeapon: Te,
+    damageAt: Ce,
+    shotInterval: we,
+    zoom: (e) => K?.vm?.zoom(e) ?? null,
+    presentReplay: (e) => {
+      if (!K?.vm) return;
+      if (e) {
+        let t = Kt(e);
+        (t !== K.replayKey &&
+          ((K.replayKey = t), (K.presentedDef = null), K.presentGeneration++),
+          (K.replay = e));
+        return;
+      }
+      if (!K.replay) return;
+      ((K.replay = null),
+        (K.replayKey = ``),
+        K.presentGeneration++,
+        K.vm.setReload(0),
+        K.vm.tickAim(10, { buttons: 0 }));
+      let t = J(K.selected);
+      (Z(K.ctx, t, () => (!K.replay && K.selected === t.id ? J(t.id) : null)),
+        K.vm.setLoaded((K.ammo[K.selected]?.mag ?? 1) > 0));
+    },
+    kickReplay: (e = 1) => {
+      K?.replay && K.vm?.kick(e);
+    },
+    replayMuzzle: () =>
+      K?.replay && K.vm?.muzzle
+        ? K.vm.muzzle.getWorldPosition(new T()).toArray()
+        : null,
+    replayFov: () =>
+      !K?.replay || !K.vm
+        ? 75
+        : 75 + ((K.vm.optic ? K.vm.opticFov : 55) - 75) * K.vm.ads,
+    throwGrenade: () =>
+      K ? ($t(K.ctx) ? en(K.ctx) : K.grenades.requestThrow()) : !1,
+    gIsDefib: () => !!K && $t(K.ctx),
+    releaseGrenade: () => K?.grenades?.releaseThrow() ?? !1,
+    grenadeFuse: () => K?.grenades?.fuse() ?? null,
+    grenadeCooking: () => K?.grenades?.cooking() ?? !1,
+    grenadeGrabTarget: () => K?.grenades?.grabTarget() ?? null,
+    grenadeCount: () => K?.grenades?.remaining() ?? 0,
+    grenadeThrowProgress: () => K?.grenades?.progress() ?? -1,
+    gadgetStatus: () => K?.gadgets?.status() ?? null,
+    isUnlimitedAmmo: () =>
+      !!K?.ctx.localServer && j[K.selected]?.class === `launcher`,
+    stats: () =>
+      K
+        ? {
+            selected: K.selected,
+            ammo: structuredClone(K.ammo),
+            shots: K.shotSeq,
+            heat: K.heat,
+            inventory: K.prediction?.stats(),
+            aimRecoil: K.aimRecoil.stats(),
+          }
+        : null,
+  },
+  un = {
+    name: `weapons`,
+    deps: [`player`, `ui`, `audio`, `effects`, `netcode`],
+    api: $,
+    async init(e) {
+      ((K = {
+        ctx: e,
+        rng: e.rng.fork(`weapons`),
+        selected: 0,
+        lastInputSlot: 0,
+        ammo: Zt(),
+        cooldown: 0,
+        reloadT: -1,
+        heat: 0,
+        shotSeq: 0,
+        prevFire: !1,
+        prevReload: !1,
+        range: null,
+        vm: null,
+        keyOff: null,
+        presentGeneration: 0,
+      }),
+        (K.catalog = ce(e.assets)),
+        await K.catalog.ensure(0, { priority: `local` }));
+      let t = K.catalog.scenes;
+      (e.scene.add(e.camera),
+        (K.vm = me(e.camera, { bodies: t, renderer: e.renderer })),
+        K.vm.setWeapon(M[0]),
+        (K.bodies = t),
+        (K.grenades = Ge(e, {
+          interruptReload: () => {
+            let t = e.modules.get(`player`)?.getLocalEntity?.();
+            (K.prediction?.interruptReload(),
+              (K.reloadT = -1),
+              K.vm?.setReload(0),
+              t &&
+                ((t.state &= ~a.RELOADING),
+                K.prediction &&
+                  e.modules.get(`netcode`)?.getClient?.() &&
+                  ln(e, t)));
+          },
+        })),
+        (K.knife = ct(e)),
+        (K.gadgets = xt(e)),
+        (K.beacons = wt(e)),
+        (K.drops = Et(e, {
+          bodies: t,
+          catalog: K.catalog,
+          inventory: () => K?.prediction?.state,
+        })),
+        (K.medic = Pt(e)),
+        (K.kitAction = It(e)),
+        (K.redeploy = Lt(e)),
+        (K.repair = Rt(e)),
+        (K.rockets = dt(e)),
+        (K.thermal = Gt(e)),
+        (K.prediction = $e(!!e.localServer)),
+        (K.offs = []),
+        (K.aimRecoil = Ut()),
+        (K.lock = ke()),
+        (K.sway = ht()),
+        (K.braced = !1),
+        (K.restTick = 0),
+        typeof document < `u` && !e.config?.headless && (K.steadyHud = gt()),
+        K.offs.push(
+          e.events.on(`player:beforeInput`, ({ entity: t, dt: n }) => {
+            if (!t || t.hp <= 0 || t.state & (a.DEAD | a.IN_VEHICLE)) {
+              (K.aimRecoil.reset(),
+                K.sway.reset(),
+                (K.braced = !1),
+                K.steadyHud?.update(!1));
+              return;
+            }
+            let r = e.modules.get(`player`),
+              i = K.aimRecoil.step(r.getLook(), n),
+              o = K.vm,
+              s = J(K.selected),
+              c =
+                !K.replay &&
+                o?.optic?.type === `scope` &&
+                o.ads >= 1 &&
+                o.opticFov <= pt.maxFov &&
+                s.class !== `launcher`,
+              l = s.attachments?.grip === `bipod`;
+            (c
+              ? K.restTick++ % 6 == 0 &&
+                (K.braced = mt(e.world, D(t), i.yaw, l))
+              : (K.braced = !1),
+              K.sway.step(i, n, {
+                scoped: c,
+                stance: t.stance,
+                braced: K.braced,
+                bipod: l,
+              }),
+              r.setLook(i.yaw, i.pitch),
+              K.steadyHud?.update(c, K.sway.status()));
+          }),
+        ));
+      let n = () => {
+        let t = J(K.selected);
+        K.presentedDef !== t &&
+          !K.replay &&
+          Z(e, t, () => (!K.replay && K.selected === t.id ? J(t.id) : null));
+      };
+      ((K.equipment = vt(e, n)), K.offs.push(ue(n), fe(n)));
+      let r = () =>
+        e.modules
+          .get(`netcode`)
+          ?.sendRpc?.(`career:camos`, { ...he(), wear: ye() });
+      (K.offs.push(ue(r), fe(r), e.events.on(`player:local`, r)),
+        e.modules
+          .get(`player`)
+          ?.setSlotCount?.(e.config.showcase ? 4 : ae.length));
+      let i = ({ entityId: t }) => {
+        (K.aimRecoil.reset(),
+          K.sway?.reset(),
+          (K.minEpoch =
+            K.localEntityId === t ? K.prediction.stats().epoch + 1 : 0),
+          (K.prediction = $e(!!e.localServer)),
+          (K.localEntityId = t),
+          (K.ammo = Zt()),
+          (K.cooldown = 0),
+          (K.reloadT = -1),
+          (K.prevFire = !1),
+          (K.prevReload = !1),
+          K.vm?.setReload(0),
+          X(e, j[K.selected], K.ammo[K.selected]));
+      };
+      (K.offs.push(e.events.on(`player:local`, i)),
+        K.offs.push(
+          e.events.on(`player:spawn`, (t) => {
+            t.entityId === e.modules.get(`player`)?.getLocalEntity?.()?.id &&
+              i(t);
+          }),
+        ),
+        K.offs.push(
+          e.events.on(`weapon:inventory`, (t) => {
+            let n = e.modules.get(`player`)?.getLocalEntity?.();
+            !n ||
+              t.entityId !== n.id ||
+              t.epoch < (K.minEpoch ?? 0) ||
+              (K.prediction.reconcile(t) && ln(e, n));
+          }),
+        ));
+      let o = e.modules.get(`netcode`)?.getClient?.();
+      (o &&
+        K.offs.push(
+          o.on(`connected`, () => {
+            ((K.localEntityId = null),
+              (K.minEpoch = 0),
+              (K.prediction = $e(!!e.localServer)));
+          }),
+        ),
+        o &&
+          K.offs.push(
+            o.on(`input`, (t) => {
+              if (e.config.showcase) return;
+              let n = e.modules.get(`player`)?.getLocalEntity?.();
+              if (!n || n.state & a.IN_VEHICLE) return;
+              let r = n.hp > 0 && !(n.state & a.DEAD),
+                i = K.prediction.state,
+                o = (i.loadout ?? ae)[t.slot],
+                s = o === F.id;
+              (je(
+                K.lock,
+                e.world,
+                n,
+                s &&
+                  r &&
+                  i.selected === o &&
+                  Ye(i, K.prediction.clock) &&
+                  Ze(i, J(o)) >= 1 &&
+                  i.reloadEndTick < 0 &&
+                  i.ammo[o].mag > 0,
+              ),
+                K.knife.input(t.buttons, r, K.grenades.busy()));
+              let c = K.prediction.predict(
+                t,
+                r,
+                !s || Ae(K.lock, Jt),
+                K.grenades.busy() || K.knife.busy() || tn(),
+              );
+              (c.shot && s && ((K.lock.targetId = null), (K.lock.ticks = 0)),
+                ln(e, n),
+                c.firing || (n.state &= ~a.FIRING));
+              let l = J(K.selected);
+              (c.reload &&
+                e.events.emit(`weapon:reload`, {
+                  entityId: n.id,
+                  weaponId: l.id,
+                  duration: l.reload,
+                }),
+                c.shot && on(e, n, l, K.ammo[l.id], t, !0));
+            }),
+          ));
+      let s = (t) => {
+          if (
+            t.code === `KeyX` &&
+            !t.repeat &&
+            e.modules.get(`player`)?.getLocalEntity?.()?.state & a.IN_VEHICLE
+          ) {
+            (t.preventDefault(),
+              e.modules.get(`netcode`)?.sendRpc?.(`vehicle:flares`, {}));
+            return;
+          }
+          if (
+            (t.code === `KeyQ` || t.code === `KeyE`) &&
+            !t.repeat &&
+            e.modules.get(`player`)?.isInputActive?.() &&
+            e.modules.get(`player`)?.getLocalEntity?.()?.state & a.IN_VEHICLE
+          ) {
+            (t.preventDefault(),
+              e.modules.get(`netcode`)?.sendRpc?.(`vehicle:seat`, {
+                dir: t.code === `KeyQ` ? -1 : 1,
+              }));
+            return;
+          }
+          (t.code === `KeyG` &&
+            !t.repeat &&
+            e.modules.get(`player`)?.isInputActive?.() &&
+            (t.preventDefault(), $.throwGrenade()),
+            e.config.showcase === `weapons` &&
+              /^Digit[1-7]$/.test(t.code) &&
+              nn(e, Number(t.code.slice(5)) - 1));
+        },
+        c = (e) => {
+          K.vm?.optic?.type === `scope` &&
+            K.vm.ads > 0.5 &&
+            K.vm.zoom(e.deltaY < 0 ? 1 : -1) != null &&
+            (e.preventDefault(), e.stopImmediatePropagation());
+        },
+        l = (e) => {
+          e.code === `KeyG` && K.grenades.releaseThrow();
+        },
+        u = () => K.grenades.releaseThrow();
+      (window.addEventListener(`keydown`, s),
+        window.addEventListener(`keyup`, l),
+        window.addEventListener(`blur`, u),
+        window.addEventListener(`wheel`, c, { capture: !0, passive: !1 }),
+        (K.keyOff = () => {
+          (window.removeEventListener(`keydown`, s),
+            window.removeEventListener(`keyup`, l),
+            window.removeEventListener(`blur`, u),
+            window.removeEventListener(`wheel`, c, { capture: !0 }));
+        }));
+      let d = e.modules.get(`player`);
+      try {
+        let e = localStorage.getItem(Xt);
+        e != null &&
+          d?.setSensitivity &&
+          (d.setSensitivity(+e), localStorage.removeItem(Xt));
+      } catch {}
+      ((K.sensBase = d?.getSensitivity?.() ?? null),
+        (K.sensRatio = 1),
+        (K.scoped = !1),
+        X(e, M[0], K.ammo[0]));
+    },
+    tick(e, t) {
+      if ((K?.equipment?.tick(), !K)) return;
+      let n = e.modules.get(`player`),
+        r = n?.getLocalEntity?.();
+      if (!r) return;
+      let i = n.getInput();
+      if (!e.config.showcase && e.modules.get(`netcode`)?.getClient?.()) {
+        ((!e.modules.get(`netcode`)?.isConnected?.() ||
+          r.hp <= 0 ||
+          r.state & a.DEAD) &&
+          ((K.reloadT = -1),
+          K.vm?.setReload(0),
+          (r.state &= ~(a.FIRING | a.RELOADING))),
+          (K.heat = Math.max(0, K.heat - t * 0.75)),
+          K.replay ||
+            K.vm?.tickAim(
+              t,
+              i,
+              Ze(K.prediction.state, J(K.selected)),
+              qe(K.prediction.state, K.prediction.clock),
+            ),
+          e.events.emit(`ui:spread`, {
+            spread: Y((j[K.selected].spread + K.heat * 0.018) / 0.025, 0, 1),
+          }));
+        return;
+      }
+      if (r.hp <= 0 || r.state & a.DEAD) {
+        ((K.reloadT = -1),
+          K.vm?.setReload(0),
+          (r.state &= ~(a.FIRING | a.RELOADING)),
+          (K.prevFire = !!(i.buttons & p.FIRE)),
+          (K.prevReload = !!(i.buttons & p.RELOAD)));
+        return;
+      }
+      i.slot !== K.lastInputSlot &&
+        re(i.slot) &&
+        ((K.lastInputSlot = i.slot), nn(e, i.slot));
+      let o = j[K.selected],
+        s = K.ammo[o.id];
+      ((K.cooldown = Math.max(0, K.cooldown - t)),
+        (K.heat = Math.max(0, K.heat - t * 0.75)),
+        K.replay || K.vm?.tickAim(t, i),
+        (r.weapon = o.id),
+        (r.ammo = s.mag));
+      let c = !!(i.buttons & p.FIRE),
+        l = !!(i.buttons & p.RELOAD);
+      ((s.mag <= 0 || (l && !K.prevReload)) && rn(e, r, o, s),
+        K.reloadT >= 0 &&
+          ((K.reloadT -= t),
+          K.vm?.setReload(Y(1 - K.reloadT / o.reload, 0.001, 1)),
+          K.reloadT <= 0 && an(e, r, o, s)));
+      let u = o.mode === `AUTO` ? c : c && !K.prevFire;
+      (u && K.cooldown <= 0 && K.reloadT < 0 && on(e, r, o, s, i),
+        u || (r.state &= ~a.FIRING),
+        (r.ammo = s.mag),
+        (K.prevFire = c),
+        (K.prevReload = l),
+        e.events.emit(`ui:spread`, {
+          spread: Y((o.spread + K.heat * 0.018) / 0.025, 0, 1),
+        }));
+    },
+    update(e, t) {
+      if (!K) return;
+      (K.rounds?.length && cn(e, t),
+        (K.remoteFire ??= zt()),
+        K.remoteFire.update(
+          e,
+          t,
+          e.modules.get(`player`)?.getLocalEntity?.()?.id,
+        ),
+        K.grenades.update(t),
+        K.gadgets.update(t),
+        K.beacons.update(t),
+        K.drops.update(t),
+        K.rockets.update(t));
+      let n = e.modules.get(`player`),
+        r = n?.getLocalEntity?.(),
+        i = n?.getInput?.();
+      if (K.replay) {
+        (K.grenades.present(!1),
+          K.knife.cancel(),
+          K.vm?.setThrowLower(0),
+          K.medic.update(t),
+          K.kitAction.update(t, !1, K.vm),
+          K.thermal?.lower());
+        let n = K.replay,
+          r = $.equippedDefinition(n.weaponId, n.entity) ?? j[0];
+        if (K.presentedDef !== r) {
+          let t = K.replayKey;
+          (Z(e, r, () =>
+            qt(K, t, r.id)
+              ? ($.equippedDefinition(r.id, K.replay.entity) ?? j[r.id])
+              : null,
+          ),
+            K.vm?.setLoaded(!0));
+        }
+        let i = { buttons: (n.ads ? p.ADS : 0) | (n.sprint ? p.SPRINT : 0) };
+        (K.vm?.setReload(n.reload ?? 0),
+          K.vm?.tickAim(t, i, 1),
+          K.vm?.setVisible(!0),
+          K.vm?.update(t, i, n.speed ?? 0),
+          K.vm?.setCameraFov(e.camera.fov, e.renderer.domElement.clientHeight),
+          K.scoped &&
+            ((K.scoped = !1),
+            e.events.emit(`ui:scoped`, { scoped: !1, fov: e.camera.fov })),
+          e.events.emit(`ui:launcherRange`, { active: !1 }),
+          Yt(e, null, t, !1));
+        return;
+      }
+      let o = !1;
+      if (r) {
+        _e(
+          +(e.world.match?.mode === `ffa` || r.team === 1),
+          K.equipment?.classId(r) ?? `assault`,
+          !!e.config.frost,
+        );
+        let t = r.pos[1] + (n?.eyeHeight?.(r) ?? 1.62),
+          i = e.camera.position.x - r.pos[0],
+          a = e.camera.position.y - t,
+          s = e.camera.position.z - r.pos[2];
+        o = i * i + a * a + s * s < 4;
+      }
+      K.medic.update(t);
+      let s = tn() && o;
+      if (s && K.presentedDef?.id !== Q)
+        (Z(e, j[Q], () => (tn() ? j[Q] : null)), K.vm?.setLoaded(!0));
+      else if (!s && K.presentedDef?.id === Q && K.selected !== Q) {
+        let t = J(K.selected);
+        Z(e, t, () => (!K.replay && K.selected === t.id ? J(t.id) : null));
+        let n = K.ammo[t.id]?.mag;
+        n != null && (K.vm?.setLoaded(n > 0), K.vm?.setAmmo?.(n));
+      }
+      (K.kitAction.update(
+        t,
+        o && r?.hp > 0 && !(r.state & (a.IN_VEHICLE | a.DEAD)),
+        K.vm,
+        s ? `defib` : j[K.selected]?.class,
+      ),
+        K.vm?.setThrowLower(Math.max(K.grenades.lower(), K.knife.lower())),
+        K.vm?.setVisible(o && !K.thermal?.busy() && !(r?.state & a.IN_VEHICLE)),
+        K.vm?.update(t, i, r ? Math.hypot(r.vel[0], r.vel[2]) : 0),
+        K.range?.update(t, e.world.time.sim));
+      let c = K.grenades.present(o && !K.thermal?.busy());
+      c && (e.camera.rotateZ(c.roll), e.camera.rotateX(c.pitch));
+      let l = K.knife.present(
+        t,
+        o &&
+          r?.hp > 0 &&
+          !(r.state & (a.DEAD | a.IN_VEHICLE)) &&
+          !K.thermal?.busy(),
+      );
+      if (
+        (l &&
+          (e.camera.rotateZ(l.roll),
+          e.camera.rotateX(l.pitch),
+          e.camera.translateZ(-l.push)),
+        Yt(e, r, t, o),
+        (K.rangeTimer = (K.rangeTimer ?? 0) - t),
+        K.rangeTimer <= 0)
+      ) {
+        K.rangeTimer = 0.1;
+        let t = j[K.selected];
+        e.events.emit(
+          `ui:launcherRange`,
+          o && r?.hp > 0 && t.class === `launcher`
+            ? ft(e.world, r, t)
+            : { active: !1 },
+        );
+      }
+      let u = K.vm?.optic,
+        d = e.camera,
+        f = K.vm?.opticFov ?? 55;
+      if (o && u && f !== 55) {
+        let e = 1 + (f / 55 - 1) * K.vm.ads;
+        Math.abs(e - 1) > 0.001 && ((d.fov *= e), d.updateProjectionMatrix());
+      }
+      if (
+        (K.vm?.setCameraFov(d.fov, e.renderer.domElement.clientHeight),
+        n?.setAimSensitivityScale)
+      ) {
+        let e = o ? Math.min(1, d.fov / 55) : 1;
+        n.setAimSensitivityScale(e >= 0.995 ? 1 : e);
+      }
+      let m = !!(o && u?.type === `scope` && K.vm.ads >= 1);
+      m !== K.scoped &&
+        ((K.scoped = m), e.events.emit(`ui:scoped`, { scoped: m, fov: d.fov }));
+      let h = e.modules.get(`environment`),
+        g = f > 0 ? 55 / f : 0,
+        _ = o && u?.type === `scope` && g >= 6 ? K.vm.ads * 0.2 : 0;
+      (h?.setFogSightMultiplier?.(1 - _),
+        K.thermal?.setScope(m && !!u?.thermal),
+        K.thermal?.update(t));
+    },
+    async showcase(e) {
+      K.range = nt(e);
+      let t = e.modules.get(`player`),
+        n = t?.getLocalEntity?.();
+      (n &&
+        ((n.pos[0] = 0),
+        (n.pos[1] = e.world.map.getHeight(0, 7)),
+        (n.pos[2] = 7),
+        (n.yaw = 0),
+        (n.pitch = 0),
+        t.setLook?.(0, 0)),
+        e.setCamera(`fps`),
+        e.events.emit(`ui:message`, {
+          kind: `hint`,
+          text: `CLICK TO DEPLOY • LMB FIRE • RMB AIM • R RELOAD • 1–7 WEAPONS`,
+          ttl: 0.6,
+        }));
+    },
+    dispose(e) {
+      K &&=
+        (K.thermal?.dispose(),
+        K.gadgets?.dispose(),
+        K.beacons?.dispose(),
+        K.drops?.dispose(),
+        K.medic?.dispose(),
+        K.kitAction?.dispose(),
+        K.redeploy?.dispose(),
+        K.repair?.dispose(),
+        K.equipment?.dispose(),
+        K.steadyHud?.dispose(),
+        e.modules.get(`player`)?.setBreathCapture?.(null),
+        K.offs?.forEach((e) => e()),
+        e.events.emit(`ui:launcherRange`, { active: !1 }),
+        e.events.emit(`ui:javelinLock`, { active: !1 }),
+        K.keyOff?.(),
+        e.modules.get(`player`)?.setSlotCount?.(4),
+        e.modules.get(`player`)?.setAimSensitivityScale?.(1),
+        K.rockets?.dispose(),
+        K.grenades?.dispose(),
+        K.knife?.dispose(),
+        K.range?.dispose(),
+        K.vm?.dispose(),
+        null);
+    },
+  };
+export { un as default };
+//# sourceMappingURL=weapons-D4QomYwC.js.map

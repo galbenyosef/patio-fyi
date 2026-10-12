@@ -1,0 +1,93 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import { i as e, r as t, t as n } from "./shared-DPd8kRBt.js";
+var r = Math.round(n.speakerHold * 60);
+function i(e, t) {
+  if (!t.ext.net?.helloed || t.entityId <= 0) return null;
+  let n = e.world.get(t.entityId);
+  return !n || n.type !== `soldier` ? null : n;
+}
+function a(e, t, i, a) {
+  let o = e.get(t);
+  if (o) return ((o.tick = a), (o.dist = i), !0);
+  let s = -1,
+    c = -1;
+  for (let [t, n] of e) {
+    if (a - n.tick > r) {
+      e.delete(t);
+      continue;
+    }
+    n.dist > c && ((c = n.dist), (s = t));
+  }
+  if (e.size >= n.maxSpeakers) {
+    if (i >= c) return !1;
+    e.delete(s);
+  }
+  return (e.set(t, { tick: a, dist: i }), !0);
+}
+var o = {
+  name: `voice`,
+  deps: [`netcode`],
+  init() {
+    ((this._stats = { framesIn: 0, framesOut: 0, bytesOut: 0, dropped: 0 }),
+      (this.api.stats = () => ({ ...this._stats })));
+  },
+  onConnect(e, t) {
+    t.ext.voice = {
+      tokens: n.burst,
+      tick: e.world.time.tick,
+      slots: new Map(),
+    };
+  },
+  onDisconnect(e, t) {
+    t.ext.voice = null;
+  },
+  onMessage(r, o, s) {
+    if (!s || s[0] !== 8) return;
+    let c = o.ext.voice,
+      l = this._stats;
+    if (!c) return;
+    let u = r.world.time.tick;
+    if (
+      ((c.tokens = Math.min(
+        n.burst,
+        c.tokens + (u - c.tick) * (n.packetsPerSecond / 60),
+      )),
+      (c.tick = u),
+      c.tokens < 1)
+    ) {
+      l.dropped++;
+      return;
+    }
+    --c.tokens;
+    let d = t(s);
+    if (!d) {
+      l.dropped++;
+      return;
+    }
+    let f = i(r, o);
+    if (!f) {
+      l.dropped++;
+      return;
+    }
+    l.framesIn++;
+    let p = null,
+      m = f.pos,
+      h = n.range * n.range;
+    for (let t of r.clients.values()) {
+      if (t === o || !t.ext.voice || !t.ext.net?.helloed) continue;
+      let n = r.world.get(t.entityId);
+      if (!n) continue;
+      let i = n.pos[0] - m[0],
+        s = n.pos[1] - m[1],
+        c = n.pos[2] - m[2],
+        g = i * i + s * s + c * c;
+      g > h ||
+        (a(t.ext.voice.slots, f.id, Math.sqrt(g), u) &&
+          ((p ??= e(f.id, d.seq, d.frame)),
+          r.send(t.id, p) && (l.framesOut++, (l.bytesOut += p.byteLength))));
+    }
+  },
+  api: {},
+};
+export { o as default };
+//# sourceMappingURL=server-CZiUO-nf.js.map

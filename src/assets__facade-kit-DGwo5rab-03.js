@@ -1,0 +1,346 @@
+// assets__facade-kit-DGwo5rab 03 — base
+// Lines 370-713 of readable/assets__facade-kit-DGwo5rab.pretty.js (statement-aligned).
+var V = {
+    brickRed: {
+      pat: `brick`,
+      p: { base: 9715756, mortar: 12168602, vary: 0.3, burnt: 0.09, seed: 1 },
+      scale: 1.2,
+      rough: 0.92,
+      bump: 1.6,
+      grime: 0.32,
+    },
+    brickTan: {
+      pat: `brick`,
+      p: { base: 12095328, mortar: 9405554, vary: 0.2, burnt: 0.06, seed: 2 },
+      scale: 1.2,
+      rough: 0.92,
+      bump: 1.6,
+      grime: 0.38,
+    },
+    sidingSage: {
+      pat: `lap`,
+      p: { base: 8427386, seed: 3 },
+      scale: 1.44,
+      rough: 0.72,
+      bump: 2.5,
+      grime: 0.16,
+    },
+    battenRed: {
+      pat: `batten`,
+      p: { base: 8138532, seed: 4 },
+      scale: 1.6,
+      rough: 0.85,
+      bump: 2.2,
+      grime: 0.28,
+    },
+    stucco: {
+      pat: `stucco`,
+      p: { base: 14471090, seed: 5 },
+      scale: 2.2,
+      rough: 0.95,
+      bump: 0.8,
+      grime: 0.36,
+    },
+    stone: {
+      pat: `ashlar`,
+      p: { base: 12433062, rows: 4, seed: 6 },
+      scale: 1.6,
+      rough: 0.9,
+      bump: 1.2,
+      grime: 0.3,
+    },
+    rustic: {
+      pat: `ashlar`,
+      p: {
+        base: 13089695,
+        rows: 3,
+        joint: 16,
+        rustic: !0,
+        jointK: 0.55,
+        seed: 7,
+      },
+      scale: 1.8,
+      rough: 0.95,
+      bump: 3,
+      grime: 0.42,
+    },
+    concrete: {
+      pat: `stucco`,
+      p: { base: 11117980, seed: 8, lines: 2 },
+      scale: 2.4,
+      rough: 0.95,
+      bump: 0.6,
+      grime: 0.3,
+    },
+    trimWhite: {
+      pat: `paint`,
+      p: { base: 15460058 },
+      size: 128,
+      scale: 1,
+      rough: 0.55,
+    },
+    trimCream: {
+      pat: `paint`,
+      p: { base: 14206364 },
+      size: 128,
+      scale: 1,
+      rough: 0.6,
+    },
+    ironGreen: {
+      pat: `paint`,
+      p: { base: 2902586 },
+      size: 128,
+      scale: 1,
+      rough: 0.45,
+      metal: 0.25,
+    },
+    ironDark: {
+      pat: `paint`,
+      p: { base: 2763823 },
+      size: 128,
+      scale: 1,
+      rough: 0.5,
+      metal: 0.45,
+    },
+    brass: {
+      pat: `paint`,
+      p: { base: 11569726 },
+      size: 64,
+      scale: 1,
+      rough: 0.3,
+      metal: 0.9,
+    },
+    curtain: {
+      pat: `paint`,
+      p: { base: 14931640 },
+      size: 64,
+      scale: 1,
+      rough: 0.9,
+      emissive: 2760722,
+    },
+    shutterGreen: {
+      pat: `lap`,
+      p: { base: 3100992, rows: 16, seed: 9 },
+      scale: 1,
+      rough: 0.7,
+      bump: 1.2,
+    },
+    shingle: {
+      pat: `shingle`,
+      p: { base: 6182994, seed: 10 },
+      scale: 1.5,
+      rough: 0.95,
+      bump: 3,
+    },
+    corrugated: {
+      pat: `corrugated`,
+      p: { base: 9277580, seed: 11 },
+      scale: 1.2,
+      rough: 0.5,
+      metal: 0.55,
+      bump: 2.5,
+    },
+    rollup: {
+      pat: `corrugated`,
+      p: { base: 6253940, seed: 12 },
+      scale: 0.6,
+      rough: 0.5,
+      metal: 0.4,
+      bump: 2,
+      swap: !0,
+    },
+    tarRoof: {
+      pat: `stucco`,
+      p: { base: 4078650, seed: 13, joints: !0 },
+      scale: 3,
+      rough: 1,
+    },
+    wood: {
+      pat: `planks`,
+      p: { base: 9268298, seed: 14 },
+      scale: 1.2,
+      rough: 0.85,
+      bump: 1.2,
+    },
+    woodDoor: {
+      pat: `planks`,
+      p: { base: 5912612, n: 5, seed: 15 },
+      scale: 1.2,
+      rough: 0.65,
+      bump: 1.2,
+    },
+    tank: {
+      pat: `planks`,
+      p: { base: 7232068, n: 10, seed: 16 },
+      scale: 2,
+      rough: 0.9,
+      bump: 1.5,
+    },
+    awningGreen: {
+      pat: `stripes`,
+      p: { base: 3103300, alt: 14866102 },
+      size: 256,
+      scale: 1,
+      rough: 0.95,
+    },
+    awningRed: {
+      pat: `stripes`,
+      p: { base: 9054756, alt: 14866102 },
+      size: 256,
+      scale: 1,
+      rough: 0.95,
+    },
+    sidewalk: {
+      pat: `stucco`,
+      p: { base: 10986136, seed: 19, joints: !0, blotch: 30 },
+      scale: 1.6,
+      rough: 0.95,
+      bump: 0.8,
+    },
+    asphalt: {
+      pat: `asphalt`,
+      p: { base: 4013632, seed: 20 },
+      scale: 4,
+      rough: 0.95,
+      bump: 0.6,
+    },
+    interior: {
+      pat: `stucco`,
+      p: { base: 7827551, seed: 17, blotch: 6 },
+      scale: 3,
+      rough: 1,
+      side: 1,
+      noShadow: !0,
+    },
+    floorSlab: {
+      pat: `planks`,
+      p: { base: 6968897, n: 8, seed: 18 },
+      scale: 2,
+      rough: 0.9,
+    },
+    glass: { glass: !0 },
+    glassBlue: { glass: !0, color: 7116966 },
+    glassGrey: { glass: !0, color: 8885920 },
+    glassBronze: { glass: !0, color: 9206366 },
+    glassLit: { glass: !0, lit: 16758122 },
+    glassShop: { glass: !0, lit: 16769712 },
+    railGlass: { clear: !0 },
+    spandrelBlue: {
+      pat: `paint`,
+      p: { base: 2902357 },
+      size: 128,
+      scale: 1,
+      rough: 0.18,
+      metal: 0.65,
+    },
+    whiteSpandrel: {
+      pat: `paint`,
+      p: { base: 15132384 },
+      size: 128,
+      scale: 1,
+      rough: 0.4,
+      metal: 0.1,
+      grime: 0.15,
+    },
+    aluminum: {
+      pat: `paint`,
+      p: { base: 12830667 },
+      size: 128,
+      scale: 1,
+      rough: 0.32,
+      metal: 0.85,
+    },
+    bronze: {
+      pat: `paint`,
+      p: { base: 6047280 },
+      size: 128,
+      scale: 1,
+      rough: 0.38,
+      metal: 0.8,
+    },
+    beacon: {
+      pat: `paint`,
+      p: { base: 16726564 },
+      size: 64,
+      scale: 1,
+      rough: 0.5,
+      emissive: 16720912,
+    },
+    limestone: {
+      pat: `ashlar`,
+      p: { base: 14274748, rows: 3, joint: 3, seed: 23 },
+      scale: 2.4,
+      rough: 0.9,
+      bump: 0.8,
+      grime: 0.3,
+    },
+    granite: {
+      pat: `ashlar`,
+      p: { base: 5065288, rows: 2, joint: 3, jointK: 0.6, seed: 24 },
+      scale: 2.4,
+      rough: 0.35,
+      bump: 0.5,
+    },
+    boardConcrete: {
+      pat: `boardform`,
+      p: { base: 10723222, n: 10, seed: 25 },
+      scale: 2.4,
+      rough: 0.95,
+      bump: 1,
+      grime: 0.35,
+      swap: !0,
+    },
+    brickBrown: {
+      pat: `brick`,
+      p: { base: 7618605, mortar: 10195589, vary: 0.24, burnt: 0.1, seed: 26 },
+      scale: 1.2,
+      rough: 0.92,
+      bump: 1.6,
+      grime: 0.3,
+    },
+    louver: {
+      pat: `lap`,
+      p: { base: 9343894, rows: 24, seed: 27 },
+      scale: 1.2,
+      rough: 0.5,
+      metal: 0.5,
+      bump: 1.5,
+    },
+  },
+  ae = { uAlive: { value: C } };
+function oe(e, t = 0, n = !1) {
+  return (
+    (e.onBeforeCompile = (e) => {
+      ((e.uniforms.uAlive = ae.uAlive),
+        (e.vertexShader =
+          `attribute float cellId;
+uniform sampler2D uAlive;
+varying float vWY;
+` +
+          e.vertexShader.replace(
+            `#include <begin_vertex>`,
+            `#include <begin_vertex>
+      {
+        vec2 cuv = vec2((mod(cellId, 128.0) + 0.5) / 128.0, (floor(cellId / 128.0) + 0.5) / 128.0);
+        if (texture2D(uAlive, cuv).r < 0.5) transformed = vec3(0.0);
+      }
+      ${n ? `` : `vWY = (modelMatrix * vec4(transformed, 1.0)).y;`}`,
+          )),
+        n ||
+          (e.fragmentShader =
+            `varying float vWY;
+` +
+            e.fragmentShader.replace(
+              `#include <map_fragment>`,
+              `#include <map_fragment>
+      diffuseColor.rgb *= mix(${(1 - t).toFixed(3)}, 1.0, smoothstep(0.05, 1.7, vWY));`,
+            )));
+    }),
+    (e.customProgramCacheKey = () => `facade-${t}-${n}`),
+    e
+  );
+}
+var se = oe(new e({ depthPacking: v }), 0, !0),
+  H = new Map(),
+  ce = (e) => U(e, !0),
+  le = (e) => U(e, !1);

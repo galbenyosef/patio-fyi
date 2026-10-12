@@ -1,0 +1,935 @@
+{
+  "version": 1,
+  "voices": {
+    "go": [
+      {
+        "file": "lewis/go-1.wav",
+        "durationMs": 1202,
+        "sha256": "e089e64ced19992239173f76f5ad7ce6ede60e6505f3050c49ed1ae65d070fb5",
+        "text": "Go, go, go!"
+      },
+      {
+        "file": "lewis/go-2.wav",
+        "durationMs": 547,
+        "sha256": "d3c6aef373f56e6309e8002a470e1b9a3cc6e117f4881d0658cb6c9053213036",
+        "text": "Move up!"
+      },
+      {
+        "file": "lewis/go-3.wav",
+        "durationMs": 1407,
+        "sha256": "4d3fc8ec67b458eae89c5564ca06f97e2721aa2c133769b3e73a9b245c65076b",
+        "text": "Let's go, let's go!"
+      },
+      {
+        "file": "lewis/go-4.wav",
+        "durationMs": 757,
+        "sha256": "4ff71102900b7a59faf229bd3301afae5d1dae5a9aaa430ac24b2048d27ac63f",
+        "text": "Push forward!"
+      },
+      {
+        "file": "lewis/go-5.wav",
+        "durationMs": 684,
+        "sha256": "7bfbbc231098fbb2c40ea912f9fc8ef677aba721082e87e890a0242ea36885fa",
+        "text": "Move, move!"
+      }
+    ],
+    "pinned": [
+      {
+        "file": "lewis/pinned-1.wav",
+        "durationMs": 889,
+        "sha256": "b87cfb850f335c62d807de6d448f9469c29162e17c8504f2e9d37c62485d6037",
+        "text": "I'm pinned down!"
+      },
+      {
+        "file": "lewis/pinned-2.wav",
+        "durationMs": 1076,
+        "sha256": "9a7107f83d0a0eb602474216dffeaa4734767b51dc9a3dcbd8fcdebaa7cbba51",
+        "text": "Taking heavy fire!"
+      },
+      {
+        "file": "lewis/pinned-3.wav",
+        "durationMs": 997,
+        "sha256": "d99807eeb7c9a362d294e26661cc382906479ebef686e0762caf7bad9b4046ea",
+        "text": "They've got me pinned!"
+      },
+      {
+        "file": "lewis/pinned-4.wav",
+        "durationMs": 1246,
+        "sha256": "62256bf7a43624c790bf315b90296511ee24b170e31260fa1b9deb901369507c",
+        "text": "Can't move, I'm pinned!"
+      },
+      {
+        "file": "lewis/pinned-5.wav",
+        "durationMs": 1672,
+        "sha256": "2e1507c703bcf663fc62e63c53b835c7038535d0815fc64bf6aa0d257404ba48",
+        "text": "Suppressed! I need help here!"
+      }
+    ],
+    "lookout": [
+      {
+        "file": "lewis/lookout-1.wav",
+        "durationMs": 1219,
+        "sha256": "b466fcbab9a609c56916af0daffeed3dc255baf99c78dd481ed4c5a3348fc709",
+        "text": "Look out! Vehicle!"
+      },
+      {
+        "file": "lewis/lookout-2.wav",
+        "durationMs": 1120,
+        "sha256": "9c4ab5b14f996408888083cc98758f8d07df905ce21cb044731153fad04ada10",
+        "text": "Armour! Get clear!"
+      },
+      {
+        "file": "lewis/lookout-3.wav",
+        "durationMs": 1702,
+        "sha256": "2d0b89cf36217242d3dbc9690d493f02ce56538511cd5d7a318023ee9e04bbb6",
+        "text": "Vehicle incoming! Move!"
+      },
+      {
+        "file": "lewis/lookout-4.wav",
+        "durationMs": 1113,
+        "sha256": "ff4383b4f84e2319917c48a7e1dc6364182b50b68513b0fd8f9ed5d3c27ab4af",
+        "text": "Watch out, tank!"
+      }
+    ],
+    "cover": [
+      {
+        "file": "lewis/cover-1.wav",
+        "durationMs": 1295,
+        "sha256": "a68bd9f27c35f9d111ccf3efaef01be986c185d5601ddc09d0bb7a121d77bdc7",
+        "text": "Reloading! Cover me!"
+      },
+      {
+        "file": "lewis/cover-2.wav",
+        "durationMs": 1641,
+        "sha256": "0670cbec467c2f359018b1be02e20b7c9c44e2416f657a89a1c95702e625bb30",
+        "text": "Changing mags! Cover me!"
+      },
+      {
+        "file": "lewis/cover-3.wav",
+        "durationMs": 556,
+        "sha256": "297b088538b895067f93acc88a91b394c8a819757dcd5cdba1b7fc0ab6a86e35",
+        "text": "Cover me!"
+      },
+      {
+        "file": "lewis/cover-4.wav",
+        "durationMs": 629,
+        "sha256": "341880abec09b2f27abc836071690447894e6e4fe01df61d259a23339e4eb4e7",
+        "text": "Reloading!"
+      }
+    ],
+    "medic": [
+      {
+        "file": "lewis/medic-1.wav",
+        "durationMs": 483,
+        "sha256": "ba359c9f0aab06c1ec2cc779adc4766fb8abe8c81e9efc3143ead02beaec1b6c",
+        "text": "Medic!"
+      },
+      {
+        "file": "lewis/medic-2.wav",
+        "durationMs": 969,
+        "sha256": "642f8595fbbb36321c85379a9b06e6a72f7e02d704e49585faac76f0bec6632f",
+        "text": "I need a medic!"
+      },
+      {
+        "file": "lewis/medic-3.wav",
+        "durationMs": 1259,
+        "sha256": "30fe71a46928f0290295ade62d4f2f35c919b65db629a00fec5b86ac8af55f1e",
+        "text": "Medic! Over here!"
+      },
+      {
+        "file": "lewis/medic-4.wav",
+        "durationMs": 1182,
+        "sha256": "e3e1f501d83a86ed26ec0f055efc4d6250e5a528747bf6c326b071c39ebaeee5",
+        "text": "I'm hit! Medic!"
+      },
+      {
+        "file": "lewis/medic-5.wav",
+        "durationMs": 1207,
+        "sha256": "cff5b0648b3e45b1128bc3d4c101665252230b458be4c12d02d415dbf58542cd",
+        "text": "Somebody patch me up!"
+      }
+    ],
+    "banter_amber": [
+      {
+        "file": "lewis/banter-amber-1.wav",
+        "durationMs": 1832,
+        "sha256": "239be9688696463a43ebbdbfec6f0469cc4e0892e687f60f029fbe02f47ebfd5",
+        "text": "Quiet out here. Too quiet."
+      },
+      {
+        "file": "lewis/banter-amber-2.wav",
+        "durationMs": 1647,
+        "sha256": "c8e61218d2006edddd42bb51aec3828984707d5af6552947472375715159665b",
+        "text": "Anyone got a spare mag?"
+      },
+      {
+        "file": "lewis/banter-amber-3.wav",
+        "durationMs": 1793,
+        "sha256": "9bd22211cf80570a6bf637d3a45cc91fc1f50ab5ef650d9975ec5ae6e154409e",
+        "text": "Keep your eyes open, lads."
+      },
+      {
+        "file": "lewis/banter-amber-4.wav",
+        "durationMs": 2087,
+        "sha256": "8d53480383f10dc2a6cb2ae07f0cbdb2d08192fb14e77b72caafdc920249a81e",
+        "text": "Could murder a cup of tea right now."
+      }
+    ],
+    "banter_cobalt": [
+      {
+        "file": "lewis/banter-cobalt-1.wav",
+        "durationMs": 1607,
+        "sha256": "a9a16e19758bd436cc002afce06ef41564805326c549108ef0c0af77a0e35d7a",
+        "text": "Stay sharp. They're out there."
+      },
+      {
+        "file": "lewis/banter-cobalt-2.wav",
+        "durationMs": 1128,
+        "sha256": "c783f3a1bba14045cb188f49dad0b8bae358686e2b38d36417aa94486727fd3a",
+        "text": "Check your corners."
+      },
+      {
+        "file": "lewis/banter-cobalt-3.wav",
+        "durationMs": 2118,
+        "sha256": "c3ddcc71839dca1d3e40bfc9711987165688c36c77dbb0d1a36345ff32225960",
+        "text": "Right. Nobody do anything stupid."
+      },
+      {
+        "file": "lewis/banter-cobalt-4.wav",
+        "durationMs": 1592,
+        "sha256": "e46f7820025ce6ed95b1bde2494234fa2329d66cf26bcdf2d6597074ad61b890",
+        "text": "Heads on a swivel, lads."
+      }
+    ],
+    "frag_out": [
+      {
+        "file": "lewis/frag-out-1.wav",
+        "durationMs": 731,
+        "sha256": "ae0ccb0702237b929b6207d83d2c50002c89a6d437ccef9ceea1f83e07a258dc",
+        "text": "Frag out!"
+      },
+      {
+        "file": "lewis/frag-out-2.wav",
+        "durationMs": 791,
+        "sha256": "ffd192240493917a037c299b47a3531a6366a24ead1f25b2ec27a4d00c49a791",
+        "text": "Grenade out!"
+      },
+      {
+        "file": "lewis/frag-out-3.wav",
+        "durationMs": 836,
+        "sha256": "f3f634a2f37f7697e46b2dac4496846235d7835e32a5359c26940c57fd95681d",
+        "text": "Throwing frag!"
+      },
+      {
+        "file": "lewis/frag-out-4.wav",
+        "durationMs": 964,
+        "sha256": "cf3ec290e84cdc82e343b8d7553f656ebdad8da1c3e6136d22645d68f8862738",
+        "text": "Fire in the hole!"
+      }
+    ],
+    "grenade": [
+      {
+        "file": "lewis/grenade-1.wav",
+        "durationMs": 584,
+        "sha256": "d7234dd21e7eaefd1de31a5f36b94edd044ea9f23033240a03beb72ed008f6e4",
+        "text": "Grenade!"
+      },
+      {
+        "file": "lewis/grenade-2.wav",
+        "durationMs": 1267,
+        "sha256": "433e777200efae051e1122948fc2baf4dbdfa538f645e3495a81c7d3f6fcb29d",
+        "text": "Grenade! Get down!"
+      },
+      {
+        "file": "lewis/grenade-3.wav",
+        "durationMs": 1259,
+        "sha256": "9fd217938b0e2dfe441ff63dabf3dc8f6b0d763b7b800c82c36cc7970d3ab95f",
+        "text": "Frag! Take cover!"
+      },
+      {
+        "file": "lewis/grenade-4.wav",
+        "durationMs": 1082,
+        "sha256": "cca5119e91fab09fc21d1b05a711307d6b45803dde264a0214d7da2775234b72",
+        "text": "Grenade, move!"
+      }
+    ],
+    "spotted": [
+      {
+        "file": "lewis/spotted-1.wav",
+        "durationMs": 928,
+        "sha256": "2ecf9bbcb11af393f184b514320f8a97c4cb36bffe46148368b06850adcf8e9e",
+        "text": "Enemy spotted!"
+      },
+      {
+        "file": "lewis/spotted-2.wav",
+        "durationMs": 569,
+        "sha256": "e0ff3366393c55de8b006d20d29f11290cc8129b958565030ee5874a4a3b0b26",
+        "text": "Contact!"
+      },
+      {
+        "file": "lewis/spotted-3.wav",
+        "durationMs": 1474,
+        "sha256": "3e4ce9d0c8b83e040a1ca6911368a0dc1596593b9ee8596c574a778b088510e8",
+        "text": "Eyes on! Enemy there!"
+      },
+      {
+        "file": "lewis/spotted-4.wav",
+        "durationMs": 1431,
+        "sha256": "2df3c63f9727f5a76ad0f2770e0a6f48fc16e61f99240f22d7a0c3e26053a41a",
+        "text": "Hostile! Marking him!"
+      },
+      {
+        "file": "lewis/spotted-5.wav",
+        "durationMs": 900,
+        "sha256": "7b58bc8acf7e3bc613959cb4fbb69e462c39632cfb3c92c866805afba18b21be",
+        "text": "Target marked!"
+      }
+    ],
+    "spotted_vehicle": [
+      {
+        "file": "lewis/spotted-vehicle-1.wav",
+        "durationMs": 1450,
+        "sha256": "07f85eadb4afcde6cceaa7e61011613a3a6af881c29f76cc7bd82cc0aeb06cf3",
+        "text": "Enemy vehicle spotted!"
+      },
+      {
+        "file": "lewis/spotted-vehicle-2.wav",
+        "durationMs": 834,
+        "sha256": "cd664551f58a6ac090ad8babc2273cd1a0c982c2db543b5f94f0a750903c8c0a",
+        "text": "Armour spotted!"
+      },
+      {
+        "file": "lewis/spotted-vehicle-3.wav",
+        "durationMs": 1636,
+        "sha256": "b3fe95b10c70f718ad3865e54330da6fd3191601975b396d34c9a9edd8d3d4ba",
+        "text": "Enemy vehicle! Marked!"
+      }
+    ],
+    "spotted_air": [
+      {
+        "file": "lewis/spotted-air-1.wav",
+        "durationMs": 1490,
+        "sha256": "2f592e97747d639906f1be0e4392feac9cdbc16e2448f5446f47344b028b92cd",
+        "text": "Enemy helo spotted!"
+      },
+      {
+        "file": "lewis/spotted-air-2.wav",
+        "durationMs": 830,
+        "sha256": "84e666c0bae8b1cb470a09c3a1810b5a80a0a819c64150b6e5c91dd9fb6d9fdc",
+        "text": "Air contact!"
+      },
+      {
+        "file": "lewis/spotted-air-3.wav",
+        "durationMs": 1246,
+        "sha256": "9131cb9097f69f01c0c6b6292d02163e6640522fa3b13f536e861af8c5b1211c",
+        "text": "Chopper! Marking it!"
+      }
+    ],
+    "kill": [
+      {
+        "file": "lewis/kill-1.wav",
+        "durationMs": 479,
+        "sha256": "9bcac2a7f2d9784f9d50f132df6b62ed2bc772f45c97d29830c5955a57e41b3b",
+        "text": "Got him!"
+      },
+      {
+        "file": "lewis/kill-2.wav",
+        "durationMs": 784,
+        "sha256": "efc92fcc3c0710f535d17a276ae9351bbb06ff95a3b6aad40ad471e36c8dcae0",
+        "text": "Enemy down!"
+      },
+      {
+        "file": "lewis/kill-3.wav",
+        "durationMs": 770,
+        "sha256": "e75cc0d734a4d8f7deaf178fe6c7c18a232e017966ad84465cb60be58d368399",
+        "text": "Tango down!"
+      },
+      {
+        "file": "lewis/kill-4.wav",
+        "durationMs": 790,
+        "sha256": "6eb914ffe0c15d048010002bc9b21cf2ce9266aeb4620df2dd1afa74466eabd5",
+        "text": "Target down!"
+      },
+      {
+        "file": "lewis/kill-5.wav",
+        "durationMs": 627,
+        "sha256": "7eb0a493a60d06ff418dbe37b1ec6529cc81e2e6da8a6e1050a73233553cfcac",
+        "text": "He's down!"
+      },
+      {
+        "file": "lewis/kill-6.wav",
+        "durationMs": 535,
+        "sha256": "83e96ad3c7941c0b3ab4219eea5a30669d55f9b2f6fd103286b617a18e820994",
+        "text": "Got one!"
+      }
+    ],
+    "man_down": [
+      {
+        "file": "lewis/man-down-1.wav",
+        "durationMs": 676,
+        "sha256": "c55b2a274255821e9e8c5d281abe07ace0f3b8571222522731a307ebef329892",
+        "text": "Man down!"
+      },
+      {
+        "file": "lewis/man-down-2.wav",
+        "durationMs": 809,
+        "sha256": "740aa7bc6600cc4530ee12e6b024017ff4757ed688a4e7b7de9ee6d9791bf365",
+        "text": "We've lost one!"
+      },
+      {
+        "file": "lewis/man-down-3.wav",
+        "durationMs": 813,
+        "sha256": "57bcac4906b97642d4109353a4328b2b2dfbfb0d40344da3e63e308dfa21820e",
+        "text": "Friendly down!"
+      },
+      {
+        "file": "lewis/man-down-4.wav",
+        "durationMs": 1453,
+        "sha256": "f1bf4aeb5d31a820fa920d41ad0fae837eabdd4c21dbee00e3b0b128770b1835",
+        "text": "Man down, man down!"
+      }
+    ],
+    "revive_give": [
+      {
+        "file": "lewis/revive-give-1.wav",
+        "durationMs": 682,
+        "sha256": "34c62e0f1a421a18357f1984af219773aefe84b087b317ae29dca09090d31449",
+        "text": "I've got you!"
+      },
+      {
+        "file": "lewis/revive-give-2.wav",
+        "durationMs": 1061,
+        "sha256": "0f0385197b0e546bd5464b3c4417eeffca887fc3a39ed6b9dedc6b5b3f012a13",
+        "text": "Hang on, mate!"
+      },
+      {
+        "file": "lewis/revive-give-3.wav",
+        "durationMs": 738,
+        "sha256": "a139d0066885b4bce5a93997ed106ab9ab874dee6ea5a4281f72619206346990",
+        "text": "Up you get!"
+      },
+      {
+        "file": "lewis/revive-give-4.wav",
+        "durationMs": 1535,
+        "sha256": "e6cfd119adab7ebfac515842901bb2342084d9fb23e22fd72dc710d6bfed59e8",
+        "text": "You're alright! Let's go!"
+      }
+    ],
+    "revive_thanks": [
+      {
+        "file": "lewis/revive-thanks-1.wav",
+        "durationMs": 848,
+        "sha256": "054f53cd1ce7a269bbcd0638027a28afade8b9983c14cff86bcf17bf3a12d871",
+        "text": "Thanks, doc!"
+      },
+      {
+        "file": "lewis/revive-thanks-2.wav",
+        "durationMs": 948,
+        "sha256": "c0c05c498b9943885b1c88864f7e4daa8abc12367efcbc92acb38b1c6f34a81b",
+        "text": "Cheers, mate!"
+      },
+      {
+        "file": "lewis/revive-thanks-3.wav",
+        "durationMs": 643,
+        "sha256": "d906d7bb9230ff076e872849f59cd424f96b22880fa2e930a4941419a9060852",
+        "text": "Back in it!"
+      },
+      {
+        "file": "lewis/revive-thanks-4.wav",
+        "durationMs": 820,
+        "sha256": "719b5df90f9d7046017853e8c243b010f8dacb7e5fcd94bf29306dcf82c166f7",
+        "text": "Thanks for that!"
+      }
+    ],
+    "captured": [
+      {
+        "file": "lewis/captured-1.wav",
+        "durationMs": 1229,
+        "sha256": "d54c64dfc121ef430449a75e7cbd5e3ae5778128010fe512e3ac6b7aaf6af762",
+        "text": "Objective secured!"
+      },
+      {
+        "file": "lewis/captured-2.wav",
+        "durationMs": 673,
+        "sha256": "d8c6ce52f8d8cad92670b1be5c4d001725ce287ebdc34125f05d72796a770881",
+        "text": "It's ours!"
+      },
+      {
+        "file": "lewis/captured-3.wav",
+        "durationMs": 800,
+        "sha256": "2f42a20096f1ea327f2d1f0a37e07bfa6edd74451627e0b06e43ca0fcbdc7e39",
+        "text": "Flag's ours!"
+      },
+      {
+        "file": "lewis/captured-4.wav",
+        "durationMs": 829,
+        "sha256": "810fa1d9c0cd7f191b394815f2d94c4305bfd250b23103430436146d3f208e07",
+        "text": "We've taken it!"
+      }
+    ],
+    "vehicle_down": [
+      {
+        "file": "lewis/vehicle-down-1.wav",
+        "durationMs": 1255,
+        "sha256": "37eea2ccc30d06663f4935fdfb4530c67d131efa75c9fc23e21a60debfae30bb",
+        "text": "Vehicle destroyed!"
+      },
+      {
+        "file": "lewis/vehicle-down-2.wav",
+        "durationMs": 1169,
+        "sha256": "d828a60ef81b8850935b82e4d984a296d05ec684d46f6f11a916f6cbde45fd33",
+        "text": "Scratch one vehicle!"
+      },
+      {
+        "file": "lewis/vehicle-down-3.wav",
+        "durationMs": 682,
+        "sha256": "b8cf5d179318495a21c385dd069a4408e04449bc855d4636903ea7a13dd4bcbf",
+        "text": "Armour down!"
+      }
+    ],
+    "squad_attack": [
+      {
+        "file": "lewis/squad-attack.wav",
+        "durationMs": 2066,
+        "sha256": "67c773a540b18dbc8c4fa86f774ee90612a6e584d88a81bb18c871c25e04d698",
+        "text": "Squad! Attack the objective!",
+        "radio": true
+      }
+    ],
+    "squad_defend": [
+      {
+        "file": "lewis/squad-defend.wav",
+        "durationMs": 1979,
+        "sha256": "aea476e67e50f16799ef86aef2a09c8244bf1b69e8383ce94be7dc328fd23961",
+        "text": "Squad! Defend the objective!",
+        "radio": true
+      }
+    ],
+    "squad_hold": [
+      {
+        "file": "lewis/squad-hold.wav",
+        "durationMs": 1776,
+        "sha256": "21e3b1ae8e9a798e680ad14982c6a805a3ea0110863391f73688d7a214d43dba",
+        "text": "Squad, hold this position!",
+        "radio": true
+      }
+    ],
+    "squad_regroup": [
+      {
+        "file": "lewis/squad-regroup.wav",
+        "durationMs": 1562,
+        "sha256": "d2da23b67dcc60ac13746386af2ef025ebfc76a7ab1d09003fc6004c793cd3de",
+        "text": "Squad, regroup on me!",
+        "radio": true
+      }
+    ],
+    "squad_cancelled": [
+      {
+        "file": "lewis/squad-cancelled.wav",
+        "durationMs": 1436,
+        "sha256": "047abce15c32c55a26d4442f0edbd0a5954ad318be2a2a95d7f99f71d787a40f",
+        "text": "Squad order cancelled!",
+        "radio": true
+      }
+    ],
+    "squad_ended": [
+      {
+        "file": "lewis/squad-ended.wav",
+        "durationMs": 2397,
+        "sha256": "5783c56d48e8422f63533ac67cc77d6c2a598601db7cffe92039d4eb8ed921ad",
+        "text": "Order ended! Awaiting new orders.",
+        "radio": true
+      }
+    ],
+    "squad_held": [
+      {
+        "file": "lewis/squad-held.wav",
+        "durationMs": 2089,
+        "sha256": "2a00dd10ad64a6beaa6a698ec5ff418afbe6b964750d88a84b1bb9c1e29a4c41",
+        "text": "Position held! Order complete!",
+        "radio": true
+      }
+    ],
+    "squad_regrouped": [
+      {
+        "file": "lewis/squad-regrouped.wav",
+        "durationMs": 2102,
+        "sha256": "1bd748267431cac66dc8d47b49b86710ac908f40e05d00dd465f76aeb08abe06",
+        "text": "Squad regrouped! Order complete!",
+        "radio": true
+      }
+    ],
+    "match_start": [
+      {
+        "file": "lewis/match-start-1.wav",
+        "durationMs": 1479,
+        "sha256": "7ee2a4d887dc70a475c40e474da2da79f120fbb9ad7922dd48049669842da387",
+        "text": "All units, move out!",
+        "radio": true
+      },
+      {
+        "file": "lewis/match-start-2.wav",
+        "durationMs": 2161,
+        "sha256": "86a56c5773f21d08091d8c4cc8e86825a760085c0e4c59d386e6a254d7cfd924",
+        "text": "Here we go, lads! Move out!",
+        "radio": true
+      }
+    ],
+    "match_won": [
+      {
+        "file": "lewis/match-won-1.wav",
+        "durationMs": 2148,
+        "sha256": "03ef19a98387fad566a38a8b22b1c489fa7175c3247da656b23e3be89b833a12",
+        "text": "That's the match! Well done, lads!",
+        "radio": true
+      },
+      {
+        "file": "lewis/match-won-2.wav",
+        "durationMs": 1651,
+        "sha256": "c0f29892d8a208ea01851871885f6d18a10f0d86e258408ecad10b5f2900d70a",
+        "text": "We've won it! Good work!",
+        "radio": true
+      }
+    ],
+    "match_lost": [
+      {
+        "file": "lewis/match-lost-1.wav",
+        "durationMs": 1925,
+        "sha256": "8f9dfca8698f14682d5154488ff694d2be3821abaa9110f6c8bd3963129ea88e",
+        "text": "We've lost this one. Fall back.",
+        "radio": true
+      },
+      {
+        "file": "lewis/match-lost-2.wav",
+        "durationMs": 2616,
+        "sha256": "cda1917b32486b16105f971bddd4bc08d3a0b8b0dc9f51280310e1dc115fb521",
+        "text": "They've beaten us. Regroup for the next one.",
+        "radio": true
+      }
+    ],
+    "squad_attack_A": [
+      {
+        "file": "lewis/squad-attack-a.wav",
+        "durationMs": 1587,
+        "sha256": "9e99459694c6d8f247cc92e01cc8c845f605c8813437375f546bd676316df9cb",
+        "text": "Squad! Attack Alpha!",
+        "radio": true
+      }
+    ],
+    "squad_defend_A": [
+      {
+        "file": "lewis/squad-defend-a.wav",
+        "durationMs": 1611,
+        "sha256": "ddeeb91a83b26ca6151e8569bb46605d8e88c600e5965c5de3249e37ce9f267f",
+        "text": "Squad! Defend Alpha!",
+        "radio": true
+      }
+    ],
+    "squad_secured_A": [
+      {
+        "file": "lewis/squad-secured-a.wav",
+        "durationMs": 3196,
+        "sha256": "dbc5751c9bc984c239fd31edc20032464a969e2cc75eb64380d367744b1b8141",
+        "text": "Alpha secured! Squad, defend the objective!",
+        "radio": true
+      }
+    ],
+    "squad_defended_A": [
+      {
+        "file": "lewis/squad-defended-a.wav",
+        "durationMs": 2128,
+        "sha256": "24fa1e8deffcd08ee699bae69db46fc66b5128f3db42b18560b9123332125e89",
+        "text": "Alpha defended! Order complete!",
+        "radio": true
+      }
+    ],
+    "obj_captured_A": [
+      {
+        "file": "lewis/obj-captured-a.wav",
+        "durationMs": 1080,
+        "sha256": "35d12b35d64261d6089f523a1e6085d8e5816e7acadf0560611ac2a6bb71fa9a",
+        "text": "Alpha captured!",
+        "radio": true
+      }
+    ],
+    "obj_lost_A": [
+      {
+        "file": "lewis/obj-lost-a.wav",
+        "durationMs": 1133,
+        "sha256": "fec91af073a7f049d7e56be93733e36a188eaad6d799d8135ddf395fbed33494",
+        "text": "We've lost Alpha!",
+        "radio": true
+      }
+    ],
+    "squad_attack_B": [
+      {
+        "file": "lewis/squad-attack-b.wav",
+        "durationMs": 1762,
+        "sha256": "941319c8983b720d561a078bd11ea8e47bd3b741d589842def89ccdee6134ba2",
+        "text": "Squad! Attack Bravo!",
+        "radio": true
+      }
+    ],
+    "squad_defend_B": [
+      {
+        "file": "lewis/squad-defend-b.wav",
+        "durationMs": 1831,
+        "sha256": "7e5f0f9ed17754c648d816c75b881c788ad417bc5fcc95d66ced22fbecbbb47d",
+        "text": "Squad! Defend Bravo!",
+        "radio": true
+      }
+    ],
+    "squad_secured_B": [
+      {
+        "file": "lewis/squad-secured-b.wav",
+        "durationMs": 3245,
+        "sha256": "cafae595d5045bda876c7ac0f9e12df7bae3f9a39bf8569a7f40eefa82838e7c",
+        "text": "Bravo secured! Squad, defend the objective!",
+        "radio": true
+      }
+    ],
+    "squad_defended_B": [
+      {
+        "file": "lewis/squad-defended-b.wav",
+        "durationMs": 2217,
+        "sha256": "561d0c8415693077bda7e287490e9e3a9616fffb651c60188ca5edc1ee799251",
+        "text": "Bravo defended! Order complete!",
+        "radio": true
+      }
+    ],
+    "obj_captured_B": [
+      {
+        "file": "lewis/obj-captured-b.wav",
+        "durationMs": 1090,
+        "sha256": "ada43774b93c1fc111f9ce7938990c392c29879a34b3cad1094026dd051ef38b",
+        "text": "Bravo captured!",
+        "radio": true
+      }
+    ],
+    "obj_lost_B": [
+      {
+        "file": "lewis/obj-lost-b.wav",
+        "durationMs": 1301,
+        "sha256": "772a8bf77f9e53caddf9e46000076cde6e2cf31af2c824e52ec783705c7f0e0f",
+        "text": "We've lost Bravo!",
+        "radio": true
+      }
+    ],
+    "squad_attack_C": [
+      {
+        "file": "lewis/squad-attack-c.wav",
+        "durationMs": 1632,
+        "sha256": "19ef3e4f807e8fe0fb703b964b783121f6d248390ca867e3c747e092c5a0cd02",
+        "text": "Squad! Attack Charlie!",
+        "radio": true
+      }
+    ],
+    "squad_defend_C": [
+      {
+        "file": "lewis/squad-defend-c.wav",
+        "durationMs": 1662,
+        "sha256": "750b6b357247bd4dc3b50ec88ed93790ced0831163925656677be95cde4d90d0",
+        "text": "Squad! Defend Charlie!",
+        "radio": true
+      }
+    ],
+    "squad_secured_C": [
+      {
+        "file": "lewis/squad-secured-c.wav",
+        "durationMs": 3323,
+        "sha256": "8bb7eeeabf1bca68e4834639d4413ebd288d5c2eb0a13bb501ebc1c91ddaba2e",
+        "text": "Charlie secured! Squad, defend the objective!",
+        "radio": true
+      }
+    ],
+    "squad_defended_C": [
+      {
+        "file": "lewis/squad-defended-c.wav",
+        "durationMs": 2199,
+        "sha256": "f9703a9a3c507a891329dbaf1b349c6a44fefde407cc49c4948ca87a2afd40b2",
+        "text": "Charlie defended! Order complete!",
+        "radio": true
+      }
+    ],
+    "obj_captured_C": [
+      {
+        "file": "lewis/obj-captured-c.wav",
+        "durationMs": 1117,
+        "sha256": "cb7508494da6d5e30703dd9ab51a27f0f36a402ac70a05dc93f732c76931a1c8",
+        "text": "Charlie captured!",
+        "radio": true
+      }
+    ],
+    "obj_lost_C": [
+      {
+        "file": "lewis/obj-lost-c.wav",
+        "durationMs": 1277,
+        "sha256": "9b4cd72915d35c95a10407ed074f51efe8d20272445440d3fdfe84fac3256a65",
+        "text": "We've lost Charlie!",
+        "radio": true
+      }
+    ],
+    "squad_attack_D": [
+      {
+        "file": "lewis/squad-attack-d.wav",
+        "durationMs": 1680,
+        "sha256": "f1572d52d27fb4e6a23bf650c57cb796a181a857b71a6c6235d12b9bb75afb08",
+        "text": "Squad! Attack Delta!",
+        "radio": true
+      }
+    ],
+    "squad_defend_D": [
+      {
+        "file": "lewis/squad-defend-d.wav",
+        "durationMs": 1673,
+        "sha256": "87654c1d4c9d1e1e3f22e12e9b20e1a647dc8fdfa115755edb73a0e5402de939",
+        "text": "Squad! Defend Delta!",
+        "radio": true
+      }
+    ],
+    "squad_secured_D": [
+      {
+        "file": "lewis/squad-secured-d.wav",
+        "durationMs": 3328,
+        "sha256": "6b465cffe64d1006ecff6813edac36b64a3c18f0ac6f643ecd6dc57011a0e91c",
+        "text": "Delta secured! Squad, defend the objective!",
+        "radio": true
+      }
+    ],
+    "squad_defended_D": [
+      {
+        "file": "lewis/squad-defended-d.wav",
+        "durationMs": 2167,
+        "sha256": "e24237837e66e6802423b5f133fe76fa582b69abf3c9b2e0ac4942e962720e07",
+        "text": "Delta defended! Order complete!",
+        "radio": true
+      }
+    ],
+    "obj_captured_D": [
+      {
+        "file": "lewis/obj-captured-d.wav",
+        "durationMs": 1128,
+        "sha256": "bb610b4cfb2d4e8361cd68391686e7b44f5811ec2690bd048c9c89a1888c3ece",
+        "text": "Delta captured!",
+        "radio": true
+      }
+    ],
+    "obj_lost_D": [
+      {
+        "file": "lewis/obj-lost-d.wav",
+        "durationMs": 1260,
+        "sha256": "118736ad26ec9d6398eaa42f8be23019c98d252a6343bc1a7d4170424df41517",
+        "text": "We've lost Delta!",
+        "radio": true
+      }
+    ],
+    "squad_attack_E": [
+      {
+        "file": "lewis/squad-attack-e.wav",
+        "durationMs": 1523,
+        "sha256": "42b0e57e17578986b8344afd2507ea2bc8abeff5993a1867f7c8c37b76c6ba93",
+        "text": "Squad! Attack Echo!",
+        "radio": true
+      }
+    ],
+    "squad_defend_E": [
+      {
+        "file": "lewis/squad-defend-e.wav",
+        "durationMs": 1649,
+        "sha256": "8547d7d5f7109464ccf28f04529ac68c36995ee5a88dac8264d6c1d6a42d19d4",
+        "text": "Squad! Defend Echo!",
+        "radio": true
+      }
+    ],
+    "squad_secured_E": [
+      {
+        "file": "lewis/squad-secured-e.wav",
+        "durationMs": 3161,
+        "sha256": "cf0656209e26cc76985d7f6bc98944409612fc2427f0b096ed84f6328729993d",
+        "text": "Echo secured! Squad, defend the objective!",
+        "radio": true
+      }
+    ],
+    "squad_defended_E": [
+      {
+        "file": "lewis/squad-defended-e.wav",
+        "durationMs": 2110,
+        "sha256": "132eec6fd9ab69dbb70311b86317b9fdb2e765e4adf394489107d7ff501baa03",
+        "text": "Echo defended! Order complete!",
+        "radio": true
+      }
+    ],
+    "obj_captured_E": [
+      {
+        "file": "lewis/obj-captured-e.wav",
+        "durationMs": 1035,
+        "sha256": "e0ea37bc0424c91351fd99ca5cc8b554c38bd8d29b77118ee88c60a904f09d75",
+        "text": "Echo captured!",
+        "radio": true
+      }
+    ],
+    "obj_lost_E": [
+      {
+        "file": "lewis/obj-lost-e.wav",
+        "durationMs": 1126,
+        "sha256": "a2564c0c3867aee5e04dc470644d0d15b9ff7ccbb6a9aee54f1255d151f08c7f",
+        "text": "We've lost Echo!",
+        "radio": true
+      }
+    ],
+    "squad_attack_F": [
+      {
+        "file": "lewis/squad-attack-f.wav",
+        "durationMs": 1796,
+        "sha256": "7164a4420b7a990c1579713fd8acc7ba7c67b01968f2e61c1cd38f796af1a02c",
+        "text": "Squad! Attack Foxtrot!",
+        "radio": true
+      }
+    ],
+    "squad_defend_F": [
+      {
+        "file": "lewis/squad-defend-f.wav",
+        "durationMs": 1795,
+        "sha256": "1eda24ee08cea93bb2bfb3ea7360714d5526ca62608c6e73ec3e33b5a466ee96",
+        "text": "Squad! Defend Foxtrot!",
+        "radio": true
+      }
+    ],
+    "squad_secured_F": [
+      {
+        "file": "lewis/squad-secured-f.wav",
+        "durationMs": 3349,
+        "sha256": "3338c0c1488dce425f8048340df09412b141c3aa7842daa9ef75d6a210700295",
+        "text": "Foxtrot secured! Squad, defend the objective!",
+        "radio": true
+      }
+    ],
+    "squad_defended_F": [
+      {
+        "file": "lewis/squad-defended-f.wav",
+        "durationMs": 2282,
+        "sha256": "0021da76b8ce1d0c34c6a040bcf852fcbd18ade44eac31a3414d5ce9c13b0f2b",
+        "text": "Foxtrot defended! Order complete!",
+        "radio": true
+      }
+    ],
+    "obj_captured_F": [
+      {
+        "file": "lewis/obj-captured-f.wav",
+        "durationMs": 1341,
+        "sha256": "5349a947a0fad48cc8c0c5475b5eaeb04f2ebaf198614f69b83f0859c2fa2b09",
+        "text": "Foxtrot captured!",
+        "radio": true
+      }
+    ],
+    "obj_lost_F": [
+      {
+        "file": "lewis/obj-lost-f.wav",
+        "durationMs": 1421,
+        "sha256": "fcdbc41cc0e1fb8c13d66504d1913b70b5945754dd36b0f42165ffdd743b709c",
+        "text": "We've lost Foxtrot!",
+        "radio": true
+      }
+    ]
+  }
+}

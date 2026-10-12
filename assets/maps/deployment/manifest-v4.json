@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "generatedBy": "tools/deployment-images.mjs",
+  "maps": {
+    "compact": {
+      "image": "/assets/maps/deployment/compact-aerial-v3.jpg",
+      "bounds": [
+        -220,
+        -220,
+        220,
+        220
+      ],
+      "previews": {
+        "hq-0": "/assets/maps/deployment/compact-hq-0-v3.jpg",
+        "hq-1": "/assets/maps/deployment/compact-hq-1-v3.jpg",
+        "conquest-a": "/assets/maps/deployment/compact-conquest-a-v3.jpg",
+        "conquest-b": "/assets/maps/deployment/compact-conquest-b-v3.jpg",
+        "conquest-e": "/assets/maps/deployment/compact-conquest-e-v3.jpg",
+        "conquest-c": "/assets/maps/deployment/compact-conquest-c-v3.jpg",
+        "conquest-d": "/assets/maps/deployment/compact-conquest-d-v3.jpg"
+      }
+    },
+    "frost": {
+      "image": "/assets/maps/deployment/frost-aerial-v2.jpg",
+      "bounds": [
+        -500,
+        -500,
+        500,
+        500
+      ],
+      "previews": {
+        "hq-0": "/assets/maps/deployment/frost-hq-0-v2.jpg",
+        "hq-1": "/assets/maps/deployment/frost-hq-1-v2.jpg",
+        "conquest-a": "/assets/maps/deployment/frost-conquest-a-v2.jpg",
+        "conquest-b": "/assets/maps/deployment/frost-conquest-b-v2.jpg",
+        "conquest-c": "/assets/maps/deployment/frost-conquest-c-v2.jpg",
+        "conquest-d": "/assets/maps/deployment/frost-conquest-d-v2.jpg",
+        "conquest-e": "/assets/maps/deployment/frost-conquest-e-v2.jpg"
+      }
+    },
+    "ironwood": {
+      "image": "/assets/maps/deployment/ironwood-aerial-v2.jpg",
+      "bounds": [
+        -360,
+        -360,
+        360,
+        360
+      ],
+      "previews": {
+        "hq-0": "/assets/maps/deployment/ironwood-hq-0-v2.jpg",
+        "hq-1": "/assets/maps/deployment/ironwood-hq-1-v2.jpg",
+        "conquest-a": "/assets/maps/deployment/ironwood-conquest-a-v2.jpg",
+        "conquest-b": "/assets/maps/deployment/ironwood-conquest-b-v2.jpg",
+        "conquest-c": "/assets/maps/deployment/ironwood-conquest-c-v2.jpg",
+        "conquest-d": "/assets/maps/deployment/ironwood-conquest-d-v2.jpg",
+        "conquest-e": "/assets/maps/deployment/ironwood-conquest-e-v2.jpg"
+      }
+    },
+    "metro": {
+      "image": "/assets/maps/deployment/metro-aerial-v1.jpg",
+      "bounds": [
+        -262,
+        -142,
+        262,
+        142
+      ],
+      "previews": {
+        "hq-0": "/assets/maps/deployment/metro-hq-0-v1.jpg",
+        "hq-1": "/assets/maps/deployment/metro-hq-1-v1.jpg",
+        "conquest-a": "/assets/maps/deployment/metro-conquest-a-v1.jpg",
+        "conquest-b": "/assets/maps/deployment/metro-conquest-b-v1.jpg",
+        "conquest-c": "/assets/maps/deployment/metro-conquest-c-v1.jpg"
+      }
+    }
+  }
+}

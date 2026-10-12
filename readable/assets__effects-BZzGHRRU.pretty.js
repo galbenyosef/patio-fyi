@@ -1,0 +1,4133 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import { u as e } from "./index-CBqjwezZ.js";
+import { i as t, o as n } from "./defs-BsSJWPNa.js";
+import { t as r } from "./explosion-profile-Dq6PS3Ks.js";
+var i = `
+attribute vec3 iPos;
+attribute vec3 iAxis;
+attribute vec4 iSize;
+attribute vec4 iColor;
+uniform float uMinWidth;
+varying vec2 vUv;
+varying vec4 vColor;
+varying float vKind;
+varying float vRot;
+varying vec2 vFwd;
+#include <fog_pars_vertex>
+void main() {
+  vUv = position.xy;
+  vColor = iColor;
+  vKind = iSize.z;
+  vRot = iSize.w;
+  vFwd = vec2(0.0, 1.0);
+  vec4 vc = modelViewMatrix * vec4(iPos, 1.0);
+  float dist = length(vc.xyz);
+  float minW = dist * uMinWidth;
+  float w = max(iSize.x, minW);
+  float l = max(iSize.y, minW);
+  float alen = length(iAxis);
+  int kind = int(iSize.z + 0.5);
+  if (kind == 1 || alen < 0.001) {
+    float c = cos(iSize.w), s = sin(iSize.w);
+    vec2 p = vec2(position.x * c - position.y * s, position.x * s + position.y * c);
+    vc.xyz += vec3(p.x * w, p.y * l, 0.0);
+    if (kind == 1 && alen > 0.001) {
+      // fire direction projected onto the billboard plane, then into the quad's own rotated frame
+      vec3 av = (modelViewMatrix * vec4(iAxis / alen, 0.0)).xyz;
+      vec2 f = av.xy;
+      float fl = length(f);
+      f = fl < 0.02 ? vec2(0.0, 1.0) : f / fl;
+      vFwd = vec2(f.x * c + f.y * s, -f.x * s + f.y * c);
+    }
+  } else if (kind == 3 || kind == 6) {
+    vec3 n = iAxis / alen;
+    vec3 t = normalize(cross(n, abs(n.y) < 0.9 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0)));
+    vec3 b = cross(n, t);
+    float c = cos(iSize.w), s = sin(iSize.w);
+    vec2 p = vec2(position.x * c - position.y * s, position.x * s + position.y * c);
+    vec3 wo = t * (p.x * w) + b * (p.y * l);
+    vc.xyz += (modelViewMatrix * vec4(wo, 0.0)).xyz;
+  } else {
+    vec3 a = normalize((modelViewMatrix * vec4(iAxis / alen, 0.0)).xyz);
+    vec3 vd = normalize(vc.xyz);
+    vec3 r = cross(a, vd);
+    float rl = length(r);
+    r = rl < 0.02 ? vec3(1.0, 0.0, 0.0) : r / rl;
+    // a blast cone is wide at its base (y = -1) and pinches to a point at the far end (y = +1)
+    float wf = kind == 5 ? mix(1.0, 0.07, position.y * 0.5 + 0.5) : 1.0;
+    vc.xyz += a * (position.y * l) + r * (position.x * w * wf);
+  }
+  vec4 mvPosition = vc;
+  gl_Position = projectionMatrix * vc;
+  #include <fog_vertex>
+}
+`,
+  a = `
+uniform float uAdditive;
+varying vec2 vUv;
+varying vec4 vColor;
+varying float vKind;
+varying float vRot;
+varying vec2 vFwd;
+#include <fog_pars_fragment>
+float hash11(float p) { return fract(sin(p * 12.9898 + 4.1414) * 43758.5453); }
+void main() {
+  float x = vUv.x, y = vUv.y;
+  float r = length(vUv);
+  int kind = int(vKind + 0.5);
+  float a = 0.0;
+  vec3 col = vColor.rgb;
+  if (kind == 0) {
+    a = smoothstep(1.0, 0.2, r); a *= a;
+  } else if (kind == 1) {
+    // Flat-shaded muzzle star: 5-7 HARD triangular points (linear angular falloff, no rounding), lengths
+    // varying ~2:1 per point off the rotation seed, and every lobe clipped to the forward hemisphere of the
+    // fire direction so nothing renders back over the receiver.
+    float pts = 5.0 + floor(fract(abs(vRot) * 2.73) * 3.0);
+    float ang = atan(y, x);
+    float ph = ang * pts / 6.2831853;
+    float idx = floor(ph + 0.5);
+    float u = (ph + 0.5) - idx;                       // -0.5 .. 0.5 within one point
+    float tri = max(0.0, 1.0 - abs(u) * 2.0);         // linear ridge -> a hard triangular spike
+    float len = mix(0.46, 1.0, hash11(idx * 3.1 + floor(vRot * 7.0)));
+    float sr = mix(0.20, len, tri);
+    // forward clip: lobes whose direction opposes the barrel collapse back to the small round core
+    float fwd = dot(vUv / max(r, 1e-4), vFwd);
+    sr = mix(0.19, sr, smoothstep(-0.55, 0.05, fwd));
+    a = 1.0 - smoothstep(sr - 0.035, sr, r);
+    // amber body at the core edge ramping to a deep red-orange at the rim; white only in the innermost ~6%
+    vec3 rimCol = col * vec3(1.0, 0.50, 0.24);
+    col = mix(rimCol, col, smoothstep(sr, 0.0, r));
+    col = mix(col, vec3(1.0, 0.94, 0.80), smoothstep(0.075, 0.0, r) * 0.9);
+  } else if (kind == 2) {
+    // comet: the head (y = +1) is the widest and brightest point, dissolving to nothing at the tail
+    float t = clamp(y * 0.5 + 0.5, 0.0, 1.0);
+    float wref = mix(0.22, 1.0, t * t);
+    float xn = x / wref;
+    float across = max(0.0, 1.0 - xn * xn); across *= across;
+    float head = smoothstep(1.0, 0.965, y);           // rounded tip, no square cut
+    a = across * t * t * head;
+    col += vec3(1.0, 0.58, 0.16) * across * smoothstep(0.68, 1.0, t) * head * 0.38;
+  } else if (kind == 3) {
+    float band = 1.0 - smoothstep(0.0, 0.3, abs(r - 0.7));
+    a = band * smoothstep(1.0, 0.9, r);
+  } else if (kind == 5) {
+    float across = max(0.0, 1.0 - x * x);
+    float along = smoothstep(1.0, 0.15, y) * smoothstep(-1.0, -0.78, y);
+    a = across * along * 0.9;
+    col += vec3(0.9, 0.72, 0.42) * across * across * along * 0.5;
+  } else if (kind == 6) {
+    // ground light disc: soft core with no traceable boundary (replaces a PointLight's clean ellipse)
+    a = pow(max(0.0, 1.0 - r), 2.2);
+  } else {
+    a = exp(-r * r * 4.5) * smoothstep(1.0, 0.7, r);
+  }
+  float alpha = a * vColor.a;
+  if (alpha < 0.004) discard;
+  #ifdef USE_FOG
+    #ifdef FOG_EXP2
+      float fogFactor = 1.0 - exp(-fogDensity * fogDensity * vFogDepth * vFogDepth);
+    #else
+      float fogFactor = smoothstep(fogNear, fogFar, vFogDepth);
+    #endif
+    if (uAdditive > 0.5) col *= (1.0 - fogFactor); else col = mix(col, fogColor, fogFactor);
+  #endif
+  gl_FragColor = vec4(col, alpha);
+  #include <tonemapping_fragment>
+  #include <colorspace_fragment>
+}
+`,
+  o = `
+varying vec3 vDir;
+void main() {
+  vDir = position;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
+`,
+  s = `
+uniform vec3 uZenith;
+uniform vec3 uHorizon;
+uniform vec3 uGlow;
+uniform vec3 uGround;
+uniform vec3 uSunDir;
+uniform float uGlowK;
+varying vec3 vDir;
+void main() {
+  vec3 d = normalize(vDir);
+  float h = d.y;
+  // above the horizon: horizon -> zenith with a slow start so the pale band near the ground stays wide
+  vec3 sky = mix(uHorizon, uZenith, 1.0 - exp(-max(h, 0.0) * 4.0));
+  // below: fall off into a haze band so the dome never shows a hard seam behind the hills
+  sky = mix(sky, uGround, smoothstep(0.0, -0.16, h));
+  // warm bias toward the sun's azimuth, strongest right at the horizon, plus a broad halo around the sun
+  float az = max(0.0, dot(normalize(vec3(d.x, 0.0, d.z) + vec3(1e-5, 0.0, 0.0)), uSunDir));
+  float glow = pow(az, 4.0) * (1.0 - smoothstep(-0.05, 0.42, h)) * uGlowK;
+  float halo = pow(max(0.0, dot(d, normalize(uSunDir + vec3(0.0, 0.30, 0.0)))), 22.0) * uGlowK * 0.75;
+  vec3 col = mix(sky, uGlow, clamp(glow + halo, 0.0, 1.0));
+  gl_FragColor = vec4(col, 1.0);
+  #include <tonemapping_fragment>
+  #include <colorspace_fragment>
+}
+`,
+  c = 1 / 60,
+  l = class {
+    constructor(e, t) {
+      ((this.max = e), (this.n = 0), (this.f = {}));
+      for (let [n, r] of Object.entries(t))
+        this.f[n] = { a: new Float32Array(e * r), s: r };
+    }
+    copy(e, t) {
+      for (let n in this.f) {
+        let { a: r, s: i } = this.f[n],
+          a = e * i,
+          o = t * i;
+        for (let e = 0; e < i; e++) r[o + e] = r[a + e];
+      }
+    }
+    remove(e) {
+      let t = --this.n;
+      e !== t && this.copy(t, e);
+    }
+    alloc() {
+      if (this.n < this.max) return this.n++;
+      let e = this.f.age.a,
+        t = this.f.life.a,
+        n = 0,
+        r = -1;
+      for (let i = 0; i < this.n; i++) {
+        let a = e[i] / t[i];
+        a > r && ((r = a), (n = i));
+      }
+      return n;
+    }
+  };
+function u(e, t) {
+  if (e === 1) return t < 0.15 ? t / 0.15 : 1 - (t - 0.15) / 0.85;
+  if (e === 2) return t < 0.6 ? 1 : 1 - (t - 0.6) / 0.4;
+  if (e === 3) {
+    let e = 1 - t;
+    return e * e;
+  }
+  if (e === 4) {
+    if (t < 0.78) return 1;
+    let e = 1 - (t - 0.78) / 0.22;
+    return e * e;
+  }
+  return 1 - t;
+}
+function d(e, t) {
+  (e.clearUpdateRanges(), e.addUpdateRange(0, t), (e.needsUpdate = !0));
+}
+var f = class {
+    constructor(
+      e,
+      t,
+      { additive: n = !1, renderOrder: r = 10, name: o = `sprites` } = {},
+    ) {
+      ((this.THREE = e),
+        (this.max = t),
+        (this.additive = n),
+        (this.s = new l(t, {
+          pos: 3,
+          vel: 3,
+          axis: 3,
+          size0: 2,
+          size1: 2,
+          kind: 1,
+          rot: 1,
+          rotVel: 1,
+          c0: 3,
+          c1: 3,
+          alpha: 1,
+          age: 1,
+          life: 1,
+          grav: 1,
+          drag: 1,
+          amode: 1,
+          stretch: 1,
+          bounce: 1,
+          ramp: 1,
+        })));
+      let s = new e.PlaneGeometry(2, 2, 1, 1),
+        c = new e.InstancedBufferGeometry();
+      (c.setIndex(s.index),
+        c.setAttribute(`position`, s.attributes.position),
+        c.setAttribute(`uv`, s.attributes.uv));
+      let u = (n, r) => {
+        let i = new e.InstancedBufferAttribute(new Float32Array(t * r), r);
+        return (i.setUsage(e.DynamicDrawUsage), c.setAttribute(n, i), i);
+      };
+      ((this.aPos = u(`iPos`, 3)),
+        (this.aAxis = u(`iAxis`, 3)),
+        (this.aSize = u(`iSize`, 4)),
+        (this.aColor = u(`iColor`, 4)),
+        (c.instanceCount = 0),
+        (c.boundingSphere = new e.Sphere(new e.Vector3(), 1e6)),
+        (this.geo = c),
+        (this.material = new e.ShaderMaterial({
+          uniforms: e.UniformsUtils.merge([
+            e.UniformsLib.fog,
+            { uMinWidth: { value: 0.0022 }, uAdditive: { value: +!!n } },
+          ]),
+          vertexShader: i,
+          fragmentShader: a,
+          transparent: !0,
+          depthWrite: !1,
+          depthTest: !0,
+          fog: !0,
+          blending: n ? e.AdditiveBlending : e.NormalBlending,
+          side: e.DoubleSide,
+        })),
+        (this.mesh = new e.Mesh(c, this.material)),
+        (this.mesh.visible = !1),
+        (this.mesh.frustumCulled = !1),
+        (this.mesh.renderOrder = r),
+        (this.mesh.name = `fx:` + o),
+        (this.mesh.matrixAutoUpdate = !1),
+        (this.spawned = 0));
+    }
+    get count() {
+      return this.s.n;
+    }
+    emit(e) {
+      let t = this.s.alloc(),
+        n = this.s.f;
+      this.spawned++;
+      let r = t * 3,
+        i = t * 2;
+      return (
+        (n.pos.a[r] = e.x),
+        (n.pos.a[r + 1] = e.y),
+        (n.pos.a[r + 2] = e.z),
+        (n.vel.a[r] = e.vx),
+        (n.vel.a[r + 1] = e.vy),
+        (n.vel.a[r + 2] = e.vz),
+        (n.axis.a[r] = e.ax),
+        (n.axis.a[r + 1] = e.ay),
+        (n.axis.a[r + 2] = e.az),
+        (n.size0.a[i] = e.w0),
+        (n.size0.a[i + 1] = e.l0),
+        (n.size1.a[i] = e.w1),
+        (n.size1.a[i + 1] = e.l1),
+        (n.kind.a[t] = e.kind),
+        (n.rot.a[t] = e.rot),
+        (n.rotVel.a[t] = e.rotVel),
+        (n.c0.a[r] = e.c0[0]),
+        (n.c0.a[r + 1] = e.c0[1]),
+        (n.c0.a[r + 2] = e.c0[2]),
+        (n.c1.a[r] = e.c1[0]),
+        (n.c1.a[r + 1] = e.c1[1]),
+        (n.c1.a[r + 2] = e.c1[2]),
+        (n.alpha.a[t] = e.alpha),
+        (n.age.a[t] = 0),
+        (n.life.a[t] = Math.max(e.life, c)),
+        (n.grav.a[t] = e.grav),
+        (n.drag.a[t] = e.drag),
+        (n.amode.a[t] = e.amode),
+        (n.stretch.a[t] = e.stretch),
+        (n.bounce.a[t] = e.bounce),
+        (n.ramp.a[t] = e.ramp),
+        t
+      );
+    }
+    tick(e, t) {
+      let n = this.s.f,
+        r = n.pos.a,
+        i = n.vel.a,
+        a = n.axis.a,
+        o = n.age.a,
+        s = n.life.a,
+        c = n.grav.a,
+        l = n.drag.a,
+        u = n.stretch.a,
+        d = n.bounce.a;
+      for (let n = 0; n < this.s.n; n++) {
+        if (((o[n] += e), o[n] >= s[n])) {
+          (this.s.remove(n), n--);
+          continue;
+        }
+        let f = n * 3,
+          p = c[n],
+          m = l[n];
+        if ((p !== 0 && (i[f + 1] -= p * e), m !== 0)) {
+          let t = Math.max(0, 1 - m * e);
+          ((i[f] *= t), (i[f + 1] *= t), (i[f + 2] *= t));
+        }
+        if (
+          ((r[f] += i[f] * e),
+          (r[f + 1] += i[f + 1] * e),
+          (r[f + 2] += i[f + 2] * e),
+          d[n] !== 0 || p > 0)
+        ) {
+          let e = t(r[f], r[f + 2]);
+          if (r[f + 1] < e + 0.02) {
+            if (d[n] < 0) {
+              (this.s.remove(n), n--);
+              continue;
+            }
+            ((r[f + 1] = e + 0.02),
+              i[f + 1] < 0 &&
+                ((i[f + 1] = -i[f + 1] * d[n]),
+                (i[f] *= 0.6),
+                (i[f + 2] *= 0.6)));
+          }
+        }
+        if (u[n] > 0) {
+          let e = i[f],
+            t = i[f + 1],
+            n = i[f + 2],
+            r = Math.hypot(e, t, n);
+          r > 1e-4 && ((a[f] = e / r), (a[f + 1] = t / r), (a[f + 2] = n / r));
+        }
+      }
+    }
+    update(e) {
+      let t = this.s.n;
+      if (((this.geo.instanceCount = t), (this.mesh.visible = t > 0), t === 0))
+        return;
+      let n = this.s.f,
+        r = n.pos.a,
+        i = n.vel.a,
+        a = n.axis.a,
+        o = n.age.a,
+        s = n.life.a,
+        l = n.size0.a,
+        f = n.size1.a,
+        p = n.kind.a,
+        m = n.rot.a,
+        h = n.rotVel.a,
+        g = n.c0.a,
+        _ = n.c1.a,
+        v = n.alpha.a,
+        y = n.amode.a,
+        b = n.ramp.a,
+        x = this.aPos.array,
+        S = this.aAxis.array,
+        C = this.aSize.array,
+        w = this.aColor.array,
+        T = e * c;
+      for (let e = 0; e < t; e++) {
+        let t = e * 3,
+          n = e * 2,
+          c = e * 4;
+        ((x[t] = r[t] + i[t] * T),
+          (x[t + 1] = r[t + 1] + i[t + 1] * T),
+          (x[t + 2] = r[t + 2] + i[t + 2] * T),
+          (S[t] = a[t]),
+          (S[t + 1] = a[t + 1]),
+          (S[t + 2] = a[t + 2]));
+        let d = Math.min(1, (o[e] + T) / s[e]);
+        ((C[c] = l[n] + (f[n] - l[n]) * d),
+          (C[c + 1] = l[n + 1] + (f[n + 1] - l[n + 1]) * d),
+          (C[c + 2] = p[e]),
+          (C[c + 3] = m[e] + h[e] * o[e]));
+        let E = b[e],
+          D = E === 1 ? d : d ** +E;
+        ((w[c] = g[t] + (_[t] - g[t]) * D),
+          (w[c + 1] = g[t + 1] + (_[t + 1] - g[t + 1]) * D),
+          (w[c + 2] = g[t + 2] + (_[t + 2] - g[t + 2]) * D),
+          (w[c + 3] = v[e] * u(y[e], d)));
+      }
+      (d(this.aPos, t * 3),
+        d(this.aAxis, t * 3),
+        d(this.aSize, t * 4),
+        d(this.aColor, t * 4));
+    }
+    dispose() {
+      (this.geo.dispose(), this.material.dispose());
+    }
+  },
+  p = class {
+    constructor(
+      e,
+      t,
+      n,
+      r,
+      {
+        alpha: i = !1,
+        shadow: a = !1,
+        renderOrder: o = 0,
+        name: s = `mesh`,
+        fadeInjected: c = !1,
+      } = {},
+    ) {
+      if (
+        ((this.THREE = e),
+        (this.max = r),
+        (this.hasAlpha = i),
+        (this.s = new l(r, {
+          pos: 3,
+          vel: 3,
+          quat: 4,
+          ang: 3,
+          s0: 3,
+          s1: 3,
+          c0: 3,
+          c1: 3,
+          c2: 3,
+          tri: 1,
+          age: 1,
+          life: 1,
+          grav: 1,
+          drag: 1,
+          bounce: 1,
+          amode: 1,
+          alpha: 1,
+          rest: 1,
+          ramp: 1,
+          radius: 1,
+          shrink: 1,
+        })),
+        (this.geo = t),
+        (this.aAlpha = null),
+        i)
+      ) {
+        let i = new e.InstancedBufferAttribute(new Float32Array(r), 1);
+        (i.setUsage(e.DynamicDrawUsage),
+          t.setAttribute(`aAlpha`, i),
+          (this.aAlpha = i),
+          c || m(n));
+      }
+      let u = new e.InstancedMesh(t, n, r);
+      ((u.count = 0),
+        (u.visible = !1),
+        (u.frustumCulled = !1),
+        (u.renderOrder = o),
+        (u.name = `fx:` + s),
+        (u.castShadow = a),
+        (u.receiveShadow = !1),
+        (u.matrixAutoUpdate = !1),
+        u.instanceMatrix.setUsage(e.DynamicDrawUsage),
+        (u.instanceColor = new e.InstancedBufferAttribute(
+          new Float32Array(r * 3),
+          3,
+        )),
+        u.instanceColor.setUsage(e.DynamicDrawUsage),
+        (this.mesh = u),
+        (this.material = n),
+        (this.spawned = 0),
+        (this.onRest = null));
+    }
+    get count() {
+      return this.s.n;
+    }
+    emit(e) {
+      let t = this.s.alloc(),
+        n = this.s.f;
+      this.spawned++;
+      let r = t * 3,
+        i = t * 4;
+      ((n.pos.a[r] = e.x),
+        (n.pos.a[r + 1] = e.y),
+        (n.pos.a[r + 2] = e.z),
+        (n.vel.a[r] = e.vx),
+        (n.vel.a[r + 1] = e.vy),
+        (n.vel.a[r + 2] = e.vz),
+        (n.quat.a[i] = e.qx),
+        (n.quat.a[i + 1] = e.qy),
+        (n.quat.a[i + 2] = e.qz),
+        (n.quat.a[i + 3] = e.qw),
+        (n.ang.a[r] = e.ax),
+        (n.ang.a[r + 1] = e.ay),
+        (n.ang.a[r + 2] = e.az),
+        (n.s0.a[r] = e.sx0),
+        (n.s0.a[r + 1] = e.sy0),
+        (n.s0.a[r + 2] = e.sz0),
+        (n.s1.a[r] = e.sx1),
+        (n.s1.a[r + 1] = e.sy1),
+        (n.s1.a[r + 2] = e.sz1),
+        (n.c0.a[r] = e.c0[0]),
+        (n.c0.a[r + 1] = e.c0[1]),
+        (n.c0.a[r + 2] = e.c0[2]),
+        (n.c1.a[r] = e.c1[0]),
+        (n.c1.a[r + 1] = e.c1[1]),
+        (n.c1.a[r + 2] = e.c1[2]));
+      let a = e.c2 ?? e.c1;
+      return (
+        (n.tri.a[t] = +!!e.c2),
+        (n.c2.a[r] = a[0]),
+        (n.c2.a[r + 1] = a[1]),
+        (n.c2.a[r + 2] = a[2]),
+        (n.age.a[t] = 0),
+        (n.life.a[t] = Math.max(e.life, c)),
+        (n.grav.a[t] = e.grav),
+        (n.drag.a[t] = e.drag),
+        (n.bounce.a[t] = e.bounce),
+        (n.amode.a[t] = e.amode),
+        (n.alpha.a[t] = e.alpha),
+        (n.rest.a[t] = 0),
+        (n.ramp.a[t] = e.ramp),
+        (n.radius.a[t] = e.radius),
+        (n.shrink.a[t] = e.shrink),
+        t
+      );
+    }
+    tick(e, t) {
+      let n = this.s.f,
+        r = n.pos.a,
+        i = n.vel.a,
+        a = n.quat.a,
+        o = n.ang.a,
+        s = n.age.a,
+        c = n.life.a,
+        l = n.grav.a,
+        u = n.drag.a,
+        d = n.bounce.a,
+        f = n.rest.a,
+        p = n.radius.a;
+      for (let n = 0; n < this.s.n; n++) {
+        if (((s[n] += e), s[n] >= c[n])) {
+          (this.s.remove(n), n--);
+          continue;
+        }
+        if (f[n] > 0) continue;
+        let m = n * 3,
+          h = n * 4,
+          g = l[n],
+          _ = u[n];
+        if ((g !== 0 && (i[m + 1] -= g * e), _ !== 0)) {
+          let t = Math.max(0, 1 - _ * e);
+          ((i[m] *= t), (i[m + 1] *= t), (i[m + 2] *= t));
+        }
+        if (
+          ((r[m] += i[m] * e),
+          (r[m + 1] += i[m + 1] * e),
+          (r[m + 2] += i[m + 2] * e),
+          g > 0)
+        ) {
+          let e = t(r[m], r[m + 2]) + p[n];
+          r[m + 1] < e &&
+            ((r[m + 1] = e),
+            i[m + 1] < 0 &&
+              ((i[m + 1] = -i[m + 1] * d[n]),
+              (i[m] *= 0.65),
+              (i[m + 2] *= 0.65),
+              (o[m] *= 0.5),
+              (o[m + 1] *= 0.5),
+              (o[m + 2] *= 0.5),
+              i[m + 1] < 0.6 &&
+                ((i[m] = 0),
+                (i[m + 1] = 0),
+                (i[m + 2] = 0),
+                (o[m] = 0),
+                (o[m + 1] = 0),
+                (o[m + 2] = 0),
+                (f[n] = 1),
+                this.onRest &&
+                  this.onRest(r[m], e - p[n], r[m + 2], c[n] - s[n]))));
+        }
+        let v = o[m],
+          y = o[m + 1],
+          b = o[m + 2];
+        if (v !== 0 || y !== 0 || b !== 0) {
+          let t = a[h],
+            n = a[h + 1],
+            r = a[h + 2],
+            i = a[h + 3],
+            o = 0.5 * e,
+            s = t + o * (v * i + y * r - b * n),
+            c = n + o * (y * i + b * t - v * r),
+            l = r + o * (b * i + v * n - y * t),
+            u = i + o * (-v * t - y * n - b * r),
+            d = 1 / Math.hypot(s, c, l, u);
+          ((a[h] = s * d),
+            (a[h + 1] = c * d),
+            (a[h + 2] = l * d),
+            (a[h + 3] = u * d));
+        }
+      }
+    }
+    update(e) {
+      let t = this.s.n;
+      if (((this.mesh.count = t), (this.mesh.visible = t > 0), t === 0)) return;
+      let n = this.s.f,
+        r = n.pos.a,
+        i = n.vel.a,
+        a = n.quat.a,
+        o = n.age.a,
+        s = n.life.a,
+        l = n.s0.a,
+        f = n.s1.a,
+        p = n.c0.a,
+        m = n.c1.a,
+        h = n.c2.a,
+        g = n.tri.a,
+        _ = n.amode.a,
+        v = n.alpha.a,
+        y = n.ramp.a,
+        b = n.shrink.a,
+        x = n.rest.a,
+        S = this.mesh.instanceMatrix.array,
+        C = this.mesh.instanceColor.array,
+        w = this.aAlpha ? this.aAlpha.array : null,
+        T = e * c;
+      for (let e = 0; e < t; e++) {
+        let t = e * 3,
+          n = e * 4,
+          c = e * 16,
+          d = Math.min(1, (o[e] + T) / s[e]),
+          E = 1;
+        b[e] > 0 && d > 0.8 && (E = 1 - (d - 0.8) / 0.2);
+        let D = (l[t] + (f[t] - l[t]) * d) * E,
+          O = (l[t + 1] + (f[t + 1] - l[t + 1]) * d) * E,
+          k = (l[t + 2] + (f[t + 2] - l[t + 2]) * d) * E,
+          A = a[n],
+          j = a[n + 1],
+          M = a[n + 2],
+          N = a[n + 3],
+          ee = A + A,
+          te = j + j,
+          P = M + M,
+          F = A * ee,
+          I = A * te,
+          L = A * P,
+          R = j * te,
+          z = j * P,
+          B = M * P,
+          V = N * ee,
+          H = N * te,
+          U = N * P;
+        ((S[c] = (1 - (R + B)) * D),
+          (S[c + 1] = (I + U) * D),
+          (S[c + 2] = (L - H) * D),
+          (S[c + 3] = 0),
+          (S[c + 4] = (I - U) * O),
+          (S[c + 5] = (1 - (F + B)) * O),
+          (S[c + 6] = (z + V) * O),
+          (S[c + 7] = 0),
+          (S[c + 8] = (L + H) * k),
+          (S[c + 9] = (z - V) * k),
+          (S[c + 10] = (1 - (F + R)) * k),
+          (S[c + 11] = 0));
+        let W = x[e] > 0 ? 0 : T;
+        ((S[c + 12] = r[t] + i[t] * W),
+          (S[c + 13] = r[t + 1] + i[t + 1] * W),
+          (S[c + 14] = r[t + 2] + i[t + 2] * W),
+          (S[c + 15] = 1));
+        let G = y[e],
+          K = G === 1 ? d : d ** +G;
+        if (g[e] === 0)
+          ((C[t] = p[t] + (m[t] - p[t]) * K),
+            (C[t + 1] = p[t + 1] + (m[t + 1] - p[t + 1]) * K),
+            (C[t + 2] = p[t + 2] + (m[t + 2] - p[t + 2]) * K));
+        else if (K < 0.5) {
+          let e = K * 2;
+          ((C[t] = p[t] + (m[t] - p[t]) * e),
+            (C[t + 1] = p[t + 1] + (m[t + 1] - p[t + 1]) * e),
+            (C[t + 2] = p[t + 2] + (m[t + 2] - p[t + 2]) * e));
+        } else {
+          let e = (K - 0.5) * 2;
+          ((C[t] = m[t] + (h[t] - m[t]) * e),
+            (C[t + 1] = m[t + 1] + (h[t + 1] - m[t + 1]) * e),
+            (C[t + 2] = m[t + 2] + (h[t + 2] - m[t + 2]) * e));
+        }
+        w && (w[e] = v[e] * u(_[e], d));
+      }
+      (d(this.mesh.instanceMatrix, t * 16),
+        d(this.mesh.instanceColor, t * 3),
+        this.aAlpha && d(this.aAlpha, t));
+    }
+    dispose() {
+      (this.geo.dispose(), this.material.dispose());
+    }
+  };
+function m(e, t = {}) {
+  let n = t.fade === !0,
+    r = t.rim || 0,
+    i = t.emissive || 0;
+  ((e.onBeforeCompile = (e) => {
+    ((e.vertexShader = e.vertexShader
+      .replace(
+        `#include <common>`,
+        `#include <common>
+attribute float aAlpha;
+varying float vFxAlpha;` +
+          (n
+            ? `
+attribute float aFade;`
+            : ``),
+      )
+      .replace(
+        `#include <begin_vertex>`,
+        `#include <begin_vertex>
+vFxAlpha = aAlpha` +
+          (n ? ` * aFade` : ``) +
+          `;`,
+      )),
+      (e.fragmentShader = e.fragmentShader
+        .replace(
+          `#include <common>`,
+          `#include <common>
+varying float vFxAlpha;`,
+        )
+        .replace(
+          `#include <color_fragment>`,
+          `#include <color_fragment>
+diffuseColor.a *= vFxAlpha;`,
+        )),
+      r > 0 &&
+        (e.fragmentShader = e.fragmentShader.replace(
+          `#include <normal_fragment_maps>`,
+          `#include <normal_fragment_maps>\n{ float fxFace = abs(dot(normalize(normal), normalize(vViewPosition)));\n  diffuseColor.a *= smoothstep(0.0, ${r.toFixed(3)}, fxFace); }`,
+        )),
+      i > 0 &&
+        (e.fragmentShader = e.fragmentShader.replace(
+          `#include <emissivemap_fragment>`,
+          `#include <emissivemap_fragment>\ntotalEmissiveRadiance += vColor.rgb * ${i.toFixed(3)};`,
+        )));
+  }),
+    (e.customProgramCacheKey = () => `fx-ia-${+!!n}-${r}-${i}`));
+}
+var h = class {
+  constructor(e, t, n = 8) {
+    ((this.lights = []),
+      (this.age = new Float32Array(n)),
+      (this.life = new Float32Array(n)),
+      (this.i0 = new Float32Array(n)),
+      (this.decay = new Float32Array(n)),
+      (this.free = []));
+    for (let r = 0; r < n; r++) {
+      let n = new e.PointLight(16777215, 0, 10, 2);
+      ((n.name = `fx:light` + r),
+        n.position.set(0, -1e3, 0),
+        (n.castShadow = !1),
+        t.add(n),
+        this.lights.push(n),
+        this.free.push(r));
+    }
+    this.active = [];
+  }
+  spawn(e, t, n, r, i, a, o, s = 1) {
+    let l;
+    if (this.free.length) l = this.free.pop();
+    else {
+      let e = -1;
+      for (let t of this.active) {
+        let n = this.age[t] / this.life[t];
+        n > e && ((e = n), (l = t));
+      }
+      if (l === void 0) return -1;
+      this.active.splice(this.active.indexOf(l), 1);
+    }
+    let u = this.lights[l];
+    return (
+      u.position.set(e, t, n),
+      u.color.setHex(r),
+      (u.intensity = i),
+      (u.distance = a),
+      (this.age[l] = 0),
+      (this.life[l] = Math.max(o, c)),
+      (this.i0[l] = i),
+      (this.decay[l] = s),
+      this.active.push(l),
+      l
+    );
+  }
+  tick(e) {
+    for (let t = this.active.length - 1; t >= 0; t--) {
+      let n = this.active[t];
+      this.age[n] += e;
+      let r = this.age[n] / this.life[n];
+      if (r >= 1) {
+        let e = this.lights[n];
+        ((e.intensity = 0),
+          e.position.set(0, -1e3, 0),
+          this.active.splice(t, 1),
+          this.free.push(n));
+        continue;
+      }
+      let i = 1 - r;
+      this.lights[n].intensity =
+        this.i0[n] * (this.decay[n] === 1 ? i : i ** +this.decay[n]);
+    }
+  }
+  get count() {
+    return this.active.length;
+  }
+};
+function g(e, t, n, r) {
+  let i = t.attributes.position,
+    a = new Map();
+  for (let e = 0; e < i.count; e++) {
+    let t =
+        i.getX(e).toFixed(4) +
+        `,` +
+        i.getY(e).toFixed(4) +
+        `,` +
+        i.getZ(e).toFixed(4),
+      o = a.get(t);
+    (o || ((o = [r.range(-n, n), r.range(-n, n), r.range(-n, n)]), a.set(t, o)),
+      i.setXYZ(e, i.getX(e) + o[0], i.getY(e) + o[1], i.getZ(e) + o[2]));
+  }
+  return (
+    (i.needsUpdate = !0),
+    t.computeVertexNormals(),
+    t.computeBoundingSphere(),
+    t
+  );
+}
+function _(e, t, n, r, i) {
+  let a = t.index ? t.toNonIndexed() : t,
+    o = a.attributes.position.count,
+    s = new Float32Array(o * 3);
+  for (let e = 0; e < o; e += 3) {
+    let t = i.range(n, r);
+    for (let n = 0; n < 3; n++)
+      ((s[(e + n) * 3] = t),
+        (s[(e + n) * 3 + 1] = t),
+        (s[(e + n) * 3 + 2] = t));
+  }
+  return (a.setAttribute(`color`, new e.BufferAttribute(s, 3)), a);
+}
+function v(t, n) {
+  let r = e(`effects-geometry`),
+    i = {};
+  ((i.add = new f(t, 1100, {
+    additive: !0,
+    renderOrder: 30,
+    name: `sprites-additive`,
+  })),
+    (i.alp = new f(t, 800, {
+      additive: !1,
+      renderOrder: 20,
+      name: `sprites-alpha`,
+    })));
+  let a = g(t, new t.IcosahedronGeometry(1, 2), 0.085, r),
+    o = new t.MeshStandardMaterial({
+      color: 16777215,
+      roughness: 1,
+      metalness: 0,
+      transparent: !0,
+      depthWrite: !1,
+    });
+  (m(o, { rim: 1.25 }),
+    (i.smoke = new p(t, a, o, 900, {
+      alpha: !0,
+      renderOrder: 12,
+      name: `smoke`,
+      fadeInjected: !0,
+    })),
+    (i.debris = new p(
+      t,
+      g(t, new t.DodecahedronGeometry(1, 0), 0.22, r),
+      new t.MeshStandardMaterial({
+        color: 16777215,
+        roughness: 0.92,
+        metalness: 0,
+        flatShading: !0,
+      }),
+      512,
+      { shadow: !0, name: `debris` },
+    )),
+    (i.casings = new p(
+      t,
+      new t.CylinderGeometry(0.5, 0.5, 1, 6),
+      new t.MeshStandardMaterial({
+        color: 16777215,
+        roughness: 0.4,
+        metalness: 0.3,
+        flatShading: !0,
+      }),
+      96,
+      { name: `casings` },
+    )));
+  let s = new t.CircleGeometry(1, 12);
+  {
+    let e = s.attributes.position,
+      n = new Float32Array(e.count);
+    for (let t = 0; t < e.count; t++)
+      if (Math.hypot(e.getX(t), e.getY(t)) > 0.5) {
+        let i = r.range(0.82, 1);
+        (e.setXY(t, e.getX(t) * i, e.getY(t) * i), (n[t] = 0));
+      } else n[t] = 1;
+    ((e.needsUpdate = !0),
+      s.setAttribute(`aFade`, new t.BufferAttribute(n, 1)));
+  }
+  let c = new t.MeshStandardMaterial({
+    color: 16777215,
+    roughness: 1,
+    metalness: 0,
+    transparent: !0,
+    depthWrite: !1,
+    polygonOffset: !0,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -4,
+  });
+  (m(c, { fade: !0 }),
+    (i.decals = new p(t, s, c, 512, {
+      alpha: !0,
+      renderOrder: 5,
+      name: `decals`,
+      fadeInjected: !0,
+    })));
+  let l = _(t, g(t, new t.IcosahedronGeometry(1, 2), 0.11, r), 0.78, 1, r),
+    u = new t.MeshStandardMaterial({
+      color: 2757896,
+      vertexColors: !0,
+      roughness: 1,
+      metalness: 0,
+      transparent: !0,
+      depthWrite: !1,
+    });
+  (m(u, { rim: 1, emissive: 1.15 }),
+    (i.fire = new p(t, l, u, 64, {
+      alpha: !0,
+      renderOrder: 14,
+      name: `fireballs`,
+      fadeInjected: !0,
+    })),
+    (i.lights = new h(t, n, 8)),
+    (i.list = [i.add, i.alp, i.smoke, i.debris, i.casings, i.decals, i.fire]));
+  for (let e of i.list) n.add(e.mesh);
+  return (
+    (i.tick = (e, t) => {
+      for (let n of i.list) n.tick(e, t);
+      i.lights.tick(e);
+    }),
+    (i.update = (e) => {
+      for (let t of i.list) t.update(e);
+    }),
+    (i.total = () => i.list.reduce((e, t) => e + t.count, 0)),
+    (i.dispose = () => {
+      for (let e of i.list) (n.remove(e.mesh), e.dispose());
+      for (let e of i.lights.lights) n.remove(e);
+    }),
+    i
+  );
+}
+var y = 1 / 60;
+function b(e, t, n, r) {
+  let {
+      add: i,
+      alp: a,
+      smoke: o,
+      debris: s,
+      casings: c,
+      decals: l,
+      fire: u,
+      lights: d,
+    } = n,
+    f = (t) => {
+      let n = new e.Color(t);
+      return [n.r, n.g, n.b];
+    },
+    p = {
+      flash: f(16747550),
+      flashOut: f(16730632),
+      flashLate: f(12598278),
+      cone: f(16751672),
+      coreHot: f(16764040),
+      glow: f(16747578),
+      tracer: f(16751664),
+      tracerTail: f(8006660),
+      tracerHot: f(16751664),
+      spark: f(16774600),
+      sparkWarm: f(16764794),
+      sparkEnd: f(16734740),
+      defib: f(13167871),
+      defibEnd: f(3833343),
+      dirt: f(6965806),
+      dirtLight: f(10518616),
+      clod: f(4862752),
+      clodLight: f(8018490),
+      grass: f(6451766),
+      rockDust: f(11446427),
+      rockChip: f(8091246),
+      rockDark: f(4867648),
+      metalDark: f(2894896),
+      metalRim: f(9343128),
+      smokeWisp: f(10131604),
+      wood: f(12950883),
+      woodDark: f(8149556),
+      woodDust: f(14469280),
+      sand: f(15259816),
+      sandDark: f(12559984),
+      water: f(14085109),
+      waterDeep: f(7315392),
+      foam: f(16055295),
+      hit: f(12169380),
+      hitDark: f(7300700),
+      smokeDark: f(4999236),
+      smokeMid: f(8749178),
+      smokeLight: f(9407363),
+      dustSmoke: f(10127980),
+      dustSmokeL: f(12562575),
+      smokeBase: f(5259578),
+      smokeTop: f(12106948),
+      fireHot: f(16751150),
+      fire2: f(16738834),
+      fire3: f(1968643),
+      flame: f(16742944),
+      ember: f(16760928),
+      emberEnd: f(16727056),
+      emberChunk: f(4204058),
+      decal: f(1841173),
+      decalDirt: f(2365970),
+      decalRock: f(2368031),
+      decalWood: f(3153935),
+      scorchCore: f(2760728),
+      scorchEdge: f(4864550),
+      brass: f(9071150),
+      brassDark: f(6178592),
+      dust: f(9402968),
+      dustLight: f(13088142),
+      dustGrass: f(8224080),
+      dustGrassL: f(10723698),
+      contact: f(1315342),
+    },
+    m = (e, n) => t.world.map.getHeight(e, n),
+    h = { frame: -1, day: 1, dx: -0.5, dz: -0.4 };
+  function g() {
+    let e = t.world.time.tick;
+    if (h.frame === e) return h;
+    let n = null,
+      r = null,
+      i = t.modules.get(`environment`);
+    try {
+      let e = i?.getSun?.();
+      e && ((n = e.intensity), (r = e.dir));
+    } catch {}
+    if (n == null) {
+      let e = t.scene.getObjectByName(`debugSun`);
+      e &&
+        ((n = e.intensity),
+        (r = [-e.position.x, -e.position.y, -e.position.z]));
+    }
+    n ??= 2.5;
+    let a = Math.max(0, Math.min(1, n / 2.9)),
+      o = -0.5,
+      s = -0.4;
+    if (r) {
+      let e = Math.hypot(r[0], r[2]) || 1;
+      ((o = r[0] / e), (s = r[2] / e));
+    }
+    return ((h = { frame: e, day: a, dx: o, dz: s }), h);
+  }
+  let _ = [0, 0, 0],
+    v = [0, 0, 0];
+  function b(e, t) {
+    let n = 0.16 + 0.7 * g().day;
+    return ((t[0] = e[0] * n), (t[1] = e[1] * n), (t[2] = e[2] * n), t);
+  }
+  let x = {
+      x: 0,
+      y: 0,
+      z: 0,
+      vx: 0,
+      vy: 0,
+      vz: 0,
+      ax: 0,
+      ay: 0,
+      az: 0,
+      w0: 0.1,
+      l0: 0.1,
+      w1: 0.1,
+      l1: 0.1,
+      kind: 0,
+      rot: 0,
+      rotVel: 0,
+      c0: p.dust,
+      c1: p.dust,
+      alpha: 1,
+      life: 1,
+      grav: 0,
+      drag: 0,
+      amode: 0,
+      stretch: 0,
+      bounce: 0,
+      ramp: 1,
+    },
+    S = {
+      x: 0,
+      y: 0,
+      z: 0,
+      vx: 0,
+      vy: 0,
+      vz: 0,
+      qx: 0,
+      qy: 0,
+      qz: 0,
+      qw: 1,
+      ax: 0,
+      ay: 0,
+      az: 0,
+      sx0: 0.1,
+      sy0: 0.1,
+      sz0: 0.1,
+      sx1: 0.1,
+      sy1: 0.1,
+      sz1: 0.1,
+      c0: p.dust,
+      c1: p.dust,
+      c2: null,
+      life: 1,
+      grav: 0,
+      drag: 0,
+      bounce: 0,
+      amode: 0,
+      alpha: 1,
+      ramp: 1,
+      radius: 0.05,
+      shrink: 0,
+    };
+  function C(e, t, n) {
+    return (
+      (x.x = e),
+      (x.y = t),
+      (x.z = n),
+      (x.vx = x.vy = x.vz = 0),
+      (x.ax = x.ay = x.az = 0),
+      (x.kind = 0),
+      (x.rot = 0),
+      (x.rotVel = 0),
+      (x.alpha = 1),
+      (x.grav = 0),
+      (x.drag = 0),
+      (x.amode = 0),
+      (x.stretch = 0),
+      (x.bounce = 0),
+      (x.ramp = 1),
+      x
+    );
+  }
+  function w(e, t, n) {
+    return (
+      (S.x = e),
+      (S.y = t),
+      (S.z = n),
+      (S.vx = S.vy = S.vz = 0),
+      (S.qx = S.qy = S.qz = 0),
+      (S.qw = 1),
+      (S.ax = S.ay = S.az = 0),
+      (S.grav = 0),
+      (S.drag = 0),
+      (S.bounce = 0),
+      (S.amode = 0),
+      (S.alpha = 1),
+      (S.ramp = 1),
+      (S.radius = 0.05),
+      (S.shrink = 0),
+      (S.c2 = null),
+      S
+    );
+  }
+  let T = (e, t, n, r, i) => {
+      ((e.w0 = t), (e.l0 = n), (e.w1 = r), (e.l1 = i));
+    },
+    E = (e, t, n) => {
+      ((e.sx0 = e.sy0 = e.sz0 = t), (e.sx1 = e.sy1 = e.sz1 = n));
+    },
+    D = [0, 0, 0],
+    O = [0, 0, 0],
+    k = [0, 0, 0],
+    A = [0, 0, 0],
+    j = (e) => {
+      let t = Math.hypot(e[0], e[1], e[2]) || 1;
+      return ((e[0] /= t), (e[1] /= t), (e[2] /= t), e);
+    };
+  function M(e, t, n) {
+    return (
+      (D[0] = e[0] + (r.next() * 2 - 1) * t),
+      (D[1] = e[1] + (r.next() * 2 - 1) * t),
+      (D[2] = e[2] + (r.next() * 2 - 1) * t),
+      j(D),
+      (D[0] *= n),
+      (D[1] *= n),
+      (D[2] *= n),
+      D
+    );
+  }
+  function N(e) {
+    let t = r.next(),
+      n = r.next() * Math.PI * 2,
+      i = r.next() * Math.PI * 2,
+      a = Math.sqrt(1 - t),
+      o = Math.sqrt(t);
+    ((e.qx = a * Math.sin(n)),
+      (e.qy = a * Math.cos(n)),
+      (e.qz = o * Math.sin(i)),
+      (e.qw = o * Math.cos(i)));
+  }
+  function ee(e, t) {
+    let n = t[0],
+      r = t[1],
+      i = t[2];
+    if (i > 0.9999) {
+      ((e.qx = 0), (e.qy = 0), (e.qz = 0), (e.qw = 1));
+      return;
+    }
+    if (i < -0.9999) {
+      ((e.qx = 0), (e.qy = 1), (e.qz = 0), (e.qw = 0));
+      return;
+    }
+    let a = -r,
+      o = n,
+      s = 1 + i,
+      c = 1 / Math.hypot(a, o, 0, s);
+    ((e.qx = a * c), (e.qy = o * c), (e.qz = 0 * c), (e.qw = s * c));
+  }
+  function te(e) {
+    ((k[0] = -e[2]), (k[1] = 0), (k[2] = e[0]));
+    let t = Math.hypot(k[0], k[2]);
+    return (
+      t < 1e-4 ? ((k[0] = 1), (k[2] = 0)) : ((k[0] /= t), (k[2] /= t)),
+      k
+    );
+  }
+  function P(e) {
+    let t = g();
+    ((A[0] = -t.dx), (A[1] = 0), (A[2] = -t.dz));
+    let n = A[0] * e[0] + A[1] * e[1] + A[2] * e[2];
+    ((A[0] -= e[0] * n), (A[1] -= e[1] * n), (A[2] -= e[2] * n));
+    let r = Math.hypot(A[0], A[1], A[2]);
+    if (r < 0.001) {
+      ((A[0] = 1), (A[1] = 0), (A[2] = 0));
+      let t = A[0] * e[0];
+      ((A[0] -= e[0] * t), (A[1] -= e[1] * t), (A[2] -= e[2] * t), j(A));
+    } else ((A[0] /= r), (A[1] /= r), (A[2] /= r));
+    return A;
+  }
+  let F = (e) => (
+      e && Math.hypot(e[0], e[1], e[2]) > 1e-6
+        ? ((O[0] = e[0]), (O[1] = e[1]), (O[2] = e[2]))
+        : ((O[0] = 0), (O[1] = 1), (O[2] = 0)),
+      j(O)
+    ),
+    I = [0, 1, 0];
+  function L(e, t, n = {}) {
+    let o = F(t),
+      s = n.scale ?? 1,
+      c = e[0] + o[0] * 0.07,
+      l = e[1] + o[1] * 0.07,
+      u = e[2] + o[2] * 0.07,
+      f = 5 * y,
+      m = 0.16 * s,
+      h = C(c, l, u);
+    ((h.kind = 1),
+      (h.ax = o[0]),
+      (h.ay = o[1]),
+      (h.az = o[2]),
+      T(h, m, m, m * 0.62, m * 0.62),
+      (h.rot = r.next() * 6.283),
+      (h.rotVel = 0),
+      (h.c0 = p.flash),
+      (h.c1 = p.flashLate),
+      (h.alpha = 1),
+      (h.life = f),
+      (h.amode = 4),
+      (h.ramp = 1.6),
+      a.emit(h));
+    let x = 0.26 * s;
+    ((h = C(e[0] + o[0] * x, e[1] + o[1] * x, e[2] + o[2] * x)),
+      (h.kind = 5),
+      (h.ax = o[0]),
+      (h.ay = o[1]),
+      (h.az = o[2]),
+      T(h, 0.075 * s, x, 0.035 * s, x * 1.2),
+      (h.c0 = p.cone),
+      (h.c1 = p.flashOut),
+      (h.alpha = 0.55),
+      (h.life = f),
+      (h.amode = 4),
+      (h.ramp = 0.6),
+      i.emit(h),
+      (h = C(c, l, u)),
+      (h.kind = 4),
+      T(h, 0.055 * s, 0.055 * s, 0.03 * s, 0.03 * s),
+      (h.c0 = p.coreHot),
+      (h.c1 = p.flashOut),
+      (h.alpha = 0.9),
+      (h.life = 1.4 * y),
+      (h.amode = 3),
+      i.emit(h),
+      (h = C(c, l, u)),
+      (h.kind = 4),
+      T(h, 0.09 * s, 0.09 * s, 0.045 * s, 0.045 * s),
+      (h.c0 = p.flashOut),
+      (h.c1 = p.flashLate),
+      (h.alpha = 0.3),
+      (h.life = 7 * y),
+      (h.amode = 0),
+      i.emit(h));
+    let S = 3 + r.int(0, 1);
+    for (let e = 0; e < S; e++) {
+      let e = M(o, 0.26, r.range(5, 10));
+      ((h = C(c + o[0] * 0.3, l + o[1] * 0.3, u + o[2] * 0.3)),
+        (h.vx = e[0]),
+        (h.vy = e[1]),
+        (h.vz = e[2]),
+        (h.kind = 2),
+        (h.stretch = 1),
+        T(h, 0.01, 0.09, 0.005, 0.04),
+        (h.c0 = p.sparkWarm),
+        (h.c1 = p.sparkEnd),
+        (h.life = r.range(0.1, 0.2)),
+        (h.grav = 9.8),
+        (h.drag = 2),
+        (h.amode = 0),
+        i.emit(h));
+    }
+    for (let e = 0; e < 2; e++) {
+      let t = M(o, 0.35, r.range(1.5, 3));
+      ((h = C(
+        c + o[0] * (0.3 + e * 0.2),
+        l + o[1] * (0.3 + e * 0.2),
+        u + o[2] * (0.3 + e * 0.2),
+      )),
+        (h.vx = t[0]),
+        (h.vy = t[1] + 0.5),
+        (h.vz = t[2]),
+        (h.kind = 0),
+        T(h, 0.06 * s, 0.06 * s, 0.26 * s, 0.26 * s),
+        (h.rot = r.next() * 6.283),
+        (h.rotVel = r.range(-1, 1)),
+        (h.c0 = b(p.smokeMid, _)),
+        (h.c1 = b(p.smokeLight, v)),
+        (h.alpha = 0.28),
+        (h.life = r.range(0.6, 0.9)),
+        (h.drag = 3.5),
+        (h.amode = 1),
+        a.emit(h));
+    }
+    let w = g().day;
+    (d.spawn(
+      c + o[0] * 0.35,
+      l + o[1] * 0.35 + 0.03,
+      u + o[2] * 0.35,
+      16758903,
+      (1.5 + 7.5 * (1 - w)) * s,
+      3.8 * s,
+      3 * y,
+      1,
+    ),
+      n.casing !== !1 && z(e, t, n));
+  }
+  function R(e, t) {
+    let n = F(t).slice(),
+      r = C(e[0] + n[0] * 0.55, e[1] + n[1] * 0.55, e[2] + n[2] * 0.55);
+    ((r.kind = 5),
+      (r.ax = n[0]),
+      (r.ay = n[1]),
+      (r.az = n[2]),
+      T(r, 0.27, 0.65, 0.13, 0.85),
+      (r.c0 = p.coreHot),
+      (r.c1 = p.flashOut),
+      (r.alpha = 0.85),
+      (r.life = 3 * y),
+      (r.amode = 4),
+      (r.ramp = 0.8),
+      i.emit(r));
+    let a = te(n).slice();
+    for (let t of [-1, 1])
+      for (let r = 0; r < 3; r++) {
+        let i = 0.25 + r * 0.12,
+          o = 2.5 + r * 0.6;
+        X(
+          e[0] + n[0] * 0.35 + a[0] * t * i,
+          e[1] + n[1] * 0.35 - 0.12,
+          e[2] + n[2] * 0.35 + a[2] * t * i,
+          n[0] * 0.5 + a[0] * t * o,
+          0.35,
+          n[2] * 0.5 + a[2] * t * o,
+          0.16,
+          0.65,
+          0.65 + r * 0.06,
+          p.smokeMid,
+          p.smokeLight,
+          0.13,
+          0.35,
+          1,
+          0,
+          0.8,
+        );
+      }
+    d.spawn(e[0], e[1], e[2], 16759688, 4 + 14 * (1 - g().day), 7, 3 * y, 1);
+  }
+  function z(e, t, n = {}) {
+    let i = F(t),
+      a = te(i),
+      o = w(
+        e[0] - i[0] * 0.26 + a[0] * 0.06,
+        e[1] - i[1] * 0.26 - 0.02,
+        e[2] - i[2] * 0.26 + a[2] * 0.06,
+      ),
+      s = r.range(0.75, 1.15);
+    ((o.vx = a[0] * s + i[0] * r.range(-0.12, 0.12) + r.range(-0.08, 0.08)),
+      (o.vy = r.range(1, 1.5)),
+      (o.vz = a[2] * s + i[2] * r.range(-0.12, 0.12) + r.range(-0.08, 0.08)),
+      N(o),
+      (o.ax = r.range(-22, 22)),
+      (o.ay = r.range(-22, 22)),
+      (o.az = r.range(-22, 22)),
+      (o.sx0 = o.sx1 = 0.01),
+      (o.sy0 = o.sy1 = 0.022),
+      (o.sz0 = o.sz1 = 0.01),
+      (o.c0 = p.brass),
+      (o.c1 = p.brassDark),
+      (o.ramp = 3),
+      (o.life = r.range(1.8, 2.4)),
+      (o.grav = 9.8),
+      (o.drag = 0.1),
+      (o.bounce = 0.32),
+      (o.radius = 0.01),
+      (o.shrink = 1),
+      c.emit(o));
+  }
+  c.onRest = (e, t, n, r) => {
+    r < 0.35 ||
+      V([e, t, n], I, {
+        color: p.contact,
+        alpha: 0.3,
+        radius: 0.035,
+        lift: 0.006,
+        life: r,
+      });
+  };
+  function B(e, n, r = {}) {
+    let a = F(n),
+      o = r.speed ?? 330,
+      s = r.dist;
+    if (s == null) {
+      let n = t.world.map.raycast(e, a, 900, null, null, !0);
+      s = n ? n.dist : 900;
+    }
+    let c = Math.min(2, Math.max(0.7, s * 0.06)),
+      l = Math.max(s - c, 0.25) / o,
+      u = e[0] + a[0] * c * 2,
+      d = e[1] + a[1] * c * 2,
+      f = e[2] + a[2] * c * 2,
+      m = Math.min(8, Math.max(c * 1.6, s * 0.12)),
+      h = C(u - a[0] * m, d - a[1] * m, f - a[2] * m);
+    ((h.vx = a[0] * o),
+      (h.vy = a[1] * o),
+      (h.vz = a[2] * o),
+      (h.ax = a[0]),
+      (h.ay = a[1]),
+      (h.az = a[2]),
+      (h.kind = 2),
+      T(h, 0.05, m, 0.05, m),
+      (h.c0 = p.tracer),
+      (h.c1 = p.tracerTail),
+      (h.alpha = 0.12),
+      (h.ramp = 1),
+      (h.life = l),
+      (h.amode = 2),
+      (h.bounce = -1),
+      i.emit(h),
+      (h = C(e[0] + a[0] * c, e[1] + a[1] * c, e[2] + a[2] * c)),
+      (h.vx = a[0] * o),
+      (h.vy = a[1] * o),
+      (h.vz = a[2] * o),
+      (h.ax = a[0]),
+      (h.ay = a[1]),
+      (h.az = a[2]),
+      (h.kind = 2),
+      T(h, 0.06, c, 0.06, c),
+      (h.c0 = p.tracerHot),
+      (h.c1 = p.tracer),
+      (h.alpha = 1),
+      (h.ramp = 2),
+      (h.life = l),
+      (h.amode = 2),
+      (h.bounce = -1),
+      i.emit(h),
+      (h = C(u, d, f)),
+      (h.vx = a[0] * o),
+      (h.vy = a[1] * o),
+      (h.vz = a[2] * o),
+      (h.kind = 4),
+      T(h, 0.085, 0.085, 0.085, 0.085),
+      (h.c0 = p.tracerHot),
+      (h.c1 = p.tracer),
+      (h.alpha = 0.85),
+      (h.life = l),
+      (h.amode = 2),
+      (h.bounce = -1),
+      i.emit(h));
+  }
+  function V(e, t, n = {}) {
+    let i = F(t),
+      a = n.radius ?? r.range(0.05, 0.08),
+      o = n.lift ?? 0.012,
+      s = n.ox ?? 0,
+      c = n.oy ?? 0,
+      u = n.oz ?? 0,
+      d = w(e[0] + i[0] * o + s, e[1] + i[1] * o + c, e[2] + i[2] * o + u);
+    ee(d, i);
+    let f = r.next() * 6.283,
+      m = Math.cos(f / 2),
+      h = Math.sin(f / 2),
+      g = d.qx,
+      _ = d.qy,
+      v = d.qz,
+      y = d.qw;
+    ((d.qx = g * m + _ * h),
+      (d.qy = _ * m - g * h),
+      (d.qz = v * m + y * h),
+      (d.qw = y * m - v * h),
+      E(d, a, a),
+      (d.c0 = n.color ?? p.decal),
+      (d.c1 = d.c0),
+      (d.alpha = n.alpha ?? 0.9),
+      (d.life = n.life ?? 45),
+      (d.amode = 2),
+      l.emit(d));
+  }
+  function H(e, t, n, i, a) {
+    let o = a * r.range(0.75, 1.45),
+      s = P(t),
+      c = o * 0.1;
+    (V(e, t, { color: i, alpha: 0.3, radius: o * 1.28, lift: 0.011, life: 26 }),
+      V(e, t, {
+        color: n,
+        alpha: 0.92,
+        radius: o,
+        lift: 0.017,
+        life: 26,
+        ox: s[0] * c,
+        oy: s[1] * c,
+        oz: s[2] * c,
+      }));
+  }
+  function U(e, t, n, i, o, s, c, l, u, d, f = 0.6, p = 0.6) {
+    for (let m = 0; m < n; m++) {
+      let n = M(t, f, r.range(u * 0.5, u)),
+        m = C(e[0] + t[0] * 0.05, e[1] + t[1] * 0.05, e[2] + t[2] * 0.05);
+      ((m.vx = n[0]),
+        (m.vy = n[1] + p),
+        (m.vz = n[2]),
+        (m.kind = 0),
+        T(m, s, s, c, c),
+        (m.rot = r.next() * 6.283),
+        (m.rotVel = r.range(-1.5, 1.5)),
+        (m.c0 = b(i, _)),
+        (m.c1 = b(o, v)),
+        (m.alpha = d),
+        (m.life = r.range(l * 0.7, l)),
+        (m.drag = 3),
+        (m.amode = 1),
+        (m.ramp = 0.6),
+        a.emit(m));
+    }
+  }
+  function W(e, t, n, i, a, o, c, l, u, d, f = 1, p = 3, m = null) {
+    for (let h = 0; h < n; h++) {
+      let n = M(t, u, r.range(l * 0.4, l)),
+        h = w(e[0] + t[0] * 0.03, e[1] + t[1] * 0.03, e[2] + t[2] * 0.03);
+      ((h.vx = n[0]),
+        (h.vy = n[1]),
+        (h.vz = n[2]),
+        N(h),
+        (h.ax = r.range(-14, 14)),
+        (h.ay = r.range(-14, 14)),
+        (h.az = r.range(-14, 14)));
+      let g = r.range(o, c);
+      ((h.sx0 = h.sx1 = g * r.range(0.7, 1.2)),
+        (h.sy0 = h.sy1 = g * f * r.range(0.8, 1.3)),
+        (h.sz0 = h.sz1 = g * r.range(0.6, 1.1)),
+        (h.c0 = r.chance(0.5) ? i : a),
+        (h.c1 = m ?? h.c0),
+        (h.ramp = m ? 0.55 : 1),
+        (h.life = r.range(p * 0.6, p)),
+        (h.grav = 9.8),
+        (h.drag = 0.2),
+        (h.bounce = d),
+        (h.radius = g * 0.8),
+        (h.shrink = 1),
+        s.emit(h));
+    }
+  }
+  function G(e, t, n, a, o, s = 0.7, c = 9.8) {
+    for (let l = 0; l < n; l++) {
+      let n = M(t, s, r.range(a * 0.35, a)),
+        l = C(e[0] + t[0] * 0.02, e[1] + t[1] * 0.02, e[2] + t[2] * 0.02);
+      ((l.vx = n[0]),
+        (l.vy = n[1]),
+        (l.vz = n[2]),
+        (l.kind = 2),
+        (l.stretch = 1),
+        T(l, 0.016, 0.14, 0.006, 0.05),
+        (l.c0 = p.spark),
+        (l.c1 = p.sparkEnd),
+        (l.life = r.range(o * 0.4, o)),
+        (l.grav = c),
+        (l.drag = 1.2),
+        (l.bounce = 0.35),
+        (l.amode = 0),
+        (l.ramp = 0.7),
+        i.emit(l));
+    }
+  }
+  function K(e, t, n, r, a, o = 0.8) {
+    let s = C(e[0] + t[0] * 0.1, e[1] + t[1] * 0.1, e[2] + t[2] * 0.1);
+    ((s.kind = 4),
+      T(s, n, n, n * 1.6, n * 1.6),
+      (s.c0 = a),
+      (s.c1 = a),
+      (s.alpha = o),
+      (s.life = r),
+      (s.amode = 3),
+      i.emit(s));
+  }
+  let q = {
+    dirt(e, t) {
+      (U(e, t, 5, p.dirt, p.dirtLight, 0.14, 0.7, 1, 2.6, 0.7),
+        W(e, t, 6, p.clod, p.clodLight, 0.02, 0.06, 6.5, 0.7, 0.25, 1, 2.4),
+        H(e, t, p.decalDirt, p.dirtLight, 0.08));
+    },
+    grass(e, t) {
+      (U(e, t, 4, p.grass, p.dirtLight, 0.12, 0.6, 0.9, 2.4, 0.65),
+        W(e, t, 5, p.clod, p.grass, 0.02, 0.05, 6, 0.7, 0.2, 1, 2.4),
+        H(e, t, p.decalDirt, p.dirtLight, 0.075));
+    },
+    rock(e, t) {
+      (U(e, t, 3, p.rockDust, p.rockDust, 0.1, 0.5, 0.8, 2.2, 0.7),
+        W(e, t, 5, p.rockChip, p.rockDark, 0.012, 0.03, 9, 0.6, 0.3, 1, 2.4),
+        G(e, t, 2, 6, 0.25),
+        H(e, t, p.decalRock, p.rockDust, 0.068));
+    },
+    metal(e, t) {
+      (G(e, t, 18, 13, 0.8, 0.75),
+        K(e, t, 0.3, 4 * y, p.spark, 0.85),
+        U(e, t, 2, p.smokeWisp, p.smokeLight, 0.06, 0.32, 0.6, 1.5, 0.4),
+        d.spawn(
+          e[0] + t[0] * 0.15,
+          e[1] + t[1] * 0.15,
+          e[2] + t[2] * 0.15,
+          16760944,
+          4,
+          3,
+          4 * y,
+          1,
+        ),
+        H(e, t, p.decal, p.metalRim, 0.055));
+    },
+    wood(e, t) {
+      (W(e, t, 7, p.wood, p.woodDark, 0.008, 0.018, 7, 0.65, 0.2, 4.5, 2.4),
+        U(e, t, 3, p.woodDust, p.woodDust, 0.08, 0.4, 0.7, 1.8, 0.5),
+        H(e, t, p.decalWood, p.woodDust, 0.068));
+    },
+    sand(e, t) {
+      (U(e, t, 6, p.sandDark, p.sand, 0.16, 1, 1.3, 2.4, 0.65, 0.7),
+        W(e, t, 4, p.sandDark, p.sand, 0.01, 0.022, 5, 0.8, 0.1),
+        V(e, t, {
+          color: p.sandDark,
+          alpha: 0.3,
+          radius: r.range(0.09, 0.16),
+          life: 20,
+        }));
+    },
+    water(e, t) {
+      let n = C(e[0], e[1] + 0.03, e[2]);
+      ((n.kind = 3),
+        (n.ay = 1),
+        T(n, 0.15, 0.15, 1.8, 1.8),
+        (n.c0 = b(p.foam, _)),
+        (n.c1 = b(p.water, v)),
+        (n.alpha = 0.8),
+        (n.life = 1),
+        (n.amode = 2),
+        a.emit(n),
+        (n = C(e[0], e[1] + 0.03, e[2])),
+        (n.kind = 3),
+        (n.ay = 1),
+        T(n, 0.05, 0.05, 1, 1),
+        (n.c0 = b(p.foam, _)),
+        (n.c1 = _),
+        (n.alpha = 0.7),
+        (n.life = 0.55),
+        (n.amode = 0),
+        a.emit(n),
+        (n = C(e[0], e[1] + 0.4, e[2])),
+        (n.kind = 2),
+        (n.ay = 1),
+        T(n, 0.14, 0.4, 0.26, 0.8),
+        (n.c0 = b(p.foam, _)),
+        (n.c1 = b(p.water, v)),
+        (n.alpha = 0.85),
+        (n.life = 0.4),
+        (n.amode = 0),
+        a.emit(n));
+      for (let i = 0; i < 14; i++) {
+        let i = M(t, 0.55, r.range(2.5, 6));
+        ((n = C(e[0], e[1] + 0.05, e[2])),
+          (n.vx = i[0]),
+          (n.vy = i[1]),
+          (n.vz = i[2]),
+          (n.kind = 0),
+          T(n, 0.035, 0.035, 0.055, 0.055),
+          (n.c0 = b(p.foam, _)),
+          (n.c1 = b(p.waterDeep, v)),
+          (n.alpha = 0.9),
+          (n.life = r.range(0.5, 0.9)),
+          (n.grav = 9.8),
+          (n.bounce = -1),
+          a.emit(n));
+      }
+      U(e, t, 2, p.water, p.foam, 0.1, 0.55, 0.8, 1.2, 0.45);
+    },
+    hit(e, t) {
+      (U(e, t, 3, p.hitDark, p.hit, 0.06, 0.35, 0.5, 1.6, 0.4),
+        K(e, t, 0.14, 2 * y, p.hit, 0.5));
+    },
+  };
+  ((q.concrete = q.rock),
+    (q.road = q.rock),
+    (q.stone = q.rock),
+    (q.brick = q.rock),
+    (q.soil = q.dirt),
+    (q.mud = q.dirt),
+    (q.gravel = q.rock),
+    (q.steel = q.metal),
+    (q.vehicle = q.metal),
+    (q.snow = q.sand),
+    (q.soldier = q.hit),
+    (q.flesh = q.hit),
+    (q.cloth = q.hit));
+  let J = {
+      dirt: [p.dirt, p.dirtLight],
+      grass: [p.dirt, p.dirtLight],
+      wood: [p.woodDust, p.woodDust],
+      metal: [p.smokeWisp, p.smokeLight],
+      sand: [p.sandDark, p.sand],
+    },
+    ne = {
+      dirt: p.decalDirt,
+      grass: p.decalDirt,
+      wood: p.decalWood,
+      metal: p.decal,
+      sand: p.decalDirt,
+    };
+  function re(e, t, n) {
+    let r =
+        q[n] === q.rock
+          ? `rock`
+          : q[n] === q.metal
+            ? `metal`
+            : q[n] === q.dirt
+              ? `dirt`
+              : q[n] === q.sand
+                ? `sand`
+                : n,
+      [i, a] = J[r] ?? [p.rockDust, p.rockDust],
+      o = ne[r] ?? p.decalRock;
+    (U(e, t, 14, i, a, 0.3, 1.25, 1.1, 2.2, 0.85, 0.7, 0.25),
+      V(e, t, { color: o, alpha: 0.55, radius: 0.21, lift: 0.019, life: 60 }),
+      V(e, t, { color: o, alpha: 0.95, radius: 0.08, lift: 0.021, life: 60 }));
+  }
+  function Y(e, t, n = {}) {
+    let r = F(t),
+      i = q[n.surface] ?? q.dirt;
+    (i(e, r), n.sniper && i !== q.hit && i !== q.water && re(e, r, n.surface));
+  }
+  function X(
+    e,
+    t,
+    n,
+    i,
+    a,
+    s,
+    c,
+    l,
+    u,
+    d,
+    f,
+    p = 0.28,
+    m = 0.5,
+    h = 1,
+    g = 0,
+    _ = 0.9,
+  ) {
+    let v = w(e, t, n);
+    ((v.vx = i),
+      (v.vy = a),
+      (v.vz = s),
+      N(v),
+      (v.ax = r.range(-0.6, 0.6)),
+      (v.ay = r.range(-0.6, 0.6)),
+      (v.az = r.range(-0.6, 0.6)),
+      E(v, c, l),
+      (v.c0 = d),
+      (v.c1 = f),
+      (v.alpha = p),
+      (v.life = u),
+      (v.drag = _),
+      (v.amode = h),
+      (v.ramp = m),
+      (v.grav = -g),
+      o.emit(v));
+  }
+  function ie(e, t, n = {}) {
+    let i = F(t),
+      a = n.count ?? 14,
+      o = n.size ?? 1,
+      s = n.life ?? 4;
+    for (let t = 0; t < a; t++) {
+      let t = M(i, 0.6, r.range(0.5, 1.4) * o);
+      X(
+        e[0] + r.range(-0.35, 0.35) * o,
+        e[1] + r.range(0, 0.4) * o,
+        e[2] + r.range(-0.35, 0.35) * o,
+        t[0],
+        t[1] + 0.7,
+        t[2],
+        r.range(0.18, 0.34) * o,
+        r.range(0.6, 1.05) * o,
+        r.range(s * 0.7, s),
+        n.dark ? p.smokeDark : p.smokeMid,
+        p.smokeLight,
+        n.alpha ?? 0.28,
+      );
+    }
+  }
+  function Z(e, n, i = {}) {
+    let o = F(n),
+      c = i.scale ?? 1,
+      l = i.count ?? 5,
+      u = p.dustGrass,
+      d = p.dustGrassL,
+      f = t.modules.get(`terrain`),
+      m = i.surface;
+    if (!m && f?.getMaterialAt)
+      try {
+        m = f.getMaterialAt(e[0], e[2]);
+      } catch {
+        m = null;
+      }
+    m === `dirt` || m === `road` || m === `soil`
+      ? ((u = p.dust), (d = p.dustLight))
+      : m === `sand`
+        ? ((u = p.sandDark), (d = p.sand))
+        : m === `rock` && ((u = p.rockChip), (d = p.rockDust));
+    for (let t = 0; t < l; t++) {
+      let t = r.range(0, 0.75),
+        n = r.range(0.62, 1.25),
+        i = C(
+          e[0] - o[0] * t + r.range(-0.25, 0.25) * c,
+          e[1] + r.range(0.03, 0.28) * c,
+          e[2] - o[2] * t + r.range(-0.25, 0.25) * c,
+        );
+      ((i.vx = -o[0] * r.range(0.7, 2) * c + r.range(-0.4, 0.4)),
+        (i.vy = r.range(0.3, 0.9) * c),
+        (i.vz = -o[2] * r.range(0.7, 2) * c + r.range(-0.4, 0.4)),
+        (i.kind = 0),
+        T(i, 0.07 * c * n, 0.07 * c * n, 0.4 * c * n, 0.4 * c * n),
+        (i.rot = r.next() * 6.283),
+        (i.rotVel = r.range(-1, 1)),
+        (i.c0 = b(u, _)),
+        (i.c1 = b(d, v)),
+        (i.alpha = r.range(0.2, 0.34)),
+        (i.life = r.range(0.55, 1.4)),
+        (i.drag = 2.2),
+        (i.amode = 1),
+        (i.ramp = 0.6),
+        a.emit(i));
+    }
+    let h = Math.min(3, l);
+    for (let t = 0; t < h; t++) {
+      let t = w(e[0], e[1] + 0.1, e[2]);
+      ((t.vx = -o[0] * r.range(1, 2.5) + r.range(-0.6, 0.6)),
+        (t.vy = r.range(1.2, 2.4)),
+        (t.vz = -o[2] * r.range(1, 2.5) + r.range(-0.6, 0.6)),
+        N(t),
+        (t.ax = r.range(-10, 10)),
+        (t.ay = r.range(-10, 10)),
+        (t.az = r.range(-10, 10)));
+      let n = r.range(0.012, 0.025) * c;
+      ((t.sx0 = t.sx1 = n),
+        (t.sy0 = t.sy1 = n),
+        (t.sz0 = t.sz1 = n),
+        (t.c0 = r.chance(0.5) ? p.clod : p.clodLight),
+        (t.c1 = t.c0),
+        (t.life = r.range(0.8, 1.4)),
+        (t.grav = 9.8),
+        (t.drag = 0.2),
+        (t.bounce = 0.2),
+        (t.radius = n),
+        (t.shrink = 1),
+        s.emit(t));
+    }
+  }
+  let Q = [];
+  function ae(e, t, n, r, i, a, o = 1) {
+    Q.length >= 24 && Q.shift();
+    let s = {
+      x: e,
+      y: t,
+      z: n,
+      ticks: r,
+      total: r,
+      every: i,
+      kind: a,
+      scale: o,
+      t: 0,
+    };
+    return (Q.push(s), s);
+  }
+  function oe(e, t, n, i, a) {
+    let o = M(I, 0.85, r.range(1.2, 3.2) * i),
+      s = w(
+        e + r.range(-0.7, 0.7) * i,
+        t + r.range(-0.05, 0.8) * i,
+        n + r.range(-0.7, 0.7) * i,
+      );
+    ((s.vx = o[0]),
+      (s.vy = o[1] + 1.8 * i),
+      (s.vz = o[2]),
+      N(s),
+      (s.ax = r.range(-3, 3)),
+      (s.ay = r.range(-3, 3)),
+      (s.az = r.range(-3, 3)));
+    let c = r.range(0.45, 1.05),
+      l = r.range(0.2, 0.45) * i * c,
+      d = r.range(0.9, 1.55) * i * c;
+    ((s.sx0 = l * r.range(0.85, 1.15)),
+      (s.sy0 = l * r.range(0.85, 1.15)),
+      (s.sz0 = l * r.range(0.85, 1.15)),
+      (s.sx1 = d * r.range(0.8, 1.25)),
+      (s.sy1 = d * r.range(0.8, 1.25)),
+      (s.sz1 = d * r.range(0.8, 1.25)),
+      (s.c0 = p.fireHot),
+      (s.c1 = p.fire2),
+      (s.c2 = p.fire3),
+      (s.ramp = 0.62),
+      (s.alpha = 0.95),
+      (s.life = r.range(0.7, 1.35) * (1 - 0.25 * a)),
+      (s.drag = 2.2),
+      (s.amode = 2),
+      u.emit(s));
+  }
+  function se(e, t, n = {}) {
+    let o = n.scale ?? 1,
+      s = n.atImpact ? Math.min(1, Math.max(0.1, o / 2.4)) : 1,
+      c = (e) => Math.max(1, Math.round(e * s)),
+      l = n.atImpact ? Math.max(e[1], m(e[0], e[2])) : m(e[0], e[2]),
+      u = e[0],
+      f = Math.max(e[1], l + 0.3),
+      h = e[2],
+      x = g().day;
+    (d.spawn(
+      u,
+      f + 1 * o,
+      h,
+      16751164,
+      (34 + 90 * (1 - x)) * o,
+      7.5 * o,
+      0.45,
+      2,
+    ),
+      d.spawn(u, f + 0.6 * o, h, 16756832, 18 * o, 5 * o, 0.85, 1.6));
+    let S = C(u, l + 0.05, h);
+    ((S.kind = 6),
+      (S.ay = 1),
+      T(S, 1.2 * o, 1.2 * o, 7.5 * o, 7.5 * o),
+      (S.c0 = p.fireHot),
+      (S.c1 = p.fire2),
+      (S.alpha = 0.55),
+      (S.life = 0.55),
+      (S.amode = 3),
+      (S.ramp = 0.7),
+      i.emit(S),
+      (S = C(u, l + 0.04, h)),
+      (S.kind = 6),
+      (S.ay = 1),
+      T(S, 0.6 * o, 0.6 * o, 3.2 * o, 3.2 * o),
+      (S.c0 = p.coreHot),
+      (S.c1 = p.glow),
+      (S.alpha = 0.7),
+      (S.life = 0.35),
+      (S.amode = 3),
+      i.emit(S));
+    for (let e = 0; e < c(8); e++) oe(u, l + 0.25 * o, h, o, 0);
+    ae(u, l + 0.3 * o, h, 12, Math.ceil(2 / s), `fire`, o);
+    for (let e = 0; e < c(8); e++) {
+      let e = M(I, 0.7, r.range(2, 5) * o),
+        t = C(
+          u + r.range(-0.7, 0.7) * o,
+          f + r.range(0.5, 1.6) * o,
+          h + r.range(-0.7, 0.7) * o,
+        );
+      ((t.vx = e[0]),
+        (t.vy = e[1] + 1.5),
+        (t.vz = e[2]),
+        (t.kind = 4),
+        T(t, 0.5 * o, 0.5 * o, 1.2 * o, 1.2 * o),
+        (t.c0 = p.fire2),
+        (t.c1 = p.flame),
+        (t.alpha = 0.45),
+        (t.life = r.range(0.4, 0.8)),
+        (t.drag = 1.5),
+        (t.amode = 0),
+        (t.ramp = 0.6),
+        i.emit(t));
+    }
+    let w = C(u, f + 0.9 * o, h);
+    ((w.kind = 4),
+      T(w, 1.4 * o, 1.4 * o, 3.6 * o, 3.6 * o),
+      (w.c0 = p.fireHot),
+      (w.c1 = p.glow),
+      (w.alpha = 0.7),
+      (w.life = 0.3),
+      (w.amode = 3),
+      i.emit(w),
+      (w = C(u, f + 0.85 * o, h)),
+      (w.kind = 4),
+      T(w, 0.7 * o, 0.7 * o, 2.2 * o, 2.2 * o),
+      (w.c0 = p.coreHot),
+      (w.c1 = p.fire2),
+      (w.alpha = 0.9),
+      (w.life = 5 * y),
+      (w.amode = 3),
+      i.emit(w),
+      (w = C(u, l + 0.15, h)),
+      (w.kind = 3),
+      (w.ay = 1),
+      T(w, 0.8 * o, 0.8 * o, 14 * o, 14 * o),
+      (w.c0 = p.flash),
+      (w.c1 = p.glow),
+      (w.alpha = 0.2),
+      (w.life = 0.42),
+      (w.amode = 0),
+      i.emit(w),
+      (w = C(u, l + 0.25, h)),
+      (w.kind = 3),
+      (w.ay = 1),
+      T(w, 1.5 * o, 1.5 * o, 12 * o, 12 * o),
+      (w.c0 = b(p.dust, _)),
+      (w.c1 = b(p.dustLight, v)),
+      (w.alpha = 0.65),
+      (w.life = 1.5),
+      (w.amode = 1),
+      (w.ramp = 0.5),
+      a.emit(w));
+    for (let e = 0; e < c(16); e++) {
+      let e = M(I, 0.5, r.range(5, 11) * o);
+      ((w = C(u + r.range(-0.5, 0.5) * o, f, h + r.range(-0.5, 0.5) * o)),
+        (w.vx = e[0]),
+        (w.vy = e[1]),
+        (w.vz = e[2]),
+        (w.kind = 0),
+        T(w, 0.3 * o, 0.3 * o, 1.3 * o, 1.3 * o),
+        (w.rot = r.next() * 6.283),
+        (w.rotVel = r.range(-1, 1)),
+        (w.c0 = b(p.dirt, _)),
+        (w.c1 = b(p.dustSmoke, v)),
+        (w.alpha = 0.8),
+        (w.life = r.range(1, 1.8)),
+        (w.grav = 4),
+        (w.drag = 1.4),
+        (w.amode = 1),
+        (w.ramp = 0.6),
+        a.emit(w));
+    }
+    W(
+      [u, l + 0.2 * o, h],
+      I,
+      c(18 + r.int(0, 5)),
+      p.flame,
+      p.ember,
+      0.035 * o,
+      0.12 * o,
+      12 * o,
+      0.75,
+      0.35,
+      1,
+      4.2,
+      p.emberChunk,
+    );
+    for (let e = 0; e < c(26); e++) {
+      let e = M(I, 0.9, r.range(5, 13) * o);
+      ((w = C(u, f + 0.5 * o, h)),
+        (w.vx = e[0]),
+        (w.vy = e[1]),
+        (w.vz = e[2]),
+        (w.kind = 2),
+        (w.stretch = 1),
+        T(w, 0.035 * o, 0.25 * o, 0.012, 0.08),
+        (w.c0 = p.ember),
+        (w.c1 = p.emberEnd),
+        (w.life = r.range(0.9, 2)),
+        (w.grav = 9.8),
+        (w.drag = 0.8),
+        (w.bounce = 0.3),
+        (w.amode = 0),
+        (w.ramp = 0.6),
+        i.emit(w));
+    }
+    for (let e = 0; e < c(18); e++) {
+      let e = M(I, 0.8, r.range(1.2, 3) * o);
+      X(
+        u + r.range(-0.8, 0.8) * o,
+        l + 0.25 + r.range(0, 1.2) * o,
+        h + r.range(-0.8, 0.8) * o,
+        e[0],
+        e[1] + 1.2 * o,
+        e[2],
+        r.range(0.2, 0.38) * o,
+        r.range(0.5, 0.95) * o,
+        r.range(3, 4.5),
+        p.smokeBase,
+        p.smokeTop,
+        0.3,
+        0.45,
+        1,
+        0.6 * o,
+        0.8,
+      );
+    }
+    (ae(u, l, h, 360, Math.ceil(5 / s), `column`, o * 0.7),
+      (!n.atImpact || e[1] - m(u, h) < 1) && $(u, l, h, o));
+  }
+  function $(e, t, n, i) {
+    V([e, t, n], I, {
+      color: p.scorchCore,
+      alpha: 0.55,
+      radius: Math.min(1.5, 0.8 * i),
+      life: 45,
+    });
+    let a = 8 + r.int(0, 4);
+    for (let o = 0; o < a; o++) {
+      let a = r.next() * 6.283,
+        o = r.range(0.55, 1.6) * i;
+      V([e + Math.cos(a) * o, t, n + Math.sin(a) * o], I, {
+        color: r.chance(0.5) ? p.dirt : p.clod,
+        alpha: 0.25,
+        radius: r.range(0.14, 0.42) * i,
+        life: 42,
+      });
+    }
+    for (let a = 0; a < 4; a++) {
+      let a = r.next() * 6.283,
+        o = r.range(0.2, 0.7) * i;
+      V([e + Math.cos(a) * o, t, n + Math.sin(a) * o], I, {
+        color: p.scorchEdge,
+        alpha: 0.3,
+        radius: r.range(0.3, 0.6) * i,
+        life: 44,
+      });
+    }
+  }
+  function ce(e, t, n = {}) {
+    let i = n.scale ?? 1,
+      o = n.atImpact ? Math.min(1, Math.max(0.1, i / 2.2)) : 1,
+      s = (e) => Math.max(1, Math.round(e * o)),
+      c = n.atImpact ? Math.max(e[1], m(e[0], e[2])) : m(e[0], e[2]),
+      l = e[0],
+      u = Math.max(e[1], c + 0.2),
+      d = e[2],
+      f = C(l, c + 0.2, d);
+    ((f.kind = 3),
+      (f.ay = 1),
+      T(f, 1 * i, 1 * i, 8 * i, 8 * i),
+      (f.c0 = b(p.dust, _)),
+      (f.c1 = b(p.dustLight, v)),
+      (f.alpha = 0.7),
+      (f.life = 1.3),
+      (f.amode = 1),
+      a.emit(f));
+    for (let e = 0; e < s(20); e++) {
+      let e = M(I, 1.2, r.range(1, 3) * i);
+      X(
+        l + r.range(-1.2, 1.2) * i,
+        c + 0.2 + r.range(0, 1.2) * i,
+        d + r.range(-1.2, 1.2) * i,
+        e[0],
+        e[1] + 0.5,
+        e[2],
+        r.range(0.25, 0.5) * i,
+        r.range(0.8, 1.4) * i,
+        r.range(2.5, 4),
+        p.dustSmoke,
+        p.dustSmokeL,
+        0.3,
+        0.5,
+      );
+    }
+    W(
+      [l, u + 0.5, d],
+      I,
+      s(18),
+      p.rockChip,
+      p.rockDark,
+      0.06 * i,
+      0.22 * i,
+      7 * i,
+      1,
+      0.25,
+      1,
+      6,
+    );
+    for (let e = 0; e < s(10); e++) {
+      let e = M(I, 1, r.range(2, 5) * i),
+        t = C(l + r.range(-1, 1) * i, u + 0.3, d + r.range(-1, 1) * i);
+      ((t.vx = e[0]),
+        (t.vy = e[1]),
+        (t.vz = e[2]),
+        (t.kind = 0),
+        T(t, 0.4 * i, 0.4 * i, 1.8 * i, 1.8 * i),
+        (t.rot = r.next() * 6.283),
+        (t.rotVel = r.range(-1, 1)),
+        (t.c0 = b(p.dust, _)),
+        (t.c1 = b(p.dustLight, v)),
+        (t.alpha = 0.7),
+        (t.life = r.range(1.2, 2)),
+        (t.grav = 2),
+        (t.drag = 1.5),
+        (t.amode = 1),
+        (t.ramp = 0.6),
+        a.emit(t));
+    }
+    ae(l, c, d, 120, Math.ceil(6 / o), `dustcol`, i);
+  }
+  function le(e, t, n = {}) {
+    let r = m(e[0], e[2]);
+    ae(
+      e[0],
+      Math.max(e[1], r),
+      e[2],
+      n.ticks ?? 1200,
+      n.every ?? 9,
+      `column`,
+      n.scale ?? 1,
+    );
+  }
+  function ue() {
+    for (let e = Q.length - 1; e >= 0; e--) {
+      let t = Q[e];
+      if (--t.ticks <= 0) {
+        Q.splice(e, 1);
+        continue;
+      }
+      if (++t.t % t.every !== 0) continue;
+      let n = t.scale;
+      if (t.kind === `fire`) oe(t.x, t.y, t.z, n, 1 - t.ticks / t.total);
+      else if (t.kind === `column`) {
+        let e = t.ticks / t.total,
+          a = 1 - e;
+        if (
+          (X(
+            t.x + r.range(-0.7, 0.7) * n,
+            t.y + 0.3 + r.range(0, 0.8) * n,
+            t.z + r.range(-0.7, 0.7) * n,
+            r.range(-0.5, 0.5) + 1.6,
+            r.range(3.4, 5) * n * (0.5 + 0.5 * e),
+            r.range(-0.5, 0.5) - 0.7,
+            r.range(0.25, 0.5) * n,
+            r.range(1.2, 2.1) * n * (1 - 0.3 * a),
+            r.range(6, 8),
+            p.smokeBase,
+            p.smokeTop,
+            0.22 * (1 - 0.45 * a),
+            0.5,
+            1,
+            0.9 * n * (0.3 + 0.7 * e),
+            0.42,
+          ),
+          e > 0.75)
+        ) {
+          let a = M(I, 0.5, r.range(1.5, 3.5) * n),
+            o = C(
+              t.x + r.range(-0.4, 0.4) * n,
+              t.y + 0.4,
+              t.z + r.range(-0.4, 0.4) * n,
+            );
+          if (
+            ((o.vx = a[0]),
+            (o.vy = a[1]),
+            (o.vz = a[2]),
+            (o.kind = 4),
+            T(o, 0.4 * n, 0.4 * n, 0.9 * n, 0.9 * n),
+            (o.c0 = p.fire2),
+            (o.c1 = p.flame),
+            (o.alpha = (0.45 * (e - 0.75)) / 0.25 + 0.12),
+            (o.life = r.range(0.35, 0.6)),
+            (o.drag = 1.5),
+            (o.amode = 0),
+            i.emit(o),
+            r.chance(0.5))
+          ) {
+            let e = M(I, 0.5, r.range(2, 5) * n),
+              a = C(t.x, t.y + 0.3, t.z);
+            ((a.vx = e[0]),
+              (a.vy = e[1]),
+              (a.vz = e[2]),
+              (a.kind = 2),
+              (a.stretch = 1),
+              T(a, 0.03, 0.18, 0.01, 0.05),
+              (a.c0 = p.ember),
+              (a.c1 = p.emberEnd),
+              (a.life = r.range(0.5, 1.1)),
+              (a.grav = 6),
+              (a.drag = 0.8),
+              (a.bounce = 0.2),
+              (a.ramp = 0.6),
+              i.emit(a));
+          }
+        }
+      } else
+        t.kind === `dustcol` &&
+          X(
+            t.x + r.range(-0.9, 0.9) * n,
+            t.y + r.range(0.2, 0.7),
+            t.z + r.range(-0.9, 0.9) * n,
+            r.range(-0.3, 0.3),
+            r.range(0.8, 1.6),
+            r.range(-0.3, 0.3),
+            r.range(0.2, 0.42) * n,
+            r.range(0.7, 1.2) * n,
+            r.range(2.5, 3.5),
+            p.dustSmoke,
+            p.dustSmokeL,
+            0.3,
+            0.5,
+          );
+    }
+  }
+  let de = {
+      muzzle: L,
+      cannon: R,
+      casing: z,
+      tracer: B,
+      decal: V,
+      impact: Y,
+      smoke: ie,
+      smokeColumn: le,
+      dust: Z,
+      explosion: se,
+      collapse: ce,
+      burn: (e, t, n) => {
+        let a = n.scale ?? 1,
+          o = Math.max(0, Math.min(1, n.heavy ?? 0)),
+          s = n.fire ?? 0,
+          c = n.count ?? 1;
+        for (let t = 0; t < c; t++) {
+          let t = M(I, 0.5, r.range(0.5, 1.4) * a);
+          X(
+            e[0] + r.range(-0.3, 0.3) * a,
+            e[1] + r.range(-0.15, 0.3) * a,
+            e[2] + r.range(-0.3, 0.3) * a,
+            t[0],
+            t[1] + 0.6 * a,
+            t[2],
+            r.range(0.3, 0.45) * a,
+            r.range(1.5, 2.2) * a * (1 + 0.6 * o),
+            r.range(3, 4.2) * (1 + 0.4 * o),
+            o > 0.5 ? p.fire3 : p.smokeMid,
+            o > 0.5 ? p.smokeBase : p.smokeLight,
+            0.46 + 0.14 * o,
+            0.45,
+            1,
+            0.6 * a,
+            0.9,
+          );
+        }
+        if (s > 0 && r.chance(s)) {
+          oe(e[0], e[1], e[2], 0.42 * a, 0.5);
+          let t = M(I, 0.7, r.range(2, 5) * a),
+            n = C(e[0], e[1] + 0.2, e[2]);
+          ((n.vx = t[0]),
+            (n.vy = t[1]),
+            (n.vz = t[2]),
+            (n.kind = 2),
+            (n.stretch = 1),
+            T(n, 0.03, 0.18, 0.01, 0.05),
+            (n.c0 = p.ember),
+            (n.c1 = p.emberEnd),
+            (n.life = r.range(0.5, 1.1)),
+            (n.grav = 6),
+            (n.drag = 0.8),
+            (n.bounce = 0.2),
+            (n.amode = 0),
+            (n.ramp = 0.6),
+            i.emit(n));
+        }
+      },
+      scrape: (e, t, n) => {
+        let r = n.scale ?? 1,
+          i = F(t);
+        (K(e, i, 0.35 * r, 3 * y, p.sparkWarm, 0.7),
+          G(e, i, Math.round(10 * r), 7 * r, 0.5, 1.2, 9.8),
+          W(
+            e,
+            i,
+            Math.round(5 * r),
+            p.rockChip,
+            p.rockDark,
+            0.04,
+            0.12 * r,
+            4 * r,
+            1.1,
+            0.3,
+            1,
+            2.5,
+          ));
+      },
+      trainSparks: (e, t, n) => {
+        let r = [-t[0], -0.35, -t[2]],
+          i = n.count ?? 10;
+        (K(e, I, 0.16, 2 * y, p.sparkWarm, 0.6), G(e, r, i, 9, 0.45, 0.9, 9.8));
+      },
+      arcFlash: (e, t, n) => {
+        let a = n.scale ?? 1;
+        K(e, I, 0.9 * a, 3 * y, p.defib, 1);
+        for (let t = 0; t < 10; t++) {
+          let t = M([0, -1, 0], 1.4, r.range(2, 7)),
+            n = C(e[0], e[1], e[2]);
+          ((n.vx = t[0]),
+            (n.vy = t[1]),
+            (n.vz = t[2]),
+            (n.kind = 2),
+            (n.stretch = 1),
+            T(n, 0.014, 0.12, 0.006, 0.04),
+            (n.c0 = p.defib),
+            (n.c1 = p.defibEnd),
+            (n.life = r.range(0.12, 0.35)),
+            (n.grav = 9.8),
+            (n.drag = 1.5),
+            (n.bounce = 0.3),
+            (n.amode = 0),
+            (n.ramp = 0.5),
+            i.emit(n));
+        }
+      },
+      deckGrit: (e, t, n) => {
+        let i = n.scale ?? 1;
+        for (let t = 0; t < (n.count ?? 4); t++) {
+          let t = r.range(0.6, 1.3),
+            n = C(
+              e[0] + r.range(-1.2, 1.2),
+              e[1] - r.range(0, 0.3),
+              e[2] + r.range(-1.2, 1.2),
+            );
+          ((n.vx = r.range(-0.3, 0.3)),
+            (n.vy = -r.range(0.2, 1.2)),
+            (n.vz = r.range(-0.3, 0.3)),
+            (n.kind = 0),
+            T(n, 0.05 * i * t, 0.05 * i * t, 0.5 * i * t, 0.9 * i * t),
+            (n.rot = r.next() * 6.283),
+            (n.rotVel = r.range(-0.6, 0.6)),
+            (n.c0 = b(p.dustLight, _)),
+            (n.c1 = b(p.dustLight, v)),
+            (n.alpha = r.range(0.16, 0.3)),
+            (n.life = r.range(1.2, 2.2)),
+            (n.grav = 1.5),
+            (n.drag = 1.4),
+            (n.amode = 1),
+            (n.ramp = 0.3),
+            a.emit(n));
+        }
+        for (let t = 0; t < (n.chips ?? 3); t++) {
+          let t = C(e[0] + r.range(-1.5, 1.5), e[1], e[2] + r.range(-1.5, 1.5));
+          ((t.vx = r.range(-0.4, 0.4)),
+            (t.vy = -r.range(0, 1)),
+            (t.vz = r.range(-0.4, 0.4)),
+            (t.kind = 0),
+            T(t, 0.03, 0.03, 0.03, 0.03),
+            (t.c0 = b(p.rockChip, _)),
+            (t.c1 = b(p.rockChip, v)),
+            (t.alpha = 0.95),
+            (t.life = r.range(1.2, 1.8)),
+            (t.grav = 9.8),
+            (t.drag = 0.2),
+            (t.bounce = 0.3),
+            (t.amode = 1),
+            (t.ramp = 0.1),
+            a.emit(t));
+        }
+      },
+      trainGust: (e, t, n) => {
+        let i = n.scale ?? 1,
+          o = n.count ?? 6,
+          s = n.speed ?? 12;
+        for (let n = 0; n < o; n++) {
+          let n = r.range(0.6, 1.3),
+            o = C(
+              e[0] + r.range(-1.5, 1.5) * i,
+              e[1] + r.range(0.05, 1.2) * i,
+              e[2] + r.range(-1.5, 1.5) * i,
+            );
+          ((o.vx = t[0] * r.range(0.5, 1) * s + r.range(-1.5, 1.5)),
+            (o.vy = r.range(0.4, 2.5)),
+            (o.vz = t[2] * r.range(0.5, 1) * s + r.range(-1.5, 1.5)),
+            (o.kind = 0),
+            T(o, 0.08 * i * n, 0.08 * i * n, 0.9 * i * n, 0.9 * i * n),
+            (o.rot = r.next() * 6.283),
+            (o.rotVel = r.range(-3, 3)),
+            (o.c0 = b(p.dust, _)),
+            (o.c1 = b(p.dustLight, v)),
+            (o.alpha = r.range(0.14, 0.26)),
+            (o.life = r.range(0.6, 1.3)),
+            (o.drag = 1.1),
+            (o.amode = 1),
+            (o.ramp = 0.4),
+            a.emit(o));
+        }
+        for (let i = 0; i < (n.flakes ?? 3); i++) {
+          let n = C(
+            e[0] + r.range(-2, 2),
+            e[1] + r.range(0.1, 0.8),
+            e[2] + r.range(-2, 2),
+          );
+          ((n.vx = t[0] * r.range(0.6, 1.1) * s),
+            (n.vy = r.range(1, 3.5)),
+            (n.vz = t[2] * r.range(0.6, 1.1) * s),
+            (n.kind = 0),
+            T(n, 0.06, 0.06, 0.05, 0.05),
+            (n.rot = r.next() * 6.283),
+            (n.rotVel = r.range(-12, 12)),
+            (n.c0 = b(p.woodDark, _)),
+            (n.c1 = b(p.woodDark, v)),
+            (n.alpha = 0.9),
+            (n.life = r.range(0.8, 1.6)),
+            (n.grav = 3),
+            (n.drag = 0.8),
+            (n.amode = 1),
+            (n.ramp = 0.2),
+            a.emit(n));
+        }
+      },
+      defib: (e, t) => {
+        let n = t && (t[0] || t[1] || t[2]) ? t : I;
+        K(e, n, 0.45, 5 * y, p.defib, 0.9);
+        for (let t = 0; t < 12; t++) {
+          let t = M(n, 1.2, r.range(1.5, 5.5)),
+            a = C(e[0], e[1] + 0.05, e[2]);
+          ((a.vx = t[0]),
+            (a.vy = t[1]),
+            (a.vz = t[2]),
+            (a.kind = 2),
+            (a.stretch = 1),
+            T(a, 0.012, 0.09, 0.005, 0.03),
+            (a.c0 = p.defib),
+            (a.c1 = p.defibEnd),
+            (a.life = r.range(0.08, 0.22)),
+            (a.grav = 2),
+            (a.drag = 3),
+            (a.bounce = 0),
+            (a.amode = 0),
+            (a.ramp = 0.5),
+            i.emit(a));
+        }
+      },
+      weld: (e, t) => {
+        let n = t && (t[0] || t[1] || t[2]) ? t : I;
+        (K(e, n, 0.18, 3 * y, p.sparkWarm, 0.7),
+          G(e, n, 7, 4.5, 0.35, 1.1, 9.8));
+      },
+      impact_dirt: (e, t, n) => Y(e, t, { ...n, surface: `dirt` }),
+      impact_grass: (e, t, n) => Y(e, t, { ...n, surface: `grass` }),
+      impact_rock: (e, t, n) => Y(e, t, { ...n, surface: `rock` }),
+      impact_metal: (e, t, n) => Y(e, t, { ...n, surface: `metal` }),
+      impact_wood: (e, t, n) => Y(e, t, { ...n, surface: `wood` }),
+      impact_sand: (e, t, n) => Y(e, t, { ...n, surface: `sand` }),
+      impact_water: (e, t, n) => Y(e, t, { ...n, surface: `water` }),
+      impact_hit: (e, t, n) => Y(e, t, { ...n, surface: `hit` }),
+    },
+    fe = (e, t) =>
+      e
+        ? Array.isArray(e) || ArrayBuffer.isView(e)
+          ? ((t[0] = +e[0] || 0), (t[1] = +e[1] || 0), (t[2] = +e[2] || 0), t)
+          : typeof e == `object`
+            ? ((t[0] = +e.x || 0), (t[1] = +e.y || 0), (t[2] = +e.z || 0), t)
+            : null
+        : null,
+    pe = [0, 0, 0],
+    me = [0, 0, 0];
+  return {
+    ids: () => Object.keys(de),
+    surfaces: () => Object.keys(q),
+    spawn(e, t, n, r) {
+      let i = de[e];
+      if (!i) return !1;
+      let a = fe(t, pe);
+      return a ? (i(a, fe(n, me), r || {}), !0) : !1;
+    },
+    tick: ue,
+    emitterCount: () => Q.length,
+    PAL: p,
+  };
+}
+var x = 1 / 60,
+  S = Math.PI / 180,
+  C = (e) => (e < 0 ? 0 : e > 1 ? 1 : e),
+  w = (e, t, n) => {
+    let r = C((n - e) / (t - e));
+    return r * r * (3 - 2 * r);
+  };
+function T(t, n, r, i = {}) {
+  let a = n.scene,
+    o = e(i.seed ?? n.config?.seed ?? 1).fork(`effects-showcase`),
+    s = new t.Group();
+  ((s.name = `fx:showcase`), a.add(s));
+  let c = n.debugGround(900);
+  (a.remove(c), c.geometry.dispose(), c.material.dispose());
+  let l = null;
+  (a.traverse((e) => {
+    !l && e.type === `GridHelper` && (l = e);
+  }),
+    l &&
+      (a.remove(l),
+      l.geometry.dispose(),
+      l.material.dispose && l.material.dispose()));
+  let u = D(t, o);
+  ((u.receiveShadow = !0), (u.name = `fx:ground`), s.add(u));
+  let d = !!a.fog;
+  d || (a.fog = new t.FogExp2(12769772, 0.003));
+  let f = E(t, a, s);
+  f.apply(i.tod ?? n.world.time.tod ?? 14);
+  let p = n.events.on(`env:timeOfDay`, (e) => {
+      e && typeof e.tod == `number` && f.apply(e.tod);
+    }),
+    m = [1.35, 1.56, 0.35],
+    h = [-5.4, 1, -2.55],
+    g = [0.9, 1.54, -0.4],
+    _ = (e, t) => n.world.map.getHeight(e, t),
+    v = [],
+    y = [
+      {
+        surface: `dirt`,
+        label: `DIRT`,
+        color: 8017462,
+        x: -14,
+        z: -30,
+        w: 3.2,
+        h: 2.4,
+        d: 1.2,
+      },
+      {
+        surface: `rock`,
+        label: `ROCK`,
+        color: 9144190,
+        x: 10,
+        z: -48,
+        w: 3,
+        h: 2.8,
+        d: 1.4,
+      },
+      {
+        surface: `metal`,
+        label: `METAL`,
+        color: 6122360,
+        x: -6,
+        z: -70,
+        w: 3.4,
+        h: 2.6,
+        d: 0.8,
+      },
+      {
+        surface: `wood`,
+        label: `WOOD`,
+        color: 12159573,
+        x: 18,
+        z: -95,
+        w: 3.2,
+        h: 2.6,
+        d: 1,
+      },
+      {
+        surface: `sand`,
+        label: `SAND`,
+        color: 14271631,
+        x: -20,
+        z: -120,
+        w: 3.6,
+        h: 2.2,
+        d: 1.6,
+      },
+      {
+        surface: `water`,
+        label: `WATER`,
+        color: 5211821,
+        x: 4,
+        z: -150,
+        w: 5,
+        h: 0.35,
+        d: 5,
+        pool: !0,
+      },
+    ],
+    b = [],
+    S = (e, n, r, i, a = 1) => {
+      let o = new t.BoxGeometry(e, n, r),
+        s = new t.Color(i),
+        c = o.attributes.position.count,
+        l = new Float32Array(c * 3),
+        u = o.attributes.normal;
+      for (let e = 0; e < c; e++) {
+        let t =
+          0.82 + 0.18 * Math.max(0, u.getY(e)) + 0.06 * Math.max(0, u.getX(e));
+        ((l[e * 3] = s.r * t * a),
+          (l[e * 3 + 1] = s.g * t * a),
+          (l[e * 3 + 2] = s.b * t * a));
+      }
+      return (o.setAttribute(`color`, new t.BufferAttribute(l, 3)), o);
+    };
+  for (let e of y) {
+    let t = _(e.x, e.z);
+    if (e.pool) {
+      let n = S(e.w + 0.8, 0.4, e.d + 0.8, 7236192);
+      (n.translate(e.x, t + 0.2, e.z), b.push(n));
+      let r = S(e.w, 0.3, e.d, e.color);
+      (r.translate(e.x, t + 0.32, e.z),
+        b.push(r),
+        (e.top = t + 0.47),
+        (e.face = null),
+        v.push([e.x, t, e.z, e.w * 0.95, 0.3]));
+    } else {
+      let n = S(e.w + 0.6, 0.3, e.d + 0.6, 6972504);
+      (n.translate(e.x, t + 0.15, e.z), b.push(n));
+      let r = S(e.w, e.h, e.d, e.color);
+      (r.translate(e.x, t + 0.3 + e.h / 2, e.z),
+        b.push(r),
+        (e.face = t + 0.3 + e.h / 2));
+      let i = S(0.25, 4.5, 0.25, e.color, 1.1);
+      (i.translate(e.x + e.w / 2 + 0.9, t + 2.25, e.z), b.push(i));
+      let a = S(1.4, 0.8, 0.08, e.color, 1.2);
+      (a.translate(e.x + e.w / 2 + 0.9 + 0.8, t + 4.1, e.z),
+        b.push(a),
+        v.push([e.x, t, e.z, Math.max(e.w, e.d) * 0.78, 0.44]),
+        v.push([e.x + e.w / 2 + 0.9, t, e.z, 0.34, 0.42]));
+    }
+  }
+  let C = new t.Mesh(
+    M(t, b),
+    new t.MeshStandardMaterial({
+      vertexColors: !0,
+      roughness: 0.9,
+      metalness: 0,
+      flatShading: !0,
+    }),
+  );
+  ((C.castShadow = !0),
+    (C.receiveShadow = !0),
+    (C.name = `fx:targets`),
+    s.add(C));
+  let w = [25, 50, 75, 100, 125, 150],
+    T = [];
+  (T.push(
+    A(
+      t,
+      110,
+      26,
+      7.5,
+      26,
+      7,
+      o,
+      6969920,
+      6253632,
+      0,
+      _(0, -172) - 0.05,
+      -172,
+      0,
+    ),
+  ),
+    T.push(
+      A(
+        t,
+        150,
+        14,
+        3.2,
+        30,
+        4,
+        o,
+        6969920,
+        6253632,
+        -41,
+        -0.05,
+        -92,
+        Math.PI / 2,
+      ),
+    ),
+    T.push(
+      A(
+        t,
+        150,
+        14,
+        3.2,
+        30,
+        4,
+        o,
+        6969920,
+        6253632,
+        39,
+        -0.05,
+        -92,
+        Math.PI / 2,
+      ),
+    ));
+  for (let e of w) {
+    let t = -e,
+      n = S(0.14, 1.5, 0.14, 4866102);
+    (n.translate(-27, _(-27, t) + 0.75, t), T.push(n));
+    let r = S(1.7, 0.6, 0.06, 15262418);
+    (r.translate(-27, _(-27, t) + 1.55, t),
+      T.push(r),
+      v.push([-27, _(-27, t), t, 0.3, 0.38]));
+  }
+  let ee = new t.DodecahedronGeometry(1, 0),
+    P = (e, n, r) => {
+      let i = ee.clone();
+      (i.scale(
+        r * o.range(0.8, 1.3),
+        r * o.range(0.55, 0.9),
+        r * o.range(0.8, 1.3),
+      ),
+        i.rotateY(o.next() * 6.283));
+      let a = i.attributes.position;
+      for (let e = 0; e < a.count; e++)
+        a.setXYZ(
+          e,
+          a.getX(e) + o.range(-0.08, 0.08) * r,
+          a.getY(e) + o.range(-0.08, 0.08) * r,
+          a.getZ(e) + o.range(-0.08, 0.08) * r,
+        );
+      (i.computeVertexNormals(),
+        j(t, i, o.chance(0.5) ? 8222312 : 6971986, o.range(0.85, 1.1)),
+        i.translate(e, _(e, n) + r * 0.35, n),
+        T.push(i),
+        r > 0.4 && v.push([e, _(e, n), n, r * 1.1, 0.34]));
+    };
+  for (let e = 0; e < 34; e++) {
+    let e, t;
+    do ((e = o.range(-46, 46)), (t = o.range(-168, -6)));
+    while (Math.abs(e) < 24 && t > -160);
+    P(e, t, o.range(0.25, 0.95));
+  }
+  for (let e = 0; e < 90; e++) {
+    let e, t;
+    do ((e = o.range(-34, 34)), (t = o.range(-62, 16)));
+    while (Math.abs(e + 2) < 5.5 && t < 6);
+    P(e, t, o.range(0.07, 0.3));
+  }
+  ee.dispose();
+  let F = [10127970, 9272664, 10720108],
+    I = (e, t, n, r, i, a) => {
+      let o = S(1.1, 0.34, 0.55, F[a % 3]);
+      (o.rotateY(i), o.translate(t, n, r), e.push(o));
+    };
+  for (let [e, t] of [
+    [-30, -40],
+    [28, -75],
+    [-34, -135],
+    [30, -150],
+  ]) {
+    let n = _(e, t);
+    (I(T, e - 0.55, n + 0.17, t, o.range(-0.1, 0.1), 0),
+      I(T, e + 0.55, n + 0.17, t, o.range(-0.1, 0.1), 1),
+      I(T, e, n + 0.51, t, o.range(-0.1, 0.1), 2),
+      I(T, e - 0.5, n + 0.85, t + 0.05, o.range(-0.1, 0.1), 0),
+      v.push([e, n, t, 1.5, 0.42]));
+  }
+  let L = new t.Mesh(
+    M(t, T),
+    new t.MeshStandardMaterial({
+      vertexColors: !0,
+      roughness: 0.95,
+      metalness: 0,
+      flatShading: !0,
+    }),
+  );
+  ((L.castShadow = !0),
+    (L.receiveShadow = !0),
+    (L.name = `fx:dressing`),
+    s.add(L));
+  let R = y.map((e) => e.label).concat(w.map((e) => e + ` m`)),
+    z = N(t, R),
+    B = [],
+    V = (e, n, r, i, a, o) => {
+      let s = new t.PlaneGeometry(n, r),
+        c = s.attributes.uv,
+        l = 1 - (e + 1) / R.length,
+        u = 1 - e / R.length;
+      for (let e = 0; e < c.count; e++) c.setY(e, l + c.getY(e) * (u - l));
+      (s.translate(i, a, o), B.push(s));
+    };
+  (y.forEach((e, t) =>
+    V(
+      t,
+      4.2,
+      1.05,
+      e.x,
+      _(e.x, e.z) + (e.pool ? 1.6 : e.h + 1.2),
+      e.z + (e.pool ? 0 : e.d / 2 + 0.05),
+    ),
+  ),
+    w.forEach((e, t) =>
+      V(y.length + t, 1.6, 0.4, -27, _(-27, -e) + 1.55, -e + 0.04),
+    ));
+  let H = new t.Mesh(
+    M(t, B),
+    new t.MeshBasicMaterial({
+      map: z,
+      transparent: !0,
+      side: t.DoubleSide,
+      depthWrite: !1,
+    }),
+  );
+  ((H.name = `fx:labels`), s.add(H));
+  let U = [],
+    W = _(1.3, 0.5);
+  (I(U, 0.8, W + 0.17, 0.5, 0.05, 0),
+    I(U, 1.9, W + 0.17, 0.45, -0.08, 1),
+    I(U, 1.35, W + 0.51, 0.5, 0.02, 2),
+    I(U, 0.75, W + 0.85, 0.55, -0.06, 1),
+    I(U, 1.95, W + 0.85, 0.5, 0.07, 0),
+    I(U, 1.35, W + 1.19, 0.55, -0.03, 2),
+    v.push([1.35, W, 0.5, 1.6, 0.46]));
+  for (let [e, t, n, r, i, a, o] of [
+    [0.07, 0.12, 0.5, 4540223, 1.35, 1.56, 1.05],
+    [0.045, 0.045, 0.75, 5000773, 1.35, 1.585, 0.72],
+    [0.06, 0.1, 0.42, 7165497, 1.35, 1.52, 1.5],
+    [0.05, 0.2, 0.12, 4079674, 1.35, 1.44, 1.02],
+    [0.03, 0.06, 0.16, 4079674, 1.35, 1.66, 1],
+  ]) {
+    let s = S(e, t, n, r);
+    (s.translate(i, W + a, o), U.push(s));
+  }
+  let G = h[0],
+    K = _(G, -1.2);
+  for (let e = 0; e < 3; e++)
+    (I(U, G - 1.1 + e * 1.1, K + 0.17, -2.5, o.range(-0.08, 0.08), e),
+      I(
+        U,
+        G - 0.55 + e * 1.1 - 0.55,
+        K + 0.51,
+        -2.48,
+        o.range(-0.08, 0.08),
+        e + 1,
+      ));
+  for (let e of [-1.9, 1.9])
+    for (let t = 0; t < 2; t++) {
+      let n = S(1.1, 0.34, 0.55, F[(t + 1) % 3]);
+      (n.rotateY(Math.PI / 2 + o.range(-0.08, 0.08)),
+        n.translate(
+          G + e,
+          K + 0.17 + t * 0.34,
+          -1.7999999999999998 + (t ? 0.02 : 0),
+        ),
+        U.push(n));
+    }
+  v.push([G, K, -2.3, 2.4, 0.44]);
+  let q = [
+    [0.13, 0.17, 0.72, 4474431, G, 1, -1.75],
+    [0.055, 0.055, 0.85, 5000773, G, 1.02, -2.5],
+    [0.09, 0.09, 0.2, 5461323, G, 1.02, -2.95],
+    [0.28, 0.05, 0.05, 4474431, G, 0.97, -1.3499999999999999],
+    [0.3, 0.2, 0.16, 5069370, G - 0.28, 0.9, -1.7],
+    [0.05, 0.05, 0.25, 13213770, G - 0.13, 0.98, -1.7],
+  ];
+  for (let [e, t, n, r, i, a, o] of q) {
+    let s = S(e, t, n, r);
+    (s.translate(i, K + a, o), U.push(s));
+  }
+  for (let [e, t] of [
+    [-0.42, 0.3],
+    [0.42, 0.3],
+    [0, -0.55],
+  ]) {
+    let n = S(0.075, 1, 0.075, 4474431);
+    (n.rotateX(Math.atan2(t, 0.9) * 0.9),
+      n.rotateZ(-Math.atan2(e, 0.9) * 0.9),
+      n.translate(G + e * 0.55, K + 0.48, -1.75 + t * 0.55),
+      U.push(n));
+  }
+  let J = new t.Mesh(
+    M(t, U),
+    new t.MeshStandardMaterial({
+      vertexColors: !0,
+      roughness: 0.85,
+      metalness: 0.05,
+      flatShading: !0,
+    }),
+  );
+  ((J.castShadow = !0), (J.receiveShadow = !0), (J.name = `fx:post`), s.add(J));
+  let ne = O(t, o, _);
+  s.add(ne);
+  let re = k(t, v);
+  ((re.name = `fx:contacts`), s.add(re));
+  let Y = te(t, S);
+  (s.add(Y.root),
+    n.setCameraFocus(g),
+    n.registerCameraPreset(`range`, (e) => {
+      (e.position.set(4.6, 3.2, 7.5),
+        e.lookAt(-3, 1.6, -60),
+        (e.fov = 62),
+        e.updateProjectionMatrix());
+    }),
+    n.registerCameraPreset(`close5`, (e) => {
+      (e.position.set(2.42, 2.06, 3.15),
+        e.lookAt(0.78, 1.52, -19),
+        (e.fov = 44),
+        e.updateProjectionMatrix());
+    }),
+    n.registerCameraPreset(`mid50`, (e) => {
+      (e.position.set(9.4, 4.3, 12),
+        e.lookAt(-4.6, 2.3, -52),
+        (e.fov = 44),
+        e.updateProjectionMatrix());
+    }),
+    n.registerCameraPreset(`far300`, (e) => {
+      (e.position.set(17, 11, 62),
+        e.lookAt(-1, 6, -158),
+        (e.fov = 30),
+        e.updateProjectionMatrix());
+    }),
+    n.registerCameraPreset(`downrange`, (e) => {
+      (e.position.set(6.5, 2.4, 5),
+        e.lookAt(0, 2, -80),
+        (e.fov = 45),
+        e.updateProjectionMatrix());
+    }));
+  let X = [0, 5, 1, 4, 2, 3],
+    ie = [5, 3, 4, 5, 4, 3],
+    Z = {
+      tick: 0,
+      pendingHits: [],
+      expIdx: 0,
+      colIdx: 0,
+      farIdx: 0,
+      runnerPhase: 0,
+      lastFoot: 0,
+    },
+    Q = [
+      [-8, -36],
+      [26, -58],
+      [12, -30],
+      [-30, -70],
+      [20, -105],
+      [-12, -140],
+      [32, -125],
+      [-26, -45],
+      [6, -82],
+      [-18, -160],
+    ],
+    ae = [
+      [30, -52],
+      [-33, -98],
+    ],
+    oe = [
+      [-70, -196],
+      [78, -214],
+      [-34, -262],
+      [58, -252],
+      [-88, -232],
+      [26, -236],
+    ],
+    se = [
+      [-72, -200],
+      [80, -220],
+      [-36, -266],
+    ],
+    $ = [0, 0, -1];
+  function ce(e) {
+    ((e.gn === void 0 || e.gn <= 0) &&
+      ((e.gn = 8 + o.int(0, 6)),
+      (e.gx = o.range(-0.26, 0.26)),
+      (e.gy = o.range(-0.2, 0.2))),
+      e.gn--);
+    let t = Math.max(-0.42, Math.min(0.42, e.gx + o.gauss() * 0.075)),
+      n = Math.max(-0.36, Math.min(0.36, e.gy + o.gauss() * 0.065)),
+      r = e.x + t * e.w,
+      i,
+      a,
+      s;
+    return (
+      e.pool
+        ? ((i = e.top), (a = e.z + n * e.d), (s = [0, 1, 0]))
+        : ((i = e.face + n * e.h), (a = e.z + e.d / 2), (s = [0, 0, 1])),
+      { point: [r, i, a], normal: s, surface: e.surface }
+    );
+  }
+  function le(e, t, r, i) {
+    let a = ce(t);
+    (($[0] = a.point[0] - e[0]),
+      ($[1] = a.point[1] - e[1]),
+      ($[2] = a.point[2] - e[2]));
+    let o = Math.hypot($[0], $[1], $[2]);
+    (($[0] /= o),
+      ($[1] /= o),
+      ($[2] /= o),
+      n.events.emit(`weapon:fire`, {
+        entityId: -1,
+        weaponId: r,
+        origin: e.slice(),
+        dir: $.slice(),
+        seq: Z.tick,
+        dist: o,
+        scale: i,
+      }));
+    let s = Math.max(1, Math.round(o / 300 / x));
+    Z.pendingHits.push({
+      at: Z.tick + s,
+      point: a.point,
+      normal: a.normal,
+      surface: a.surface,
+    });
+  }
+  function ue() {
+    Z.tick++;
+    let e = Z.tick;
+    e % 5 == 0 && le(m, y[X[Math.floor(e / 5) % X.length]], `range-rifle`, 1);
+    let t = e % 60;
+    t < 32 &&
+      t % 4 == 0 &&
+      le(
+        h,
+        y[ie[(Math.floor(e / 60) * 8 + t / 4) % ie.length]],
+        `range-mg`,
+        1.5,
+      );
+    for (let t = Z.pendingHits.length - 1; t >= 0; t--) {
+      let n = Z.pendingHits[t];
+      e >= n.at &&
+        (r.spawn(`impact`, n.point, n.normal, { surface: n.surface }),
+        Z.pendingHits.splice(t, 1));
+    }
+    if (e % 180 == 60) {
+      let e = Q[Z.expIdx % Q.length];
+      (Z.expIdx++,
+        r.spawn(`explosion`, [e[0], _(e[0], e[1]), e[1]], [0, 1, 0], {
+          scale: 1.15 + o.range(0, 0.45),
+        }));
+    }
+    if (e % 150 == 25) {
+      let e = oe[Z.farIdx % oe.length];
+      (Z.farIdx++,
+        r.spawn(
+          `explosion`,
+          [e[0], _(e[0], e[1]) + (Z.farIdx % 3 == 0 ? 9 : 0), e[1]],
+          [0, 1, 0],
+          { scale: 1.5 + o.range(0, 0.6) },
+        ));
+    }
+    if (e % 900 == 1)
+      for (let e of se)
+        r.spawn(`smokeColumn`, [e[0], _(e[0], e[1]), e[1]], [0, 1, 0], {
+          scale: 1.8,
+          ticks: 960,
+          every: 5,
+        });
+    if (e % 540 == 400) {
+      let e = ae[Z.colIdx % ae.length];
+      (Z.colIdx++,
+        r.spawn(`collapse`, [e[0], _(e[0], e[1]), e[1]], [0, 1, 0], {
+          scale: 1.4,
+        }));
+    }
+    let n = 5.6,
+      i = 2 * Math.PI * Math.sqrt(125);
+    Z.runnerPhase += (n / i) * 2 * Math.PI * x;
+    let a = Z.runnerPhase,
+      s = -6 + Math.cos(a) * 13,
+      c = -22 + Math.sin(a) * 9,
+      l = -Math.sin(a) * 13,
+      u = Math.cos(a) * 9,
+      d = _(s, c);
+    Y.set(s, d, c, Math.atan2(-l, -u), e * x * n * 1.9);
+    let f = Math.floor((e * x * n) / 0.8),
+      p = Math.hypot(l, u) || 1;
+    f === Z.lastFoot
+      ? e % 4 == 0 &&
+        r.spawn(`dust`, [s, d, c], [l / p, 0, u / p], {
+          count: 2,
+          scale: 0.9,
+          surface: `grass`,
+        })
+      : ((Z.lastFoot = f),
+        r.spawn(`dust`, [s, d, c], [l / p, 0, u / p], {
+          count: 6,
+          scale: 1.15,
+          surface: `grass`,
+        }));
+  }
+  function de(e) {
+    Y.animate();
+  }
+  function fe() {
+    (p(), a.remove(s), z.dispose(), f.restore());
+    for (let e of [C, L, H, J, u, ne, re])
+      (e.geometry.dispose(), e.material.dispose());
+    d || (a.fog = null);
+  }
+  for (let e = 0; e < 600; e++) (ue(), r.tickAll());
+  try {
+    n.renderer.compile(a, n.camera);
+  } catch (e) {
+    n.warn(`precompile skipped`, e);
+  }
+  return { tick: ue, update: de, dispose: fe, targets: y, muzzle: m };
+}
+function E(e, t, n) {
+  let r = t.getObjectByName(`debugSun`),
+    i = null;
+  (t.traverse((e) => {
+    !i && e.isHemisphereLight && (i = e);
+  }),
+    (!t.background || !t.background.isColor) &&
+      (t.background = new e.Color(12769772)));
+  let a = t.background,
+    c = {
+      bg: a.clone(),
+      fog: t.fog ? t.fog.color.clone() : null,
+      fogD: t.fog ? t.fog.density : null,
+      sunI: r?.intensity,
+      sunC: r?.color.clone(),
+      sunP: r?.position.clone(),
+      hI: i?.intensity,
+      hC: i?.color.clone(),
+      hG: i?.groundColor.clone(),
+    };
+  r?.shadow &&
+    ((c.shadow = {
+      l: r.shadow.camera.left,
+      r: r.shadow.camera.right,
+      t: r.shadow.camera.top,
+      b: r.shadow.camera.bottom,
+      f: r.shadow.camera.far,
+      n: r.shadow.camera.near,
+      tz: r.target.position.z,
+    }),
+    (r.shadow.camera.left = -140),
+    (r.shadow.camera.right = 140),
+    (r.shadow.camera.top = 140),
+    (r.shadow.camera.bottom = -140),
+    (r.shadow.camera.near = 1),
+    (r.shadow.camera.far = 900),
+    (r.shadow.bias = -4e-4),
+    (r.shadow.normalBias = 0.04),
+    r.shadow.mapSize.set(4096, 4096),
+    r.shadow.camera.updateProjectionMatrix(),
+    r.target.position.set(0, 0, -66),
+    t.add(r.target),
+    r.target.updateMatrixWorld());
+  let l = {
+      uZenith: { value: new e.Color(4158653) },
+      uHorizon: { value: new e.Color(12769772) },
+      uGlow: { value: new e.Color(16773336) },
+      uGround: { value: new e.Color(9674884) },
+      uSunDir: { value: new e.Vector3(1, 0, 0) },
+      uGlowK: { value: 0.25 },
+    },
+    u = new e.ShaderMaterial({
+      uniforms: l,
+      vertexShader: o,
+      fragmentShader: s,
+      side: e.BackSide,
+      depthWrite: !1,
+      depthTest: !1,
+      fog: !1,
+    }),
+    d = new e.Mesh(new e.SphereGeometry(2400, 40, 20), u);
+  ((d.frustumCulled = !1),
+    (d.renderOrder = -1e3),
+    (d.name = `fx:sky`),
+    n.add(d));
+  let f = {
+      zenDay: new e.Color(3696822),
+      zenDusk: new e.Color(2768750),
+      zenNight: new e.Color(725542),
+      horDay: new e.Color(11849706),
+      horDusk: new e.Color(15245415),
+      horNight: new e.Color(3820146),
+      gloDay: new e.Color(16773336),
+      gloDusk: new e.Color(16747068),
+      gloNight: new e.Color(5530766),
+      grdDay: new e.Color(9674884),
+      grdDusk: new e.Color(6968128),
+      grdNight: new e.Color(1383468),
+      sunLow: new e.Color(16742958),
+      sunGold: new e.Color(16756832),
+      sunHigh: new e.Color(16774372),
+      moon: new e.Color(9414360),
+      hemDay: new e.Color(11061503),
+      hemLow: new e.Color(6981312),
+      hemNight: new e.Color(5336478),
+      grndDay: new e.Color(6976848),
+      grndLow: new e.Color(6050624),
+      grndNight: new e.Color(3814952),
+    },
+    p = new e.Color(),
+    m = new e.Color();
+  return {
+    apply(e) {
+      let n = (e - 5.4) / 14.200000000000001,
+        o = Math.sin(Math.PI * Math.max(-0.35, Math.min(1.35, n))) * 50,
+        s = 0.12 * Math.PI + 0.76 * Math.PI * C(n),
+        c = w(0, -7, o),
+        u = w(6, 40, o),
+        d = C((e - 12.5) / 5.5);
+      (t.fog && (t.fog.density = 0.003 * (1 + 0.45 * d)),
+        l.uZenith.value.copy(f.zenDusk).lerp(f.zenDay, u).lerp(f.zenNight, c),
+        l.uHorizon.value.copy(f.horDusk).lerp(f.horDay, u).lerp(f.horNight, c),
+        l.uGlow.value.copy(f.gloDusk).lerp(f.gloDay, u).lerp(f.gloNight, c),
+        l.uGround.value.copy(f.grdDusk).lerp(f.grdDay, u).lerp(f.grdNight, c),
+        (l.uGlowK.value = (0.95 - 0.68 * u) * (1 - 0.55 * c) * (1 + 0.3 * d)),
+        l.uHorizon.value.lerp(f.horDusk, 0.1 * d * (1 - c)));
+      let h = Math.cos(s),
+        g = 0.12,
+        _ = Math.hypot(h, g);
+      if (
+        (l.uSunDir.value.set(h / _, 0, g / _),
+        a.copy(l.uHorizon.value),
+        t.fog && t.fog.color.copy(l.uHorizon.value),
+        r)
+      ) {
+        let e = Math.max(o, -6) * S,
+          t = Math.cos(e);
+        (r.position.set(
+          (h / _) * t * 300,
+          Math.max(Math.sin(e), 0.04) * 300,
+          (g / _) * t * 300,
+        ),
+          p
+            .copy(f.sunLow)
+            .lerp(f.sunGold, w(0, 14, o))
+            .lerp(f.sunHigh, w(12, 42, o)),
+          p.lerp(f.sunGold, 0.2 * d),
+          r.color.copy(p).lerp(f.moon, c));
+        let n = 0.3 + 2.75 * C(o / 42) ** 0.8;
+        r.intensity = n * (1 - c) + 0.5 * c;
+      }
+      i &&
+        (m.copy(f.hemLow).lerp(f.hemDay, u).lerp(f.hemNight, c),
+        i.color.copy(m),
+        m.copy(f.grndLow).lerp(f.grndDay, u).lerp(f.grndNight, c),
+        i.groundColor.copy(m),
+        (i.intensity = (2.05 - 1 * u) * (1 - c) + 3.4 * c));
+    },
+    restore() {
+      if (
+        (n.remove(d),
+        d.geometry.dispose(),
+        u.dispose(),
+        a.copy(c.bg),
+        t.fog &&
+          c.fog &&
+          (t.fog.color.copy(c.fog), c.fogD != null && (t.fog.density = c.fogD)),
+        r &&
+          ((r.intensity = c.sunI),
+          r.color.copy(c.sunC),
+          r.position.copy(c.sunP)),
+        r?.shadow && c.shadow)
+      ) {
+        let e = c.shadow,
+          t = r.shadow.camera;
+        ((t.left = e.l),
+          (t.right = e.r),
+          (t.top = e.t),
+          (t.bottom = e.b),
+          (t.far = e.f),
+          (t.near = e.n),
+          t.updateProjectionMatrix(),
+          (r.target.position.z = e.tz),
+          r.target.updateMatrixWorld());
+      }
+      i && ((i.intensity = c.hI), i.color.copy(c.hC), i.groundColor.copy(c.hG));
+    },
+  };
+}
+function D(e, t, n = 760, r = 304) {
+  let i = new e.PlaneGeometry(n, n, r, r);
+  (i.rotateX(-Math.PI / 2), i.translate(0, 0, -80));
+  let a = i.attributes.position,
+    o = (e, t) =>
+      9.5 * Math.sin(e * 0.0072 + 1.3) * Math.cos(t * 0.0061 - 0.4) +
+      5 * Math.sin(e * 0.0164 - 2.1) * Math.sin(t * 0.0129 + 0.7) +
+      2.4 * Math.sin((e + t * 0.7) * 0.031 + 0.2),
+    s = n / r,
+    c = s * 0.4;
+  for (let e = 0; e < a.count; e++) {
+    let r = a.getX(e),
+      i = a.getZ(e),
+      l = Math.abs(r) > n / 2 - s * 0.5 || Math.abs(i + 80) > n / 2 - s * 0.5,
+      u = l ? r : r + t.range(-c, c),
+      d = l ? i : i + t.range(-c, c),
+      f = w(250, 372, Math.hypot(u, d + 80));
+    a.setXYZ(e, u, f * Math.max(0, o(u, d) + 5.5), d);
+  }
+  let l = i.toNonIndexed();
+  i.dispose();
+  let u = l.attributes.position,
+    d = u.count,
+    f = new Float32Array(d * 3),
+    p = new e.Color(6912076),
+    m = new e.Color(8160594),
+    h = new e.Color(7299396),
+    g = new e.Color(8023118),
+    _ = new e.Color(6246968),
+    v = new e.Color(8159842),
+    y = new e.Color(),
+    b = { h: 0, s: 0, l: 0 };
+  for (let e = 0; e < d; e += 3) {
+    let n = (u.getX(e) + u.getX(e + 1) + u.getX(e + 2)) / 3,
+      r = (u.getY(e) + u.getY(e + 1) + u.getY(e + 2)) / 3,
+      i = (u.getZ(e) + u.getZ(e + 1) + u.getZ(e + 2)) / 3,
+      a = Math.sin(n * 0.021 + 1.7) * Math.cos(i * 0.0175 - 0.9),
+      o =
+        Math.sin((n - i * 0.8) * 0.114 + 0.4) *
+        Math.cos((n * 0.6 + i) * 0.097 + 2.2),
+      s = Math.sin(n * 1.17 - 1.1) * Math.sin(i * 1.31 + 0.3),
+      c = Math.sin(n * 2.9 + i * 2.3 - 0.7) * Math.cos(n * 2.1 - i * 3.1 + 1.9),
+      l = 0.5 * a + 0.28 * o + 0.14 * s + 0.08 * c;
+    (y.copy(p).lerp(m, C(l * 0.75 + 0.5)),
+      l > 0.72 && y.lerp(h, Math.min(1, (l - 0.72) * 2.1)));
+    let d = (1 - Math.min(1, Math.abs(n + 2) / 13)) * (i < 8 && i > -178);
+    if (d > 0) {
+      y.lerp(g, d * d * 0.55);
+      let e = Math.max(1 - Math.abs(Math.abs(n + 2) - 4.6) / 1.1, 0);
+      e > 0 && y.lerp(_, e * 0.5 * d);
+    }
+    (r > 1 && y.lerp(v, Math.min(0.5, r / 22)),
+      y.getHSL(b),
+      y.setHSL(
+        b.h +
+          (o * 0.006 +
+            c * 0.01 +
+            Math.max(0, r) * 8e-4 +
+            t.range(-0.008, 0.008)),
+        C(b.s * (1 + s * 0.12 + t.range(-0.07, 0.07))),
+        C(b.l * (1 + 0.1 * s + 0.06 * c) * t.range(0.945, 1.055)),
+      ));
+    for (let t = 0; t < 3; t++)
+      ((f[(e + t) * 3] = y.r),
+        (f[(e + t) * 3 + 1] = y.g),
+        (f[(e + t) * 3 + 2] = y.b));
+  }
+  (l.setAttribute(`color`, new e.BufferAttribute(f, 3)),
+    l.computeVertexNormals(),
+    l.computeBoundingSphere());
+  let x = new e.MeshStandardMaterial({
+    vertexColors: !0,
+    roughness: 1,
+    metalness: 0,
+    flatShading: !0,
+  });
+  return new e.Mesh(l, x);
+}
+function O(e, t, n, r = 1500) {
+  let i = [],
+    a = [],
+    o = new e.Color(4543014),
+    s = new e.Color(9346136);
+  for (let e = 0; e < 6; e++) {
+    let e = t.next() * 6.283,
+      n = t.range(0.05, 0.24),
+      r = t.range(0.16, 0.34),
+      c = 0.024,
+      l = Math.cos(e),
+      u = Math.sin(e),
+      d = Math.cos(e + Math.PI / 2) * c,
+      f = Math.sin(e + Math.PI / 2) * c,
+      p = l * t.range(0, 0.07),
+      m = u * t.range(0, 0.07);
+    (i.push(p - d, 0, m - f, p + d, 0, m + f, p + l * n, r, m + u * n),
+      a.push(o.r, o.g, o.b, o.r, o.g, o.b, s.r, s.g, s.b));
+  }
+  let c = new e.BufferGeometry();
+  (c.setAttribute(`position`, new e.Float32BufferAttribute(i, 3)),
+    c.setAttribute(`color`, new e.Float32BufferAttribute(a, 3)),
+    c.computeVertexNormals(),
+    c.computeBoundingSphere());
+  let l = new e.MeshStandardMaterial({
+      vertexColors: !0,
+      roughness: 1,
+      metalness: 0,
+      side: e.DoubleSide,
+      flatShading: !0,
+    }),
+    u = new e.InstancedMesh(c, l, r);
+  ((u.name = `fx:tufts`),
+    (u.castShadow = !1),
+    (u.receiveShadow = !1),
+    (u.instanceColor = new e.InstancedBufferAttribute(
+      new Float32Array(r * 3),
+      3,
+    )));
+  let d = new e.Matrix4(),
+    f = new e.Quaternion(),
+    p = new e.Vector3(0, 1, 0),
+    m = new e.Vector3(),
+    h = new e.Vector3(),
+    g = u.instanceColor.array,
+    _ = 0,
+    v = 0;
+  for (; _ < r && v++ < r * 12;) {
+    let e = t.range(-52, 52),
+      r = t.range(-96, 22);
+    if (
+      (Math.abs(e + 2) < 4.2 && r < 6) ||
+      (Math.abs(e - 1.35) < 3 && Math.abs(r - 0.5) < 3)
+    )
+      continue;
+    let i = t.range(0.7, 1.9);
+    (f.setFromAxisAngle(p, t.next() * 6.283),
+      d.compose(m.set(e, n(e, r), r), f, h.set(i, i * t.range(0.8, 1.35), i)),
+      u.setMatrixAt(_, d));
+    let a = t.range(0.72, 1.2);
+    ((g[_ * 3] = a),
+      (g[_ * 3 + 1] = a * t.range(0.96, 1.06)),
+      (g[_ * 3 + 2] = a * 0.92),
+      _++);
+  }
+  return (
+    (u.count = _),
+    (u.instanceMatrix.needsUpdate = !0),
+    (u.instanceColor.needsUpdate = !0),
+    u
+  );
+}
+function k(e, t) {
+  let n = [];
+  for (let [r, i, a, o, s] of t) {
+    let t = new e.CircleGeometry(o, 12);
+    t.rotateX(-Math.PI / 2);
+    let c = t.attributes.position,
+      l = c.count,
+      u = new Float32Array(l * 3);
+    for (let e = 0; e < l; e++) {
+      let t = Math.min(1, Math.hypot(c.getX(e), c.getZ(e)) / o),
+        n = 1 - s * (1 - t) * (1 - t * 0.35);
+      ((u[e * 3] = n), (u[e * 3 + 1] = n), (u[e * 3 + 2] = n * 0.985));
+    }
+    (t.setAttribute(`color`, new e.BufferAttribute(u, 3)),
+      t.translate(r, i + 0.015, a),
+      n.push(t));
+  }
+  let r = new e.MeshBasicMaterial({
+      vertexColors: !0,
+      transparent: !0,
+      blending: e.MultiplyBlending,
+      premultipliedAlpha: !0,
+      depthWrite: !1,
+      polygonOffset: !0,
+      polygonOffsetFactor: -1,
+      polygonOffsetUnits: -2,
+    }),
+    i = new e.Mesh(M(e, n, !0), r);
+  return ((i.renderOrder = 2), (i.frustumCulled = !1), i);
+}
+function A(e, t, n, r, i, a, o, s, c, l, u, d, f) {
+  let p = new e.PlaneGeometry(t, n, i, a);
+  p.rotateX(-Math.PI / 2);
+  let m = p.attributes.position;
+  for (let e = 0; e < m.count; e++) {
+    let a = Math.abs(m.getZ(e)) / (n / 2),
+      s = Math.abs(m.getX(e)) / (t / 2),
+      c =
+        r *
+        (Math.max(0, 1 - a) ** 1.35 * (1 - s ** 7)) *
+        (a < 0.98 ? o.range(0.8, 1.12) : 1);
+    m.setXYZ(
+      e,
+      m.getX(e) + (a < 0.98 && a > 0.02 ? (o.range(-0.25, 0.25) * t) / i : 0),
+      c,
+      m.getZ(e),
+    );
+  }
+  let h = p.toNonIndexed();
+  p.dispose();
+  let g = h.attributes.position,
+    _ = new Float32Array(g.count * 3),
+    v = new e.Color(s),
+    y = new e.Color(c),
+    b = new e.Color();
+  for (let e = 0; e < g.count; e += 3) {
+    let t = (g.getY(e) + g.getY(e + 1) + g.getY(e + 2)) / 3;
+    b.copy(v)
+      .lerp(y, Math.min(1, (t / r) * 1.3))
+      .multiplyScalar(o.range(0.9, 1.08));
+    for (let t = 0; t < 3; t++)
+      ((_[(e + t) * 3] = b.r),
+        (_[(e + t) * 3 + 1] = b.g),
+        (_[(e + t) * 3 + 2] = b.b));
+  }
+  return (
+    h.setAttribute(`color`, new e.BufferAttribute(_, 3)),
+    h.computeVertexNormals(),
+    f && h.rotateY(f),
+    h.translate(l, u, d),
+    h
+  );
+}
+function j(e, t, n, r) {
+  let i = new e.Color(n),
+    a = t.attributes.position.count,
+    o = new Float32Array(a * 3);
+  for (let e = 0; e < a; e++)
+    ((o[e * 3] = i.r * r), (o[e * 3 + 1] = i.g * r), (o[e * 3 + 2] = i.b * r));
+  t.setAttribute(`color`, new e.BufferAttribute(o, 3));
+}
+function M(e, t, n = !1) {
+  let r = 0,
+    i = 0,
+    a = t.every((e) => e.attributes.color),
+    o = t.every((e) => e.attributes.uv);
+  for (let e of t)
+    ((r += e.attributes.position.count),
+      (i += e.index ? e.index.count : e.attributes.position.count));
+  let s = new Float32Array(r * 3),
+    c = new Float32Array(r * 3),
+    l = a ? new Float32Array(r * 3) : null,
+    u = o ? new Float32Array(r * 2) : null,
+    d = new (r > 65535 ? Uint32Array : Uint16Array)(i),
+    f = 0,
+    p = 0;
+  for (let e of t) {
+    let t = e.attributes.position.count;
+    if (
+      (s.set(e.attributes.position.array, f * 3),
+      e.attributes.normal && c.set(e.attributes.normal.array, f * 3),
+      l && l.set(e.attributes.color.array, f * 3),
+      u && u.set(e.attributes.uv.array, f * 2),
+      e.index)
+    )
+      for (let t = 0; t < e.index.count; t++) d[p++] = e.index.array[t] + f;
+    else for (let e = 0; e < t; e++) d[p++] = f + e;
+    ((f += t), e.dispose());
+  }
+  let m = new e.BufferGeometry();
+  return (
+    m.setAttribute(`position`, new e.BufferAttribute(s, 3)),
+    n || m.setAttribute(`normal`, new e.BufferAttribute(c, 3)),
+    l && m.setAttribute(`color`, new e.BufferAttribute(l, 3)),
+    u && m.setAttribute(`uv`, new e.BufferAttribute(u, 2)),
+    m.setIndex(new e.BufferAttribute(d, 1)),
+    m.computeBoundingSphere(),
+    m
+  );
+}
+function N(e, t) {
+  let n = document.createElement(`canvas`);
+  ((n.width = 512), (n.height = 128 * t.length));
+  let r = n.getContext(`2d`);
+  t.forEach((e, t) => {
+    let n = t * 128;
+    ((r.fillStyle = `rgba(24,22,20,0.82)`),
+      ee(r, 12, n + 14, 488, 100, 22),
+      r.fill(),
+      (r.fillStyle = `#f2ead8`),
+      (r.font = `bold 72px "Segoe UI", Arial, sans-serif`),
+      (r.textAlign = `center`),
+      (r.textBaseline = `middle`),
+      r.fillText(e, 256, n + 64 + 4));
+  });
+  let i = new e.CanvasTexture(n);
+  return (
+    (i.colorSpace = e.SRGBColorSpace),
+    (i.anisotropy = 4),
+    (i.generateMipmaps = !0),
+    (i.minFilter = e.LinearMipmapLinearFilter),
+    i
+  );
+}
+function ee(e, t, n, r, i, a) {
+  (e.beginPath(),
+    e.moveTo(t + a, n),
+    e.arcTo(t + r, n, t + r, n + i, a),
+    e.arcTo(t + r, n + i, t, n + i, a),
+    e.arcTo(t, n + i, t, n, a),
+    e.arcTo(t, n, t + r, n, a),
+    e.closePath());
+}
+function te(e, t) {
+  let n = new e.MeshStandardMaterial({
+      vertexColors: !0,
+      roughness: 0.9,
+      metalness: 0,
+      flatShading: !0,
+    }),
+    r = new e.Group();
+  r.name = `fx:runner`;
+  let i = 5990972,
+    a = 4871729,
+    o = 13081202,
+    s = 3090980,
+    c = 4016687,
+    l = [],
+    u = (e, t, n, r) => {
+      (e.translate(t, n, r), l.push(e));
+    };
+  (u(t(0.46, 0.62, 0.28, i), 0, 1.16, 0),
+    u(t(0.5, 0.2, 0.34, c), 0, 0.95, 0),
+    u(t(0.34, 0.16, 0.2, c), 0, 1.25, 0.2),
+    u(t(0.24, 0.26, 0.26, o), 0, 1.62, 0),
+    u(t(0.3, 0.12, 0.32, a), 0, 1.79, 0),
+    u(t(0.34, 0.06, 0.36, a), 0, 1.72, 0));
+  let d = new e.Mesh(M(e, l), n);
+  ((d.castShadow = !0), r.add(d));
+  let f = (r, i, a, o, s = []) => {
+      let c = [t(r, i, a, o)];
+      c[0].translate(0, -i / 2, 0);
+      for (let [e, n, r, i, a, o, l] of s) {
+        let s = t(e, n, r, i);
+        (s.translate(a, o, l), c.push(s));
+      }
+      let l = new e.Mesh(M(e, c), n);
+      return ((l.castShadow = !0), l);
+    },
+    p = f(0.18, 0.78, 0.2, i, [[0.2, 0.14, 0.3, s, 0, -0.78, -0.04]]);
+  p.position.set(-0.12, 0.85, 0);
+  let m = f(0.18, 0.78, 0.2, i, [[0.2, 0.14, 0.3, s, 0, -0.78, -0.04]]);
+  m.position.set(0.12, 0.85, 0);
+  let h = f(0.13, 0.58, 0.14, i, [[0.12, 0.12, 0.12, o, 0, -0.62, 0]]);
+  h.position.set(-0.31, 1.44, 0);
+  let g = f(0.13, 0.58, 0.14, i, [[0.12, 0.12, 0.12, o, 0, -0.62, 0]]);
+  g.position.set(0.31, 1.44, 0);
+  let _ = t(0.06, 0.1, 0.8, 2829352);
+  _.translate(0.12, -0.55, -0.25);
+  let v = new e.Mesh(_, n);
+  ((v.castShadow = !0), g.add(v), r.add(p, m, h, g));
+  let y = 0,
+    b = 0;
+  return {
+    root: r,
+    set(e, t, n, i, a) {
+      ((b = t), r.position.set(e, t, n), (r.rotation.y = i), (y = a));
+    },
+    animate() {
+      let e = Math.sin(y),
+        t = Math.cos(y);
+      ((p.rotation.x = e * 0.9),
+        (m.rotation.x = -e * 0.9),
+        (h.rotation.x = -e * 0.7 - 0.3),
+        (g.rotation.x = -0.9 + t * 0.1),
+        (g.rotation.y = -0.4),
+        (r.position.y = b + Math.abs(t) * 0.06),
+        (r.rotation.x = 0.12));
+    },
+  };
+}
+function P(e, t, n, r, i = 1) {
+  i >= 1
+    ? t.spawn(`cannon`, n, r)
+    : t.spawn(`muzzle`, n, r, { scale: 1.4, casing: !1 });
+  let a = e.map.raycast(n, [0, -1, 0], i >= 1 ? 5 : 3.5);
+  if (!(
+    !a ||
+    a.entityId != null ||
+    a.surface === `water` ||
+    a.point[1] <= e.map.waterLevel
+  )) {
+    for (let e of [-1, 1]) {
+      let n = [r[2] * e, 0, -r[0] * e];
+      t.spawn(`dust`, a.point, n, {
+        count: Math.round(5 * i),
+        scale: 1.7 * i,
+        surface: a.surface,
+      });
+    }
+    if (i >= 1) {
+      let i = [n[0] + r[0] * 3, n[1], n[2] + r[2] * 3],
+        a = e.map.raycast(i, [0, -1, 0], 5);
+      a &&
+        a.entityId == null &&
+        a.surface !== `water` &&
+        t.spawn(`dust`, a.point, [r[0], 0.3, r[2]], {
+          count: 6,
+          scale: 2.1,
+          surface: a.surface,
+        });
+    }
+  }
+}
+function F(e, t, n) {
+  let r = n[0] - t[0],
+    i = n[1] - t[1],
+    a = n[2] - t[2],
+    o = r * r + i * i + a * a;
+  if (o < 1e-4) return !1;
+  let s = 1;
+  for (let n of [e.smoke, e.alp]) {
+    let e = n?.s;
+    if (!e) continue;
+    let c = e.f,
+      l = !!c.s0;
+    for (let n = 0; n < e.n; n++) {
+      if (!l && c.kind.a[n] !== 0) continue;
+      let e = Math.min(1, c.age.a[n] / c.life.a[n]);
+      if (e >= 1) continue;
+      let u = c.amode.a[n],
+        d = 1 - e;
+      u === 1
+        ? (d = e < 0.15 ? e / 0.15 : 1 - (e - 0.15) / 0.85)
+        : u === 2
+          ? (d = e < 0.6 ? 1 : 1 - (e - 0.6) / 0.4)
+          : u === 3
+            ? (d = (1 - e) ** 2)
+            : u === 4 && (d = e < 0.78 ? 1 : (1 - (e - 0.78) / 0.22) ** 2);
+      let f = c.alpha.a[n] * d;
+      if (f < 0.02) continue;
+      let p = n * 3,
+        m = c.pos.a[p] - t[0],
+        h = c.pos.a[p + 1] - t[1],
+        g = c.pos.a[p + 2] - t[2],
+        _ = Math.max(0, Math.min(1, (m * r + h * i + g * a) / o)),
+        v = (m - _ * r) ** 2 + (h - _ * i) ** 2 + (g - _ * a) ** 2,
+        y = l ? c.s0.a : c.size0.a,
+        b = l ? c.s1.a : c.size1.a,
+        x = l ? 3 : 2,
+        S = 0;
+      for (let t = 0; t < x; t++)
+        S = Math.max(S, y[n * x + t] + (b[n * x + t] - y[n * x + t]) * e);
+      if (
+        (l || (S *= 0.5),
+        !(S <= 0 || v >= S * S) &&
+          ((s *= 1 - Math.min(0.95, f * Math.sqrt(1 - v / (S * S)))), s < 0.45))
+      )
+        return !0;
+    }
+  }
+  return !1;
+}
+var I = 1 / 60,
+  L = null;
+function R(e) {
+  if (!e) return `dirt`;
+  if (e.targetId != null && e.targetId >= 0) return `hit`;
+  let t = e.surface;
+  return typeof t == `string` && t ? t.toLowerCase() : `dirt`;
+}
+function z(e, i) {
+  let a = e.events,
+    o = (e) => {
+      if (!e?.pos) return;
+      let t = r(e),
+        n = e.normal ?? [0, 1, 0];
+      (i.spawn(`explosion`, e.pos, n, t.blast),
+        i.spawn(`collapse`, e.pos, n, t.dust));
+    };
+  (a.on(`vehicle:fire`, (t) => {
+    if (!t?.pos || !t.dir) return;
+    let n = e.world.get(t.vehicleId)?.weapon;
+    if (t.mg) {
+      (i.spawn(`muzzle`, t.pos, t.dir, { scale: 1.05, casing: !1 }),
+        i.spawn(`tracer`, t.pos, t.dir, { dist: t.dist, speed: 600 }));
+      return;
+    }
+    P(e.world, i, t.pos, t.dir, n === 2 ? 1 : 0.55);
+  }),
+    a.on(`weapon:fire`, (e) => {
+      e &&
+        e.origin &&
+        e.dir &&
+        (e.muzzle === !1
+          ? e.casing !== !1 && i.spawn(`casing`, e.origin, e.dir, {})
+          : i.spawn(`muzzle`, e.origin, e.dir, {
+              scale: e.scale ?? 1,
+              casing: e.casing !== !1,
+            }),
+        e.tracer !== !1 &&
+          i.spawn(
+            `tracer`,
+            e.origin,
+            e.dir,
+            e.dist == null ? {} : { dist: e.dist },
+          ));
+    }),
+    a.on(`weapon:hit`, (e) => {
+      e &&
+        e.point &&
+        i.spawn(`impact`, e.point, e.normal || [0, 1, 0], {
+          surface: R(e),
+          sniper: t(n[e.weaponId]),
+        });
+    }),
+    a.on(`destruction:collapse`, (e) => {
+      e &&
+        e.pos &&
+        i.spawn(`collapse`, e.pos, [0, 1, 0], { scale: e.scale ?? 1 });
+    }),
+    a.on(`destruction:damage`, (e) => {
+      e &&
+        e.pos &&
+        i.spawn(`impact`, e.pos, e.normal || [0, 1, 0], {
+          surface: e.surface || `rock`,
+        });
+    }));
+  let s = (t) => {
+    if (t?.pos) return t.pos;
+    let n = t?.vehicleId ?? t?.entityId,
+      r = n == null ? null : e.world.get(n);
+    return r ? r.pos : null;
+  };
+  for (let e of [`vehicle:destroyed`, `vehicle:explode`, `vehicle:death`])
+    a.on(e, (e) => {
+      let t = s(e);
+      t && o({ pos: t, scale: e?.scale ?? 1.3 });
+    });
+  for (let e of [`vehicle:enter`, `vehicle:exit`])
+    a.on(e, (e) => {
+      let t = s(e);
+      t && i.spawn(`dust`, t, [0, 0, 1], { count: 4, scale: 1.4 });
+    });
+  (a.on(`vehicle:damage`, (e) => {
+    let t = e?.pos || s(e);
+    t && i.spawn(`impact`, t, e?.normal || [0, 1, 0], { surface: `metal` });
+  }),
+    a.on(`explosion`, o),
+    a.on(`rocket:launch`, (t) => {
+      if (![8, 9, 10].includes(t?.weaponId) || !t.pos || !t.dir) return;
+      let n = t.dir.map((e) => -e),
+        r = t.weaponId === 10,
+        a = t.pos.map((e, t) => e + n[t] * (r ? 1.6 : 1.3));
+      if (r) {
+        (P(e.world, i, a, n, 0.7),
+          i.spawn(`smoke`, a, n, { count: 10, scale: 1.6 }),
+          i.spawn(`smoke`, t.pos, t.dir, { count: 4, scale: 1 }));
+        return;
+      }
+      (i.spawn(`muzzle`, t.pos, t.dir, { scale: 2.6, casing: !1 }),
+        P(e.world, i, a, n, 0.5),
+        i.spawn(`smoke`, a, n, { count: 7, scale: 1.3 }),
+        i.spawn(`smoke`, t.pos, t.dir, { count: 3, scale: 0.9 }));
+    }),
+    a.on(`explosion`, (e) => {
+      if (e?.weaponId !== 10 || e.kind !== `rocket` || !e.pos) return;
+      let t = e.pos.slice();
+      setTimeout(() => {
+        if (!L) return;
+        let e = [t[0], t[1] + 1.6, t[2]];
+        (i.spawn(`explosion`, e, [0, 1, 0], { scale: 3.6, atImpact: !0 }),
+          i.spawn(`smoke`, e, [0, 1, 0], { count: 14, scale: 3 }));
+        for (let e = 0; e < 6; e++) {
+          let n = (e * Math.PI) / 3;
+          i.spawn(`dust`, t, [Math.cos(n), 0.15, Math.sin(n)], {
+            count: 4,
+            scale: 2.6,
+          });
+        }
+      }, 130);
+    }));
+}
+var B = 0.8,
+  V = new Map(),
+  H = [0, 0, 0];
+function U(e, t, n) {
+  let r = e.camera.position,
+    i = e.world.time.tick;
+  for (let a of e.world.sorted()) {
+    if ((a.type !== `soldier` && a.type !== `vehicle`) || a.state & 1216)
+      continue;
+    let o = a.vel[0],
+      s = a.vel[2],
+      c = Math.hypot(o, s);
+    if (c < 2.5) continue;
+    let l = a.pos[0] - r.x,
+      u = a.pos[2] - r.z;
+    if (
+      l * l + u * u > 12100 ||
+      a.pos[1] - e.world.map.getHeight(a.pos[0], a.pos[2]) > 0.6
+    )
+      continue;
+    let d = V.get(a.id);
+    (d || ((d = { d: 0, seen: i }), V.set(a.id, d)),
+      (d.seen = i),
+      (d.d += c * n));
+    let f = a.type === `vehicle`;
+    d.d >= (f ? 0.7 : B) &&
+      ((d.d = 0),
+      (H[0] = o / c),
+      (H[1] = 0),
+      (H[2] = s / c),
+      t.spawn(
+        `dust`,
+        a.pos,
+        H,
+        f
+          ? { count: 4 + Math.min(4, (c / 8) | 0), scale: 1.6 + c * 0.05 }
+          : { count: 5, scale: 1 },
+      ));
+  }
+  if (!(i & 255)) for (let [e, t] of V) i - t.seen > 120 && V.delete(e);
+}
+var W = {
+  name: `effects`,
+  deps: [],
+  async init(e) {
+    let t = e.three,
+      n = v(t, e.scene),
+      r = e.rng.fork(`effects`),
+      i = b(t, e, n, r);
+    ((i.tickAll = () => {
+      (i.tick(), n.tick(I, (t, n) => e.world.map.getHeight(t, n)));
+    }),
+      (L = {
+        ctx: e,
+        pools: n,
+        fx: i,
+        rng: r,
+        show: null,
+        getHeight: (t, n) => e.world.map.getHeight(t, n),
+      }),
+      z(e, i),
+      e.log(
+        `effects ready:`,
+        i.ids().length,
+        `effect ids,`,
+        n.list.length,
+        `pools`,
+      ));
+  },
+  tick(e, t) {
+    L &&
+      (L.show && L.show.tick(),
+      U(e, L.fx, t),
+      L.fx.tick(),
+      L.pools.tick(t, L.getHeight));
+  },
+  update(e, t, n) {
+    L && (L.pools.update(n), L.show && L.show.update(t));
+  },
+  async showcase(e, t) {
+    L && ((L.show = T(e.three, e, L.fx, t)), t?.camera ?? e.setCamera(`mid50`));
+  },
+  dispose(e) {
+    if (L) {
+      try {
+        L.show?.dispose();
+      } catch {}
+      (L.pools.dispose(), (L = null));
+    }
+  },
+  api: {
+    identificationObscured(e, t) {
+      return L ? F(L.pools, e, t) : !1;
+    },
+    spawn(e, t, n, r) {
+      try {
+        return L ? L.fx.spawn(e, t, n, r) : !1;
+      } catch (e) {
+        return (L?.ctx.error(`spawn failed`, e), !1);
+      }
+    },
+    ids() {
+      return L ? L.fx.ids() : [];
+    },
+    surfaces() {
+      return L ? L.fx.surfaces() : [];
+    },
+    stats() {
+      if (!L) return { total: 0 };
+      let e = L.pools;
+      return {
+        total: e.total(),
+        max: e.list.reduce((e, t) => e + t.max, 0),
+        additive: e.add.count,
+        alpha: e.alp.count,
+        smoke: e.smoke.count,
+        debris: e.debris.count,
+        casings: e.casings.count,
+        decals: e.decals.count,
+        fireballs: e.fire.count,
+        lights: e.lights.count,
+        emitters: L.fx.emitterCount(),
+        spawnedTotal: e.list.reduce((e, t) => e + t.spawned, 0),
+        drawCalls:
+          e.list.reduce((e, t) => e + +(t.count > 0), 0) +
+          (e.debris.count > 0 && e.debris.mesh.castShadow ? 1 : 0),
+      };
+    },
+  },
+};
+export { W as default };
+//# sourceMappingURL=effects-BZzGHRRU.js.map

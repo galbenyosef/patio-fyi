@@ -1,0 +1,529 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+var e = 25,
+  t = 3,
+  n = 0.7,
+  r = 30,
+  i = 0.3,
+  a = Object.freeze([0, -9999, 0, 0, -9998, 0]),
+  o = (e) => (e < 0 ? 0 : e > 1 ? 1 : e),
+  s = (e) => (e <= 0 ? 0 : e >= 1 ? 1 : e * e * (3 - 2 * e));
+function c() {
+  return {
+    epoch: null,
+    ignite: {},
+    car: null,
+    engine: null,
+    propane: null,
+    hits: {},
+  };
+}
+function l(e) {
+  return (e.state ??= c());
+}
+function u(e, t, n) {
+  let r = l(e).ignite[t.id ?? t];
+  return r == null ? 0 : o((n - r) / 1500);
+}
+function d(e, t) {
+  let n = l(e).car;
+  return n == null ? 0 : o((t - n) / 900);
+}
+var f = (e, t, n, r = 0) =>
+  e.boxes.some(
+    (e) => t >= e[0] - r && t <= e[2] + r && n >= e[1] - r && n <= e[3] + r,
+  );
+function p(e, t, n, r) {
+  for (let i of e.rooms)
+    if (n >= i.y0 - 0.4 && n < i.y1 - 0.2 && f(i, t, r)) return i;
+  return null;
+}
+function m(e, t, n) {
+  let r = p(e, t[0], t[1], t[2]),
+    i = r ? u(e, r, n) : 0,
+    a = e.car,
+    s = Math.hypot(t[0] - a.x, t[2] - a.z);
+  s < a.r && t[1] < 2.2 && (i = Math.max(i, d(e, n) * (1 - s / a.r) * 1.25));
+  let c = l(e);
+  if (c.propane != null) {
+    let r = e.propane,
+      a = Math.hypot(t[0] - r.x, t[2] - r.z);
+    a < 2.2 &&
+      t[1] < r.y + 2 &&
+      (i = Math.max(i, o((n - c.propane) / 240) * (1 - a / 2.2)));
+  }
+  return i;
+}
+function h(e, t, n) {
+  let r = l(e),
+    i = t.ceil;
+  for (let [e, a, o] of t.stages) {
+    let c = r.ignite[e];
+    if (c == null) continue;
+    let l = s((n - c) / (o * 60));
+    i = Math.min(i, t.ceil + (a - t.ceil) * l);
+  }
+  return i;
+}
+function g(e, t, n) {
+  let r = l(e),
+    i = 0;
+  for (let [e, , a] of t.stages) {
+    let t = r.ignite[e];
+    t != null && (i = Math.max(i, o((n - t) / (a * 60 * 0.5))));
+  }
+  return i;
+}
+function _(e, t, n, r, i) {
+  let a = 0;
+  for (let o of e.smoke) {
+    let s = o.box;
+    if (!(
+      t < s[0] ||
+      t > s[2] ||
+      r < s[1] ||
+      r > s[3] ||
+      n < o.floor - 0.05 ||
+      n > o.ceil + 0.1
+    )) {
+      if (n >= h(e, o, i)) return 1;
+      a = Math.max(a, 0.375 * g(e, o, i));
+    }
+  }
+  let o = p(e, t, n - 1, r) ?? p(e, t, n, r);
+  if (o) {
+    let t = u(e, o, i);
+    if (t > 0.35) return 1;
+    a = Math.max(a, t * 2.2);
+  }
+  return Math.min(1, a);
+}
+function v(e, t, n, r, i, a = 3) {
+  let o = e.houseBox,
+    s = t[0],
+    c = t[2],
+    l = t[0] + n[0] * r,
+    u = t[2] + n[2] * r;
+  if (
+    Math.max(s, l) < o[0] ||
+    Math.min(s, l) > o[2] ||
+    Math.max(c, u) < o[1] ||
+    Math.min(c, u) > o[3]
+  )
+    return !1;
+  let d = Math.max(2, Math.ceil(r / 0.4)),
+    f = r / d,
+    p = 0;
+  for (let r = 0; r < d; r++) {
+    let s = (r + 0.5) * f,
+      c = t[0] + n[0] * s,
+      l = t[2] + n[2] * s;
+    if (
+      !(c < o[0] || c > o[2] || l < o[1] || l > o[3]) &&
+      ((p += f * _(e, c, t[1] + n[1] * s, l, i)), p >= a)
+    )
+      return !0;
+  }
+  return !1;
+}
+function y(e, t) {
+  let n = e.engine,
+    r = l(e).engine,
+    i = {
+      phase: `none`,
+      s: -1,
+      z: n.z + n.from + 200,
+      outriggers: 0,
+      swing: 0,
+      raise: 0,
+      extend: 0,
+      speed: 0,
+    };
+  if (r == null || t < r) return i;
+  let a = (t - r) / 60;
+  i.s = a;
+  let c = (e) => o((a - e[0]) / (e[1] - e[0]));
+  if (a < n.drive[0]) return ((i.phase = `siren`), i);
+  let u = c(n.drive);
+  return (
+    (i.z = n.z + n.from * (1 - (1 - (1 - u) * (1 - u)))),
+    (i.speed =
+      a < n.drive[1] ? (n.from * 2 * (1 - u)) / (n.drive[1] - n.drive[0]) : 0),
+    a < n.drive[1]
+      ? ((i.phase = `drive`), i)
+      : ((i.outriggers = s(c(n.outriggers))),
+        (i.swing = s(c(n.swing))),
+        (i.raise = s(c(n.raise))),
+        (i.extend = s(c(n.extend))),
+        (i.phase = a >= n.open ? `ready` : `setup`),
+        i)
+  );
+}
+var b = (e, t) => y(e, t).phase === `ready`;
+function x(e, t) {
+  let n = e.engine,
+    r = y(e, t);
+  if (r.phase === `none` || r.phase === `siren`) return null;
+  let i = n.wid / 2,
+    a = n.len / 2,
+    o = r.z - a,
+    s = n.pedestal;
+  return {
+    chassis: [n.x - i, 0, o + n.cabLen, n.x + i, n.deck, r.z + a],
+    cab: [n.x - i, 0, o, n.x + i, n.cab, o + n.cabLen],
+    pedestal: [s.x0, n.deck, s.z0 + r.z, s.x1, n.pivot, s.z1 + r.z],
+    moving: r.phase === `drive`,
+  };
+}
+function S(e, t, n) {
+  if ((l(e).hits[t.id] ?? 0) >= 3) return !0;
+  if (t.room) {
+    let r = e.roomById.get(t.room);
+    if (r && u(e, r, n) >= 0.7) return !0;
+  }
+  return !1;
+}
+function C(e, t, r) {
+  if (!S(e, t, r)) return null;
+  let i = l(e);
+  if (t.room) {
+    let e = i.ignite[t.room];
+    if (e != null) {
+      let t = e + Math.round(n * 25 * 60);
+      if (t <= r) return t;
+    }
+  }
+  return i.hitAt?.[t.id] ?? r;
+}
+function w(e, t, n, r, i) {
+  let a = [];
+  for (let o of e.panes) {
+    let s = Math.abs(o.a[1] - o.b[1]) < 1e-6,
+      c = s ? o.a[1] : o.a[0],
+      l = s ? n[2] : n[0],
+      u = s ? t[2] : t[0];
+    if (Math.abs(l) < 1e-9) continue;
+    let d = (c - u) / l;
+    if (!(d > 0 && d < r)) continue;
+    let f = t[1] + n[1] * d;
+    if (f < o.y0 || f > o.y1) continue;
+    let p = s ? t[0] + n[0] * d : t[2] + n[2] * d,
+      m = Math.min(s ? o.a[0] : o.a[1], s ? o.b[0] : o.b[1]),
+      h = Math.max(s ? o.a[0] : o.a[1], s ? o.b[0] : o.b[1]);
+    p < m ||
+      p > h ||
+      S(e, o, i) ||
+      a.push({ pane: o, t: d, point: [t[0] + n[0] * d, f, t[2] + n[2] * d] });
+  }
+  return a.sort((e, t) => e.t - t.t);
+}
+function T(e, t, n, r) {
+  return e.panes.filter((i) => {
+    if (S(e, i, r)) return !1;
+    let a = Math.min(i.a[0], i.b[0]),
+      o = Math.max(i.a[0], i.b[0]),
+      s = Math.min(i.a[1], i.b[1]),
+      c = Math.max(i.a[1], i.b[1]),
+      l = Math.max(a - t[0], 0, t[0] - o),
+      u = Math.max(s - t[2], 0, t[2] - c),
+      d = Math.max(i.y0 - t[1], 0, t[1] - i.y1);
+    return l * l + d * d + u * u < n * n;
+  });
+}
+function E(e) {
+  let t = Math.min(e.a[0], e.b[0]),
+    n = Math.max(e.a[0], e.b[0]),
+    r = Math.min(e.a[1], e.b[1]),
+    i = Math.max(e.a[1], e.b[1]),
+    a = 0.03;
+  return n - t < 1e-6
+    ? [t - a, e.y0, r, t + a, e.y1, i]
+    : [t, e.y0, r - a, n, e.y1, r + a];
+}
+function D(e) {
+  let t = e.propane;
+  return [t.x - t.r, t.y, t.z - t.r, t.x + t.r, t.y + t.h, t.z + t.r];
+}
+var O = (e, t) => {
+  let n = l(e).propane;
+  return n != null && n <= t;
+};
+function k(e, t, n, r) {
+  let i = D(e),
+    a = 0,
+    o = r;
+  for (let e = 0; e < 3; e++) {
+    if (Math.abs(n[e]) < 1e-9) {
+      if (t[e] < i[e] || t[e] > i[e + 3]) return null;
+      continue;
+    }
+    let r = (i[e] - t[e]) / n[e],
+      s = (i[e + 3] - t[e]) / n[e];
+    if (r > s) {
+      let e = r;
+      ((r = s), (s = e));
+    }
+    if (((a = Math.max(a, r)), (o = Math.min(o, s)), a > o)) return null;
+  }
+  return a;
+}
+function A(e) {
+  if (e.roomById) return e;
+  e.roomById = new Map(e.rooms.map((e) => [e.id, e]));
+  let t = e.house;
+  return ((e.houseBox = [t.x0 - 0.5, t.z0 - 0.5, t.x1 + 0.5, t.z1 + 0.5]), e);
+}
+function j(e, t, n, r) {
+  let i = 0,
+    a = r,
+    o = -1,
+    s = 0;
+  for (let r = 0; r < 3; r++) {
+    if (Math.abs(t[r]) < 1e-9) {
+      if (e[r] < n[r] || e[r] > n[r + 3]) return null;
+      continue;
+    }
+    let c = (n[r] - e[r]) / t[r],
+      l = (n[r + 3] - e[r]) / t[r],
+      u = -1;
+    if (c > l) {
+      let e = c;
+      ((c = l), (l = e), (u = 1));
+    }
+    if ((c > i && ((i = c), (o = r), (s = u)), l < a && (a = l), i > a))
+      return null;
+  }
+  if (o < 0) return null;
+  let c = [0, 0, 0];
+  return (
+    (c[o] = s),
+    {
+      dist: i,
+      normal: c,
+      point: e.map((e, n) => e + t[n] * i),
+      surface: `metal`,
+    }
+  );
+}
+function M(e, t, n = () => e.time.tick, { obbCollider: r = null } = {}) {
+  if (!t) return (delete e.map.housefire, () => {});
+  (A(t), (e.map.housefire = t), l(t));
+  let i = [],
+    o = (t) => {
+      (e.map.addCollider(t), i.push(t.id));
+    };
+  for (let e of t.panes) {
+    let r = E(e);
+    o({
+      id: `housefire-glass-${e.id}`,
+      mask: `static`,
+      solid: !0,
+      surface: `glass`,
+      movementIndexBounds: r,
+      rayIndexBounds: a,
+      get aabb() {
+        return S(t, e, n()) ? a : r;
+      },
+      raycast: () => null,
+    });
+  }
+  let s = t.engine,
+    c = [
+      s.x - s.wid / 2 - 0.2,
+      0,
+      -s.from - 20,
+      s.x + s.wid / 2 + 0.2,
+      s.cab + 0.2,
+      s.z + s.from + s.len,
+    ];
+  for (let e of [`chassis`, `cab`, `pedestal`])
+    o({
+      id: `housefire-engine-${e}`,
+      mask: `static`,
+      solid: !0,
+      surface: `metal`,
+      movementIndexBounds: c,
+      rayIndexBounds: c,
+      get aabb() {
+        return x(t, n())?.[e] ?? a;
+      },
+      raycast(r, i, a) {
+        let o = x(t, n())?.[e];
+        return o ? j(r, i, o, a) : null;
+      },
+    });
+  let d = s.steps,
+    f = [
+      s.x - 0.5,
+      s.deck - 0.1,
+      Math.min(d.z0, d.z1),
+      s.x + 0.5,
+      s.pivot,
+      Math.max(d.z0, d.z1),
+    ];
+  o({
+    id: `housefire-pedestal-steps`,
+    mask: `static`,
+    solid: !0,
+    surface: `metal`,
+    movementIndexBounds: f,
+    rayIndexBounds: f,
+    get aabb() {
+      let e = y(t, n()).phase;
+      return e === `ready` || e === `setup` ? f : a;
+    },
+    floorHeight: (e, r) => {
+      let i = y(t, n()).phase;
+      if ((i !== `ready` && i !== `setup`) || e < s.x - 0.5 || e > s.x + 0.5)
+        return -1e6;
+      let a = (r - d.z0) / (d.z1 - d.z0);
+      return a < 0 || a > 1 ? -1e6 : s.deck + (s.pivot - s.deck) * a;
+    },
+    floorThickness: 0.12,
+    raycast: () => null,
+  });
+  let h = t.tail,
+    g = [h.x0, -0.2, Math.min(h.z0, h.z1), h.x1, s.deck, Math.max(h.z0, h.z1)];
+  o({
+    id: `housefire-tail`,
+    mask: `static`,
+    solid: !0,
+    surface: `metal`,
+    movementIndexBounds: g,
+    rayIndexBounds: g,
+    get aabb() {
+      return y(t, n()).phase === `ready` || y(t, n()).phase === `setup` ? g : a;
+    },
+    floorHeight: (e, r) => {
+      let i = y(t, n()).phase;
+      if ((i !== `ready` && i !== `setup`) || e < h.x0 || e > h.x1) return -1e6;
+      let a = (r - h.z0) / (h.z1 - h.z0);
+      return a < 0 || a > 1 ? -1e6 : s.deck * a;
+    },
+    floorThickness: 0.12,
+    raycast: () => null,
+  });
+  let C = s.ladder,
+    w = C.x0 - C.x1,
+    T = Math.abs(w),
+    k = C.y1 - C.y0;
+  if (r) {
+    let e = r({
+        id: `housefire-ladder`,
+        surface: `metal`,
+        obb: {
+          x: (C.x0 + C.x1) / 2,
+          z: C.z,
+          yaw: -Math.PI / 2,
+          hx: C.w / 2,
+          hz: T / 2,
+          y0: C.y0 - 0.14,
+          y1: C.y1,
+          ramp: { z0: -T / 2, z1: T / 2, y: C.y0, rise: k },
+          thickness: 0.14,
+        },
+      }),
+      i = e.aabb.slice(),
+      s = e.floorHeight,
+      c = e.raycast;
+    o({
+      ...e,
+      movementIndexBounds: i,
+      rayIndexBounds: i,
+      get aabb() {
+        return b(t, n()) ? i : a;
+      },
+      floorHeight: (e, r) => (b(t, n()) ? s(e, r) : -1e6),
+      raycast: (e, r, i) => (b(t, n()) ? c(e, r, i) : null),
+    });
+  }
+  let M = D(t);
+  o({
+    id: `housefire-propane`,
+    mask: `static`,
+    solid: !0,
+    surface: `metal`,
+    movementIndexBounds: M,
+    rayIndexBounds: M,
+    get aabb() {
+      return O(t, n()) ? a : M;
+    },
+    raycast: (e, r, i) => (O(t, n()) ? null : j(e, r, M, i)),
+  });
+  let N = e.map.canopy ?? null,
+    P = e.map.spawnBlocked ?? null;
+  ((e.map.canopy = (e, r, i) => v(t, e, r, i, n()) || !!N?.(e, r, i)),
+    (e.map.spawnBlocked = (e) => {
+      let r = n(),
+        i = p(t, e[0], e[1], e[2]);
+      if (
+        (i && u(t, i, r) > 0.05) ||
+        _(t, e[0], e[1] + 1.5, e[2], r) > 0.5 ||
+        m(t, e, r) > 0.05
+      )
+        return !0;
+      let a = x(t, r);
+      return a &&
+        e[0] > a.chassis[0] - 1.5 &&
+        e[0] < a.chassis[3] + 1.5 &&
+        e[2] > a.cab[2] - (a.moving ? 30 : 1.5) &&
+        e[2] < a.chassis[5] + 1.5
+        ? !0
+        : !!P?.(e);
+    }));
+  let F = t.houseBox,
+    I = t.car,
+    L = t.propane,
+    R = (e, t) =>
+      (e > F[0] && e < F[2] && t > F[1] && t < F[3]) ||
+      Math.hypot(e - I.x, t - I.z) < I.r + 0.2 ||
+      Math.hypot(e - L.x, t - L.z) < 2.4;
+  return (
+    (e.map.navAvoid = (e, r, i) => {
+      if (!R(e, i)) return !1;
+      let a = n(),
+        o = p(t, e, r, i);
+      return !!(o && u(t, o, a) >= 0.3) || m(t, [e, r, i], a) >= 0.3;
+    }),
+    (e.map.roamBlocked = (t) => R(t[0], t[2]) && !!e.map.spawnBlocked?.(t)),
+    (e.map.navLinkOpen = (e) => e.when !== `ladder` || b(t, n())),
+    () => {
+      for (let t of i) e.map.removeCollider(t);
+      (delete e.map.housefire,
+        (e.map.canopy = N),
+        P ? (e.map.spawnBlocked = P) : delete e.map.spawnBlocked,
+        delete e.map.navAvoid,
+        delete e.map.navLinkOpen,
+        delete e.map.roamBlocked);
+    }
+  );
+}
+export {
+  r as FIRE_DPS,
+  e as GROW,
+  i as HAZARD,
+  n as HEAT_BREAK,
+  t as PANE_HP,
+  d as carHeat,
+  y as engineAt,
+  x as engineBoxes,
+  c as freshState,
+  m as heatAt,
+  M as installHouseFire,
+  b as ladderOpen,
+  E as paneBox,
+  C as paneBrokeAt,
+  S as paneBroken,
+  w as panesAlong,
+  T as panesNear,
+  A as prepare,
+  D as propaneBox,
+  O as propaneGone,
+  k as rayProp,
+  p as roomAt,
+  u as roomHeat,
+  _ as smokeAt,
+  v as smokeBlocks,
+  h as smokeBottom,
+  l as stateOf,
+};
+//# sourceMappingURL=housefire-sim-D_OSgDgj.js.map

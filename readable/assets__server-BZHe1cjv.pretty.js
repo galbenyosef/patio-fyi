@@ -1,0 +1,1656 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import {
+  Gn as e,
+  Jn as t,
+  Un as n,
+  Wn as r,
+} from "./graphics-quality-BsjABS0s.js";
+import { S as i, x as a } from "./sim-D8F3HPJq.js";
+import { m as o, t as s } from "./sim-DQ2nevDc.js";
+import { o as c, r as l, s as u } from "./defs-BsSJWPNa.js";
+import { c as d, d as f, l as p, u as m } from "./attachments-DZaUzy_Q.js";
+import { a as h, i as g, n as _, o as v, t as y } from "./catalog-BxMwgLUT.js";
+import { n as b, r as x } from "./wear-levels-C35ZGfVS.js";
+import { n as S, t as C } from "./hostility-BAA0I7XB.js";
+import {
+  a as w,
+  i as T,
+  n as E,
+  o as D,
+  r as O,
+  s as k,
+  t as A,
+} from "./grenade-sim-BPkr3Qs6.js";
+import { c as j } from "./gadget-defs-Ko74xZW2.js";
+import {
+  c as ee,
+  d as te,
+  i as ne,
+  l as re,
+  n as M,
+  r as N,
+  s as ie,
+  t as ae,
+} from "./sim-CbSN8jt0.js";
+import { n as oe, o as se, s as ce, t as P } from "./javelin-BUaEG5R2.js";
+import { o as le, r as ue, s as de, u as fe } from "./ammo-box-CWU_ijOn.js";
+import { a as pe, n as me } from "./repair-D2xEpUMg.js";
+import { t as F } from "./melee-B7zsK4jg.js";
+import { n as he, t as ge } from "./beacon-server-9ZjzIK3g.js";
+import { r as _e, t as I } from "./achievements-DUR0hBOB.js";
+import { n as ve } from "./damage-direction-Bh_T3kaX.js";
+import {
+  c as ye,
+  f as be,
+  l as L,
+  m as xe,
+  n as Se,
+  o as R,
+  p as z,
+  s as B,
+} from "./weapon-drops-DbIZUUXu.js";
+function Ce(n, r, a = {}) {
+  let o = new Map(),
+    s = new Map(),
+    c = new Map(),
+    l = 0,
+    u = 0,
+    d = () => n.modules.get(`netcode`),
+    f = (e, t, n, r) =>
+      d()?.sendEvent?.(e.id, `grenade:status`, {
+        entityId: e.entityId,
+        life: o.get(e.entityId)?.life,
+        remaining: t,
+        reason: n,
+        ...r,
+      }),
+    p = (e) => [...e.pos, ...e.vel, e.yaw, e.pitch].every(Number.isFinite);
+  n.events.on(`player:spawn`, ({ entityId: e }) => {
+    c.delete(e);
+    let t = de(n.world, n.world.get(e)) ? 0 : 2;
+    o.set(e, { remaining: t, carry: t, next: 0, life: ++l });
+    let r = d()?.getClientByEntity?.(e);
+    r && f(r, t, `spawned`);
+  });
+  let m = (t, r) => {
+    let i = n.world.get(t.entityId);
+    if (
+      !i ||
+      i.type !== `soldier` ||
+      i.owner !== t.playerId ||
+      r?.entityId !== i.id ||
+      i.hp <= 0 ||
+      i.state & (e.DEAD | e.IN_VEHICLE) ||
+      !p(i)
+    )
+      return null;
+    let a = o.get(i.id);
+    return a && r?.life === a.life ? { e: i, stock: a } : null;
+  };
+  function h(e) {
+    let t = null,
+      r = 1 / 0;
+    for (let [i, a] of s) {
+      let o = n.world.get(i);
+      if (!o || !O(n.world, e, o)) continue;
+      let s = Math.hypot(o.pos[0] - e.pos[0], o.pos[2] - e.pos[2]);
+      s < r && ((t = [i, a]), (r = s));
+    }
+    return t;
+  }
+  function g(e, t, r, i, o) {
+    (c.set(e.id, { entity: e, client: t, life: r.life, ...o }),
+      (r.busyUntil = 1 / 0),
+      a.interrupt?.(e));
+    let s = { entityId: e.id, owner: e.owner, tick: i, returned: o.returned };
+    (n.events.emit(`grenade:windup`, s),
+      d()?.broadcastEvent?.(`grenade:windup`, s));
+  }
+  function _(e, t, r, i, a, o) {
+    if (c.has(e.id) || i < r.next) return;
+    ((r.next = i + 24), (r.lastId = o));
+    let l = h(e);
+    if (l) {
+      let [o, c] = l;
+      (s.delete(o),
+        n.world.despawn(o),
+        g(e, t, r, i, {
+          release: i + A.pickupTicks,
+          detonate: c.detonate,
+          returned: !0,
+          letGo: a,
+        }),
+        f(t, r.remaining, `pickup`, { fuse: (c.detonate - i) / 60 }));
+      return;
+    }
+    if (r.remaining <= 0) {
+      f(t, 0, `empty`);
+      return;
+    }
+    if (s.size + c.size >= 64) {
+      f(t, r.remaining, `busy`);
+      return;
+    }
+    (r.remaining--,
+      g(e, t, r, i, {
+        release: i + A.throwTicks,
+        detonate: i + A.fuseTicks,
+        returned: !1,
+        letGo: a,
+      }),
+      f(t, r.remaining, `windup`, { fuse: A.fuseTicks / 60 }));
+  }
+  (n.events.on(`net:rpc`, ({ client: e, rpc: t }) => {
+    if (!e || (t?.name !== `grenade:throw` && t?.name !== `grenade:release`))
+      return;
+    let r = m(e, t.data);
+    if (!r) return;
+    let { e: i, stock: a } = r,
+      o = n.world.time.tick,
+      s = t.data?.id ?? null;
+    if (t.name === `grenade:throw`) {
+      _(i, e, a, o, !1, s);
+      return;
+    }
+    let l = c.get(i.id);
+    if (l) {
+      l.letGo = !0;
+      return;
+    }
+    s != null && s !== a.lastId && _(i, e, a, o, !0, s);
+  }),
+    n.events.on(`world:despawn`, ({ id: e }) => {
+      (o.delete(e), c.delete(e));
+    }));
+  function v(e, t, r) {
+    let i = n.world.time.tick,
+      a = n.world.spawn(`projectile`, {
+        pos: e,
+        vel: t,
+        weapon: A.id,
+        team: r.team,
+        owner: r.owner,
+        hp: T(r.detonate - i),
+        maxHp: 1,
+      });
+    return (s.set(a.id, r), a);
+  }
+  let y = (e) => {
+      let t = n.world.get(e.attacker);
+      return t === e.thrower && t?.owner === e.owner ? e.attacker : null;
+    },
+    b = (e) => (e.returned ? `FR-1 FRAG (RETURNED)` : `FR-1 FRAG`);
+  function x(t, i, a) {
+    let o = t.pos.map((e, t) => e - i[t]),
+      s = Math.hypot(...o);
+    if (s < 1e-6 || s / 0.016666666666666666 < A.impactSpeed) return;
+    let c = o.map((e) => e / s),
+      l = ne(i, c, n.world, s + A.radius, a.attacker);
+    if (!l) return;
+    let u = n.world.get(l.entityId);
+    if (
+      !u ||
+      u.hp <= 0 ||
+      u.state & e.DEAD ||
+      !S(n.world, a.team, a.owner, u) ||
+      n.world.map.raycast(i, c, Math.max(0, l.dist - 0.02))
+    )
+      return;
+    a.struck = !0;
+    let d = Math.min(u.hp, w(u));
+    ((u.hp = Math.max(0, u.hp - d)),
+      u.hp <= 0 && (u.state |= e.DEAD),
+      r(n, {
+        targetId: u.id,
+        attackerId: y(a),
+        amount: d,
+        part: `torso`,
+        weapon: b(a),
+        pos: l.point.map((e, t) => e - c[t] * 0.5),
+        headshot: !1,
+        fatal: u.hp <= 0,
+        impact: !0,
+      }));
+    let f = Math.max(0, l.dist - A.radius - 0.02);
+    ((t.pos = i.map((e, t) => e + c[t] * f)),
+      (t.vel = [
+        -t.vel[0] * 0.15,
+        Math.min(0, t.vel[1]) * 0.3,
+        -t.vel[2] * 0.15,
+      ]));
+  }
+  function C(t, i, a) {
+    let o = y(i),
+      s = b(i);
+    for (let a of n.world.sorted()) {
+      if (
+        a.type !== `soldier` ||
+        (!S(n.world, i.team, i.owner, a) && a.id !== o)
+      )
+        continue;
+      let c = E(n.world, t, a);
+      c <= 0 ||
+        ((a.hp = Math.max(0, a.hp - c)),
+        a.hp <= 0 && (a.state |= e.DEAD),
+        r(n, {
+          targetId: a.id,
+          attackerId: o,
+          amount: c,
+          part: `torso`,
+          weapon: s,
+          pos: t.slice(),
+          headshot: !1,
+          fatal: a.hp <= 0,
+        }));
+    }
+    let c = {
+      pos: t.slice(),
+      scale: 1,
+      kind: `grenade`,
+      projectileId: a,
+      sourceTeam: i.team,
+      attackerId: o,
+      weapon: s,
+    };
+    (n.events.emit(`explosion`, c), d()?.broadcastEvent?.(`explosion`, c));
+  }
+  let j = (e, t) => ({
+    detonate: t.detonate,
+    attacker: e.id,
+    thrower: e,
+    owner: e.owner,
+    team: e.team,
+    returned: t.returned,
+  });
+  return {
+    active: s,
+    inventory: o,
+    pending: c,
+    restock(e) {
+      let t = o.get(e?.id);
+      if (!t || t.remaining >= (t.carry ?? 2) || c.has(e.id)) return !1;
+      t.remaining++;
+      let n = d()?.getClientByEntity?.(e.id);
+      return (n && f(n, t.remaining, `restocked`), !0);
+    },
+    busy: (e) => c.has(e) || n.world.time.tick < (o.get(e)?.busyUntil ?? -1),
+    remaining: (e) => (c.has(e) ? 0 : (o.get(e)?.remaining ?? 0)),
+    throwFor(t) {
+      let r = o.get(t?.id),
+        i = n.world.time.tick;
+      return !r ||
+        t.type !== `soldier` ||
+        t.hp <= 0 ||
+        t.state & (e.DEAD | e.IN_VEHICLE) ||
+        !p(t) ||
+        c.has(t.id) ||
+        i < (r.busyUntil ?? -1) ||
+        r.remaining <= 0
+        ? !1
+        : (_(
+            t,
+            { id: null, playerId: t.owner, entityId: t.id },
+            r,
+            i,
+            !0,
+            null,
+          ),
+          c.has(t.id));
+    },
+    tick() {
+      let r = n.world.time.tick;
+      for (let [a, s] of c) {
+        let l = n.world.get(a),
+          m = o.get(a);
+        if (
+          l !== s.entity ||
+          m?.life !== s.life ||
+          l.owner !== s.client.playerId ||
+          !p(l)
+        ) {
+          c.delete(a);
+          continue;
+        }
+        if (l.hp <= 0 || l.state & e.DEAD) {
+          (c.delete(a),
+            v(
+              [l.pos[0], l.pos[1] + 0.35, l.pos[2]],
+              [l.vel[0] * 0.3, 1, l.vel[2] * 0.3],
+              j(l, s),
+            ),
+            f(s.client, m.remaining, `dropped`));
+          continue;
+        }
+        if (l.state & e.IN_VEHICLE) {
+          (c.delete(a),
+            (m.busyUntil = 0),
+            s.returned
+              ? v([l.pos[0], l.pos[1] + 0.35, l.pos[2]], [0, 0, 0], j(l, s))
+              : m.remaining++,
+            f(s.client, m.remaining, `cancelled`));
+          continue;
+        }
+        if (r >= s.detonate) {
+          (c.delete(a), (m.busyUntil = r + A.recoverTicks));
+          let e = i(l, [0, 0, 0]),
+            n = t(l.yaw, l.pitch);
+          C(
+            e.map((e, t) => e + n[t] * 0.35),
+            j(l, s),
+            -++u,
+          );
+          continue;
+        }
+        if (!s.letGo || r < s.release) continue;
+        c.delete(a);
+        let h = D(l, n.world),
+          g = v(h.pos, h.vel, j(l, s));
+        m.busyUntil = r + A.recoverTicks;
+        let _ = { entityId: l.id, owner: l.owner, tick: r };
+        (n.events.emit(`grenade:thrown`, {
+          entityId: l.id,
+          projectileId: g.id,
+          returned: s.returned,
+        }),
+          d()?.broadcastEvent?.(`grenade:release`, _),
+          f(s.client, m.remaining, `thrown`, { fuse: (s.detonate - r) / 60 }));
+      }
+      for (let [e, t] of s) {
+        let i = n.world.get(e);
+        if (!i) {
+          s.delete(e);
+          continue;
+        }
+        let a = i.pos.slice();
+        (k(i, n.world, 0.016666666666666666) &&
+          (t.detonate = Math.min(t.detonate, r + A.groundTicks)),
+          t.struck || x(i, a, t),
+          (i.hp = T(t.detonate - r)),
+          !(r < t.detonate) &&
+            (C(i.pos, t, e), n.world.despawn(e), s.delete(e)));
+      }
+    },
+    dispose() {
+      for (let e of s.keys()) n.world.despawn(e);
+      (s.clear(), c.clear(), o.clear());
+    },
+  };
+}
+function we(t, r, i = {}) {
+  let o = new Map(),
+    s = new Map(),
+    c = () => t.modules.get(`netcode`);
+  function l(e, n) {
+    (o.set(e.id, { start: n, landed: !1 }), i.interrupt?.(e));
+    let r = { entityId: e.id, owner: e.owner, tick: n };
+    (t.events.emit(`melee:swing`, r), c()?.broadcastEvent?.(`melee:swing`, r));
+  }
+  function u(n) {
+    let r = -Math.sin(n.yaw),
+      i = -Math.cos(n.yaw),
+      o = [n.pos[0], n.pos[1] + a(n), n.pos[2]],
+      s = null,
+      c = 1 / 0;
+    for (let l of t.world.byType(`soldier`)) {
+      if (
+        l.id === n.id ||
+        l.hp <= 0 ||
+        l.state & (e.DEAD | e.IN_VEHICLE) ||
+        !C(t.world, n, l)
+      )
+        continue;
+      let u = l.pos[0] - n.pos[0],
+        d = l.pos[2] - n.pos[2],
+        f = Math.hypot(u, d);
+      if (
+        f > F.reach ||
+        Math.abs(l.pos[1] - n.pos[1]) > F.rise ||
+        f >= c ||
+        (f > 0.35 && (u * r + d * i) / f < F.cone)
+      )
+        continue;
+      let p = [l.pos[0], l.pos[1] + a(l) * 0.75, l.pos[2]],
+        m = [p[0] - o[0], p[1] - o[1], p[2] - o[2]],
+        h = Math.hypot(...m) || 1;
+      ((m[0] /= h), (m[1] /= h), (m[2] /= h));
+      let g = t.world.map?.raycast?.(o, m, h);
+      (g && g.dist < h - 0.25) || ((s = l), (c = f));
+    }
+    return s;
+  }
+  return {
+    busy: (e) => {
+      let n = o.get(e);
+      return !!n && t.world.time.tick < n.start + F.ticks;
+    },
+    input(r, i, a = !1) {
+      let c = !!((i?.buttons ?? 0) & n.MELEE),
+        u = s.get(r.id);
+      if ((s.set(r.id, c), !c || u || a)) return;
+      let d = t.world.time.tick,
+        f = o.get(r.id);
+      (f && d < f.start + F.ticks + F.recover) ||
+        r.hp <= 0 ||
+        r.state & (e.DEAD | e.IN_VEHICLE) ||
+        l(r, d);
+    },
+    tick() {
+      let n = t.world.time.tick;
+      for (let [i, s] of o) {
+        let c = t.world.get(i);
+        if (!c || c.hp <= 0 || c.state & e.DEAD) {
+          o.delete(i);
+          continue;
+        }
+        if (!s.landed && n >= s.start + F.hitTick) {
+          if (((s.landed = !0), c.state & e.IN_VEHICLE)) continue;
+          let n = u(c);
+          if (n) {
+            let i = n.hp,
+              o = [n.pos[0], n.pos[1] + a(n) * 0.8, n.pos[2]];
+            ((n.hp = 0),
+              (n.state |= e.DEAD),
+              r(t, {
+                targetId: n.id,
+                attackerId: c.id,
+                amount: i,
+                part: `torso`,
+                weapon: F.weapon,
+                pos: o,
+                headshot: !1,
+                fatal: !0,
+                melee: !0,
+              }));
+          } else ge(t.world)?.melee(c);
+        }
+        n >= s.start + F.ticks + F.recover && o.delete(i);
+      }
+    },
+    forget(e) {
+      (o.delete(e), s.delete(e));
+    },
+  };
+}
+function Te(t, n = null) {
+  let r = new Map(),
+    i = new Map(),
+    a = 0,
+    o = () => t.modules.get(`netcode`),
+    s = (e) => {
+      let t = r.get(e);
+      return (
+        t || ((t = { desired: f(null), nextRequest: 0 }), r.set(e, t)),
+        t
+      );
+    },
+    c = (e) => ({
+      camos:
+        n?.camos(e.owner, t.world.players.get(e.owner)?.loadout?.weapons) ?? {},
+      wears:
+        n?.wears?.(e.owner, t.world.players.get(e.owner)?.loadout?.weapons) ??
+        {},
+      entityId: e.id,
+      owner: e.owner,
+      revision: i.get(e.id)?.revision ?? 0,
+      classId: t.world.players.get(e.owner)?.loadout?.classId ?? `assault`,
+      config: p(
+        i.get(e.id)?.config,
+        t.world.players.get(e.owner)?.loadout?.weapons,
+      ),
+    }),
+    l = (e) => {
+      let n = t.world.players.get(e),
+        r = t.config?.career;
+      if (!n || n.isBot) return null;
+      let i = [...(t.clients?.values?.() ?? [])].find((t) => t.playerId === e);
+      return _(r?.row?.(n.name) ?? null, !!(i && r?.isAdmin?.(i)));
+    },
+    u = (e) => {
+      let n = f(
+        t.world.players.get(e.owner)?.loadout?.attachments ??
+          s(e.owner).desired,
+        l(e.owner),
+      );
+      (i.set(e.id, { owner: e.owner, config: n, revision: ++a }),
+        o()?.broadcastEvent?.(`weapon:equipment`, c(e)));
+    },
+    h = [];
+  return (
+    n?.onCamosChanged((e) => {
+      for (let n of t.world.byType(`soldier`)) {
+        let t = i.get(n.id);
+        n.owner === e &&
+          t &&
+          ((t.revision = ++a), o()?.broadcastEvent?.(`weapon:equipment`, c(n)));
+      }
+    }),
+    h.push(
+      t.events.on(`player:spawn`, ({ entityId: e }) => {
+        let n = t.world.get(e);
+        n?.type === `soldier` && u(n);
+      }),
+    ),
+    h.push(t.events.on(`world:despawn`, ({ id: e }) => i.delete(e))),
+    h.push(
+      t.events.on(`net:rpc`, ({ client: n, rpc: r }) => {
+        if (
+          !n ||
+          r?.name !== `weapon:configure` ||
+          !t.world.players.has(n.playerId)
+        )
+          return;
+        let i = s(n.playerId),
+          a = t.world.time.tick;
+        if (a < i.nextRequest) return;
+        ((i.nextRequest = a + 30), (i.desired = f(r.data)));
+        let l = t.world.get(n.entityId),
+          p =
+            !!l &&
+            l.type === `soldier` &&
+            l.owner === n.playerId &&
+            t.world.match.phase === `warmup` &&
+            !(l.state & e.IN_VEHICLE);
+        (p && u(l),
+          o()?.sendEvent?.(n.id, `weapon:configuration`, {
+            desired: i.desired,
+            pending: !p,
+            key: d(i.desired),
+          }));
+        for (let e of t.world.byType(`soldier`))
+          o()?.sendEvent?.(n.id, `weapon:equipment`, c(e));
+      }),
+    ),
+    {
+      definition(e, t) {
+        let n = i.get(e.id);
+        return m(t, n?.owner === e.owner ? n.config : null);
+      },
+      equipment(e) {
+        return c(e);
+      },
+      disconnect(e) {
+        r.delete(e.playerId);
+      },
+      dispose() {
+        for (let e of h) e();
+        (r.clear(), i.clear());
+      },
+    }
+  );
+}
+var V = (e) => {
+    let t = 2166136261;
+    for (let n of String(e)) t = Math.imul(t ^ n.charCodeAt(0), 16777619);
+    return (
+      (t ^= t >>> 13),
+      (t = Math.imul(t, 1540483477)),
+      ((t ^ (t >>> 15)) >>> 0) / 4294967296
+    );
+  },
+  H = (e) => 1 + Math.floor(80 * V(`level:` + e) ** 1.6),
+  Ee = [
+    [10, `Rifleman`],
+    [18, `Marksman`],
+    [26, `Hardened`],
+    [36, `Warfighter`],
+    [46, `Deadeye`],
+    [58, `Champion`],
+    [70, `Executioner`],
+  ];
+function De(e, t) {
+  if (V(`title:` + e) < 0.45) return null;
+  let n = null;
+  for (let [e, r] of Ee) t >= e && (n = r);
+  return n;
+}
+var Oe = [
+    [`olive`, 12],
+    [`woodland`, 9],
+    [`desert`, 7],
+    [`arctic`, 5],
+    [`urban`, 3.5],
+    [`tiger`, 5],
+    [`redtiger`, 3],
+    [`bloodline`, 1.8],
+  ],
+  ke = [
+    [`gold`, 3.5],
+    [`platinum`, 1.2],
+    [`obsidian`, 0.4],
+    [`veteran`, 0.5],
+    [`victor`, 0.5],
+    [`reaper`, 0.5],
+    [`headhunter`, 0.5],
+    [`duelist`, 0.5],
+    [`officer`, 0.5],
+  ];
+function Ae(e, t) {
+  let n = e / 30,
+    r = [
+      [null, 50],
+      ...Oe.map(([e, t]) => [e, t * (0.4 + n)]),
+      ...ke.map(([e, t]) => [e, t * n * n]),
+    ],
+    i = t * r.reduce((e, [, t]) => e + t, 0);
+  for (let [e, t] of r) if (((i -= t), i < 0)) return e;
+  return null;
+}
+function je(e) {
+  let t = e.config?.career ?? null,
+    n = e.config?.careerSalt ?? Math.random(),
+    r = new Map(),
+    i = new Map(),
+    a = new Map(),
+    o = [],
+    s = null,
+    c = () => e.modules.get(`netcode`),
+    l = (e) => {
+      let t = i.get(e);
+      return (
+        t ||
+          i.set(
+            e,
+            (t = {
+              camos: {},
+              wear: {},
+              title: null,
+              signature: null,
+              progress: v(null),
+              greeted: !1,
+            }),
+          ),
+        t
+      );
+    },
+    u = (e, t) =>
+      e &&
+      t &&
+      e.level === t.level &&
+      e.title === t.title &&
+      !!e.bot == !!t.bot;
+  function d(e, t) {
+    u(r.get(e), t) ||
+      (r.set(e, t), c()?.broadcastEvent?.(`career:cards`, { [e]: t }));
+  }
+  function f(n) {
+    let i = e.world.players.get(n.playerId);
+    if (!i) return;
+    let a = l(n.playerId),
+      o = t?.row?.(i.name) ?? null,
+      u = !!t?.isAdmin?.(n),
+      f = [
+        o?.score,
+        o?.kills,
+        o?.headshots,
+        o?.wins,
+        o?.bestStreak,
+        Math.floor((o?.seconds ?? 0) / 60),
+        u,
+      ].join(`|`);
+    (f !== a.signature &&
+      ((a.signature = f),
+      (a.progress = v(o, { unlockAll: u })),
+      c()?.sendEvent?.(n.id, `career:progress`, { stats: o, admin: u }),
+      s?.(n.playerId)),
+      a.greeted ||
+        ((a.greeted = !0),
+        c()?.sendEvent?.(n.id, `career:cards`, Object.fromEntries(r))));
+    let p =
+      a.progress.titles.find((e) => e.name === a.title && e.done)?.name ?? null;
+    d(n.playerId, { level: a.progress.rank.level, title: p });
+  }
+  return (
+    o.push(
+      e.events.on(`net:rpc`, ({ client: t, rpc: n }) => {
+        if (t && e.world.players.has(t.playerId)) {
+          if (n?.name === `career:camos`) {
+            let e = l(t.playerId),
+              r = {};
+            if (n.data && typeof n.data == `object`)
+              for (let e of y) {
+                let t = n.data[e];
+                typeof t == `string` && g[t] && (r[e] = t);
+              }
+            let i = {},
+              a = n.data?.wear;
+            if (a && typeof a == `object`)
+              for (let e of b) x(a[e]) && (i[e] = a[e]);
+            (JSON.stringify(r) !== JSON.stringify(e.camos) ||
+              JSON.stringify(i) !== JSON.stringify(e.wear)) &&
+              ((e.camos = r), (e.wear = i), (e.camosDirty = !0));
+          } else
+            n?.name === `career:title` &&
+              (l(t.playerId).title =
+                typeof n.data == `string` ? n.data.slice(0, 40) : null);
+        }
+      }),
+    ),
+    {
+      camos(t, r = []) {
+        let o = e.world.players.get(t),
+          s = {};
+        if (!o) return s;
+        if (o.isBot) {
+          let e = a.get(t);
+          e || a.set(t, (e = {}));
+          for (let t of r)
+            y.includes(t) &&
+              (t in e || (e[t] = Ae(H(o.name), V(`${n}:${o.name}:${t}`))),
+              e[t] && (s[t] = e[t]));
+          return s;
+        }
+        let c = i.get(t);
+        if (!c) return s;
+        for (let e of r)
+          c.camos[e] && h(c.progress, e, c.camos[e]) && (s[e] = c.camos[e]);
+        return s;
+      },
+      wears(t, n = []) {
+        let r = e.world.players.get(t),
+          a = {};
+        if (!r) return a;
+        for (let e of n) {
+          if (!b.includes(e)) continue;
+          let n = r.isBot
+            ? [null, null, `used`, `used`, `worn`][
+                Math.floor(V(`wear:${r.name}:${e}`) * 5)
+              ]
+            : i.get(t)?.wear?.[e];
+          n && (a[e] = n);
+        }
+        return a;
+      },
+      onCamosChanged(e) {
+        s = e;
+      },
+      card: (e) => r.get(e) ?? null,
+      tick() {
+        if (!(e.world.time.tick % 60)) {
+          for (let [e, t] of i) t.camosDirty && ((t.camosDirty = !1), s?.(e));
+          for (let t of e.clients?.values?.() ?? [])
+            t.playerId >= 0 && t.ext?.net && f(t);
+          for (let t of e.world.players.values())
+            if (t.isBot && !r.has(t.id)) {
+              let e = H(t.name);
+              d(t.id, { level: e, title: De(t.name, e), bot: !0 });
+            }
+          for (let t of r.keys())
+            e.world.players.has(t) || (r.delete(t), i.delete(t), a.delete(t));
+        }
+      },
+      dispose() {
+        for (let e of o) e();
+        (r.clear(), i.clear(), a.clear());
+      },
+    }
+  );
+}
+var Me = new Set([
+    `ar`,
+    `carbine`,
+    `dmr`,
+    `sniper`,
+    `lmg`,
+    `smg`,
+    `pistol`,
+    `shotgun`,
+  ]),
+  U = (e) => (typeof e == `number` ? c[e] : null),
+  W = (e) => Me.has(U(e)?.class),
+  G = (e) => U(e)?.class ?? null,
+  K = (e) => typeof e == `string` && /FRAG/i.test(e),
+  Ne = (e) =>
+    typeof e == `number`
+      ? U(e)?.class === `launcher`
+      : /KITE|BREAKER|JAVELIN|ROCKET/i.test(String(e)),
+  Pe = (e, t) => Math.hypot(e[0] - t[0], e[1] - t[1], e[2] - t[2]),
+  Fe = 0,
+  Ie = 1,
+  q = 2,
+  Le = 4,
+  Re = 720;
+function ze(t) {
+  let n = t.world,
+    i = t.config?.career ?? null,
+    a = new Map(),
+    c = new Map(),
+    l = [],
+    u = new Map(),
+    d = new Map(),
+    f = new Map(),
+    p = !1,
+    m = () => t.modules.get(`netcode`),
+    h = (e) => (e ? n.players.get(e.owner) : null),
+    g = (e) => n.get(n.players.get(e)?.entityId),
+    _ = () => ({
+      kills: 0,
+      heads: 0,
+      revives: 0,
+      recent: [],
+      hurt: !1,
+      knives: 0,
+      pistols: 0,
+      lmgs: 0,
+      roadkills: 0,
+      ace: null,
+      tank: null,
+    }),
+    v = (e) => {
+      let t = c.get(e);
+      return (
+        t ||
+          c.set(
+            e,
+            (t = {
+              ..._(),
+              spawnTick: -1e9,
+              lastKiller: null,
+              sameTick: null,
+              victims: new Map(),
+            }),
+          ),
+        t
+      );
+    },
+    y = (e) => Object.assign(e, _());
+  function b(e, n) {
+    let r = h(e);
+    if (!r || r.isBot || !_e[n]) return;
+    let o = i?.achieve?.(r.name, n);
+    if (!Number.isFinite(o)) {
+      let e = `${String(r.name).toLowerCase()}|${n}`;
+      a.set(e, (o = (a.get(e) ?? 0) + 1));
+    }
+    let s = m()?.getClientByEntity?.(e.id);
+    (s && m()?.sendEvent?.(s.id, `achievement:earned`, { id: n, count: o }),
+      t.events.emit(`achievement:earned`, {
+        playerId: r.id,
+        entityId: e.id,
+        id: n,
+        count: o,
+      }));
+  }
+  let x = (e) => e.pos[1] - o(n, e.pos[0], e.pos[2], e.pos[1]),
+    S = (t) => (t.state & e.IN_VEHICLE ? n.get(t.seat) : null),
+    C = () => t.modules.get(`vehicles`)?.getFleet?.(),
+    w = (e) => {
+      let t = S(e);
+      return (
+        !!t &&
+        !!s[t.weapon]?.air &&
+        C()?.get(t.id)?.seats?.[0] === e.id &&
+        x(t) > 2
+      );
+    };
+  return (
+    l.push(
+      t.events.on(`match:phase`, (e) => {
+        if (e?.phase === `live`) {
+          p = !1;
+          for (let e of c.values()) e.victims.clear();
+          f.clear();
+        }
+      }),
+    ),
+    l.push(
+      t.events.on(`player:spawn`, ({ entityId: e }) => {
+        let t = h(n.get(e));
+        if (!t) return;
+        let r = y(v(t.id));
+        r.spawnTick = n.time.tick;
+      }),
+    ),
+    l.push(
+      t.events.on(`spot:target`, (e) => {
+        Number.isInteger(e?.targetId) &&
+          e.spotterId != null &&
+          d.set(e.targetId, {
+            spotter: e.spotterId,
+            team: e.team,
+            until: e.expiresTick ?? n.time.tick + 900,
+          });
+      }),
+    ),
+    l.push(
+      t.events.on(`player:damage`, (t) => {
+        let i = n.get(t?.targetId),
+          a = t?.attackerId == null ? null : n.get(t.attackerId),
+          o = n.time.tick;
+        if (!i) return;
+        if (a && a.id !== i.id) {
+          u.set(i.id, { attackerId: a.id, tick: o });
+          let e = h(i);
+          e && (t.amount ?? 0) > 0 && (v(e.id).hurt = !0);
+        }
+        if (!t.fatal) return;
+        let c = h(i),
+          l = h(a);
+        if (c) {
+          let e = v(c.id);
+          ((e.lastKiller = l && l.id !== c.id ? l.id : null), y(e));
+        }
+        let f = d.get(i.id);
+        if ((d.delete(i.id), !a || a.id === i.id || !l || a.team === i.team))
+          return;
+        if (
+          f &&
+          f.until >= o &&
+          f.spotter !== l.id &&
+          n.players.get(f.spotter)?.team === a.team
+        ) {
+          let e = g(f.spotter);
+          e && b(e, `eagleeye`);
+        }
+        if (l.isBot) return;
+        let m = v(l.id),
+          _ = t.weapon,
+          T = Pe(a.pos, i.pos),
+          E = a.hp <= 0 || !!(a.state & e.DEAD);
+        (m.kills++,
+          t.headshot && m.heads++,
+          (m.recent = m.recent.filter((e) => o - e < Re)),
+          m.recent.push(o));
+        let D = (e, t) =>
+          m.recent.length >= e && o - m.recent[m.recent.length - e] < t;
+        if (
+          (n.match?.phase === `live` && !p && ((p = !0), b(a, `firstblood`)),
+          m.sameTick?.tick === o && m.sameTick.w === _)
+        ) {
+          let e = ++m.sameTick.n;
+          (e === 2 && b(a, K(_) ? `twobirds` : W(_) ? `collateral` : null),
+            e === 3 && W(_) && b(a, `kebab`));
+        } else m.sameTick = { tick: o, w: _, n: 1 };
+        (w(i)
+          ? b(a, `grounded`)
+          : !S(i) && !(i.ext?.pl?.lad > 0) && x(i) > I.clayAir && b(a, `clay`),
+          !S(i) && i.ext?.pl?.lad > 0 && b(a, `offladder`),
+          i.state & e.SWIMMING && b(a, `fishbarrel`),
+          W(_) &&
+            (T >= I.longshot && b(a, `longshot`),
+            T >= I.marathon && b(a, `marathon`),
+            t.headshot && T >= I.bullseye && b(a, `bullseye`),
+            t.headshot && T >= I.sharpshooter && b(a, `sharpshooter`),
+            T < I.pointblank && b(a, `pointblank`),
+            G(_) === `sniper` &&
+              !(a.state & e.ADS) &&
+              T >= I.noscopeMin &&
+              b(a, `noscope`),
+            G(_) === `sniper` &&
+              G(i.weapon) === `sniper` &&
+              T >= I.duelist &&
+              b(a, `duelist`),
+            a.pos[1] - i.pos[1] >= I.highground && b(a, `highground`),
+            a.stance === r.PRONE && T >= I.snake && b(a, `snake`),
+            G(_) === `pistol` && ++m.pistols === I.sidearm && b(a, `sidearm`),
+            G(_) === `lmg` && ++m.lmgs === I.suppressor && b(a, `suppressor`)),
+          _ === `Knife` &&
+            (b(a, `knife`), ++m.knives === I.silent && b(a, `silent`)),
+          _ === `Roadkill` &&
+            (b(a, `roadrage`), ++m.roadkills === I.bowling && b(a, `bowling`)),
+          _ === `Defibrillator` && b(a, `clear`),
+          K(_) &&
+            (E && b(a, `grave`),
+            t.impact && b(a, `bonk`),
+            /RETURNED/i.test(_) && b(a, `sender`)),
+          Ne(_) && b(a, `overkill`));
+        let O = S(a);
+        if (
+          (!O &&
+            !E &&
+            (a.state & e.CHUTE
+              ? b(a, `deathfromabove`)
+              : !(a.ext?.pl?.lad > 0) && x(a) > I.jump && b(a, `jumpshot`)),
+          O?.weapon === Fe && b(a, `driveby`),
+          O?.weapon === Le &&
+            C()?.get(O.id)?.seats?.[0] !== a.id &&
+            b(a, `doorgunner`),
+          O?.weapon === q
+            ? (m.tank?.v !== O.id && (m.tank = { v: O.id, n: 0 }),
+              ++m.tank.n === I.steelfist && b(a, `steelfist`))
+            : (m.tank = null),
+          O && s[O.weapon]?.air
+            ? (m.ace?.v !== O.id && (m.ace = { v: O.id, n: 0 }),
+              ++m.ace.n === I.ace && b(a, `ace`))
+            : (m.ace = null),
+          D(I.double[0], I.double[1]) &&
+            !D(I.double[0] + 1, I.double[1]) &&
+            b(a, `double`),
+          m.recent.filter((e) => o - e < I.triple[1]).length === I.triple[0] &&
+            b(a, `triple`),
+          m.recent.filter((e) => o - e < I.quad[1]).length === I.quad[0] &&
+            b(a, `quad`),
+          m.recent.filter((e) => o - e < I.five[1]).length === I.five[0] &&
+            b(a, `five`),
+          m.kills === I.unstoppable && b(a, `unstoppable`),
+          m.kills === I.rampage && b(a, `rampage`),
+          m.kills === I.legend && b(a, `legend`),
+          m.kills === I.untouchable && !m.hurt && b(a, `untouchable`),
+          t.headshot && m.heads === I.headhunter && b(a, `headhunter`),
+          t.headshot && m.heads === I.brainiac && b(a, `brainiac`),
+          c &&
+            m.lastKiller === c.id &&
+            (b(a, `payback`), (m.lastKiller = null)),
+          c)
+        ) {
+          let e = (m.victims.get(c.id) ?? 0) + 1;
+          (m.victims.set(c.id, e), e === I.nemesis && b(a, `nemesis`));
+        }
+        (o - m.spawnTick <= I.quickdraw && b(a, `quickdraw`),
+          !E && a.hp <= (a.maxHp || 100) * I.lastbreath && b(a, `lastbreath`));
+        let k = !1;
+        for (let [e, t] of u) {
+          if (o - t.tick > 600) {
+            u.delete(e);
+            continue;
+          }
+          !k &&
+            t.attackerId === i.id &&
+            o - t.tick <= I.bodyguard &&
+            e !== a.id &&
+            n.get(e)?.team === a.team &&
+            ((k = !0), b(a, `bodyguard`));
+        }
+      }),
+    ),
+    l.push(
+      t.events.on(`vehicle:damage`, (e) => {
+        if (!e?.fatal || e.attackerId == null) return;
+        let t = n.get(e.vehicleId),
+          r = n.get(e.attackerId);
+        if (
+          t &&
+          r &&
+          r.team !== t.team &&
+          (t.weapon === q && b(r, `tankbuster`),
+          t.weapon === Ie && b(r, `canopener`),
+          s[t.weapon]?.air)
+        ) {
+          (b(r, `skyfall`),
+            (e.weapon === 10 || /JAVELIN/i.test(String(e.weapon))) &&
+              b(r, `lockon`));
+          let t = S(r);
+          t && s[t.weapon]?.air && b(r, `dogfight`);
+        }
+      }),
+    ),
+    l.push(
+      t.events.on(`medic:revive`, (e) => {
+        let t = n.get(e?.medicId),
+          r = h(t);
+        if (!r) return;
+        let i = v(r.id);
+        (i.revives++,
+          i.revives === I.angel && b(t, `angel`),
+          i.revives === I.surgeon && b(t, `surgeon`));
+      }),
+    ),
+    l.push(
+      t.events.on(`objective:changed`, (t) => {
+        let r = n.match?.objectives?.find((e) => e.id === t?.objectiveId);
+        if (!r) return;
+        let i = f.get(r.id);
+        if (
+          (f.set(r.id, t.team),
+          i === void 0 || t.team < 0 || t.team === i || !t.spawnable)
+        )
+          return;
+        let a = [...n.byType(`soldier`)].filter(
+          (n) =>
+            n.team === t.team &&
+            n.hp > 0 &&
+            !(n.state & e.DEAD) &&
+            Math.hypot(n.pos[0] - r.pos[0], n.pos[2] - r.pos[2]) <=
+              (r.radius ?? 10) &&
+            Math.abs(n.pos[1] - r.pos[1]) <= 8,
+        );
+        for (let e of a) (b(e, `flag`), a.length === 1 && b(e, `lonewolf`));
+      }),
+    ),
+    {
+      award: b,
+      dispose() {
+        for (let e of l) e?.();
+      },
+    }
+  );
+}
+function Be() {
+  let e = [],
+    t = 0;
+  return {
+    add(n, r) {
+      n &&
+        (e.push({ pos: [...n.pos], expires: r + 3600 }), (t = Math.min(t, r)));
+    },
+    tick(n, r) {
+      if (!(n.time.tick < t)) {
+        t = n.time.tick + 6;
+        for (let t = e.length - 1; t >= 0; t--) {
+          let i = e[t];
+          if (n.time.tick >= i.expires) {
+            e.splice(t, 1);
+            continue;
+          }
+          for (let [a, o] of r) {
+            let r = n.get(a);
+            if (
+              !r ||
+              r.hp <= 0 ||
+              r.seat >= 0 ||
+              Math.hypot(r.pos[0] - i.pos[0], r.pos[2] - i.pos[2]) > 1.8 ||
+              Math.abs(r.pos[1] - i.pos[1]) > 2
+            )
+              continue;
+            let s = 0;
+            for (let e of o.loadout) {
+              let t = c[e],
+                n = o.ammo[e],
+                r = Math.min(t.reserve - n.reserve, Math.ceil(t.reserve * 0.2));
+              r > 0 && !n.unlimited && ((n.reserve += r), (s += r));
+            }
+            if (s) {
+              e.splice(t, 1);
+              break;
+            }
+          }
+        }
+      }
+    },
+    dispose() {
+      e.length = 0;
+    },
+  };
+}
+var J = Object.freeze({ safe: 4.5, lethal: 16, weapon: `Fall` });
+function Ve(e, t = 100) {
+  if (!(e > J.safe)) return 0;
+  let n = Math.min(1, (e - J.safe) / (J.lethal - J.safe));
+  return Math.round(t * n);
+}
+function He(t, n) {
+  let r = new WeakMap();
+  return {
+    tick() {
+      for (let i of t.byType(`soldier`)) {
+        let t = i.ext?.pl;
+        if (
+          !t ||
+          (r.get(t) ?? 0) === t.landN ||
+          (r.set(t, t.landN), i.hp <= 0 || i.state & (e.DEAD | e.IN_VEHICLE))
+        )
+          continue;
+        let a = Math.min(i.hp, Ve(t.landDrop, i.maxHp || 100));
+        a >= 1 && n(i, a, [i.pos[0], i.pos[1] - 1, i.pos[2]]);
+      }
+    },
+  };
+}
+var Y = new WeakMap();
+function X(e, t, n, r, i) {
+  let a = e.get(t.id);
+  if (!a) {
+    let o = t.ext?.loadout ? j(t.ext.loadout) : void 0,
+      s = i
+        ? be((o ?? L().loadout).map((e) => i.definition(t, e)).filter(Boolean))
+        : {};
+    ((a = { ...L(r, o, s, t.ext?.loadout?.classId), lastInputTick: n }),
+      e.set(t.id, a));
+  }
+  return a;
+}
+function Z(t, n) {
+  (ye(n), (t.state &= ~e.RELOADING));
+}
+function Ue(t, n, r) {
+  if (n.reloadWeapon !== r.id) {
+    Z(t, n);
+    return;
+  }
+  (R(n, n.reloadEndTick),
+    (t.ammo = n.ammo[r.id].mag),
+    (t.state &= ~e.RELOADING));
+}
+function Q(e, t, n) {
+  e.events.emit(t, n);
+}
+function $(e, t) {
+  ((t = ve(e.world, t)), Q(e, `player:damage`, t));
+  let n = e.modules.get(`netcode`),
+    r = new Set();
+  for (let e of [t.attackerId, t.targetId]) {
+    let i = n?.getClientByEntity?.(e);
+    i && !r.has(i.id) && (r.add(i.id), n.sendEvent?.(i.id, `player:damage`, t));
+  }
+}
+function We(t, n, r) {
+  let i = n.states,
+    a = r?.input,
+    o =
+      r?.entity ??
+      (r?.client?.entityId > 0 ? t.world.get(r.client.entityId) : null);
+  if (
+    !a ||
+    !o ||
+    o.type !== `soldier` ||
+    o.hp <= 0 ||
+    o.state & (e.DEAD | e.IN_VEHICLE)
+  )
+    return;
+  let u = t.world.time.tick,
+    d = X(i, o, u, t.config?.local, n.attachments);
+  if (
+    (n.melee.input(o, a, n.grenades.busy(o.id)),
+    n.grenades.busy(o.id) || n.melee.busy(o.id))
+  ) {
+    ((d.aimTicks = 0),
+      (d.aimLastTick = u),
+      (d.ack = a.seq ?? 0),
+      (d.lastInputTick = u),
+      (o.state &= ~(e.FIRING | e.ADS)));
+    return;
+  }
+  let f = Number.isInteger(a.slot) ? c[d.loadout[a.slot]] : null,
+    p = f && n.attachments.definition(o, f.id);
+  if (!p) return;
+  {
+    let e = (d.caps ??= {}),
+      t = e[p.id];
+    if (p.mag !== f.mag || p.reload !== f.reload) {
+      if (t?.mag !== p.mag || t?.reload !== p.reload) {
+        e[p.id] = { mag: p.mag, reload: p.reload };
+        let t = d.ammo[p.id];
+        t && t.mag > p.mag && ((t.reserve += t.mag - p.mag), (t.mag = p.mag));
+      }
+    } else if (t) {
+      delete e[p.id];
+      let t = d.ammo[p.id];
+      t && t.mag > f.mag && ((t.reserve += t.mag - f.mag), (t.mag = f.mag));
+    }
+  }
+  let m = n.locks.get(o.id);
+  m || n.locks.set(o.id, (m = oe()));
+  let h = p.id === P.id;
+  if (
+    (ce(
+      m,
+      t.world,
+      o,
+      h &&
+        d.selected === p.id &&
+        z(d, u) &&
+        B(d, p) >= 1 &&
+        d.reloadEndTick < 0 &&
+        d.ammo[p.id].mag > 0,
+    ),
+    m.targetId != null && u % 30 == 0)
+  ) {
+    let n = t.world.get(m.targetId);
+    if (n?.type === `vehicle` && s[n.weapon]?.air)
+      for (let r of t.world.byType(`soldier`)) {
+        if (r.seat !== n.id || !(r.state & e.IN_VEHICLE)) continue;
+        let i = t.modules.get(`netcode`)?.getClientByEntity?.(r.id);
+        i &&
+          t.modules
+            .get(`netcode`)
+            .sendEvent?.(i.id, `javelin:warn`, { state: `lock` });
+      }
+  }
+  let g = xe(d, a, u, { canLaunch: n.rockets.canLaunch() && (!h || se(m)) });
+  ((d.ack = a.seq ?? 0),
+    (d.lastInputTick = u),
+    (o.state &= ~e.RELOADING),
+    g.firing || (o.state &= ~e.FIRING),
+    z(d, u) || (o.state &= ~e.ADS),
+    d.reloadEndTick >= 0 && (o.state |= e.RELOADING),
+    g.reload &&
+      t.events.emit(`weapon:reload`, {
+        entityId: o.id,
+        weaponId: p.id,
+        duration: p.reload,
+      }));
+  let _ = d.ammo[p.id];
+  if (((o.weapon = p.id), (o.ammo = _.mag), g.shot)) {
+    o.state |= e.FIRING;
+    let r = t.modules.get(`netcode`);
+    if (p.class === `defib`) {
+      n.medic.pads(o);
+      return;
+    }
+    if (p.class === `tool`) {
+      p.tool === `repair`
+        ? n.repair.use(o)
+        : p.tool === `beacon`
+          ? n.beacons.use(o)
+          : n.gadgets.use(o, p.tool);
+      return;
+    }
+    if (p.class === `launcher`) {
+      (n.rockets.launch(o, h ? m.targetId : null),
+        (m.targetId = null),
+        (m.ticks = 0));
+      return;
+    }
+    let i = { ...o, pos: o.pos.slice() },
+      s = ie(o, p, a, B(d, p)),
+      c = l(p),
+      f = () =>
+        N(i, p, t.world, n.rng, u, {
+          spread: s,
+          ignoreEntityId: o.id,
+          flight: c,
+        }),
+      g = c || !r?.withRewind ? f() : r.withRewind(a.renderTick, f),
+      _ = c ? ee(g.origin, g.dir, p, t.world) : g.hit.distance;
+    if (
+      (Q(t, `weapon:fire`, {
+        entityId: o.id,
+        weaponId: p.id,
+        origin: g.origin,
+        dir: g.dir,
+        seq: d.shotSeq,
+        dist: _,
+        tracer: !0,
+        report: p.reportVolume ?? 1,
+      }),
+      !c)
+    ) {
+      Ge(t, n, o, p, g, u);
+      return;
+    }
+    let v = {
+      entity: o,
+      def: p,
+      shot: g,
+      firedTick: u,
+      seenTick: Number.isFinite(+a.renderTick) ? Math.min(u, +a.renderTick) : u,
+    };
+    (n.rounds.push(v), Ke(t, n, [v]));
+  }
+}
+function Ge(t, n, r, i, a, o) {
+  let s = a.hit;
+  for (let c of [s, ...(s.beyond ?? []), ...(s.stop ? [s.stop] : [])]) {
+    let s = c.entityId == null ? null : t.world.get(c.entityId),
+      l = s ? te(t.world, s, M(i, c.distance, c.part, c.pen ?? 1)) : 0;
+    for (let e of re(c, a.dir))
+      Q(t, `weapon:hit`, {
+        entityId: r.id,
+        weaponId: i.id,
+        firedTick: o,
+        point: e.point,
+        normal: e.normal,
+        surface: e.surface,
+        targetId: null,
+        part: null,
+        damage: 0,
+      });
+    if (
+      (c.miss ||
+        Q(t, `weapon:hit`, {
+          entityId: r.id,
+          weaponId: i.id,
+          firedTick: o,
+          point: c.point,
+          normal: c.normal,
+          surface: c.surface || `dirt`,
+          targetId: c.entityId,
+          part: c.part,
+          damage: l,
+        }),
+      c.beaconId != null)
+    ) {
+      n.beacons.damage(
+        t.world.get(c.beaconId),
+        M(i, c.distance, `torso`, c.pen ?? 1),
+        r,
+      );
+      continue;
+    }
+    s &&
+      C(t.world, r, s) &&
+      s.hp > 0 &&
+      l > 0 &&
+      ((s.hp = Math.max(0, s.hp - l)),
+      s.hp <= 0 && (s.state |= e.DEAD),
+      $(t, {
+        targetId: s.id,
+        attackerId: r.id,
+        amount: l,
+        part: c.part || `torso`,
+        weapon: i.id,
+        pos: c.point,
+        headshot: c.part === `head`,
+        fatal: s.hp <= 0,
+        ...(s.hp <= 0
+          ? { dir: a.dir.map((e) => Math.round(e * 1e3) / 1e3) }
+          : {}),
+      }));
+  }
+}
+function Ke(e, t, n = t.rounds) {
+  let r = e.modules.get(`netcode`),
+    i = e.world.time.tick,
+    a = !1;
+  for (let o of n) {
+    let n = r?.rewindTo
+        ? (e) => {
+            let t = o.seenTick + e * 60;
+            t < i - 0.01 ? r.rewindTo(t) : r.isRewound?.() && r.restore();
+          }
+        : null,
+      s;
+    try {
+      s = ae(o.shot.flight, (i - o.seenTick) / 60, n);
+    } finally {
+      r?.isRewound?.() && r.restore();
+    }
+    s &&
+      ((o.shot.hit = s),
+      (a = !0),
+      Ge(e, t, o.entity, o.def, o.shot, o.firedTick));
+  }
+  a && (t.rounds = t.rounds.filter((e) => !e.shot.flight.done));
+}
+function qe(e) {
+  let t = {};
+  for (let n of [...e.loadout, e.selected, e.reloadWeapon])
+    e.ammo[n] && (t[n] = e.ammo[n]);
+  return structuredClone({ ...e, ammo: t });
+}
+function Je(t, n, r, i) {
+  let a = t.world.time.tick,
+    o = X(n.states, i, a, t.config?.local, n.attachments);
+  (R(o, a, i.hp > 0 && !(i.state & e.DEAD)),
+    t.modules.get(`netcode`)?.sendEvent?.(r.id, `weapon:inventory`, {
+      entityId: i.id,
+      epoch: n.epochs.get(i.id) ?? 0,
+      version: ++n.version,
+      ack: r.lastInputSeq,
+      tick: a,
+      inventory: qe(o),
+      equipment: n.attachments.equipment(i),
+    }));
+}
+var Ye = {
+  name: `weapons`,
+  deps: [`netcode`],
+  api: {
+    weaponDefs: u,
+    fireWeapon: N,
+    damageAt: M,
+    grenadesFor: (e) => Y.get(e)?.grenades ?? null,
+  },
+  init(t) {
+    let n = {
+      rounds: [],
+      states: new Map(),
+      locks: new Map(),
+      epochs: new Map(),
+      version: 0,
+      rng: t.rng.fork(`weapons`),
+    };
+    (Y.set(t.world, n),
+      (n.grenades = Ce(t, $, {
+        interrupt: (e) => {
+          let t = n.states.get(e.id);
+          t && Z(e, t);
+        },
+      })),
+      (n.melee = we(t, $, {
+        interrupt: (e) => {
+          let t = n.states.get(e.id);
+          t && Z(e, t);
+        },
+      })),
+      (n.gadgets = pe(t)),
+      (n.beacons = he(t)),
+      (n.medic = le(t, $)),
+      (n.ammoBoxes = ue(t, n.states, n.grenades)),
+      (n.repair = me(t)),
+      (n.rockets = fe(t, $)),
+      (n.career = je(t)),
+      (n.achievements = ze(t)),
+      (n.falls = He(t.world, (n, r, i) => {
+        ((n.hp = Math.max(0, n.hp - r)),
+          n.hp <= 0 && (n.state |= e.DEAD),
+          $(t, {
+            targetId: n.id,
+            attackerId: null,
+            amount: r,
+            part: `torso`,
+            weapon: J.weapon,
+            pos: i,
+            headshot: !1,
+            fatal: n.hp <= 0,
+          }));
+      })),
+      (n.attachments = Te(t, n.career)),
+      (n.resupply = Be()),
+      (n.drops = Se(t, {
+        state: (e) =>
+          X(n.states, e, t.world.time.tick, t.config?.local, n.attachments),
+        changed: (e, r) => {
+          let i = t.modules.get(`netcode`),
+            a = i?.getClientByEntity?.(e.id);
+          a &&
+            (r.kind !== `full` && Je(t, n, a, e),
+            i.sendEvent?.(a.id, `weapon:pickup`, r));
+        },
+      })),
+      t.events.on(`player:death`, (e) => {
+        (n.resupply.add(t.world.get(e.victimId), t.world.time.tick),
+          n.drops.death(e.victimId));
+        let r = n.states.get(e.victimId);
+        r && R(r, t.world.time.tick, !1);
+      }),
+      t.events.on(`world:despawn`, ({ id: e }) => {
+        (n.drops.forget(e),
+          n.melee.forget(e),
+          n.states.delete(e),
+          n.locks.delete(e),
+          n.epochs.delete(e));
+      }),
+      t.events.on(`player:spawn`, ({ entityId: e }) => {
+        let r = t.world.get(e),
+          i = r && t.world.players.get(r.owner)?.loadout;
+        (i &&
+          ((r.ext.loadout = structuredClone(i)),
+          (r.weapon = i.weapons[0]),
+          (r.ammo = c[r.weapon].mag)),
+          n.states.delete(e),
+          n.locks.delete(e),
+          n.epochs.set(e, ++n.version));
+      }),
+      t.events.on(`net:input`, (e) => We(t, n, e)),
+      t.events.on(`net:input`, ({ entity: e, input: t } = {}) =>
+        n.drops.input(e, t),
+      ),
+      (n.flares = new Map()),
+      t.events.on(`net:rpc`, ({ client: r, rpc: i }) => {
+        if (i?.name !== `vehicle:flares` || !r) return;
+        let a = t.world.get(r.entityId),
+          o = a && a.state & e.IN_VEHICLE ? t.world.get(a.seat) : null;
+        if (
+          !o ||
+          o.type !== `vehicle` ||
+          !s[o.weapon]?.air ||
+          o.hp <= 0 ||
+          t.modules.get(`vehicles`)?.getFleet?.()?.get(o.id)?.seats?.[0] !==
+            a.id
+        )
+          return;
+        let c = t.world.time.tick,
+          l = n.flares.get(o.id);
+        (l || n.flares.set(o.id, (l = { ready: [] })),
+          (l.ready = l.ready.filter((e) => e > c)),
+          !(l.ready.length >= P.flareCharges || c < (l.next ?? 0)) &&
+            (l.ready.push(c + P.flareRecharge),
+            (l.next = c + 45),
+            n.rockets.flares(o),
+            t.modules.get(`netcode`)?.sendEvent?.(r.id, `javelin:flareState`, {
+              charges: P.flareCharges - l.ready.length,
+              nextTick: Math.min(...l.ready),
+            })));
+      }),
+      t.events.on(`world:despawn`, ({ id: e }) => n.flares.delete(e)));
+  },
+  tick(t) {
+    (Y.get(t.world)?.career.tick(),
+      Y.get(t.world)?.grenades.tick(),
+      Y.get(t.world)?.melee.tick(),
+      Y.get(t.world)?.gadgets.tick(),
+      Y.get(t.world)?.beacons.tick(),
+      Y.get(t.world)?.medic.tick(),
+      Y.get(t.world)?.rockets.tick(),
+      Y.get(t.world)?.falls.tick(),
+      Y.get(t.world)?.drops.tick());
+    {
+      let e = Y.get(t.world);
+      e?.rounds.length && Ke(t, e);
+    }
+    let n = Y.get(t.world)?.states;
+    if (!n) return;
+    (Y.get(t.world).resupply.tick(t.world, n), Y.get(t.world).ammoBoxes.tick());
+    let r = t.world.time.tick;
+    for (let [i, a] of n) {
+      let o = t.world.get(i);
+      if (!o) {
+        n.delete(i);
+        continue;
+      }
+      if (o.hp <= 0 || o.state & e.DEAD) {
+        (Z(o, a), (o.state &= ~e.FIRING));
+        continue;
+      }
+      a.reloadEndTick >= 0 &&
+        r >= a.reloadEndTick &&
+        Ue(o, a, c[a.reloadWeapon] || u[0]);
+    }
+    if (r % 12 == 0) {
+      let n = Y.get(t.world);
+      for (let i of t.clients?.values?.() ?? []) {
+        let a = t.world.get(i.entityId);
+        a && ((a.state & e.IN_VEHICLE && r % 60 != 0) || Je(t, n, i, a));
+      }
+    }
+  },
+  onDisconnect(e, t) {
+    Y.get(e.world)?.attachments.disconnect(t);
+  },
+  dispose(e) {
+    (Y.get(e.world)?.gadgets.dispose(),
+      Y.get(e.world)?.beacons.dispose(),
+      Y.get(e.world)?.medic.dispose(),
+      Y.get(e.world)?.ammoBoxes.dispose(),
+      Y.get(e.world)?.repair.dispose(),
+      Y.get(e.world)?.drops.dispose(),
+      Y.get(e.world)?.attachments.dispose(),
+      Y.get(e.world)?.career.dispose(),
+      Y.get(e.world)?.achievements?.dispose(),
+      Y.get(e.world)?.grenades.dispose(),
+      Y.get(e.world)?.rockets.dispose(),
+      Y.delete(e.world));
+  },
+};
+export { qe as carriedInventory, Ye as default };
+//# sourceMappingURL=server-BZHe1cjv.js.map

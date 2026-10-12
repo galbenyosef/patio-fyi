@@ -1,0 +1,198 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import { a as e } from "./greywater-centre-hZuxA5K7.js";
+var t = {
+  speed: 35,
+  cars: 4,
+  carLen: 18.3,
+  gap: 0.9,
+  bogie: 6.4,
+  halfW: 1.48,
+  height: 3.78,
+  lane: 2.25,
+  lead: 320,
+  period: 120,
+  tps: 60,
+};
+t.length = t.cars * t.carLen + (t.cars - 1) * t.gap;
+var n = 33.424,
+  r = t;
+function i(t) {
+  let n = e(),
+    r = n.length,
+    i = Math.max(0, Math.min(r, t)),
+    a = n.at(i),
+    o = t - i;
+  return { x: a.x + a.tx * o, z: a.z + a.tz * o, tx: a.tx, tz: a.tz };
+}
+var a = 5e3;
+function o(t) {
+  let n = e().length,
+    i = n + r.length + 2 * r.lead,
+    o = Math.max(0, t / r.tps),
+    s = [],
+    c = Math.floor(o / r.period),
+    l = (o - c * r.period) * r.speed;
+  for (let [e, t] of [
+    [0, 1],
+    [1, -1],
+  ]) {
+    let o = c % 2 === e && l <= i,
+      u = o ? l : a;
+    s.push({
+      id: e,
+      dir: t,
+      head: t > 0 ? u - r.lead : n + r.lead - u,
+      lane: t * r.lane,
+      running: o,
+    });
+  }
+  return s;
+}
+function s(e) {
+  let t = (t) => {
+      let n = i(t);
+      return [n.x + n.tz * e.lane, n.z - n.tx * e.lane];
+    },
+    a = [];
+  for (let i = 0; i < r.cars; i++) {
+    let o = e.head - e.dir * (r.carLen / 2 + i * (r.carLen + r.gap)),
+      [s, c] = t(o + e.dir * r.bogie),
+      [l, u] = t(o - e.dir * r.bogie),
+      d = Math.atan2(s - l, c - u);
+    a.push({
+      x: (s + l) / 2,
+      z: (c + u) / 2,
+      yaw: d,
+      c: Math.cos(d),
+      s: Math.sin(d),
+      y0: n + 0.3,
+      y1: n + r.height,
+    });
+  }
+  return a;
+}
+var c = (e, t, n) => {
+  let r = t - e.x,
+    i = n - e.z;
+  return [e.c * r - e.s * i, e.s * r + e.c * i];
+};
+function l(e, t, n, i) {
+  let [a, o] = c(e, t[0], t[2]),
+    s = e.c * n[0] - e.s * n[2],
+    l = e.s * n[0] + e.c * n[2],
+    u = [a, t[1], o],
+    d = [s, n[1], l],
+    f = [-r.halfW, e.y0, -r.carLen / 2],
+    p = [r.halfW, e.y1, r.carLen / 2],
+    m = 0,
+    h = i,
+    g = -1,
+    _ = 0;
+  for (let e = 0; e < 3; e++) {
+    if (Math.abs(d[e]) < 1e-9) {
+      if (u[e] < f[e] || u[e] > p[e]) return null;
+      continue;
+    }
+    let t = (f[e] - u[e]) / d[e],
+      n = (p[e] - u[e]) / d[e],
+      r = -1;
+    if (t > n) {
+      let e = t;
+      ((t = n), (n = e), (r = 1));
+    }
+    if ((t > m && ((m = t), (g = e), (_ = r)), n < h && (h = n), m > h))
+      return null;
+  }
+  if (g < 0) return null;
+  let v = [0, 0, 0];
+  return (
+    (v[g] = _),
+    {
+      dist: m,
+      normal: [e.c * v[0] + e.s * v[2], v[1], -e.s * v[0] + e.c * v[2]],
+      point: t.map((e, t) => e + n[t] * m),
+      surface: `metal`,
+    }
+  );
+}
+function u(e, t = () => e.time.tick) {
+  let i = [-240, n, -240, 240, n + r.height + 0.5, 240],
+    a = [],
+    c = [{ tick: NaN }, { tick: NaN }],
+    u = (e) => {
+      let i = c[e],
+        a = t();
+      if (i.tick !== a) {
+        let t = s(o(a).find((t) => t.id === e)),
+          c = [1 / 0, n + 0.3, 1 / 0, -1 / 0, n + r.height, -1 / 0];
+        for (let e of t) {
+          let t = r.carLen / 2 + r.halfW;
+          ((c[0] = Math.min(c[0], e.x - t)),
+            (c[3] = Math.max(c[3], e.x + t)),
+            (c[2] = Math.min(c[2], e.z - t)),
+            (c[5] = Math.max(c[5], e.z + t)));
+        }
+        Object.assign(i, { tick: a, boxes: t, aabb: c });
+      }
+      return i;
+    },
+    d = (e) => u(e).boxes;
+  for (let t of [0, 1]) {
+    let n = `rail-train-${t}`,
+      r = () => u(t).aabb.slice();
+    (e.map.addCollider({
+      id: n,
+      mask: `static`,
+      solid: !0,
+      noPlayer: !0,
+      surface: `metal`,
+      rayIndexBounds: i,
+      movementIndexBounds: i,
+      get aabb() {
+        return r();
+      },
+      raycast(e, n, r) {
+        let i = null;
+        for (let a of d(t)) {
+          let t = l(a, e, n, i?.dist ?? r);
+          t && (i = t);
+        }
+        return i;
+      },
+    }),
+      a.push(n));
+  }
+  return () => {
+    for (let t of a) e.map.removeCollider(t);
+  };
+}
+function d(e, t) {
+  let i = [],
+    a = o(t).map(s);
+  for (let t of e.byType(`soldier`))
+    if (!(!(t.hp > 0) || t.pos[1] < n - 0.9 || t.pos[1] > n + r.height)) {
+      for (let e of a)
+        if (
+          e.some((e) => {
+            let [n, i] = c(e, t.pos[0], t.pos[2]);
+            return (
+              Math.abs(n) < r.halfW + 0.35 && Math.abs(i) < r.carLen / 2 + 0.5
+            );
+          })
+        ) {
+          i.push(t);
+          break;
+        }
+    }
+  return i;
+}
+export {
+  n as RAIL_Y,
+  t as TRAIN_SIM,
+  s as carBoxes,
+  u as installTrains,
+  i as lineAt,
+  d as trainVictims,
+  o as trainsAt,
+};
+//# sourceMappingURL=trains-sim-BhrrY_Za.js.map

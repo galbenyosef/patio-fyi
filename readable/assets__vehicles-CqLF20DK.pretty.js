@@ -1,0 +1,2850 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import {
+  $ as e,
+  Cn as t,
+  Ct as n,
+  F as r,
+  Gn as i,
+  I as a,
+  Jn as o,
+  K as s,
+  Lt as c,
+  Ot as l,
+  P as u,
+  R as d,
+  Rn as f,
+  Rt as p,
+  U as m,
+  Un as h,
+  Ut as g,
+  Yt as _,
+  an as v,
+  en as y,
+  et as b,
+  fn as x,
+  gt as S,
+  lt as C,
+  mn as w,
+  tt as T,
+  v as E,
+  vn as D,
+  wn as O,
+  zn as k,
+  zt as A,
+} from "./graphics-quality-BsjABS0s.js";
+import {
+  a as j,
+  g as M,
+  h as N,
+  m as P,
+  t as F,
+  u as ee,
+} from "./sim-DQ2nevDc.js";
+import { i as I, n as L, r as R, t as z } from "./rotor-spool-BGBN_bun.js";
+import {
+  a as te,
+  i as B,
+  l as V,
+  n as H,
+  o as ne,
+  r as re,
+  t as ie,
+} from "./aim-BX_kIDKd.js";
+import { t as ae } from "./helicopter-kit-DBJtwl3L.js";
+import { i as oe } from "./prediction-1yCEFwrS.js";
+function se() {
+  let e = new Map(),
+    t = new Map();
+  return {
+    pack(n, r) {
+      let i = new Map();
+      for (let e of n.children.filter((e) => e.isMesh)) {
+        let t = e.material,
+          n =
+            `${t.roughness}/${t.metalness}` +
+            (t.map ? `/${t.map.uuid}/${t.alphaTest}/${t.side}` : ``) +
+            (t.transparent ? `/glass/${t.opacity}` : ``);
+        (i.has(n) || i.set(n, []), i.get(n).push(e));
+      }
+      for (let [o, s] of i) {
+        let i = r + `/` + o,
+          c = e.get(i);
+        if (!c) {
+          let t = s.map((e) => {
+            e.updateMatrix();
+            let t = e.geometry.index
+              ? e.geometry.toNonIndexed()
+              : e.geometry.clone();
+            t.applyMatrix4(e.matrix);
+            let n = t.attributes.position.count,
+              r = new Float32Array(n * 3),
+              i = e.material.color;
+            for (let e = 0; e < n; e++)
+              ((r[e * 3] = i.r), (r[e * 3 + 1] = i.g), (r[e * 3 + 2] = i.b));
+            return (t.setAttribute(`color`, new a(r, 3)), t);
+          });
+          ((c = E(t)),
+            t.forEach((e) => e.dispose()),
+            c.computeBoundingSphere(),
+            e.set(i, c));
+        }
+        let l = t.get(o);
+        if (!l) {
+          let e = s[0].material;
+          ((l = new g({
+            vertexColors: !0,
+            roughness: e.roughness,
+            metalness: e.metalness,
+            flatShading: !0,
+            ...(e.map
+              ? {
+                  map: e.map,
+                  alphaTest: e.alphaTest,
+                  transparent: e.transparent,
+                  side: e.side,
+                }
+              : {}),
+            ...(e.transparent && !e.map
+              ? {
+                  transparent: !0,
+                  opacity: e.opacity,
+                  depthWrite: !1,
+                  side: e.side,
+                }
+              : {}),
+          })),
+            t.set(o, l));
+        }
+        s.forEach((e) => n.remove(e));
+        let u = new p(c, l);
+        ((u.castShadow = !l.transparent), (u.receiveShadow = !0), n.add(u));
+      }
+    },
+    dispose() {
+      (e.forEach((e) => e.dispose()),
+        t.forEach((e) => e.dispose()),
+        e.clear(),
+        t.clear());
+    },
+  };
+}
+(new URL(`/assets/vehicle-0-7HS-etH-.glb`, `` + import.meta.url).href,
+  new URL(`/assets/vehicle-1-CYFNFXTZ.glb`, `` + import.meta.url).href,
+  new URL(`/assets/vehicle-2-DZDij-Mu.glb`, `` + import.meta.url).href,
+  new URL(`/assets/vehicle-3-Bk_2KfAj.glb`, `` + import.meta.url).href,
+  new URL(`/assets/vehicle-4-T_elDiaz.glb`, `` + import.meta.url).href);
+function ce(e) {
+  let t = new Set(),
+    n = new Map(),
+    r = !1,
+    i = () => {
+      r ||
+        ((r = !0),
+        t.forEach((e) => e.dispose()),
+        n.forEach((e) => e.dispose()),
+        t.clear(),
+        n.clear());
+    },
+    o;
+  try {
+    o = e.map((e, r) => {
+      e.updateMatrixWorld(!0);
+      let i = {
+        body: [],
+        turret: [],
+        elevation: [],
+        recoil: [],
+        trackShoe: [],
+      };
+      if (
+        (e.traverse((e) => {
+          if (!e.isMesh) return;
+          let o = e;
+          for (; o && !o.userData.component;) o = o.parent;
+          let s = o?.userData.component ?? `body`;
+          if (!i[s]) throw Error(`Unknown vehicle mesh component ` + s);
+          if (Array.isArray(e.material))
+            throw Error(`Unexpected multi-material body primitive ` + r);
+          let c = e.geometry.clone().applyMatrix4(e.matrixWorld);
+          if (
+            (c.attributes.uv ||
+              c.setAttribute(
+                `uv`,
+                new a(new Float32Array(c.attributes.position.count * 2), 2),
+              ),
+            t.add(c),
+            !n.has(e.material))
+          ) {
+            let t = e.material.clone();
+            ((t.flatShading = !0), n.set(e.material, t));
+          }
+          i[s].push({ geometry: c, material: n.get(e.material) });
+        }),
+        !i.body.length)
+      )
+        throw Error(`Empty authored vehicle body ` + r);
+      return i;
+    });
+  } catch (e) {
+    throw (i(), e);
+  }
+  return {
+    trackPrototype(e) {
+      return o[e]?.trackShoe?.[0] ?? null;
+    },
+    has(e, t) {
+      return !!o[e]?.[t]?.length;
+    },
+    attach(e, t, n = `body`) {
+      if (r) throw Error(`Vehicle body library disposed`);
+      let i = o[t]?.[n];
+      if (!i?.length)
+        throw Error(`Missing authored vehicle component ` + t + `/` + n);
+      for (let t of i) {
+        let n = new p(t.geometry, t.material);
+        ((n.castShadow = n.receiveShadow = !0), e.add(n));
+      }
+      (n === `body` && (e.userData.authoredBody = t),
+        (e.userData.authoredComponent = n),
+        (e.userData.meshSource = `Blender 4.5.9 / SALIENT`));
+    },
+    dispose: i,
+  };
+}
+var U = [
+    [-2.45, 1.045],
+    [2.38, 1.045],
+    [2.94, 0.72],
+    [2.94, 0.34],
+    [2.38, 0.13],
+    [-2.45, 0.13],
+    [-2.94, 0.34],
+    [-2.94, 0.72],
+  ],
+  W = U.map((e, t) =>
+    Math.hypot(
+      e[0] - U[(t + 1) % U.length][0],
+      e[1] - U[(t + 1) % U.length][1],
+    ),
+  ),
+  G = W.reduce((e, t) => e + t, 0);
+function le(e) {
+  let t = ((e % G) + G) % G;
+  for (let e = 0; e < U.length; e++) {
+    if (t <= W[e] || e === U.length - 1) {
+      let n = U[e],
+        r = U[(e + 1) % U.length],
+        i = t / W[e];
+      return {
+        z: n[0] + (r[0] - n[0]) * i,
+        y: n[1] + (r[1] - n[1]) * i,
+        angle: -Math.atan2(r[1] - n[1], r[0] - n[0]),
+      };
+    }
+    t -= W[e];
+  }
+}
+function ue() {
+  let e = null,
+    t = [0, 0];
+  return {
+    phase: t,
+    reset() {
+      ((e = null), t.fill(0));
+    },
+    step(n, r, i = !0) {
+      if (e) {
+        let a = n[0] - e.x,
+          o = n[2] - e.z,
+          s = Math.atan2(Math.sin(r - e.yaw), Math.cos(r - e.yaw));
+        if (i && Math.hypot(a, o) < 2 && Math.abs(s) < 0.5) {
+          let n = e.yaw + s / 2,
+            r = -a * Math.sin(n) - o * Math.cos(n);
+          for (let e = 0; e < 2; e++)
+            t[e] = (t[e] + r + (e ? 1.48 : -1.48) * s) % G;
+        }
+      }
+      return ((e = { x: n[0], z: n[2], yaw: r }), t);
+    },
+  };
+}
+function de(e) {
+  let n = new C(),
+    r = new S(e.geometry, e.material, 34);
+  ((n.name = `tank-tracks`),
+    (r.castShadow = r.receiveShadow = !0),
+    n.add(r),
+    (r.boundingSphere = new t(new k(0, 0.6, 0), 3.7)),
+    (r.boundingBox = new u(
+      new k(-1.85, 0.04, -3.04),
+      new k(1.85, 1.13, 3.04),
+    )));
+  let i = ue(),
+    a = new c(),
+    o = new k(),
+    s = new v(),
+    l = new k(1, 0, 0),
+    d = new k(1, 1, 1),
+    f = null;
+  function p(e, t, n = !0) {
+    let c = i.step(e, t, n);
+    if (!(f && c.every((e, t) => e === f[t]))) {
+      for (let e = 0; e < 2; e++)
+        for (let t = 0; t < 17; t++) {
+          let n = le((t * G) / 17 - c[e]);
+          (a.compose(
+            o.set(e ? 1.48 : -1.48, n.y, n.z),
+            s.setFromAxisAngle(l, n.angle),
+            d,
+          ),
+            r.setMatrixAt(e * 17 + t, a));
+        }
+      ((r.instanceMatrix.needsUpdate = !0), (f = c.slice()));
+    }
+  }
+  return (
+    p([0, 0, 0], 0, !1),
+    i.reset(),
+    {
+      root: n,
+      update: p,
+      dispose() {
+        r.dispose();
+      },
+    }
+  );
+}
+var K = { 0: 13209650, 1: 5408432, [-1]: 14733201 },
+  fe = {
+    rubber: 1842460,
+    metal: 7171174,
+    gun: 4145212,
+    glass: 1716026,
+    black: 1447704,
+    light: 15919304,
+    amber: 14717486,
+    red: 12596011,
+    blue: 2973648,
+  },
+  pe = {
+    sand: {
+      ...fe,
+      paint: 13217408,
+      dark: 10652258,
+      trim: 8811343,
+      canvas: 10127970,
+    },
+    olive: {
+      ...fe,
+      paint: 6119494,
+      dark: 4737592,
+      trim: 3816495,
+      canvas: 8025424,
+    },
+  };
+function me(e) {
+  let t = e >>> 0;
+  return () => (t = (t * 1664525 + 1013904223) >>> 0) / 4294967296;
+}
+function q(e, t, n) {
+  let r = document.createElement(`canvas`);
+  ((r.width = e), (r.height = t), n(r.getContext(`2d`), e, t));
+  let i = new d(r);
+  return ((i.colorSpace = w), (i.wrapS = i.wrapT = x), (i.anisotropy = 4), i);
+}
+var he = () =>
+    q(128, 32, (e, t, n) => {
+      ((e.fillStyle = `#2b2c2b`),
+        e.fillRect(0, 0, t, n),
+        (e.fillStyle = `#151615`));
+      for (let t = 0; t < 16; t++) {
+        let r = t * 8;
+        (e.beginPath(),
+          e.moveTo(r, 0),
+          e.lineTo(r + 4, n / 2),
+          e.lineTo(r, n),
+          e.lineTo(r + 3, n),
+          e.lineTo(r + 7, n / 2),
+          e.lineTo(r + 3, 0),
+          e.fill());
+      }
+    }),
+  ge = (e) =>
+    q(256, 256, (t, n, r) => {
+      let i = me(e);
+      ((t.fillStyle = `#c9ae80`), t.fillRect(0, 0, n, r));
+      for (let [e, a] of [
+        [`#7d8250`, 9],
+        [`#8a6a44`, 7],
+      ]) {
+        t.fillStyle = e;
+        for (let e = 0; e < a; e++) {
+          let e = i() * n,
+            a = i() * r,
+            o = 18 + i() * 26;
+          t.beginPath();
+          for (let n = 0; n <= 9; n++) {
+            let r = (n / 9) * Math.PI * 2,
+              s = o * (0.55 + i() * 0.7);
+            t[n ? `lineTo` : `moveTo`](
+              e + Math.cos(r) * s * 1.5,
+              a + Math.sin(r) * s,
+            );
+          }
+          t.fill();
+        }
+      }
+    }),
+  _e = () =>
+    q(64, 64, (e, t, n) => {
+      (e.clearRect(0, 0, t, n), (e.strokeStyle = `#2a2723`), (e.lineWidth = 3));
+      for (let r = -t; r <= t * 2; r += 16)
+        (e.beginPath(),
+          e.moveTo(r, 0),
+          e.lineTo(r + n, n),
+          e.stroke(),
+          e.beginPath(),
+          e.moveTo(r, n),
+          e.lineTo(r + n, 0),
+          e.stroke());
+    }),
+  J = {},
+  ve = (e, t) => (e in J ? J[e] : (J[e] = typeof document > `u` ? null : t()));
+function ye(e, { camo: t = 0 } = {}) {
+  let i = new Set(),
+    a = {},
+    o = (e, t = {}) =>
+      new g({
+        color: e,
+        roughness: 0.78,
+        metalness: 0.12,
+        flatShading: !0,
+        ...t,
+      });
+  for (let [t, n] of Object.entries(pe[e])) {
+    let e = [`light`, `amber`, `red`, `blue`].includes(t);
+    a[t] = o(
+      n,
+      t === `glass`
+        ? { roughness: 0.12, metalness: 0.55 }
+        : t === `metal` || t === `gun`
+          ? { roughness: 0.48, metalness: 0.6 }
+          : e
+            ? { emissive: n, emissiveIntensity: 0.35, roughness: 0.3 }
+            : t === `rubber`
+              ? { roughness: 0.95, metalness: 0 }
+              : {},
+    );
+  }
+  let c = ve(`tread`, () => {
+    let e = he();
+    return (e.repeat.set(3, 1), e);
+  });
+  a.tread = o(c ? 16777215 : 2500390, {
+    map: c,
+    roughness: 0.95,
+    metalness: 0,
+  });
+  let l = t ? ve(`camo` + t, () => ge(t)) : null;
+  l && ((a.paint.map = l), a.paint.color.set(16777215));
+  let u = ve(`mesh`, _e);
+  a.mesh = new g({
+    color: u ? 16777215 : 2762531,
+    map: u,
+    transparent: !!u,
+    alphaTest: u ? 0.4 : 0,
+    side: 2,
+    roughness: 0.7,
+    metalness: 0.4,
+  });
+  let d = (e, t, n, r, o) => {
+      i.add(t);
+      let s = new p(
+        t,
+        Array.isArray(n) ? n.map((e) => a[e] ?? e) : (a[n] ?? n),
+      );
+      return (
+        r && s.position.set(...r),
+        o && s.rotation.set(...o),
+        (n === `glass` || n === `mesh`) && (s.userData.seeThrough = !0),
+        (s.castShadow = s.receiveShadow = !0),
+        e.add(s),
+        s
+      );
+    },
+    m = new k(0, 1, 0),
+    h = (e, t, n, r, i) => {
+      let a = new k(...n),
+        o = new k(...r),
+        s = d(e, t, i);
+      return (
+        s.position.copy(a).add(o).multiplyScalar(0.5),
+        s.quaternion.setFromUnitVectors(m, o.sub(a).normalize()),
+        s
+      );
+    },
+    _ = (e, t) => Math.hypot(e[0] - t[0], e[1] - t[1], e[2] - t[2]),
+    v = (e, t, n) => {
+      if (n === 1) return;
+      e.computeBoundingBox();
+      let r = (e.boundingBox.min.y + e.boundingBox.max.y) / 2,
+        i = e.attributes.position;
+      for (let a = 0; a < i.count; a++) {
+        let o = Math.max(0, (i.getY(a) - r) / (e.boundingBox.max.y - r));
+        i.setX(a, t + (i.getX(a) - t) * (1 - (1 - n) * o));
+      }
+    },
+    b = {
+      mats: a,
+      team: (e) =>
+        o(K[e] ?? K[0], { emissive: K[e] ?? K[0], emissiveIntensity: 0.12 }),
+      box: (e, t, n, i = `paint`, a) => d(e, new r(...t), i, n, a),
+      cyl(e, t, n, r, i = `metal`, a = `y`, o = 12, c = t) {
+        let l = new s(c, t, n, o);
+        return (
+          a === `x`
+            ? l.rotateZ(-Math.PI / 2)
+            : a === `z` && l.rotateX(Math.PI / 2),
+          d(e, l, i, r)
+        );
+      },
+      ball: (e, t, n, r = `metal`, i = 12) =>
+        d(e, new O(t, i, Math.max(6, (i * 0.6) | 0)), r, n),
+      wheel(e, t, n, r, i = `dark`, a = 18) {
+        let o = new s(t, t, n, a);
+        o.rotateZ(Math.PI / 2);
+        let c = d(e, o, `tread`, r);
+        return (
+          b.cyl(e, t * 0.58, n + 0.03, r, i, `x`, 10),
+          b.cyl(e, t * 0.2, n + 0.07, r, `metal`, `x`, 8),
+          c
+        );
+      },
+      prism(e, t, n, r = 0, i = `paint`, a = 0.025, o = 1) {
+        let s = Math.max(0.01, n - 2 * a),
+          c = new T(new D(t.map(([e, t]) => new f(-e, t))), {
+            depth: s,
+            bevelEnabled: a > 0,
+            bevelSize: a,
+            bevelThickness: a,
+            bevelSegments: 1,
+            curveSegments: 1,
+          });
+        return (
+          c.rotateY(Math.PI / 2),
+          c.translate(r - s / 2, 0, 0),
+          v(c, r, o),
+          c.computeVertexNormals(),
+          d(e, c, i)
+        );
+      },
+      slab(e, t, n, r = 0, i = `paint`, a = 1, o = 0.025) {
+        let s = Math.max(0.01, n - 2 * o),
+          c = new T(new D(t.map(([e, t]) => new f(e, -t))), {
+            depth: s,
+            bevelEnabled: o > 0,
+            bevelSize: o,
+            bevelThickness: o,
+            bevelSegments: 1,
+            curveSegments: 1,
+          });
+        if ((c.rotateX(-Math.PI / 2), c.translate(0, r + o, 0), a !== 1)) {
+          let e = t.reduce((e, t) => e + t[0], 0) / t.length,
+            i = t.reduce((e, t) => e + t[1], 0) / t.length,
+            o = c.attributes.position;
+          for (let t = 0; t < o.count; t++)
+            o.getY(t) > r + n * 0.5 &&
+              (o.setX(t, e + (o.getX(t) - e) * a),
+              o.setZ(t, i + (o.getZ(t) - i) * a));
+        }
+        return (c.computeVertexNormals(), d(e, c, i));
+      },
+      taper(e, t, n, [i, a], [o, s], c, l = `paint`, u = 0, f = 0) {
+        let p = new r(1, 1, 1),
+          m = p.attributes.position;
+        for (let e = 0; e < m.count; e++) {
+          let r = m.getZ(e) + 0.5;
+          m.setXYZ(
+            e,
+            u + m.getX(e) * (i + (o - i) * r),
+            c + f * r + m.getY(e) * (a + (s - a) * r),
+            t + (n - t) * r,
+          );
+        }
+        return (p.computeVertexNormals(), d(e, p, l));
+      },
+      lathe(e, t, r, i = `paint`, a = 14, o = 1, s = 1) {
+        let c = new n(
+          t.map(([e, t]) => new f(t, e)),
+          a,
+        );
+        return (c.rotateX(Math.PI / 2), c.scale(o, s, 1), d(e, c, i, r));
+      },
+      beam: (e, t, n, i, a, o = `dark`) => h(e, new r(i, _(t, n), a), t, n, o),
+      tube: (e, t, n, r, i = `metal`, a = 8) =>
+        h(e, new s(r, r, _(t, n), a), t, n, i),
+      plane: (e, t, n, r, i, a) => d(e, new y(t, n), i, r, a),
+      group(e, t = [0, 0, 0], n) {
+        let r = new C();
+        return (r.position.set(...t), n && r.rotation.set(...n), e.add(r), r);
+      },
+      dispose() {
+        (i.forEach((e) => e.dispose()),
+          Object.values(a).forEach((e) => e.dispose()));
+      },
+    };
+  return b;
+}
+function be() {
+  let e = new C(),
+    t = new C(),
+    n = new C(),
+    r = new _(),
+    i = new C(),
+    a = new C();
+  return (
+    (r.name = `vehicle-muzzle`),
+    t.add(n),
+    { root: e, turret: t, elevation: n, muzzle: r, rotor: i, tailRotor: a }
+  );
+}
+function xe(e, t) {
+  let n = H(t);
+  return (
+    e.root.add(e.turret),
+    e.turret.position.fromArray(n.offset ?? [0, n.height, 0]),
+    (e.muzzle.position.z = -n.length),
+    e.elevation.add(e.muzzle),
+    n
+  );
+}
+function Se(e, t, n = {}) {
+  let r = new g({ color: 2500387, roughness: 0.95, flatShading: !0 }),
+    i = new Map();
+  t.root.traverse((e) => {
+    e.isMesh && i.set(e, e.material);
+  });
+  let a = !1;
+  return {
+    ...t,
+    recoil: null,
+    suspension: t.root,
+    tracks: null,
+    ...n,
+    setEngineHot() {},
+    setDestroyed(t) {
+      if (t !== a) {
+        a = t;
+        for (let [n, a] of i) n.material = t ? (a === e.mats.mesh ? a : r) : a;
+      }
+    },
+    releaseSource() {
+      e.dispose();
+    },
+    dispose() {
+      (e.dispose(), r.dispose());
+    },
+  };
+}
+function Ce(e) {
+  let t = ye(e.palette),
+    n = be(),
+    { root: r, turret: i, elevation: a } = n;
+  for (let e of [-1, 1]) {
+    let n = e * 1.38;
+    for (let e = 0; e < 7; e++)
+      t.wheel(r, 0.42, 0.5, [n, 0.47, -2.3 + e * 0.767], `dark`, 14);
+    (t.wheel(r, 0.34, 0.5, [n, 0.74, -3.02], `dark`, 12),
+      t.cyl(r, 0.4, 0.52, [n, 0.78, 3.02], `dark`, `x`, 12),
+      t.box(r, [0.64, 0.08, 5.3], [n, 0.04, 0], `rubber`),
+      t.box(r, [0.64, 0.08, 6.05], [n, 1.14, 0], `rubber`),
+      t.beam(r, [n, 0.04, -2.65], [n, 0.78, -3.38], 0.64, 0.08, `rubber`),
+      t.beam(r, [n, 0.04, 2.65], [n, 0.84, 3.44], 0.64, 0.08, `rubber`));
+  }
+  (t.prism(
+    r,
+    [
+      [-3.05, 0.4],
+      [-3.38, 1.05],
+      [3.2, 1.05],
+      [3, 0.4],
+    ],
+    2.1,
+    0,
+    `dark`,
+  ),
+    t.prism(
+      r,
+      [
+        [-3.45, 1.1],
+        [-3.32, 1.5],
+        [-2.15, 1.95],
+        [3.05, 1.98],
+        [3.22, 1.62],
+        [3.22, 1.1],
+      ],
+      3.46,
+    ),
+    t.box(r, [0.7, 0.06, 0.6], [0, 1.98, -2], `dark`));
+  for (let e of [-0.22, 0, 0.22])
+    t.box(r, [0.14, 0.08, 0.08], [e, 2, -2.32], `glass`);
+  for (let e of [-1, 1])
+    (t.box(r, [0.34, 0.16, 0.12], [e * 1.35, 1.52, -3.36], `dark`),
+      t.box(r, [0.1, 0.08, 0.04], [e * 1.28, 1.53, -3.43], `light`),
+      t.box(r, [0.08, 0.07, 0.04], [e * 1.44, 1.53, -3.43], `amber`),
+      t.tube(
+        r,
+        [e * 1.18, 1.44, -3.45],
+        [e * 1.18, 1.64, -3.38],
+        0.018,
+        `dark`,
+      ),
+      t.tube(
+        r,
+        [e * 1.52, 1.44, -3.45],
+        [e * 1.52, 1.64, -3.38],
+        0.018,
+        `dark`,
+      ),
+      t.box(r, [0.08, 0.12, 0.2], [e * 0.7, 1.2, -3.45], `dark`),
+      t.box(r, [0.18, 0.18, 0.06], [e * 1.35, 1.52, 3.25], `red`));
+  t.box(r, [2.3, 0.42, 0.06], [0, 1.4, 3.25], `black`);
+  for (let e of [1.6, 2.3]) t.box(r, [1.8, 0.03, 0.55], [0, 2, e], `black`);
+  for (let n of [-1, 1])
+    if (e.era) {
+      for (let e = 0; e < 2; e++)
+        for (let i = 0; i < 9; i++)
+          t.box(
+            r,
+            [0.14, 0.26, 0.5],
+            [n * 1.84, 0.78 + e * 0.28, -2.9 + i * 0.56],
+            e ? `paint` : `dark`,
+          );
+      for (let e = 0; e < 9; e++)
+        t.box(r, [0.04, 1.1, 0.04], [n * 1.95, 1.3, 2.05 + e * 0.16], `dark`);
+      (t.box(r, [0.05, 0.05, 1.45], [n * 1.95, 1.84, 2.72], `dark`),
+        t.box(r, [0.05, 0.05, 1.45], [n * 1.95, 0.8, 2.72], `dark`));
+    } else {
+      (t.box(r, [0.07, 0.52, 5.7], [n * 1.77, 0.86, -0.35]),
+        t.box(r, [0.08, 0.06, 5.7], [n * 1.78, 0.6, -0.35], `trim`));
+      for (let e = 1; e < 6; e++)
+        t.box(
+          r,
+          [0.075, 0.5, 0.02],
+          [n * 1.775, 0.86, -3.2 + e * 0.95],
+          `trim`,
+        );
+      t.box(r, [0.02, 0.2, 0.34], [n * 1.81, 0.9, 1.55], `black`);
+    }
+  if (e.era)
+    for (let e = 0; e < 16; e++)
+      t.box(r, [0.04, 1, 0.04], [-1.5 + e * 0.2, 1.35, 3.42], `dark`);
+  let o = xe(n, 2);
+  (t.cyl(i, 1.25, 0.14, [0, -0.83, 0.1], `dark`, `y`, 16),
+    t.slab(
+      i,
+      [
+        [-0.55, -1.75],
+        [0.55, -1.75],
+        [1.56, -1.15],
+        [1.64, 0.35],
+        [1.46, 1.25],
+        [1.12, 1.58],
+        [-1.12, 1.58],
+        [-1.46, 1.25],
+        [-1.64, 0.35],
+        [-1.56, -1.15],
+      ],
+      1.05,
+      -0.76,
+      `paint`,
+      0.93,
+    ));
+  for (let n of [-1, 1]) {
+    t.box(i, [0.34, 0.2, 0.3], [n * 1.47, 0.02, -0.9], `dark`, [0, n * 0.5, 0]);
+    for (let e = 0; e < 3; e++)
+      t.cyl(
+        i,
+        0.04,
+        0.12,
+        [n * (1.42 + e * 0.07), 0.13, -1.05 - e * 0.05],
+        `black`,
+        `z`,
+        6,
+      );
+    (t.box(
+      i,
+      [0.12, 0.42, 1.3],
+      [n * 1.62, -0.25, 0.55],
+      e.era ? `canvas` : `trim`,
+    ),
+      t.cyl(i, 0.012, 2.3, [n * 0.95, 1.4, 1.35], `black`, `y`, 4),
+      t.cyl(i, 0.05, 0.1, [n * 0.95, 0.33, 1.35], `dark`, `y`, 6));
+  }
+  (t.box(i, [0.5, 0.32, 0.6], [0.95, 0.44, -0.85]),
+    t.box(i, [0.4, 0.2, 0.02], [0.95, 0.46, -1.16], `glass`),
+    t.cyl(i, 0.16, 0.3, [-0.45, 0.45, 0.1], `dark`, `y`, 10),
+    t.box(i, [0.18, 0.12, 0.04], [-0.45, 0.52, -0.06], `glass`),
+    t.cyl(i, 0.015, 0.6, [0, 0.6, 1.3], `black`, `y`, 4),
+    t.box(i, [2.4, 0.05, 0.05], [0, 0.05, 2.25], `dark`),
+    t.box(i, [2.4, 0.05, 0.05], [0, -0.35, 2.25], `dark`));
+  for (let e of [-1, 1]) {
+    t.box(i, [0.05, 0.05, 0.7], [e * 1.2, 0.05, 1.9], `dark`);
+    for (let n of [1.62, 2.25])
+      t.box(i, [0.05, 0.45, 0.05], [e * 1.2, -0.15, n], `dark`);
+  }
+  (t.box(i, [0.9, 0.34, 0.5], [-0.55, -0.12, 1.9], `canvas`),
+    t.box(i, [0.7, 0.28, 0.45], [0.45, -0.15, 1.92], e.era ? `trim` : `canvas`),
+    t.box(i, [0.35, 0.22, 0.25], [0.95, -0.2, 1.95], `dark`));
+  let s = t.group(i, [0.7, 0.29, 0.55]);
+  (t.cyl(s, 0.4, 0.2, [0, 0.1, 0], `paint`, `y`, 12),
+    t.cyl(s, 0.3, 0.05, [0, 0.22, 0], `dark`, `y`, 12),
+    e.rws
+      ? (t.box(s, [0.45, 0.36, 0.5], [0, 0.45, -0.05], `dark`),
+        t.box(s, [0.2, 0.16, 0.04], [0.12, 0.5, -0.31], `glass`),
+        t.cyl(s, 0.03, 0.9, [-0.1, 0.42, -0.72], `gun`, `z`, 6))
+      : (t.box(s, [0.18, 0.18, 0.55], [0, 0.42, -0.35], `gun`),
+        t.cyl(s, 0.03, 0.85, [0, 0.44, -1.05], `gun`, `z`, 6),
+        t.box(s, [0.2, 0.16, 0.18], [0.16, 0.36, -0.3], `dark`)));
+  let c = t.group(i, [-0.72, 0.29, 0.5]);
+  if (
+    (t.cyl(c, 0.34, 0.08, [0, 0.04, 0], `dark`, `y`, 12),
+    t.box(c, [0.12, 0.14, 0.45], [0, 0.35, -0.35], `gun`),
+    t.cyl(c, 0.025, 0.6, [0, 0.37, -0.85], `gun`, `z`, 6),
+    t.tube(c, [0, 0.05, -0.2], [0, 0.3, -0.3], 0.02, `dark`),
+    e.era)
+  ) {
+    (t.box(c, [0.85, 0.55, 0.05], [0, 0.35, -0.55]),
+      t.box(c, [0.28, 0.2, 0.02], [0.2, 0.42, -0.58], `glass`));
+    for (let e of [-1, 1])
+      t.box(c, [0.05, 0.55, 0.6], [e * 0.45, 0.35, -0.22], `paint`, [
+        0,
+        e * 0.25,
+        0,
+      ]);
+  }
+  return (
+    t.box(a, [0.95, 0.52, 0.36], [0, -0.02, -1.72]),
+    t.cyl(a, 0.15, 0.55, [0, 0, -2.08], `paint`, `z`, 10, 0.17),
+    t.cyl(a, 0.09, 1.45, [0, 0, -3], `paint`, `z`, 10, 0.115),
+    t.cyl(a, 0.14, 0.32, [0, 0, -2.72], `paint`, `z`, 10),
+    t.cyl(a, 0.105, 0.1, [0, 0, -3.67], `dark`, `z`, 10),
+    t.box(a, [0.14, 0.12, 0.3], [0.32, 0.18, -1.9], `dark`),
+    t.box(i, [0.5, 0.03, 0.4], [0, 0.31, 1], t.team(e.team)),
+    Se(t, n, { gun: o })
+  );
+}
+function we(e) {
+  let t = ye(e.palette, { camo: e.camo }),
+    n = be(),
+    { root: r } = n;
+  t.box(r, [1.2, 0.42, 3.55], [0, 0.72, 0], `dark`);
+  for (let e of [-1.3, 1.28]) {
+    t.box(r, [1.7, 0.12, 0.14], [0, 0.45, e], `black`);
+    for (let n of [-1, 1])
+      t.wheel(r, 0.45, 0.38, [n * 0.88, 0.45, e], `dark`, 20);
+  }
+  (t.prism(
+    r,
+    [
+      [-2.02, 0.95],
+      [-2.05, 1.22],
+      [-1.3, 1.3],
+      [-0.72, 1.33],
+      [1.9, 1.33],
+      [1.95, 0.95],
+    ],
+    2.1,
+  ),
+    t.prism(
+      r,
+      [
+        [-0.72, 1.3],
+        [-0.58, 1.9],
+        [1.28, 1.9],
+        [1.34, 1.3],
+      ],
+      1.98,
+    ),
+    t.box(r, [1.96, 0.6, 1.56], [0, 0.66, 0.02]));
+  for (let e of [-1, 1]) {
+    (t.box(r, [0.1, 0.07, 0.95], [e * 1.02, 0.97, -1.3], `trim`),
+      t.box(r, [0.1, 0.07, 0.95], [e * 1.02, 0.97, 1.28], `trim`),
+      t.box(
+        r,
+        [0.84, 0.44, 0.03],
+        [e * 0.44, 1.62, -0.668],
+        `glass`,
+        [0.27, 0, 0],
+      ));
+    for (let [n, i] of [
+      [-0.25, 0.5],
+      [0.55, 0.5],
+    ])
+      (t.box(r, [0.03, 0.3, i], [e * 1.005, 1.64, n], `glass`),
+        t.box(r, [0.02, 0.56, 0.02], [e * 1, 1.58, n + 0.33], `trim`),
+        t.box(r, [0.03, 0.03, 0.1], [e * 1.01, 1.42, n + 0.1], `black`));
+    (t.box(r, [0.05, 0.2, 0.14], [e * 1.12, 1.62, -0.62], `black`),
+      t.tube(r, [e * 0.98, 1.5, -0.62], [e * 1.1, 1.55, -0.62], 0.015, `black`),
+      t.cyl(r, 0.1, 0.05, [e * 0.76, 1.08, -2.06], `light`, `z`, 12),
+      t.box(r, [0.1, 0.08, 0.04], [e * 0.95, 1.08, -2.06], `amber`),
+      t.box(r, [0.12, 0.14, 0.04], [e * 0.88, 1.12, 1.97], `red`),
+      t.box(r, [0.1, 0.12, 0.18], [e * 0.7, 0.78, -2.2], `dark`));
+  }
+  (t.box(r, [0.08, 0.48, 0.05], [0, 1.62, -0.668], `paint`, [0.27, 0, 0]),
+    t.box(r, [1.3, 0.26, 0.03], [0, 1.08, -2.05], `dark`));
+  for (let e = -3; e <= 3; e++)
+    t.box(r, [0.06, 0.23, 0.03], [e * 0.17, 1.08, -2.07], `black`);
+  (t.box(r, [2.15, 0.2, 0.18], [0, 0.82, -2.12], `dark`),
+    t.box(r, [1.2, 0.03, 0.75], [0, 1.33, -1.6]),
+    t.box(r, [0.5, 0.02, 0.25], [0, 1.35, -1.1], `black`),
+    t.box(r, [1.6, 0.26, 0.03], [0, 1.64, 1.3], `glass`),
+    t.box(r, [1.9, 0.28, 0.58], [0, 1.47, 1.63]),
+    t.box(r, [0.5, 0.03, 0.42], [0, 1.915, 0.95], t.team(e.team)));
+  let i = t.group(r, [0, 1.9, 0.25]);
+  if ((t.cyl(i, 0.56, 0.1, [0, 0.05, 0], `dark`, `y`, 14), e.cupola)) {
+    t.box(i, [1.2, 0.66, 0.07], [0, 0.43, -0.48]);
+    for (let e of [-1, 1])
+      (t.box(i, [0.32, 0.22, 0.02], [e * 0.3, 0.5, -0.52], `glass`),
+        t.box(i, [0.07, 0.66, 0.8], [e * 0.62, 0.43, -0.1], `paint`, [
+          0,
+          e * 0.18,
+          0,
+        ]),
+        t.box(i, [0.02, 0.2, 0.3], [e * 0.66, 0.5, -0.1], `glass`, [
+          0,
+          e * 0.18,
+          0,
+        ]),
+        t.box(i, [0.07, 0.4, 0.4], [e * 0.5, 0.3, 0.42], `paint`, [
+          0,
+          -e * 0.5,
+          0,
+        ]));
+    (t.box(i, [1.2, 0.06, 0.4], [0, 0.78, -0.38], `paint`, [-0.18, 0, 0]),
+      e.armed &&
+        (t.box(i, [0.16, 0.18, 0.5], [0, 0.33, -0.3], `gun`),
+        t.cyl(i, 0.028, 0.6, [0, 0.36, -0.8], `gun`, `z`, 6)));
+  } else {
+    (t.box(i, [1.05, 0.48, 0.06], [0, 0.34, -0.42]),
+      t.box(i, [0.2, 0.14, 0.02], [0.28, 0.42, -0.46], `glass`));
+    for (let e of [-1, 1])
+      t.box(i, [0.06, 0.4, 0.45], [e * 0.6, 0.3, -0.25], `paint`, [
+        0,
+        e * 0.4,
+        0,
+      ]);
+    e.armed &&
+      (t.box(i, [0.2, 0.2, 0.6], [0, 0.48, -0.25], `gun`),
+      t.cyl(i, 0.035, 0.95, [0, 0.5, -1], `gun`, `z`, 8),
+      t.cyl(i, 0.055, 0.1, [0, 0.5, -1.45], `gun`, `z`, 8),
+      t.box(i, [0.18, 0.15, 0.28], [0.2, 0.42, -0.2], `dark`),
+      t.tube(i, [0, 0.1, -0.1], [0, 0.4, -0.2], 0.03, `dark`));
+    for (let e of [-1, 1])
+      (t.cyl(r, 0.04, 0.12, [e * 0.85, 1.67, 1.8], `black`, `y`, 6),
+        t.cyl(r, 0.01, 2.8, [e * 0.85, 3.1, 1.8], `black`, `y`, 4));
+    for (let e of [-1, 1])
+      t.box(r, [0.2, 0.36, 0.14], [e * 0.72, 1.8, 1.72], `dark`);
+  }
+  return Se(t, n);
+}
+function Te(e) {
+  let t = ye(e.palette),
+    n = be(),
+    { root: r, turret: i, elevation: a } = n,
+    o = e.mrap,
+    s = o ? 0.62 : 0.58,
+    c = o ? [-1.85, 1.75] : [-1.85, 1.9];
+  t.box(r, [1.6, 0.45, 4.9], [0, 0.78, 0], `dark`);
+  for (let e of c) {
+    t.box(r, [2, 0.14, 0.16], [0, s, e], `black`);
+    for (let n of [-1, 1])
+      t.wheel(r, s, o ? 0.52 : 0.46, [n * 1.12, s, e], `dark`, 22);
+  }
+  if (o) {
+    (t.prism(
+      r,
+      [
+        [-2.95, 1.05],
+        [-3, 1.55],
+        [-2.25, 1.86],
+        [2.78, 1.86],
+        [2.86, 1.05],
+      ],
+      2.72,
+    ),
+      t.prism(
+        r,
+        [
+          [-2.95, 1.5],
+          [-2.3, 1.95],
+          [-1.6, 1.98],
+          [-1.6, 1.8],
+          [-2.95, 1.45],
+        ],
+        1.5,
+        0,
+        `paint`,
+      ),
+      t.prism(
+        r,
+        [
+          [-1.62, 1.82],
+          [-1.26, 2.54],
+          [2.7, 2.56],
+          [2.8, 1.82],
+        ],
+        2.56,
+        0,
+        `paint`,
+        0.03,
+        0.9,
+      ));
+    for (let e = 0; e < 6; e++)
+      t.box(
+        r,
+        [1.7, 0.045, 0.14],
+        [0, 1.1 + e * 0.075, -3.02],
+        `dark`,
+        [0.5, 0, 0],
+      );
+    for (let e of [-1, 1])
+      (t.box(r, [0.36, 0.24, 0.06], [e * 1.05, 1.45, -2.99], `dark`),
+        t.box(r, [0.28, 0.16, 0.03], [e * 1.05, 1.45, -3.02], `light`),
+        t.plane(r, 0.42, 0.3, [e * 1.05, 1.45, -3.07], `mesh`),
+        t.box(r, [0.18, 0.1, 0.05], [e * 1, 1.8, -2.55], `amber`, [0.4, 0, 0]));
+    let e = Math.atan2(0.36, 0.72);
+    for (let n of [-1, 1])
+      t.box(r, [0.98, 0.64, 0.03], [n * 0.52, 2.17, -1.46], `glass`, [e, 0, 0]);
+    (t.plane(r, 2.2, 0.72, [0, 2.2, -1.56], `mesh`, [e, 0, 0]),
+      t.box(r, [2.6, 0.22, 0.25], [0, 0.92, -3.02], `dark`));
+    for (let e of [-1, 1])
+      t.box(r, [0.12, 0.2, 0.2], [e * 0.6, 0.88, -3.18], `dark`);
+  } else {
+    (t.prism(
+      r,
+      [
+        [-2.75, 1],
+        [-2.8, 1.45],
+        [-1.75, 1.62],
+        [2.75, 1.62],
+        [2.8, 1],
+      ],
+      2.62,
+    ),
+      t.prism(
+        r,
+        [
+          [-1.75, 1.58],
+          [-1.35, 2.42],
+          [2.7, 2.45],
+          [2.78, 1.58],
+        ],
+        2.5,
+        0,
+        `paint`,
+        0.03,
+        0.96,
+      ));
+    let e = Math.atan2(0.4, 0.84);
+    for (let n of [-1, 1])
+      t.box(r, [1.08, 0.72, 0.03], [n * 0.57, 2.02, -1.585], `glass`, [
+        e,
+        0,
+        0,
+      ]);
+    (t.box(r, [1.5, 0.34, 0.03], [0, 1.22, -2.81], `dark`),
+      t.plane(r, 1.5, 0.34, [0, 1.22, -2.84], `mesh`));
+    for (let e of [-1, 1]) {
+      (t.box(r, [0.3, 0.18, 0.04], [e * 1, 1.24, -2.81], `light`),
+        t.box(r, [0.14, 0.1, 0.04], [e * 1.25, 1.24, -2.81], `amber`));
+      for (let n of [0.45, 1.12])
+        t.tube(r, [e * n, 0.75, -3.05], [e * n, 1.48, -3], 0.035, `paint`);
+      (t.tube(r, [e * 1.12, 1.48, -3], [e * 1.2, 1.45, -2.78], 0.035, `paint`),
+        t.tube(
+          r,
+          [e * 1.12, 0.78, -3.05],
+          [e * 1.2, 0.85, -2.78],
+          0.035,
+          `paint`,
+        ));
+    }
+    for (let e of [0.9, 1.45])
+      t.tube(r, [-1.14, e, -3.03], [1.14, e, -3.03], 0.035, `paint`);
+    (t.box(r, [0.72, 0.1, 0.18], [0, 2.5, -1.15], `dark`),
+      t.box(r, [0.18, 0.1, 0.15], [-0.22, 2.56, -1.15], `blue`),
+      t.box(r, [0.18, 0.1, 0.15], [0.22, 2.56, -1.15], `red`),
+      t.box(r, [2.6, 0.2, 0.2], [0, 0.85, -2.86], `dark`));
+  }
+  let l = o ? 2.56 : 2.45;
+  for (let e of [-1, 1]) {
+    let n = e * (o ? 1.29 : 1.26);
+    for (let i of o ? [-1, 0.4] : [-0.95, 0.45, 1.6])
+      (t.box(r, [0.03, 0.36, 0.5], [n + e * 0.01, 2, i], `glass`),
+        t.box(r, [0.02, 0.9, 0.02], [n + e * 0.005, 1.75, i + 0.42], `trim`));
+    (t.box(r, [0.3, 0.05, 1.6], [e * 1.35, 0.98, -0.3], `dark`),
+      t.tube(r, [n, 2.05, -1.45], [e * 1.55, 2.1, -1.55], 0.02, `black`),
+      t.box(r, [0.08, 0.3, 0.2], [e * 1.58, 2.02, -1.55], `black`),
+      t.box(r, [0.16, 0.24, 0.05], [e * 1, 1.4, 2.83], `red`),
+      t.cyl(r, 0.01, 1.8, [e * 1, l + 0.9, 2.3], `black`, `y`, 4));
+  }
+  (t.box(r, [0.9, 1, 0.04], [0, 1.7, 2.84], `trim`),
+    t.box(r, [0.4, 0.3, 0.02], [0, 2, 2.87], `glass`),
+    t.box(r, [0.5, 0.03, 0.45], [0, l + 0.02, 1.6], t.team(e.team)));
+  let u = xe(n, 1),
+    d = l - u.height;
+  if ((t.cyl(i, 0.65, 0.14, [0, d + 0.07, 0], `dark`, `y`, 16), o)) {
+    t.slab(
+      i,
+      [
+        [-0.35, -0.72],
+        [0.35, -0.72],
+        [0.72, -0.35],
+        [0.72, 0.35],
+        [0.35, 0.72],
+        [-0.35, 0.72],
+        [-0.72, 0.35],
+        [-0.72, -0.35],
+      ],
+      0.66,
+      d + 0.12,
+      `paint`,
+      0.92,
+    );
+    for (let e of [-1, 1])
+      (t.box(i, [0.28, 0.24, 0.03], [e * 0.2, d + 0.5, -0.705], `glass`),
+        t.box(i, [0.03, 0.24, 0.3], [e * 0.7, d + 0.5, 0], `glass`));
+    (t.cyl(i, 0.28, 0.06, [0, d + 0.8, 0.15], `dark`, `y`, 10),
+      t.cyl(i, 0.09, 0.18, [0.45, d + 0.86, -0.3], `metal`, `z`, 10),
+      t.cyl(i, 0.07, 0.02, [0.45, d + 0.86, -0.4], `light`, `z`, 10));
+  } else {
+    (t.box(i, [1.15, 0.58, 0.06], [0, d + 0.44, -0.55]),
+      t.box(i, [0.24, 0.16, 0.02], [0.3, d + 0.55, -0.59], `glass`));
+    for (let e of [-1, 1])
+      (t.box(i, [0.06, 0.55, 0.6], [e * 0.65, d + 0.42, -0.25], `paint`, [
+        0,
+        e * 0.35,
+        0,
+      ]),
+        t.cyl(
+          i,
+          0.1,
+          0.32,
+          [e * 0.75, d + 0.8, -0.35],
+          `metal`,
+          `z`,
+          10,
+          0.05,
+        ));
+  }
+  return (
+    t.box(a, [0.32, 0.3, 0.8], [0, 0, -0.55], `gun`),
+    t.box(a, [0.2, 0.2, 0.35], [0.26, -0.05, -0.4], `dark`),
+    t.cyl(
+      a,
+      0.05,
+      u.length - 1,
+      [0, 0, -(u.length + 0.95) / 2],
+      `gun`,
+      `z`,
+      8,
+      0.065,
+    ),
+    t.cyl(a, 0.075, 0.2, [0, 0, -u.length + 0.1], `gun`, `z`, 8),
+    Se(t, n, { gun: u })
+  );
+}
+function Y(e, t, n) {
+  let r = ae(e, { paint: t, team: n.team, doors: !!n.open });
+  for (let [e, t] of Object.entries(r.materials)) {
+    if (e === `glass`) continue;
+    let n = [`metal`, `dark`, `lens`, `blade`].includes(e);
+    ((t.roughness = n ? 0.45 : 0.75), (t.metalness = n ? 0.5 : 0.15));
+  }
+  let { root: i, turret: a, elevation: o, muzzle: s } = r,
+    c = e === `ah64e` ? 3 : 4,
+    l = H(c),
+    u = new Set();
+  i.traverse((e) => {
+    e.isMesh && u.add(e.geometry);
+  });
+  let d = o.position.y;
+  for (let e of a.children) e !== o && (e.position.y -= d);
+  (a.position.fromArray(l.offset ?? [0, l.height, 0]),
+    o.position.set(0, 0, 0),
+    s.position.set(0, 0, -l.length),
+    (s.name = `vehicle-muzzle`),
+    (!n.armed || c === 4) &&
+      (i.remove(a), a.clear(), a.add(o), o.clear(), o.add(s)));
+  let f = new g({ color: 2500387, roughness: 0.95, flatShading: !0 }),
+    p = new Map();
+  i.traverse((e) => {
+    e.isMesh && p.set(e, e.material);
+  });
+  let m = !1,
+    h = () => {
+      (u.forEach((e) => e.dispose()),
+        Object.values(r.materials).forEach((e) => e.dispose()));
+    };
+  return {
+    root: i,
+    turret: a,
+    elevation: o,
+    muzzle: s,
+    rotor: r.rotor,
+    tailRotor: r.tailRotor,
+    tail: r.tail,
+    recoil: null,
+    suspension: i,
+    tracks: null,
+    setEngineHot() {},
+    setDestroyed(e) {
+      if (e !== m) {
+        m = e;
+        for (let [t, n] of p) t.material = e ? f : n;
+      }
+    },
+    releaseSource: h,
+    dispose() {
+      (h(), f.dispose());
+    },
+  };
+}
+var Ee = [
+  {
+    key: `tank-a`,
+    type: 2,
+    name: `Desert MBT`,
+    note: `Long flat turret, skirts, bustle rack, open commander MG (ref 1)`,
+    build: (e) => Ce({ palette: `sand`, ...e }),
+  },
+  {
+    key: `tank-b`,
+    type: 2,
+    name: `Urban-kit MBT`,
+    note: `Reactive tiles, slat cage, remote weapon station, shielded loader`,
+    build: (e) => Ce({ palette: `olive`, era: !0, rws: !0, ...e }),
+  },
+  {
+    key: `jeep-a`,
+    type: 0,
+    name: `Camo hardtop`,
+    note: `Desert camo, tall armoured gunner cupola with windows (ref 2)`,
+    build: (e) => we({ palette: `sand`, camo: 7, cupola: !0, ...e }),
+  },
+  {
+    key: `jeep-b`,
+    type: 0,
+    name: `Ring-mount patrol`,
+    note: `Plain sand, low shield with heavy MG, whips, jerrycans (ref 3)`,
+    build: (e) => we({ palette: `sand`, ...e }),
+  },
+  {
+    key: `apc-a`,
+    type: 1,
+    name: `Crew carrier`,
+    note: `Long armoured cab, brush guard, beacons, open gunner ring (ref 4)`,
+    build: (e) => Te({ palette: `sand`, ...e }),
+  },
+  {
+    key: `apc-b`,
+    type: 1,
+    name: `Faceted MRAP`,
+    note: `Louvred nose, mesh guards, big tyres, windowed turret (ref 5)`,
+    build: (e) => Te({ palette: `sand`, mrap: !0, ...e }),
+  },
+  {
+    key: `heli3-a`,
+    type: 3,
+    name: `AH-64E Apache`,
+    note: `Olive; tandem cockpit, Longbow radar, chin cannon, stub-wing stores (real size)`,
+    build: (e) => Y(`ah64e`, `olive`, e),
+  },
+  {
+    key: `heli3-b`,
+    type: 3,
+    name: `AH-64E Apache (sand)`,
+    note: `Sand finish of the same airframe`,
+    build: (e) => Y(`ah64e`, `sand`, e),
+  },
+  {
+    key: `heli4-a`,
+    type: 4,
+    name: `UH-60M Black Hawk`,
+    note: `Olive; cabin doors closed (real size)`,
+    build: (e) => Y(`uh60m`, `olive`, e),
+  },
+  {
+    key: `heli4-b`,
+    type: 4,
+    name: `UH-60M Black Hawk (doors open)`,
+    note: `Black; cabin doors slid back`,
+    build: (e) => Y(`uh60m`, `black`, { ...e, open: !0 }),
+  },
+];
+function De({ batch: e = !0, bodies: t = null, thermal: n = !1 } = {}) {
+  let i = t ? ce(t) : null,
+    o = se(),
+    c = new Set(),
+    l = new r(1, 1, 1),
+    u = new s(1, 1, 1, 12),
+    d = new O(1, 12, 8),
+    f = Object.fromEntries(
+      Object.entries({
+        hull: 5858642,
+        armor: 3687996,
+        tire: 2106919,
+        glass: 1651774,
+        metal: 7963262,
+        light: 14733201,
+        amber: 13209650,
+        cobalt: 11023406,
+        wreck: 2632231,
+      }).map(([e, t]) => [
+        e,
+        new g({
+          color: t,
+          roughness: e === `glass` ? 0.25 : 0.8,
+          metalness: e === `metal` ? 0.55 : 0.12,
+          flatShading: !0,
+        }),
+      ]),
+    );
+  function m(e, t) {
+    let n = F[e],
+      r = [];
+    for (let i of t)
+      for (let t of i.children.filter((e) => e.isMesh)) {
+        let i = t.geometry;
+        if (!i.attributes.thermalHeat) {
+          let t = i.attributes.position,
+            r = new Float32Array(t.count);
+          for (let i = 0; i < t.count; i++) {
+            let a = Math.hypot(
+              t.getX(i) / 1.1,
+              (t.getY(i) - (n.air ? 2 : 1.3)) / 0.85,
+              (t.getZ(i) - (n.air ? 0 : e === 0 ? -1.15 : n.l * 0.3)) / 1.25,
+            );
+            r[i] = 0.95 * Math.max(0, 1 - a * 0.55);
+          }
+          (i.setAttribute(`thermalHeat`, new a(r, 1)),
+            i.setAttribute(
+              `thermalStrength`,
+              new a(new Float32Array(t.count).fill(1), 1),
+            ));
+        }
+        ((t.userData.thermalEngineOn = !1), r.push(t));
+      }
+    return r;
+  }
+  function h(t, r, i, a) {
+    let s = Ee.filter((e) => e.type === t)[+(a === `b`)],
+      c = s.build({ team: r, armed: i }),
+      l = new C(),
+      u = c.root,
+      { turret: d, elevation: p, rotor: h, tailRotor: g, muzzle: _ } = c;
+    (l.add(u), d.parent && l.add(d));
+    let v = [u, d, p, h, g, ...(c.tail ? [c.tail] : [])];
+    l.updateMatrixWorld(!0);
+    for (let e of v) {
+      let t = [];
+      e.traverse((n) => {
+        if (!n.isMesh || n.parent === e) return;
+        let r = n.parent;
+        for (; r && !v.includes(r);) r = r.parent;
+        r === e && t.push(n);
+      });
+      for (let n of t) e.attach(n);
+    }
+    e &&
+      (v.forEach((e, t) => o.pack(e, `study/${s.key}/${r}/${+!!i}/${t}`)),
+      c.releaseSource());
+    let y = n ? m(t, [u]) : [],
+      b = new Map();
+    l.traverse((e) => {
+      e.isMesh && b.set(e, e.material);
+    });
+    let x = !1;
+    return {
+      root: l,
+      rotor: h,
+      tailRotor: g,
+      tail: c.tail ?? null,
+      turret: d,
+      elevation: p,
+      recoil: null,
+      suspension: u,
+      muzzle: _,
+      tracks: null,
+      variant: s.key,
+      setEngineHot(e) {
+        for (let t of y) t.userData.thermalEngineOn = e;
+      },
+      dispose() {
+        e || c.dispose();
+      },
+      setDestroyed(e) {
+        if (e !== x) {
+          x = e;
+          for (let [t, n] of b) t.material = e ? f.wreck : n;
+        }
+      },
+    };
+  }
+  function v(t, r, a = !0, s = null) {
+    if (s) return h(t, r, a, s);
+    let g = F[t],
+      v = new C(),
+      y = new C(),
+      b = new C(),
+      x = new C(),
+      S = new C(),
+      w = new _(),
+      T = new C(),
+      E = new C(),
+      D = (e, t, n, r = `hull`, i = v) => {
+        let a = new p(e, f[r]);
+        return (
+          a.scale.set(...t),
+          a.position.set(...n),
+          (a.castShadow = !0),
+          (a.receiveShadow = !0),
+          i.add(a),
+          a
+        );
+      },
+      O = (e, t, n, r) => D(l, e, t, n, r);
+    if (i) {
+      if (
+        (t === 2
+          ? (v.add(S), i.attach(S, t), (v.userData.authoredBody = t))
+          : i.attach(v, t),
+        g.air)
+      ) {
+        (v.add(T),
+          (T.position.y = 2.8),
+          O([0.15, 0.8, 0.15], [0, -0.25, 0], `metal`, T));
+        for (let e of [0, Math.PI / 2]) {
+          let n = O([t === 4 ? 11 : 8, 0.05, 0.22], [0, 0.2, 0], `armor`, T);
+          n.rotation.y = e;
+        }
+        (v.add(E), E.position.set(0.25, 1.8, g.l * 0.86));
+        for (let e of [0, Math.PI / 2]) {
+          let t = O([0.08, 1.8, 0.12], [0, 0, 0], `metal`, E);
+          t.rotation.x = e;
+        }
+      } else if (t === 0) {
+        let e = D(u, [0.19, 0.04, 0.19], [-0.48, 1.38, -0.15], `tire`);
+        e.rotation.x = Math.PI * 0.35;
+      }
+    } else if (g.air) {
+      (D(d, [g.w * 0.52, 0.94, g.l * 0.3], [0, 1.3, -0.3]),
+        D(d, [g.w * 0.45, 0.75, 1.05], [0, 1.55, -g.l * 0.3], `glass`));
+      let e = D(u, [0.22, g.l * 0.75, 0.22], [0, 1.4, g.l * 0.47], `armor`);
+      ((e.rotation.x = Math.PI / 2),
+        O([0.14, 1.45, 1.2], [0, 1.7, g.l * 0.83], `armor`),
+        O([2.1, 0.1, 0.7], [0, 1.5, g.l * 0.73], `armor`));
+      for (let e of [-1, 1]) {
+        O([0.11, 0.11, g.l * 0.7], [e, 0.15, 0], `metal`);
+        for (let t of [-0.8, 0.8]) O([0.08, 0.65, 0.1], [e, 0.48, t], `metal`);
+      }
+      (v.add(T),
+        (T.position.y = 2.8),
+        O([0.15, 0.8, 0.15], [0, -0.25, 0], `metal`, T));
+      for (let e of [0, Math.PI / 2]) {
+        let n = O(
+          [g.air && t === 4 ? 11 : 8, 0.05, 0.22],
+          [0, 0.2, 0],
+          `armor`,
+          T,
+        );
+        n.rotation.y = e;
+      }
+      (v.add(E), E.position.set(0.25, 1.8, g.l * 0.86));
+      for (let e of [0, Math.PI / 2]) {
+        let t = O([0.08, 1.8, 0.12], [0, 0, 0], `metal`, E);
+        t.rotation.x = e;
+      }
+      if (t === 4 && a) {
+        O([5, 0.15, 1], [0, 1.2, 0.3], `armor`);
+        for (let e of [-2, 2]) {
+          let t = D(u, [0.32, 1.5, 0.32], [e, 1, 0.3], `armor`);
+          t.rotation.x = Math.PI / 2;
+        }
+      } else
+        for (let e of [-1.3, 1.3]) O([0.7, 0.12, 1.8], [e, 0.85, 0.1], `armor`);
+    } else {
+      if (
+        (O([g.w, 0.55, g.l], [0, 0.65, 0], `armor`),
+        O(
+          [g.w * 0.9, t === 0 ? 0.12 : 0.7, g.l * 0.75],
+          [0, t === 0 ? 0.86 : 1.13, 0],
+        ),
+        t === 0)
+      ) {
+        (O([1.7, 0.25, 1.25], [0, 1.35, -1.15]),
+          O([1.65, 0.1, 1.75], [0, 2.12, 0.35], `armor`),
+          O([1.65, 0.65, 0.08], [0, 1.72, -0.5], `glass`));
+        for (let e of [-0.83, 0.83])
+          for (let t of [-0.5, 1.2])
+            O([0.09, 0.85, 0.09], [e, 1.65, t], `metal`);
+        O([1.7, 0.65, 0.12], [0, 1.2, 1.65]);
+      }
+      if (t === 0) {
+        for (let e of [-0.48, 0.48])
+          for (let t of [0.25, 1])
+            (O([0.55, 0.1, 0.5], [e, 0.91, t], `tire`),
+              O([0.55, 0.45, 0.1], [e, 1.18, t + 0.25], `tire`));
+        let e = D(u, [0.19, 0.04, 0.19], [-0.48, 1.38, -0.15], `tire`);
+        e.rotation.x = Math.PI * 0.35;
+      } else
+        (O([g.w * 0.76, 0.65, g.l * 0.5], [0, 1.65, 0.35]),
+          O(
+            [t === 2 ? 1.65 : 1.05, 0.6, t === 2 ? 1.8 : 1.05],
+            [0, 2.15, 0],
+            `armor`,
+          ),
+          O(
+            [t === 2 ? 2 : 1.25, 0.55, t === 2 ? 2.4 : 1.4],
+            [0, -0.2, 0],
+            `armor`,
+            y,
+          ),
+          O([0.12, 0.4, 0.16], [0.5, 0.25, -0.35], `armor`, y),
+          O([0.35, 0.16, 0.55], [0.5, 0.5, -0.35], `glass`, y));
+      for (let e of [-g.w * 0.48, g.w * 0.48])
+        for (let n of t === 0 ? [-1.2, 1.2] : [-2, -0.7, 0.7, 2]) {
+          let t = D(u, [0.48, 0.3, 0.48], [e, 0.5, n], `tire`);
+          t.rotation.z = Math.PI / 2;
+        }
+      if (t === 2)
+        for (let e of [-1.5, 1.5]) O([0.65, 0.7, 5.6], [e, 0.42, 0], `tire`);
+      for (let e of [-g.w * 0.32, g.w * 0.32])
+        O([0.25, 0.2, 0.05], [e, 0.9, -g.l / 2 - 0.02], `light`);
+      O([g.w + 0.12, 0.18, 0.3], [0, 0.5, -g.l / 2], `metal`);
+    }
+    if (g.gun && a) {
+      let e = H(t);
+      if (
+        (v.add(y),
+        y.position.fromArray(e.offset ?? [0, e.height, 0]),
+        y.add(b),
+        (w.name = `vehicle-muzzle`),
+        i)
+      )
+        (i.attach(y, t, `turret`),
+          i.attach(b, t, `elevation`),
+          i.has(t, `recoil`) && (b.add(x), i.attach(x, t, `recoil`)));
+      else {
+        (t === 3 &&
+          (O([0.25, 0.3, 0.5], [-1.55, 0.9, -0.8], `armor`),
+          O([0.35, 0.15, 0.7], [-1.32, 0.85, -0.8], `metal`)),
+          t === 4 &&
+            (O([0.35, 0.65, 0.45], [0, 0.95, -2.35], `armor`),
+            O([0.32, 0.25, 1.25], [0, 0.7, -2.9], `metal`),
+            O([0.45, 0.25, 0.5], [0, 0, 0], `armor`, y)));
+        let n = g.gun === 2 ? 0.11 : 0.055,
+          r = D(u, [n, e.length, n], [0, 0, -e.length / 2], `metal`, b);
+        ((r.rotation.x = Math.PI / 2),
+          O([0.35, 0.3, 0.55], [0, 0, -0.25], `armor`, b));
+      }
+      ((w.position.z = -e.length), (i?.has(t, `recoil`) ? x : b).add(w));
+    }
+    O(
+      [0.5, 0.08, 0.45],
+      [0, g.air ? 2.28 : 1.54, -0.3],
+      r < 0 ? `light` : r ? `cobalt` : `amber`,
+    );
+    let k = t === 2 ? i?.trackPrototype(t) : null,
+      A = k ? de(k) : null;
+    (A && (S.add(A.root), c.add(A)),
+      e &&
+        [v, y, b, T, E, x, S].forEach((e, n) => o.pack(e, `${t}/${r}/${n}`)));
+    let j = n ? m(t, [v, S]) : [],
+      M = new Map();
+    v.traverse((e) => {
+      e.isMesh && M.set(e, e.material);
+    });
+    let N = !1;
+    return {
+      root: v,
+      rotor: T,
+      tailRotor: E,
+      turret: y,
+      elevation: b,
+      recoil: i?.has(t, `recoil`) ? x : null,
+      suspension: S,
+      muzzle: w,
+      tracks: A,
+      setEngineHot(e) {
+        for (let t of j) t.userData.thermalEngineOn = e;
+      },
+      dispose() {
+        A && c.delete(A) && A.dispose();
+      },
+      setDestroyed(e) {
+        if (e !== N) {
+          N = e;
+          for (let [t, n] of M) t.material = e ? f.wreck : n;
+        }
+      },
+    };
+  }
+  return {
+    make: v,
+    dispose() {
+      (c.forEach((e) => e.dispose()),
+        c.clear(),
+        o.dispose(),
+        i?.dispose(),
+        l.dispose(),
+        u.dispose(),
+        d.dispose(),
+        Object.values(f).forEach((e) => e.dispose()));
+    },
+  };
+}
+function Oe() {
+  let e = new Map();
+  return {
+    accept(t) {
+      if (
+        !Number.isInteger(t?.vehicleId) ||
+        !Number.isInteger(t?.tick) ||
+        t.tick < 0 ||
+        ![t.pos, t.dir].every(
+          (e) => Array.isArray(e) && e.length === 3 && e.every(Number.isFinite),
+        )
+      )
+        return !1;
+      let n = e.get(t.vehicleId);
+      return (n && t.tick <= n.tick) || (!n && e.size >= 12)
+        ? !1
+        : (e.set(t.vehicleId, { tick: t.tick, age: 0 }), !0);
+    },
+    advance(t) {
+      for (let n of e.values()) n.age += Math.max(0, t);
+    },
+    pose(t) {
+      return ke(e.get(t)?.age ?? 1 / 0);
+    },
+    remove(t) {
+      e.delete(t);
+    },
+    clear() {
+      e.clear();
+    },
+  };
+}
+function ke(e) {
+  if (!Number.isFinite(e) || e < 0 || e >= 1.6)
+    return { barrel: 0, camera: 0, hull: 0, dip: 0, lift: 0 };
+  let t =
+      e < 0.055
+        ? 0.42 * Math.sin(((e / 0.055) * Math.PI) / 2)
+        : 0.42 *
+          Math.exp(-(e - 0.055) * 5) *
+          (1 - Math.min(1, (e - 0.055) / 1.5)),
+    n = Math.sin((Math.min(1, e / 0.09) * Math.PI) / 2),
+    r = 0.05 * n * Math.exp(-e * 2.6) * Math.cos(e * 7.5),
+    i = 0.11 * n * Math.exp(-e * 2.2) * Math.max(0, Math.cos(e * 6)),
+    a = 0.5 * n * Math.exp(-e * 4);
+  return {
+    barrel: t,
+    camera: 0.024 * n * Math.exp(-e * 7) * Math.cos(e * 14),
+    hull: r,
+    dip: i,
+    lift: a,
+  };
+}
+function Ae(e) {
+  let t = new Map(),
+    n = new s(0.055, 0.055, 0.35, 6),
+    r = new s(0.032, 0.008, 2.2, 6),
+    i = new O(0.07, 6, 4);
+  (n.rotateX(Math.PI / 2), r.rotateX(Math.PI / 2));
+  let a = new g({ color: 7563607, roughness: 0.5 }),
+    o = new A({ color: 16765841, toneMapped: !1 }),
+    c = new C(),
+    l = new p(n, a),
+    u = new p(r, o),
+    d = new p(i, o);
+  return (
+    l.add(u, d),
+    c.position.set(0, -1e4, 0),
+    c.add(l),
+    e.scene.add(c),
+    {
+      update() {
+        c.parent && e.scene.remove(c);
+        let s = new Set();
+        for (let c of e.world.byType(`projectile`)) {
+          if (c.weapon !== 240) continue;
+          s.add(c.id);
+          let l = t.get(c.id);
+          if (!l) {
+            ((l = new p(n, a)), (l.name = `tank-shell-` + c.id));
+            let s = new p(r, o);
+            ((s.position.z = 1.25), l.add(s));
+            let u = new p(i, o);
+            ((u.position.z = 0.2), l.add(u), t.set(c.id, l), e.scene.add(l));
+          }
+          (l.position.fromArray(c.pos),
+            (c.vel[0] || c.vel[1] || c.vel[2]) &&
+              l.lookAt(
+                c.pos[0] - c.vel[0],
+                c.pos[1] - c.vel[1],
+                c.pos[2] - c.vel[2],
+              ));
+          let u = e.world.time.tick;
+          l.userData.lt !== u &&
+            u % 3 == 0 &&
+            ((l.userData.lt = u),
+            e.modules
+              ?.get(`effects`)
+              ?.spawn?.(`smoke`, [c.pos[0], c.pos[1], c.pos[2]], [0, 1, 0], {
+                count: 1,
+                scale: 0.4,
+              }));
+        }
+        for (let [n, r] of t) s.has(n) || (e.scene.remove(r), t.delete(n));
+      },
+      dispose() {
+        e.scene.remove(c);
+        for (let n of t.values()) e.scene.remove(n);
+        (t.clear(),
+          n.dispose(),
+          r.dispose(),
+          i.dispose(),
+          a.dispose(),
+          o.dispose());
+      },
+    }
+  );
+}
+var X = (e, t) => {
+    ((t = String(t)), e.textContent !== t && (e.textContent = t));
+  },
+  je = (e, t, n) => {
+    e.getAttribute(t) !== n && e.setAttribute(t, n);
+  };
+function Me(e) {
+  let t = new C();
+  ((t.name = `helicopter-cockpit`), (t.visible = !1), e.scene.add(t));
+  let n = new C();
+  (n.position.set(0, -0.3, 0.5), t.add(n));
+  let i = [
+      new g({
+        color: 6508601,
+        roughness: 0.72,
+        metalness: 0.38,
+        emissive: 2169360,
+        emissiveIntensity: 0.45,
+      }),
+      new g({
+        color: 1383451,
+        roughness: 0.86,
+        metalness: 0.15,
+        emissive: 790800,
+        emissiveIntensity: 0.5,
+      }),
+      new g({ color: 9145722, roughness: 0.45, metalness: 0.65 }),
+      new A({ color: 10926483, toneMapped: !1 }),
+    ],
+    a = i.map(() => []),
+    o = new c(),
+    s = new v(),
+    u = new k(0, 1, 0);
+  function f(e, t, n, r) {
+    (o.compose(new k(...n), r ?? new v(), new k(1, 1, 1)), e.applyMatrix4(o));
+    let i = e.index ? e.toNonIndexed() : e;
+    (i !== e && e.dispose(), a[t].push(i));
+  }
+  function m(e, t, n = 1) {
+    f(new r(...e), n, t);
+  }
+  function h(e, t, n, i, a = 0) {
+    let o = new k(...e),
+      c = new k(...t),
+      l = c.clone().sub(o);
+    f(
+      new r(n, l.length(), i),
+      a,
+      o.add(c).multiplyScalar(0.5).toArray(),
+      s.setFromUnitVectors(u, l.normalize()).clone(),
+    );
+  }
+  for (let e of [-1, 1]) {
+    (h([e * 1.02, -0.9, -1.55], [e * 1.08, 0.93, -0.97], 0.075, 0.105),
+      h([e * 1.08, 0.93, -0.97], [e * 1.1, 0.93, 1.92], 0.075, 0.085),
+      h([e * 1.1, -1, 0.65], [e * 1.1, 0.93, 0.65], 0.065, 0.08),
+      h([e * 1.02, -0.9, -1.55], [e * 1.1, -1, 1.95], 0.08, 0.09),
+      m([0.09, 0.52, 3.4], [e * 1.12, -1.3, 0.28]),
+      h([e * 1.06, -1.03, 0.05], [e * 1.06, -1.03, 0.35], 0.025, 0.025, 2));
+    for (let t = 0; t < 5; t++)
+      m([0.012, 0.019, 0.021], [e * 1.063, -0.7 + t * 0.3, -1.46 + t * 0.1], 2);
+  }
+  (h([-1.08, 0.93, -0.97], [1.08, 0.93, -0.97], 0.1, 0.1),
+    m([2.2, 0.08, 3.1], [0, 1.03, 0.48]),
+    h([0, -1.5, -1.5], [0, -1.5, 2], 0.09, 0.06));
+  for (let e of [-1, 1])
+    h([e * 0.7, -1.5, -1.5], [e * 0.7, -1.5, 2], 0.05, 0.05);
+  m([2.2, 1.9, 0.08], [0, -0.04, 2.05]);
+  let _ = new D();
+  (_.moveTo(-1.04, -1.14),
+    _.lineTo(-1.04, -0.71),
+    _.lineTo(-0.88, -0.61),
+    _.lineTo(0.83, -0.61),
+    _.lineTo(1.04, -0.75),
+    _.lineTo(1.04, -1.14),
+    _.closePath(),
+    f(
+      new T(_, {
+        depth: 0.22,
+        bevelEnabled: !0,
+        bevelSegments: 1,
+        steps: 1,
+        bevelSize: 0.035,
+        bevelThickness: 0.025,
+      }),
+      0,
+      [0, 0, -1.64],
+    ),
+    m([1.83, 0.045, 0.2], [-0.02, -0.615, -1.53]),
+    h([-0.48, -1.45, -0.12], [-0.48, -1.1, -0.22], 0.035, 0.035, 2),
+    m([0.075, 0.12, 0.07], [-0.48, -1.06, -0.22]));
+  for (let e = 0; e < 9; e++)
+    (m([0.032, 0.013, 0.064], [0.48 + e * 0.049, -0.68, -1.385], 2),
+      m([0.015, 0.013, 0.014], [0.48 + e * 0.049, -0.655, -1.382], 3));
+  let b = new A({
+      color: 6127480,
+      transparent: !0,
+      opacity: 0.28,
+      depthWrite: !1,
+      side: 2,
+    }),
+    x = new p(new y(2.1, 3.5), b);
+  ((x.rotation.x = -Math.PI / 2),
+    x.position.set(0, -1.53, 0.25),
+    (x.frustumCulled = !1),
+    (x.renderOrder = 2),
+    n.add(x));
+  for (let e = 0; e < a.length; e++) {
+    let t = E(a[e]);
+    for (let t of a[e]) t.dispose();
+    let r = new p(t, i[e]);
+    ((r.frustumCulled = !1), n.add(r));
+  }
+  let S = document.createElement(`canvas`);
+  ((S.width = 1536), (S.height = 384));
+  let O = S.getContext(`2d`),
+    M = new d(S);
+  ((M.colorSpace = w),
+    (M.generateMipmaps = !1),
+    (M.minFilter = l),
+    (M.anisotropy = Math.min(4, e.renderer.capabilities.getMaxAnisotropy())));
+  let N = new A({ map: M, toneMapped: !1 }),
+    P = new p(new y(1.96, 0.49), N);
+  (P.position.set(0, -0.8, -1.37),
+    n.add(P),
+    e.renderer.compile(t, e.camera, e.scene));
+  let I = document.createElement(`div`);
+  ((I.dataset.helicopterCockpit = ``),
+    (I.hidden = !0),
+    (I.style.cssText = `position:absolute;inset:0;z-index:2;pointer-events:none;color:#8df577;text-shadow:0 0 3px #173c12;font:12px monospace`),
+    (I.innerHTML = `<svg viewBox="0 0 1000 600" preserveAspectRatio="none" style="position:absolute;left:25%;top:24%;width:50%;height:42%;overflow:hidden" aria-label="Helicopter flight instruments"><g fill="none" stroke="currentColor" stroke-width="1.1" opacity=".75"><path d="M290 48H710M495 51L500 58L505 51M190 164V402H212M810 164V402H788"/><g data-compass></g><g data-ladder></g></g><g fill="currentColor" font-family="monospace" font-size="15"><text data-heading x="500" y="30" text-anchor="middle"/><text x="176" y="147" text-anchor="end">KM/H</text><text data-speed x="176" y="287" text-anchor="end"/><text x="824" y="147">AGL M</text><text data-alt x="824" y="287"/><text data-climb x="824" y="315" font-size="12"/><text data-role x="500" y="490" text-anchor="middle" font-size="12"/></g><g data-heat font-family="monospace" style="display:none"><text data-heatlabel x="340" y="452" fill="currentColor" font-size="15" text-anchor="end">GUN</text><rect x="350" y="439" width="300" height="16" fill="#0b1a10aa" stroke="currentColor" stroke-width="1.4"/><rect data-heatfill x="352" y="441" width="0" height="12" fill="currentColor"/><text data-ammo x="662" y="452" fill="currentColor" font-size="15"/></g></svg>`),
+    e.ui.append(I));
+  let L = Object.fromEntries(
+      [
+        `heading`,
+        `speed`,
+        `alt`,
+        `climb`,
+        `role`,
+        `compass`,
+        `ladder`,
+        `heat`,
+        `heatfill`,
+        `heatlabel`,
+        `ammo`,
+      ].map((e) => [e, I.querySelector(`[data-` + e + `]`)]),
+    ),
+    R = 1,
+    z,
+    B,
+    V;
+  function H(e, t, n, r, i, a, o, s = 0) {
+    let c = O;
+    ((c.fillStyle = `#1b211e`),
+      c.fillRect(0, 0, 1536, 384),
+      (c.fillStyle = `#ffffff05`));
+    for (let e = 0; e < 1536; e += 7) c.fillRect(e, 0, 1, 384);
+    let l = `#89ef77`,
+      u = `#376842`;
+    function d(e, t, n, r = 18, i = l) {
+      ((c.font = `${r}px monospace`), (c.fillStyle = i), c.fillText(e, t, n));
+    }
+    function f(e, t, n, r, i = l) {
+      ((c.strokeStyle = i),
+        (c.lineWidth = 2),
+        c.beginPath(),
+        c.moveTo(e, t),
+        c.lineTo(n, r),
+        c.stroke());
+    }
+    function p(e, t, n) {
+      ((c.fillStyle = `#0b100f`),
+        c.fillRect(e, 37, t, 282),
+        (c.strokeStyle = `#536151`),
+        (c.lineWidth = 4),
+        c.strokeRect(e + 3, 40, t - 6, 276),
+        (c.fillStyle = `#061b13`),
+        c.fillRect(e + 17, 54, t - 34, 247),
+        d(n, e + 29, 80, 17));
+      for (let n = 98; n < 295; n += 4)
+        ((c.fillStyle = `#9eff7706`), c.fillRect(e + 20, n, t - 40, 1));
+      for (let n of [9, t - 9])
+        for (let t of [46, 310])
+          ((c.fillStyle = `#899181`),
+            c.beginPath(),
+            c.arc(e + n, t, 3, 0, Math.PI * 2),
+            c.fill());
+    }
+    (p(45, 408, `FLIGHT / ATTITUDE`),
+      p(495, 340, `NAV / TERRAIN`),
+      p(879, 300, `SYSTEMS`),
+      c.save(),
+      c.beginPath(),
+      c.rect(68, 94, 361, 192),
+      c.clip(),
+      c.translate(248, 181),
+      c.rotate(-s));
+    let m = a * 140;
+    ((c.fillStyle = `#163528`),
+      c.fillRect(-300, -300, 600, m + 300),
+      f(-300, m, 300, m));
+    for (let e = -3; e <= 3; e++) {
+      let t = m + e * 26;
+      (f(-33, t, -10, t, u),
+        f(26, t, 49, t, u),
+        d(String(Math.abs(e * 10)), 62, t + 5, 13, u));
+    }
+    (c.setTransform(1, 0, 0, 1, 0, 0),
+      f(174, 181, 230, 181),
+      f(230, 181, 248, 193),
+      f(248, 193, 266, 181),
+      f(266, 181, 322, 181),
+      c.restore(),
+      d(`${n} KM/H`, 76, 282, 21),
+      d(`${i.toString().padStart(3, `0`)} DEG`, 286, 282, 21),
+      d(`${r}`, 531, 157, 43),
+      d(`METRES AGL`, 531, 187, 16),
+      f(526, 205, 802, 205, u),
+      d(
+        `V/S ${e.vel[1] >= 0 ? `+` : ``}${e.vel[1].toFixed(1)} M/S`,
+        531,
+        239,
+        20,
+      ),
+      d(`HDG ` + i.toString().padStart(3, `0`), 531, 275, 20));
+    let h = Math.min(1, Math.max(0, e.hp / F[e.weapon].hp)),
+      g = t?.vehicleId === e.id && performance.now() - t.received < 1e3;
+    (d(`HULL ` + Math.ceil(h * 100) + `%`, 910, 124, 22),
+      (c.fillStyle = u),
+      c.fillRect(910, 143, 233, 10),
+      (c.fillStyle = l),
+      c.fillRect(910, 143, 233 * h, 10),
+      d(o ? `PILOT` : `CREW`, 910, 191, 21),
+      d(
+        g && t.heat?.[0]?.locked
+          ? `GUN COOLING`
+          : o
+            ? `FLIGHT READY`
+            : `OBSERVATION`,
+        910,
+        231,
+        17,
+      ),
+      d(F[e.weapon].name.split(` · `)[0], 910, 277, 23));
+    for (let t = 0; t < 2; t++) {
+      let n = 1302,
+        r = 108 + t * 153;
+      ((c.fillStyle = `#080e0c`),
+        c.beginPath(),
+        c.arc(n, r, 58, 0, Math.PI * 2),
+        c.fill(),
+        (c.strokeStyle = `#697466`),
+        (c.lineWidth = 3),
+        c.stroke());
+      for (let e = -2.3; e <= 2.3; e += 0.46)
+        f(
+          n + Math.sin(e) * 45,
+          r - Math.cos(e) * 45,
+          n + Math.sin(e) * 51,
+          r - Math.cos(e) * 51,
+          u,
+        );
+      let i = t ? Math.max(-2.3, Math.min(2.3, e.vel[1] / 6)) : h * 4.6 - 2.3;
+      (f(n, r, n + Math.sin(i) * 40, r - Math.cos(i) * 40),
+        d(t ? `CLIMB` : `HULL`, 1274, r + 31, 12));
+    }
+    (d(`FLIGHT SYSTEMS  /  AVIONICS`, 47, 357, 15, `#abb3a0`),
+      d(`T SPOT     SHIFT FOCUS`, 894, 357, 15, `#abb3a0`),
+      (M.needsUpdate = !0));
+  }
+  return {
+    hide() {
+      ((t.visible = !1), (I.hidden ||= !0));
+    },
+    update(n, r, i, a, o, s, c = s) {
+      ((t.visible = !0), (I.hidden &&= !1));
+      let l = j(n, ee(n, r.pos)),
+        u = Math.cos(n.yaw),
+        d = Math.sin(n.yaw);
+      (t.position.set(
+        n.pos[0] + d * l[2],
+        n.pos[1] + l[1] + te,
+        n.pos[2] + u * l[2],
+      ),
+        c
+          ? t.rotation.set(c.pitch, n.yaw, -c.roll, `YXZ`)
+          : t.rotation.set(0, n.yaw, 0));
+      let f =
+        a?.vehicleId === n.id &&
+        performance.now() - a.received < 1e3 &&
+        n.owner === r.owner
+          ? a.heat?.[0]
+          : null;
+      if (((L.heat.style.display = f ? `` : `none`), f)) {
+        let e = Math.min(1, Math.max(0, f.value || 0)),
+          t = f.locked ? `#ff6a4d` : e >= 0.75 ? `#ffd24d` : `#8df577`,
+          n = f.locked && performance.now() % 500 < 250;
+        (je(L.heatfill, `width`, (296 * e).toFixed(1)),
+          t !== z && ((L.heat.style.color = t), (z = t)),
+          X(L.heatlabel, f.locked ? (n ? `OVERHEAT` : ``) : `GUN`),
+          X(
+            L.ammo,
+            a.unlimited
+              ? ``
+              : `${a.ammo ?? ``}${a.capacity ? `/` + a.capacity : ``}`,
+          ));
+      }
+      if (((R += o), R < 0.1)) return;
+      R = 0;
+      let p = Math.round(Math.hypot(n.vel[0], n.vel[2]) * 3.6),
+        m = Math.max(
+          0,
+          Math.round(
+            n.pos[1] -
+              Math.max(
+                e.world.map.waterLevel ?? -1 / 0,
+                e.world.map.getHeight(n.pos[0], n.pos[2]),
+              ),
+          ),
+        ),
+        h = ((Math.round((-n.yaw * 180) / Math.PI) % 360) + 360) % 360,
+        g = n.owner === r.owner;
+      H(n, a, p, m, h, s ? s.pitch : 0, g, s ? s.roll : 0);
+      let _ = ((Math.round((-i.yaw * 180) / Math.PI) % 360) + 360) % 360;
+      (X(L.heading, String(_).padStart(3, `0`)),
+        X(L.speed, p),
+        X(L.alt, m),
+        X(L.climb, `${n.vel[1] >= 0 ? `+` : ``}${n.vel[1].toFixed(1)} M/S`),
+        X(L.role, g ? `` : `CREW  /  T SPOT`));
+      let v = ``;
+      for (let e = -3; e <= 3; e++) {
+        let t = 500 + e * 58,
+          n = (_ + e * 10 + 360) % 360;
+        v += `<path d="M${t} 42v6"/><text x="${t}" y="78" fill="currentColor" stroke="none" font-size="13" text-anchor="middle">${n}</text>`;
+      }
+      v !== B && ((L.compass.innerHTML = v), (B = v));
+      let y = 600 / (0.84 * Math.tan((e.camera.fov * Math.PI) / 360)),
+        b = ``;
+      for (let e = -30; e <= 30; e += 10) {
+        let t = (e * Math.PI) / 180 - i.pitch;
+        if (Math.abs(t) > 1.2) continue;
+        let n = (0.26 / 0.42) * 600 - Math.tan(t) * y;
+        n < 115 ||
+          n > 425 ||
+          (b += `<path d="M400 ${n}h70m60 0h70"${e < 0 ? ` stroke-dasharray="6 5"` : ``}/><text x="385" y="${n + 4}" fill="currentColor" stroke="none" font-size="12" text-anchor="end">${e}</text>`);
+      }
+      (b !== V && ((L.ladder.innerHTML = b), (V = b)),
+        je(
+          L.ladder,
+          `transform`,
+          `rotate(${((-(c?.roll ?? 0) * Math.cos(i.yaw - n.yaw) * 180) / Math.PI).toFixed(1)} 500 270)`,
+        ));
+    },
+    dispose() {
+      (e.scene.remove(t), t.traverse((e) => e.geometry?.dispose()));
+      for (let e of i) e.dispose();
+      (N.dispose(), b.dispose(), M.dispose(), I.remove());
+    },
+  };
+}
+var Ne = 0.38,
+  Pe = 0.5,
+  Fe = (e, t, n) => Math.max(t, Math.min(n, e));
+function Ie() {
+  return {
+    pitch: 0,
+    roll: 0,
+    pitchRate: 0,
+    rollRate: 0,
+    vel: null,
+    acc: [0, 0],
+    yaw: null,
+    yawRate: 0,
+  };
+}
+function Le(e, t, n, r, i = !1) {
+  if (!(r > 0)) return e;
+  r = Math.min(r, 0.1);
+  let a = t[0] || 0,
+    o = t[2] || 0;
+  e.vel || ((e.vel = [a, o]), (e.yaw = n));
+  let s = 1 - Math.exp(-r / 0.12),
+    c = e.vel[0] + (a - e.vel[0]) * s,
+    l = e.vel[1] + (o - e.vel[1]) * s,
+    u = (c - e.vel[0]) / r,
+    d = (l - e.vel[1]) / r;
+  e.vel = [c, l];
+  let f = 1 - Math.exp(-r / 0.18);
+  e.acc = [e.acc[0] + (u - e.acc[0]) * f, e.acc[1] + (d - e.acc[1]) * f];
+  let p = Math.atan2(Math.sin(n - e.yaw), Math.cos(n - e.yaw));
+  ((e.yaw = n), (e.yawRate += (p / r - e.yawRate) * f));
+  let m = -Math.sin(n),
+    h = -Math.cos(n),
+    g = Math.cos(n),
+    _ = -Math.sin(n),
+    v = e.acc[0] * m + e.acc[1] * h,
+    y = e.acc[0] * g + e.acc[1] * _,
+    b = c * m + l * h,
+    x = c * g + l * _,
+    S = -(v * 0.042 + b * 0.006),
+    C = y * 0.028 + x * 0.008;
+  (i && ((S = 0), (C = 0)), (S = Fe(S, -0.38, Ne)), (C = Fe(C, -0.5, Pe)));
+  let w = 5.5,
+    T = 0.8;
+  return (
+    (e.pitchRate += ((S - e.pitch) * w * w - e.pitchRate * 2 * T * w) * r),
+    (e.pitch += e.pitchRate * r),
+    (e.rollRate += ((C - e.roll) * w * w - e.rollRate * 2 * T * w) * r),
+    (e.roll += e.rollRate * r),
+    e
+  );
+}
+function Re(e, t, n) {
+  e.rotation.set(n.pitch, t, -n.roll, `YXZ`);
+}
+var ze = 0.3,
+  Be = 0.25;
+function Ve(e) {
+  return e ? { pitch: e.pitch * ze, roll: e.roll * Be } : null;
+}
+var Z = Object.freeze({
+    blocks: 110,
+    size: [0.28, 0.62],
+    burst: [3, 8],
+    lift: [2, 7],
+    spin: 9,
+    gravity: 14,
+    bounce: 0.3,
+    seconds: 20,
+  }),
+  He = 420,
+  Q = [0, 1, 0],
+  Ue = 0.5,
+  We = 0.25;
+function Ge(t, n) {
+  let i = (e, n, r, i) => t.modules.get(`effects`)?.spawn?.(e, n, r, i),
+    a = new Map(),
+    o = [],
+    s = [],
+    l = 0,
+    d = t.rng?.fork
+      ? t.rng.fork(`heli-crash`)
+      : { range: (e, t) => e + Math.random() * (t - e) },
+    f = (e) => (d.range(0, 1) < 0.5 ? -1 : 1);
+  function p(e, n, r) {
+    if (!e || !e.visible) return;
+    e.updateMatrixWorld(!0);
+    let i = e.clone(!0),
+      a = new u().setFromObject(e).getCenter(new k()),
+      s = new C();
+    (s.position.copy(a),
+      t.scene.add(s),
+      s.updateMatrixWorld(!0),
+      e.matrixWorld.decompose(i.position, i.quaternion, i.scale),
+      s.attach(i),
+      (e.visible = !1));
+    let c = (n.vel ?? [0, 0, 0]).map((e, t) => e + r.vel[t]);
+    o.push({
+      pivot: s,
+      vel: c,
+      spin: new k(...r.spin),
+      age: 0,
+      rest: !1,
+      smoke: r.smoke ?? 0,
+    });
+  }
+  function h(e) {
+    return e.tail ?? null;
+  }
+  function _(e) {
+    let r = t.world.get(e?.vehicleId),
+      o = n.get(e?.vehicleId);
+    if (!r || !o || !F[r.weapon]?.air) return;
+    let s = { mode: e.mode, since: performance.now(), dir: 1 };
+    if ((a.set(r.id, s), e.mode === `shatter`)) {
+      A(r, o);
+      return;
+    }
+    o.setDestroyed(!0);
+    let c = f(),
+      l = r.yaw,
+      u = Math.cos(l),
+      m = -Math.sin(l),
+      g = Math.sin(l),
+      _ = Math.cos(l);
+    (p(h(o), r, {
+      vel: [g * 4 + u * c * 3, 2.5, _ * 4 + m * c * 3],
+      spin: [d.range(2, 5), d.range(-2, 2), d.range(3, 7) * c],
+      smoke: 1,
+    }),
+      e.mode === `burst` &&
+        (p(o.rotor, r, {
+          vel: [u * c * 5, 7, m * c * 5],
+          spin: [d.range(-1, 1), d.range(9, 14), d.range(2, 4)],
+          smoke: 0,
+        }),
+        i(`burn`, r.pos, Q, { scale: 2.4, heavy: 1, fire: 1, count: 10 })));
+  }
+  let y = new c(),
+    x = new v(),
+    w = new k(),
+    T = new k(),
+    E = new b(),
+    D = new m();
+  function O(e) {
+    let t = Array.isArray(e.material) ? e.material[0] : e.material,
+      n = e.geometry?.attributes?.color;
+    if ((D.set(t?.color ?? 5988178), n && n.count)) {
+      let e = Math.floor(d.range(0, n.count));
+      (D.setRGB(n.getX(e), n.getY(e), n.getZ(e)),
+        t?.color && D.multiply(t.color));
+    }
+    return D.clone();
+  }
+  function A(n, a) {
+    a.root.updateMatrixWorld(!0);
+    let o = [],
+      s = 0;
+    if (
+      (a.root.traverse((e) => {
+        if (!e.isMesh || !e.visible || !e.geometry) return;
+        let t = !0;
+        for (let n = e; n; n = n.parent)
+          if (!n.visible) {
+            t = !1;
+            break;
+          }
+        if (!t) return;
+        let n = new u().setFromObject(e),
+          r = n.getSize(new k()),
+          i = Math.max(0.02, r.x * r.y * r.z);
+        !Number.isFinite(i) ||
+          r.length() > 40 ||
+          (o.push({ o: e, box: n, vol: i }), (s += i));
+      }),
+      !o.length)
+    )
+      return;
+    let c = Z.blocks,
+      l = new S(new r(1, 1, 1), new g({ roughness: 0.7, metalness: 0.15 }), c);
+    ((l.name = `heli-blocks-` + n.id),
+      (l.frustumCulled = !1),
+      (l.castShadow = !0),
+      l.instanceMatrix.setUsage(e));
+    let f = new k(n.pos[0], n.pos[1] + F[n.weapon].h * 0.5, n.pos[2]),
+      p = [];
+    for (let e = 0; e < c; e++) {
+      let t = d.range(0, s),
+        r = o[0];
+      for (let e of o)
+        if (((t -= e.vol), t <= 0)) {
+          r = e;
+          break;
+        }
+      let i = r.box,
+        a = new k(
+          d.range(i.min.x, i.max.x),
+          d.range(i.min.y, i.max.y),
+          d.range(i.min.z, i.max.z),
+        ),
+        c = a.clone().sub(f);
+      ((c.y = Math.max(0, c.y)), c.normalize());
+      let u = d.range(...Z.burst);
+      (p.push({
+        p: a,
+        v: new k(
+          (n.vel?.[0] ?? 0) * 0.6 + c.x * u,
+          (n.vel?.[1] ?? 0) * 0.3 + d.range(...Z.lift),
+          (n.vel?.[2] ?? 0) * 0.6 + c.z * u,
+        ),
+        q: new v().setFromEuler(
+          E.set(d.range(0, 6), d.range(0, 6), d.range(0, 6)),
+        ),
+        w: new k(d.range(-1, 1), d.range(-1, 1), d.range(-1, 1)).multiplyScalar(
+          Z.spin,
+        ),
+        size: d.range(...Z.size),
+        rest: !1,
+      }),
+        l.setColorAt(e, O(r.o)));
+    }
+    ((l.instanceColor.needsUpdate = !0),
+      t.scene.add(l),
+      j.push({ mesh: l, blocks: p, age: 0 }),
+      (a.shattered = !0),
+      (a.root.visible = !1),
+      i(`explosion`, [f.x, f.y, f.z], Q, { scale: 2.4 }),
+      i(`burn`, [f.x, f.y, f.z], Q, {
+        scale: 2.2,
+        heavy: 1,
+        fire: 1,
+        count: 10,
+      }),
+      t.events.emit(`audio:play`, {
+        id: `vehicle_crash`,
+        pos: [f.x, f.y, f.z],
+        volume: 1.2,
+      }));
+  }
+  let j = [];
+  function M(e) {
+    for (let n = j.length - 1; n >= 0; n--) {
+      let r = j[n];
+      if (((r.age += e), r.age > Z.seconds)) {
+        (t.scene.remove(r.mesh),
+          r.mesh.geometry.dispose(),
+          r.mesh.material.dispose(),
+          j.splice(n, 1));
+        continue;
+      }
+      let i = r.age > Z.seconds - 2 ? (r.age - (Z.seconds - 2)) * 0.5 : 0,
+        a = 0;
+      for (let n of r.blocks) {
+        if (!n.rest) {
+          ((n.v.y -= Z.gravity * e),
+            n.p.addScaledVector(n.v, e),
+            x.setFromEuler(E.set(n.w.x * e, n.w.y * e, n.w.z * e)),
+            n.q.multiply(x));
+          let r = P(t.world, n.p.x, n.p.z, n.p.y + 0.5) + n.size * 0.5;
+          n.p.y < r &&
+            ((n.p.y = r),
+            (n.v.y = Math.abs(n.v.y) * Z.bounce),
+            (n.v.x *= 0.5),
+            (n.v.z *= 0.5),
+            n.w.multiplyScalar(0.5),
+            n.v.length() < 1 && (n.rest = !0));
+        }
+        (w.set(n.p.x, n.p.y - i, n.p.z),
+          T.setScalar(n.size),
+          y.compose(w, n.q, T),
+          r.mesh.setMatrixAt(a++, y));
+      }
+      r.mesh.instanceMatrix.needsUpdate = !0;
+    }
+  }
+  function N(e, n, r) {
+    (n.setDestroyed(!0), n.root.updateMatrixWorld(!0));
+    let i = n.root.clone(!0);
+    i.name = `heli-wreck-` + e.id;
+    let a = r === `ground` ? 0 : d.range(0.25, 0.6) * f();
+    (i.position.set(e.pos[0], e.pos[1] - 0.25, e.pos[2]),
+      i.rotation.set(r === `ground` ? 0 : d.range(-0.2, 0.1), e.yaw, a, `YXZ`),
+      t.scene.add(i),
+      s.push({
+        root: i,
+        pos: e.pos.slice(),
+        age: 0,
+        next: 0,
+        h: F[e.weapon].h,
+      }),
+      (n.ghosted = !0));
+  }
+  function ee(e) {
+    let r = t.world.get(e?.vehicleId),
+      o = n.get(e?.vehicleId);
+    if (!r || !F[r.weapon]?.air) return;
+    if (e.mode === `shatter` || o?.shattered) {
+      a.delete(r.id);
+      return;
+    }
+    let s = e.pos ?? r.pos,
+      c = e.mode,
+      l = c === `spin` ? 3.2 : c === `burst` ? 1.6 : 2.2;
+    if (o) {
+      let t = f();
+      (p(
+        o.rotor,
+        { vel: [0, 0, 0] },
+        {
+          vel: [Math.cos(r.yaw) * t * 6, 6, -Math.sin(r.yaw) * t * 6],
+          spin: [d.range(-2, 2), d.range(10, 16), d.range(-3, 3)],
+        },
+      ),
+        N({ ...r, pos: s.slice(), yaw: e.yaw ?? r.yaw }, o, c));
+    }
+    (c !== `ground` &&
+      (i(`explosion`, [s[0], s[1] + 0.6, s[2]], Q, { scale: l, atImpact: !0 }),
+      i(`burn`, [s[0], s[1] + 1, s[2]], Q, {
+        scale: 2.2,
+        heavy: 1,
+        fire: 1,
+        count: 8,
+      }),
+      i(`collapse`, s, Q, { scale: 1.4, atImpact: !0 })),
+      t.events.emit(`audio:play`, { id: `vehicle_crash`, pos: s, volume: 1.2 }),
+      a.delete(r.id));
+  }
+  function I(e) {
+    let n = t.world.get(e?.vehicleId);
+    if (!n || !e.pos) return;
+    let r = F[n.weapon];
+    if (!r?.air) return;
+    let a = e.normal ?? Q,
+      o = e.speed ?? 0,
+      s = Math.min(1, o / 14),
+      c = e.rotor ? r.rotor : Math.max(r.w, r.l) * 0.45,
+      u = [
+        e.pos[0] - a[0] * c,
+        e.pos[1] + (e.rotor ? r.rotorY : r.h * 0.5),
+        e.pos[2] - a[2] * c,
+      ];
+    (o >= 3 && i(`scrape`, u, a, { scale: 0.6 + s * 1.4 }),
+      t.events.emit(`audio:play`, {
+        id: o >= 5 ? `vehicle_crash` : `impact_metal`,
+        pos: u,
+        volume: Math.min(1.2, 0.35 + s),
+      }));
+    let d = t.modules.get(`player`)?.getLocalEntity?.();
+    d && d.seat === n.id && (l = Math.max(l, 0.25 + s * 0.9));
+  }
+  (t.events.on(`vehicle:wreck`, _),
+    t.events.on(`vehicle:crashland`, ee),
+    t.events.on(`vehicle:impact`, I));
+  let L = (e, t) => [
+      e.pos[0] + Math.sin(e.yaw) * t.l * 0.18,
+      e.pos[1] + t.h * 0.95,
+      e.pos[2] + Math.cos(e.yaw) * t.l * 0.18,
+    ],
+    R = (e, t, n, r) => {
+      if (((e[t] = (e[t] ?? Math.random()) + n * r), e[t] < 1)) return 0;
+      let i = Math.min(4, Math.floor(e[t]));
+      return ((e[t] -= i), i);
+    },
+    z = {};
+  function te(e) {
+    let r = t.camera.position,
+      c = performance.now();
+    ((l = Math.max(0, l - e * 1.6)), M(e));
+    for (let o of t.world.byType(`vehicle`)) {
+      let s = F[o.weapon],
+        l = n.get(o.id);
+      if (!s?.air || !l) continue;
+      if (o.hp > 0) {
+        ((l.ghosted ||
+          l.shattered ||
+          (l.tail && !l.tail.visible) ||
+          !l.rotor.visible) &&
+          ((l.ghosted = !1),
+          (l.shattered = !1),
+          l.tail && (l.tail.visible = !0),
+          (l.rotor.visible = !0)),
+          a.delete(o.id));
+        let t = o.hp / s.hp;
+        if (
+          t >= Ue ||
+          Math.hypot(o.pos[0] - r.x, o.pos[1] - r.y, o.pos[2] - r.z) > He
+        )
+          continue;
+        let n = z[o.id] ?? (z[o.id] = {}),
+          c = t < We,
+          u = R(n, `smoke`, c ? 24 : 16, e);
+        for (let e = 0; e < u; e++)
+          i(`burn`, L(o, s), Q, {
+            scale: c ? 1.25 : 1.05,
+            heavy: c ? 1 : 0.2,
+            fire: c ? 0.45 : 0,
+          });
+        continue;
+      }
+      if (l.ghosted || l.shattered) {
+        l.root.visible = !1;
+        continue;
+      }
+      let u = a.get(o.id);
+      if (!(o.pos[1] - P(t.world, o.pos[0], o.pos[2], o.pos[1]) > 0.2))
+        continue;
+      let d = z[o.id] ?? (z[o.id] = {}),
+        f = R(d, `trail`, 40, e);
+      for (let e = 0; e < f; e++)
+        i(`burn`, L(o, s), Q, { scale: 1.3, heavy: 1, fire: 0.8 });
+      let p = (c - (u?.since ?? c)) / 1e3;
+      (l.root.rotation.set(
+        -0.28 - Math.min(0.25, p * 0.08),
+        o.yaw,
+        Math.sin(p * 3.1) * 0.22 + 0.18,
+        `YXZ`,
+      ),
+        u?.mode !== `burst` && (l.rotor.rotation.y += e * 16));
+    }
+    for (let e of Object.keys(z)) t.world.get(+e) || delete z[e];
+    for (let n = o.length - 1; n >= 0; n--) {
+      let r = o[n];
+      if (((r.age += e), r.age > 30)) {
+        (t.scene.remove(r.pivot), o.splice(n, 1));
+        continue;
+      }
+      if ((r.age > 28 && (r.pivot.position.y -= e * 0.8), r.rest)) continue;
+      let a = r.pivot.position;
+      ((r.vel[1] -= 14 * e),
+        (a.x += r.vel[0] * e),
+        (a.y += r.vel[1] * e),
+        (a.z += r.vel[2] * e),
+        r.pivot.rotateX(r.spin.x * e),
+        r.pivot.rotateY(r.spin.y * e),
+        r.pivot.rotateZ(r.spin.z * e),
+        r.smoke &&
+          (r.puff = (r.puff ?? 0) + e) > 0.06 &&
+          ((r.puff = 0),
+          i(`burn`, [a.x, a.y, a.z], Q, {
+            scale: 0.7,
+            heavy: 0.8,
+            fire: 0.3,
+          })));
+      let s = P(t.world, a.x, a.z, a.y + 0.5) + 0.25;
+      a.y < s &&
+        ((a.y = s),
+        (r.vel[1] = Math.abs(r.vel[1]) * 0.3),
+        (r.vel[0] *= 0.55),
+        (r.vel[2] *= 0.55),
+        r.spin.multiplyScalar(0.5),
+        Math.hypot(...r.vel) < 1.2 && ((r.rest = !0), (r.smoke = 0)));
+    }
+    for (let n = s.length - 1; n >= 0; n--) {
+      let a = s[n];
+      if (((a.age += e), a.age > 30)) {
+        (t.scene.remove(a.root), s.splice(n, 1));
+        continue;
+      }
+      if (
+        (a.age > 28 && (a.root.position.y -= e * 0.9),
+        Math.hypot(a.pos[0] - r.x, a.pos[1] - r.y, a.pos[2] - r.z) > He)
+      )
+        continue;
+      let o = a.age < 20,
+        c = R(a, `next`, o ? 16 : 5, e);
+      for (let e = 0; e < c; e++)
+        i(
+          `burn`,
+          [
+            a.pos[0] + d.range(-1, 1),
+            a.pos[1] + a.h * 0.5,
+            a.pos[2] + d.range(-1, 1),
+          ],
+          Q,
+          {
+            scale: o ? 1.7 : 1.2,
+            heavy: o ? 1 : 0.4,
+            fire: o ? 0.9 * (1 - a.age / 20) + 0.2 : 0,
+          },
+        );
+    }
+  }
+  return {
+    update: te,
+    getShake: () => l,
+    dispose() {
+      for (let e of j)
+        (t.scene.remove(e.mesh),
+          e.mesh.geometry.dispose(),
+          e.mesh.material.dispose());
+      j.length = 0;
+      for (let e of o) t.scene.remove(e.pivot);
+      for (let e of s) t.scene.remove(e.root);
+      ((o.length = 0), (s.length = 0), a.clear());
+    },
+  };
+}
+var $,
+  Ke = {
+    name: `vehicles`,
+    deps: [`player`, `weapons`, `demo`, `netcode`],
+    api: {},
+    async init(e) {
+      (($ = {
+        models: De({ thermal: !!e.config.frost }),
+        cockpit: Me(e),
+        shells: Ae(e),
+        views: new Map(),
+        mounted: !1,
+        status: null,
+        aim: null,
+        firing: Oe(),
+      }),
+        ($.crash = Ge(e, $.views)),
+        e.events.on(`vehicle:shot`, (t) => {
+          e.world.get(t?.vehicleId)?.weapon === 2 &&
+            $.firing.accept(t) &&
+            e.events.emit(`vehicle:fire`, t);
+        }),
+        e.events.on(`vehicle:status`, (t) => {
+          let n = e.modules.get(`player`)?.getLocalEntity?.();
+          t.entityId === n?.id &&
+            n.state & i.IN_VEHICLE &&
+            t.vehicleId === n.seat &&
+            (($.status?.vehicleId === t.vehicleId && t.tick < $.status.tick) ||
+              ($.status = { ...t, received: performance.now() }));
+        }),
+        e.events.on(`net:disconnected`, () => {
+          (($.status = null), ($.aim = null), $.firing.clear());
+        }));
+      let t = e.modules.get(`demo`),
+        n = (n, r) => {
+          n?.id &&
+            (e.world.map.removeCollider(n.id),
+            t?.hideById?.(n.id),
+            !r &&
+              n.pos &&
+              (e.modules.get(`effects`)?.spawn?.(`collapse`, n.pos, [0, 1, 0], {
+                scale: n.cls === `medium` ? 0.8 : 0.45,
+              }),
+              e.events.emit(
+                `audio:play`,
+                n.cls === `medium`
+                  ? { id: `vehicle_crash`, pos: n.pos, volume: 0.7 }
+                  : {
+                      id:
+                        n.surface === `metal` ? `impact_metal` : `impact_wood`,
+                      pos: n.pos,
+                      volume: 0.9,
+                    },
+              )));
+        };
+      (e.events.on(`prop:broken`, (e) => n(e, !1)),
+        e.events.on(`prop:state`, (e) => {
+          for (let t of e?.ids ?? []) n({ id: t }, !0);
+        }));
+      let r = () => e.modules.get(`netcode`)?.sendRpc?.(`prop:sync`, {});
+      (e.events.on(`net:connected`, r),
+        e.events.on(`player:local`, r),
+        (oe.crush = (e, t) => {
+          let r = e.movementAabb ?? e.aabb;
+          n(
+            {
+              id: e.id,
+              cls: t,
+              surface: e.surface,
+              pos: r ? [(r[0] + r[3]) / 2, r[1], (r[2] + r[5]) / 2] : null,
+            },
+            !1,
+          );
+        }),
+        (this.api.getMountedStatus = () => ($?.mounted ? $.status : null)),
+        (this.api.getViewMode = () => $?.viewMode ?? null),
+        (this.api.getAim = () => $?.aim),
+        (this.api.getHullAttitude = (e) => $?.views.get(e)?.attitude ?? null));
+    },
+    update(e, t) {
+      let n = $;
+      if (!n) return;
+      let r = new Set();
+      (n.firing.advance(t), n.shells.update());
+      let a = e.modules.get(`player`),
+        s = a?.getLocalEntity?.(),
+        c = s && s.state & i.IN_VEHICLE ? e.world.get(s.seat) : null,
+        l = c ? a.getInput() : null;
+      for (let t of e.world.byType(`vehicle`)) V(e.world, t);
+      n.aim = c ? B(c, l.yaw, l.pitch, e.world) : null;
+      for (let a of e.world.byType(`vehicle`)) {
+        let l = F[a.weapon];
+        if (!l) continue;
+        r.add(a.id);
+        let u = n.views.get(a.id),
+          d = M(a);
+        if (
+          (u &&
+            u.pick !== d &&
+            (e.modules.get(`environment`)?.removeShadowProxy?.(u.root),
+            e.scene.remove(u.root),
+            u.dispose(),
+            n.views.delete(a.id),
+            (u = null)),
+          !u)
+        ) {
+          let t = !(e.config.frost && a.weapon === 4);
+          ((u = n.models.make(a.weapon, a.team, t, d)),
+            (u.pick = d),
+            (u.root.name = `vehicle-` + a.id),
+            n.views.set(a.id, u),
+            e.scene.add(u.root),
+            e.modules.get(`environment`)?.addShadowProxy?.(u.root));
+        }
+        (u.root.position.fromArray(a.pos),
+          (u.root.rotation.y = a.yaw),
+          l.air &&
+            ((u.attitude ??= Ie()),
+            Le(
+              u.attitude,
+              a.vel,
+              a.yaw,
+              t,
+              a.hp <= 0 ||
+                a.pos[1] - P(e.world, a.pos[0], a.pos[2], a.pos[1]) < 0.15,
+            ),
+            Re(u.root, a.yaw, u.attitude)),
+          (u.root.visible = a.hp > 0),
+          (u.root.visible = !(a.hp > 0 && a.state & i.DEAD)),
+          u.setDestroyed(a.hp <= 0),
+          l.air &&
+            ((u.spool = u.spool == null ? L(a) : I(u.spool, a, t)),
+            (u.rotor.rotation.y += t * R(u.spool, z.mainRate)),
+            (u.tailRotor.rotation.x += t * R(u.spool, z.tailRate))),
+          u.tracks?.update(a.pos, a.yaw, a.hp > 0),
+          u.setEngineHot(
+            a.hp > 0 && (a.owner >= 0 || Math.hypot(...a.vel) > 0.5),
+          ));
+        let f = a === c && a.owner === s.owner ? n.aim : null,
+          p = f?.yaw ?? a.yaw + (a.stance / 255) * Math.PI * 2,
+          m = f?.pitch ?? a.pitch;
+        ((u.turret.rotation.y = p - a.yaw), (u.elevation.rotation.x = m));
+        let h = a.weapon === 2 && a.hp > 0 ? n.firing.pose(a.id) : null,
+          g = h?.barrel ?? 0;
+        u.recoil
+          ? (u.recoil.position.z = g)
+          : u.elevation.position.set(0, -Math.sin(m) * g, Math.cos(m) * g);
+        let _ = h?.hull ?? 0,
+          v = h?.dip ?? 0,
+          y = Math.cos(p - a.yaw),
+          b = Math.sin(p - a.yaw);
+        ((u.suspension.position.y = -v),
+          u.suspension.rotation.set(-y * _, 0, b * _),
+          (u.elevation.rotation.x = m + (h?.lift ?? 0) * 0.05),
+          (u.fireWait = Math.max(0, (u.fireWait ?? 0) - t)));
+        let x = a.weapon === 2 && !!(a.state & i.ADS);
+        if (
+          (a.weapon !== 2 || x) &&
+          a.hp > 0 &&
+          a.state & i.FIRING &&
+          !u.fireWait
+        ) {
+          u.fireWait = x ? 6 / 60 : (l.cooldown ?? 30) / 60;
+          let t = o(p, m),
+            n = H(a.weapon),
+            r = re(a).map((e, r) => e + t[r] * n.length);
+          e.events.emit(`vehicle:fire`, {
+            vehicleId: a.id,
+            pos: r,
+            dir: t,
+            mg: x,
+          });
+        }
+      }
+      n.crash.update(t);
+      for (let [t, i] of n.views)
+        r.has(t) ||
+          (e.modules.get(`environment`)?.removeShadowProxy?.(i.root),
+          e.scene.remove(i.root),
+          i.dispose(),
+          n.views.delete(t),
+          n.firing.remove(t),
+          e.world.map.removeCollider(`vehicle-` + t));
+      if (
+        ((n.viewMode = null),
+        n.cockpit.hide(),
+        c && window.__game?.camera?.current === `fps`)
+      ) {
+        let r =
+            c.owner === s.owner &&
+            !!F[c.weapon].gun &&
+            !(e.config.frost && c.weapon === 4),
+          i = r && !!(l.buttons & h.SPRINT);
+        if (F[c.weapon].air) {
+          let r = ne(s, l.yaw, l.pitch);
+          e.camera.position.fromArray(r.pos);
+          let i = n.views.get(c.id).attitude,
+            a = Ve(i);
+          (a &&
+            e.camera.up
+              .set(0, 1, 0)
+              .applyEuler(new b(a.pitch, c.yaw, -a.roll, `YXZ`)),
+            e.camera.lookAt(new k(...r.look)),
+            e.camera.up.set(0, 1, 0));
+          let o = n.crash.getShake();
+          if (o > 0.01) {
+            let t = performance.now() / 1e3;
+            (e.camera.rotateX(Math.sin(t * 37) * 0.035 * o),
+              e.camera.rotateZ(Math.sin(t * 29 + 1.3) * 0.05 * o),
+              e.camera.rotateY(Math.sin(t * 23 + 0.4) * 0.03 * o));
+          }
+          ((n.views.get(c.id).root.visible = !1),
+            (e.camera.fov = l.buttons & h.SPRINT ? 58 : 82),
+            (n.viewMode = `cockpit`),
+            n.cockpit.update(c, s, l, n.status, t, i, a));
+        } else if (i) {
+          let t = n.aim.sight.map((e, t) => e + n.aim.sightDir[t] * 0.4);
+          (e.camera.position.fromArray(t),
+            e.camera.lookAt(
+              new k(...t.map((e, t) => e + n.aim.sightDir[t] * 80)),
+            ),
+            (n.views.get(c.id).root.visible = !1),
+            (e.camera.fov = 42),
+            (n.viewMode = `sight`));
+        } else {
+          let t = ie(n.aim, e.world.map);
+          e.camera.position.fromArray(t.pos);
+          let i = N(c);
+          (t.pos.every((e, t) => e > i[t] - 0.35 && e < i[t + 3] + 0.35) &&
+            (n.views.get(c.id).root.visible = !1),
+            e.camera.lookAt(new k(...t.look)),
+            (e.camera.fov = 75),
+            (n.viewMode = r ? `chase` : `passenger`));
+        }
+        if (c.weapon === 2) {
+          let t = n.firing.pose(c.id).camera;
+          e.camera.rotateX(i ? t * 1.4 : t);
+        }
+        (e.camera.updateProjectionMatrix(),
+          e.modules.get(`weapons`)?.getViewModel?.()?.setVisible?.(!1));
+      }
+      (c && !n.mounted && a.setSlot?.(0),
+        (n.mounted = !!c),
+        (!c || n.status?.vehicleId !== c.id) && (n.status = null));
+    },
+    showcase(e) {
+      e.debugGround();
+      for (let t = 0; t < 5; t++)
+        e.world.spawn(`vehicle`, {
+          weapon: t,
+          team: t % 2,
+          pos: [(t - 2) * 12, 0, 0],
+          hp: F[t].hp,
+        });
+      e.setCameraFocus([0, 2, 0]);
+    },
+    dispose(e) {
+      oe.crush = null;
+      for (let [t, n] of $?.views ?? [])
+        (e.scene.remove(n.root), e.world.map.removeCollider(`vehicle-` + t));
+      ($?.cockpit.dispose(),
+        $?.crash.dispose(),
+        $?.shells.dispose(),
+        $?.models.dispose(),
+        ($ = null));
+    },
+  };
+export { Ke as default };
+//# sourceMappingURL=vehicles-CqLF20DK.js.map

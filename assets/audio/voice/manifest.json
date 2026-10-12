@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "voices": {
+    "go": [
+      {
+        "file": "go-218.wav",
+        "durationMs": 1043,
+        "sha256": "18d16b77e031731d636a44f754872721f278f6511bc6ac499cc665ec1e761541"
+      }
+    ],
+    "pinned": [
+      {
+        "file": "pinned-218.wav",
+        "durationMs": 1202,
+        "sha256": "4f729429094a7ac0a3665131e2af6b7930a5e151ffd33ccf33664a09b90fd4a0"
+      }
+    ],
+    "lookout": [
+      {
+        "file": "lookout-218.wav",
+        "durationMs": 824,
+        "sha256": "82bed6b313f287bc0a7c1b77167637f0b380314039e731f9123801a090a7e8cc"
+      }
+    ],
+    "grunt": [
+      {
+        "file": "grunt-218.wav",
+        "durationMs": 728,
+        "sha256": "47752e9500f07940a4b27bc7e736f0b1f3b6f291c0ab525b7b3df0b43159ce36"
+      }
+    ],
+    "death": [
+      {
+        "file": "death-218-1.wav",
+        "durationMs": 615,
+        "sha256": "9e1c2224137461618d1ac5e2d0ca7ee5d28046876184be4f071c6a29ab59817d"
+      },
+      {
+        "file": "death-218-2.wav",
+        "durationMs": 643,
+        "sha256": "991e6fa26497946a37b9ac9f0cbf9421b797ec0357c89f8d4813374f89229897"
+      }
+    ],
+    "cough": [
+      {
+        "file": "cough-218.wav",
+        "durationMs": 368,
+        "sha256": "2aab12fc24e61b19ce6f6778eca7041c5b9f4b97c1eab3779418815514901e6d"
+      }
+    ],
+    "banter_amber": [
+      {
+        "file": "banter-amber-218.wav",
+        "durationMs": 6000,
+        "sha256": "d1b4e9590b46a48c42bcf64acc7bec7cf1966cc826f7c15750cab1ef5001b59b"
+      }
+    ],
+    "banter_cobalt": [
+      {
+        "file": "banter-cobalt-218.wav",
+        "durationMs": 6000,
+        "sha256": "29786812e113ebb05114a2a5791d59ab0d8179d43a31a234873ceaeb3fcb473a"
+      }
+    ],
+    "radio": [
+      {
+        "file": "radio-218.wav",
+        "durationMs": 12000,
+        "sha256": "0c48568a659ded815b427993de9c6a9e0e4dff32e4667dae175f08c1f7ea07b7"
+      }
+    ],
+    "cover": [
+      {
+        "file": "cover-228.wav",
+        "durationMs": 768,
+        "sha256": "53bf62b51e2f743bac4a47bbb7d9d6574b00aad454513b39ae5a4420d2aec8fe"
+      }
+    ],
+    "medic": [
+      {
+        "file": "medic-228.wav",
+        "durationMs": 2629,
+        "sha256": "e2bcdbb39ef957b0e5db13de8e8c82f204c515f09fc269a18172edb71d39c2e9"
+      }
+    ],
+    "scream": [
+      {
+        "file": "scream-228.wav",
+        "durationMs": 2545,
+        "sha256": "b51e6cb273fb441fd125bc965d32a9e8b3a824bb8e0f20718d07f16f50bcedb6"
+      }
+    ],
+    "roar": [
+      {
+        "file": "roar-228.wav",
+        "durationMs": 3493,
+        "sha256": "4e4069b977cc68892ce6f34a87047908b630e93e749dedf3fbd1e9fcf7662482"
+      }
+    ],
+    "warhorn": [
+      {
+        "file": "warhorn-228.wav",
+        "durationMs": 6621,
+        "sha256": "fddc4ab602a3ec2499d35323f637cbaac51a80e8441581cc77fa01f6aab52dfd"
+      }
+    ],
+    "war_ambience": [
+      {
+        "file": "war-ambience-237.wav",
+        "durationMs": 25500,
+        "sha256": "cea137cb86ce2a5973e934b89cf02af3840caeaf4fe9fcc7e7eec45948d2c549",
+        "loop": true
+      }
+    ],
+    "war_distant": [
+      {
+        "file": "war-distant-237.wav",
+        "durationMs": 5546,
+        "sha256": "1a1ea3c8ccbc4b7b8ba9f25a20048cfc1937c18387080a8240f49167ace939e2"
+      }
+    ],
+    "blast_sharp": [
+      {
+        "file": "blast-sharp-237.wav",
+        "durationMs": 4111,
+        "sha256": "9add90a9e81596726fae33ed831dba68c989ac809c2c56b875095d3a10202820"
+      }
+    ],
+    "blast_heavy": [
+      {
+        "file": "blast-heavy-237.wav",
+        "durationMs": 2238,
+        "sha256": "f85bd4f8acbfa2e07c034d4d038640a6eb8e7af4a8411f30401f77b2f8ff42f5"
+      }
+    ]
+  }
+}

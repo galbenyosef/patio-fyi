@@ -1,0 +1,862 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+var e = [
+    [-236, -230],
+    [-159.3, -164.9],
+    [-81.4, -113],
+    [-44.1, -54.6],
+    [-20.8, -33.2],
+    [-17.1, -29.8],
+    [27.1, 10.8],
+    [30.8, 14.2],
+    [58, 86],
+    [97.8, 125.7],
+    [182.9, 173.8],
+    [230, 236],
+  ],
+  t = 0.29,
+  n = 2.5,
+  r = 1.45,
+  i = {
+    centre: [5, -9.5],
+    length: 44,
+    stairs: [
+      { side: -1, dir: -1 },
+      { side: 1, dir: 1 },
+    ],
+  },
+  a = {
+    y0: 24,
+    y1: 23.2,
+    y2: 22.4,
+    poly: [
+      [-32, -17],
+      [27, -17],
+      [27, -10],
+      [32, -10],
+      [32, 17],
+      [-27, 17],
+      [-27, 10],
+      [-32, 10],
+    ],
+    outer: [-14, -10, 14, 10],
+    inner: [-8, -5, 8, 5],
+    outerGaps: [
+      [-14, -6, -14, -1],
+      [14, 1, 14, 6],
+      [-7, -10, -2, -10],
+      [2, 10, 7, 10],
+    ],
+    innerGaps: [
+      [-8, 0.5, -8, 2.5],
+      [8, -2.5, 8, -0.5],
+      [1, -5, 4, -5],
+      [-4, 5, -1, 5],
+    ],
+    pad: [-16, -12, 16, 12],
+  },
+  o = {
+    main_w: [
+      [-185, 0],
+      [-145, 0],
+      [-95, -3],
+      [-50, 3],
+    ],
+    main_e: [
+      [50, -3],
+      [95, 3],
+      [145, 0],
+      [185, 0],
+    ],
+  },
+  s = null;
+function c() {
+  if (s) return s;
+  let t = e,
+    n = t.length,
+    r = [
+      [2 * t[0][0] - t[1][0], 2 * t[0][1] - t[1][1]],
+      ...t,
+      [2 * t[n - 1][0] - t[n - 2][0], 2 * t[n - 1][1] - t[n - 2][1]],
+    ],
+    a = [],
+    o = (e, t) => Math.sqrt(Math.hypot(t[0] - e[0], t[1] - e[1])) || 1e-4;
+  for (let e = 1; e < r.length - 2; e++) {
+    let [t, n, i, s] = [r[e - 1], r[e], r[e + 1], r[e + 2]],
+      c = 0 + o(t, n),
+      l = c + o(n, i),
+      u = l + o(i, s);
+    for (let e = 0; e < 60; e++) {
+      let r = c + ((l - c) * e) / 60,
+        o = (e, t, n, i) =>
+          [0, 1].map((a) => ((i - r) * e[a] + (r - n) * t[a]) / (i - n)),
+        d = o(t, n, 0, c),
+        f = o(n, i, c, l),
+        p = o(i, s, l, u),
+        m = o(d, f, 0, l),
+        h = o(f, p, c, u);
+      a.push(o(m, h, c, l));
+    }
+  }
+  a.push(t[n - 1].slice());
+  let c = [0];
+  for (let e = 1; e < a.length; e++)
+    c.push(c[e - 1] + Math.hypot(a[e][0] - a[e - 1][0], a[e][1] - a[e - 1][1]));
+  let l = c[c.length - 1],
+    u = (e) => {
+      e = Math.max(0, Math.min(l, e));
+      let t = 0,
+        n = c.length - 1;
+      for (; n - t > 1;) {
+        let r = (t + n) >> 1;
+        c[r] <= e ? (t = r) : (n = r);
+      }
+      let r = (e - c[t]) / (c[n] - c[t] || 1),
+        i = a[t],
+        o = a[n],
+        s = o[0] - i[0],
+        u = o[1] - i[1],
+        d = Math.hypot(s, u) || 1;
+      return { x: i[0] + s * r, z: i[1] + u * r, tx: s / d, tz: u / d };
+    },
+    d = 0,
+    f = 1 / 0;
+  for (let e = 0; e < a.length; e++) {
+    let t = Math.hypot(a[e][0] - i.centre[0], a[e][1] - i.centre[1]);
+    t < f && ((f = t), (d = c[e]));
+  }
+  return ((s = { length: l, at: u, stationAt: d }), s);
+}
+function l([e, t, n, r]) {
+  let o = c(),
+    s = o.at(o.stationAt);
+  for (let i = 0; i < o.length; i += 1) {
+    let a = o.at(i),
+      s = Math.max(e - a.x, 0, a.x - n),
+      c = Math.max(t - a.z, 0, a.z - r);
+    if (Math.hypot(s, c) < 6.1) return !0;
+  }
+  let l = i.stairs.map(({ side: e, dir: t }) => ({
+    l0: e > 0 ? 8.4 : -12.700000000000001,
+    l1: e > 0 ? 11.3 + 1.4 : -8.4,
+    z0: t < 0 ? -17.6 : -7.8,
+    z1: t < 0 ? 7.8 : 17.6,
+  }));
+  for (let o = e; o <= n + 1e-6; o += Math.max(0.5, (n - e) / Math.ceil(n - e)))
+    for (
+      let e = t;
+      e <= r + 1e-6;
+      e += Math.max(0.5, (r - t) / Math.ceil(r - t))
+    ) {
+      let t = o - s.x,
+        n = e - s.z,
+        r = t * s.tz - n * s.tx,
+        c = t * s.tx + n * s.tz;
+      if (
+        (Math.abs(c) <= i.length / 2 + 2 && Math.abs(r) <= 10.4) ||
+        l.some((e) => r >= e.l0 && r <= e.l1 && c >= e.z0 && c <= e.z1) ||
+        m(a.poly, o, e)
+      )
+        return !0;
+    }
+  return !1;
+}
+var u = (e) => Math.round(e * 1e3) / 1e3;
+function d(e, t, n, r, i, a, o, s, c = {}) {
+  e.push({ id: t, aabb: [n, r, i, a, o, s].map(u), surface: `concrete`, ...c });
+}
+function f(e, t, n, r = {}) {
+  let i = Math.cos(n.yaw),
+    a = Math.sin(n.yaw),
+    o = n.ramp ? Math.max(n.ramp.y, n.ramp.y + n.ramp.rise) : n.y1,
+    s = [1 / 0, n.y0, 1 / 0, -1 / 0, o, -1 / 0];
+  for (let [e, t] of [
+    [-n.hx, -n.hz],
+    [n.hx, -n.hz],
+    [n.hx, n.hz],
+    [-n.hx, n.hz],
+  ]) {
+    let r = n.x + i * e + a * t,
+      o = n.z - a * e + i * t;
+    ((s[0] = Math.min(s[0], r)),
+      (s[3] = Math.max(s[3], r)),
+      (s[2] = Math.min(s[2], o)),
+      (s[5] = Math.max(s[5], o)));
+  }
+  e.push({ id: t, aabb: s.map(u), obb: n, surface: `concrete`, ...r });
+}
+function p(e, t, n, r, i, a, o, s, c, l, u = 0.4) {
+  let f = [],
+    p = -a,
+    m = i;
+  for (let [e, t, c] of [
+    [o - u, s - u, 0],
+    [-o + u, s - u, 0.5],
+    [-o + u, -s + u, 1],
+    [o - u, -s + u, 1.5],
+  ])
+    for (let o = 0; o <= 4; o++) {
+      let s = (c + o / 8) * Math.PI,
+        l = e + Math.cos(s) * u,
+        d = t + Math.sin(s) * u;
+      f.push([n + i * l + p * d, r + a * l + m * d]);
+    }
+  let h = Math.min(...f.map((e) => e[1])),
+    g = Math.max(...f.map((e) => e[1])),
+    _ = Math.max(1, Math.round((g - h) / 0.2)),
+    v = (g - h) / _;
+  for (let n = 0; n < _; n++) {
+    let r = h + (n + 0.5) * v,
+      i = 1 / 0,
+      a = -1 / 0;
+    for (let e = 0; e < f.length; e++) {
+      let [t, n] = f[e],
+        [o, s] = f[(e + 1) % f.length];
+      if ((n - r) * (s - r) > 0 || n === s) continue;
+      let c = t + ((o - t) * (r - n)) / (s - n);
+      ((i = Math.min(i, c)), (a = Math.max(a, c)));
+    }
+    a > i && d(e, `${t}-${n}`, i, c, h + n * v, a, l, h + (n + 1) * v);
+  }
+}
+var m = (e, t, n) => {
+    let r = !1;
+    for (let i = 0, a = e.length - 1; i < e.length; a = i++) {
+      let [o, s] = e[i],
+        [c, l] = e[a];
+      s > n != l > n && t < ((c - o) * (n - s)) / (l - s) + o && (r = !r);
+    }
+    return r;
+  },
+  h = [-102, 0, 102],
+  g = [-140, 140],
+  _ = 12.1,
+  v = (e, t) =>
+    h.some(
+      (n) =>
+        Math.abs(t - n) < _ &&
+        Math.abs(e) < 152 &&
+        (n !== 0 || Math.abs(e) > 30),
+    ) || g.some((n) => Math.abs(e - n) < _ && Math.abs(t) < 108),
+  y = null;
+function b() {
+  if (y) return y;
+  let e = c(),
+    t = e.length,
+    n = Math.max(1, Math.round(t / 24)),
+    r = t / n,
+    i = [0];
+  for (let t = 1; t < n; t++) {
+    let n = t * r;
+    for (let a = 0; a <= 11; a += 0.5) {
+      let o = [t * r + a, t * r - a].find(
+        (t) => t - i[i.length - 1] > 12 && !v(e.at(t).x, e.at(t).z),
+      );
+      if (o != null) {
+        n = o;
+        break;
+      }
+    }
+    i.push(n);
+  }
+  return (i.push(t), (y = i));
+}
+var x = (e, t) => Math.abs(e) < 212 && Math.abs(t) < 212;
+function S(t, n) {
+  C(t, n);
+  let r = t.colliderDefs,
+    s = c(),
+    l = { s0: s.stationAt - i.length / 2, s1: s.stationAt + i.length / 2 },
+    h = (e, t = 0) => e > l.s0 - t && e < l.s1 + t;
+  for (let e = 0, t = 0; e < s.length; e += 3, t++) {
+    let n = s.at(e + 1.5),
+      i = Math.atan2(n.tx, n.tz);
+    if (x(n.x, n.z)) {
+      f(r, `rail-deck-${t}`, {
+        x: u(n.x),
+        z: u(n.z),
+        yaw: i,
+        hx: 5.5,
+        hz: 1.56,
+        y0: 31.2,
+        y1: 33,
+        thickness: 1.8,
+      });
+      for (let e of [-2.25, 2.25])
+        f(r, `rail-slab-${t}-${+(e > 0)}`, {
+          x: u(n.x + n.tz * e),
+          z: u(n.z - n.tx * e),
+          yaw: i,
+          hx: 1.35,
+          hz: 1.56,
+          y0: 33,
+          y1: 33.24,
+          thickness: 0.3,
+        });
+      if (!h(e + 1.5, 2.3))
+        for (let e of [-4.77, 4.77])
+          f(r, `rail-walk-${t}-${+(e > 0)}`, {
+            x: u(n.x + n.tz * e),
+            z: u(n.z - n.tx * e),
+            yaw: i,
+            hx: 0.42,
+            hz: 1.56,
+            y0: 33,
+            y1: 33.32,
+            thickness: 0.4,
+          });
+    }
+  }
+  let g = 0;
+  for (let e = 0.2; e < s.length; e += 0.75) {
+    if (h(e, 2.3)) continue;
+    let t = s.at(e);
+    for (let e of [-5.36, 5.36]) {
+      let n = t.x + t.tz * e,
+        i = t.z - t.tx * e;
+      Math.abs(n) < 219.6 &&
+        Math.abs(i) < 219.6 &&
+        d(
+          r,
+          `rail-parapet-${g++}`,
+          n - 0.34,
+          33,
+          i - 0.34,
+          n + 0.34,
+          34.24,
+          i + 0.34,
+        );
+    }
+  }
+  let _ = b();
+  for (let e = 0; e < _.length; e++) {
+    let t = Math.min(s.length - 0.6, Math.max(0.6, _[e])),
+      i = s.at(t),
+      a = n(i.x, i.z),
+      o = Math.atan2(i.tx, i.tz);
+    if (Math.abs(i.x) > 218 || Math.abs(i.z) > 218) continue;
+    let c = !x(i.x, i.z),
+      l = 29.48;
+    if (
+      (p(r, `rail-pier-${e}`, i.x, i.z, i.tz, -i.tx, 1.15, 0.725, a - 0.2, l),
+      p(
+        r,
+        `rail-pier-${e}-plinth`,
+        i.x,
+        i.z,
+        i.tz,
+        -i.tx,
+        1.3,
+        0.85,
+        a - 0.2,
+        a + 0.5,
+        0.45,
+      ),
+      c ||
+        f(
+          r,
+          `rail-pier-cap-${e}`,
+          {
+            x: u(i.x),
+            z: u(i.z),
+            yaw: o,
+            hx: 3.05,
+            hz: 0.95,
+            y0: l,
+            y1: 30.98,
+          },
+          { noPlayer: !0 },
+        ),
+      e % 2 == 0 && !h(t, 3))
+    )
+      for (let t of [-4.85, 4.85]) {
+        let n = i.x + i.tz * t,
+          a = i.z - i.tx * t;
+        Math.abs(n) < 219.6 &&
+          Math.abs(a) < 219.6 &&
+          d(
+            r,
+            `rail-mast-${e}-${+(t > 0)}`,
+            n - 0.15,
+            33.32,
+            a - 0.15,
+            n + 0.15,
+            40.6,
+            a + 0.15,
+          );
+      }
+  }
+  let v = s.at(s.stationAt),
+    y = Math.atan2(v.tx, v.tz),
+    S = i.length / 2,
+    E = (e, t) => [v.x + v.tz * e + v.tx * t, v.z - v.tx * e + v.tz * t],
+    D = Object.fromEntries(
+      i.stairs.map((e) => [e.side, e.dir < 0 ? [4, 6.8] : [-6.8, -4]]),
+    );
+  for (let e of [-1, 1]) {
+    let [t, n] = E((e * 12.65) / 2, 0);
+    f(r, `rail-platform-${+(e > 0)}`, {
+      x: u(t),
+      z: u(n),
+      yaw: y,
+      hx: 4.950000000000001 / 2,
+      hz: S,
+      y0: 33,
+      y1: 34.45,
+    });
+    for (let t of [-1, 1]) {
+      let [n, i] = E(e * 5, t * (S + 0.98));
+      f(r, `rail-platform-steps-${+(e > 0)}-${+(t > 0)}`, {
+        x: u(n),
+        z: u(i),
+        yaw: y,
+        hx: 0.5,
+        hz: 0.98,
+        y0: 33,
+        y1: 34.45,
+        ramp: { z0: t * 0.98, z1: -t * 0.98, y: 33.32, rise: 1.13 },
+      });
+      for (let n = 0.15; n < 2.1; n += 0.45) {
+        let [i, a] = E(e * 5.53, t * (S + n));
+        d(
+          r,
+          `rail-platform-cheek-${+(e > 0)}-${+(t > 0)}-${Math.round(n * 100)}`,
+          i - 0.15,
+          33.32,
+          a - 0.15,
+          i + 0.15,
+          34.45 + 1.1,
+          a + 0.15,
+        );
+      }
+    }
+    let i = [];
+    for (let e = -S + 4; e <= S - 3.9; e += 8) i.push(e);
+    for (let t of i) {
+      let [n, i] = E(e * 7.85, t);
+      d(
+        r,
+        `rail-canopy-col-${+(e > 0)}-${Math.round(t)}`,
+        n - 0.12,
+        34.45,
+        i - 0.12,
+        n + 0.12,
+        39.2,
+        i + 0.12,
+      );
+    }
+    for (let t = 0; t < i.length - 1; t++) {
+      let n = (i[t] + i[t + 1]) / 2,
+        a = D[e];
+      if (!(a && n > a[0] - 2 && n < a[1] + 2))
+        for (let t = -0.7; t <= 0.71; t += 0.35) {
+          let [i, a] = E(e * 7.28, n + t);
+          d(
+            r,
+            `rail-bench-${+(e > 0)}-${Math.round(n)}-${Math.round(t * 100)}`,
+            i - 0.2,
+            34.45,
+            a - 0.2,
+            i + 0.2,
+            35.35,
+            a + 0.2,
+          );
+        }
+    }
+    let [a, o] = E(e * 6.5, 0);
+    f(
+      r,
+      `rail-canopy-${+(e > 0)}`,
+      {
+        x: u(a),
+        z: u(o),
+        yaw: y,
+        hx: 2.65,
+        hz: S + 1,
+        y0: 38.95,
+        y1: 34.45 + 5.2,
+      },
+      { noPlayer: !0 },
+    );
+    let s = D[e];
+    for (let t = -S; t <= S + 0.001; t += 0.45) {
+      if (s && t > s[0] - 0.1 && t < s[1] + 0.1) continue;
+      let [n, i] = E(e * 8.700000000000001, t);
+      d(
+        r,
+        `rail-rail-${+(e > 0)}-${Math.round((t + S) / 0.45)}`,
+        n - 0.15,
+        34.45,
+        i - 0.15,
+        n + 0.15,
+        34.45 + 1.1,
+        i + 0.15,
+      );
+    }
+  }
+  for (let e of i.stairs) w(r, n, v, y, 33, e);
+  (T(r), (t.objectiveStyle = `flag`));
+  for (let e of t.objectives ?? []) e.letter === `E` && (e.visual = `map`);
+  t.routes = {
+    ...Object.fromEntries(
+      Object.entries(t.routes ?? {}).filter(([e]) => e !== `main`),
+    ),
+    ...o,
+  };
+  let O = (e, t) =>
+      m(a.poly, e, t) || (Math.abs(e) < 34.5 && Math.abs(t) < 6.5),
+    k = (e) => /^(rail-|plaza-)/.test(String(e).replace(/^demo-/, ``));
+  ((t.props = (t.props ?? []).filter((e) => !O(e.x, e.z))),
+    (t.signs = (t.signs ?? []).filter((e) => !O(e.x, e.z))));
+  let A = (e) => (Array.isArray(e.pos) ? [e.pos[0], e.pos[2]] : [e.x, e.z]);
+  for (let e of [`lights`, `fixtureSpills`])
+    Array.isArray(t[e]) && (t[e] = t[e].filter((e) => !O(...A(e))));
+  t.objects = t.objects.filter(
+    (e) =>
+      k(e.id) ||
+      /^(avenue|cross)-/.test(e.id) ||
+      !O(e.x, e.z) ||
+      e.kind !== `box` ||
+      e.sx > 60 ||
+      e.sz > 60,
+  );
+  let j = new Set((t.props ?? []).map((e) => `demo-` + e.id));
+  t.colliderDefs = t.colliderDefs.filter(
+    (e) =>
+      k(e.id) ||
+      !/^demo-(street|prop|streetlife)/.test(e.id) ||
+      j.has(e.id) ||
+      !O((e.aabb[0] + e.aabb[3]) / 2, (e.aabb[2] + e.aabb[5]) / 2),
+  );
+  let M = new Set([1, 4, 6, 11, 14, 19]),
+    N = (e) => {
+      let t = /^(?:demo-)?district-tree-(\d+)-(?:trunk|crown)$/.exec(e);
+      return t && +t[1] < 20 && !M.has(+t[1]);
+    };
+  ((t.objects = t.objects.filter((e) => !N(e.id))),
+    (t.colliderDefs = t.colliderDefs.filter((e) => !N(e.id))));
+  let P = new Set(t.vacated ?? []);
+  for (let e of [`buildings`, `infill`, `reviewBlock`, `landmarks`])
+    Array.isArray(t[e]) && (t[e] = t[e].filter((e) => !P.has(e.id)));
+  return (
+    (t.greywaterCentre = {
+      points: e,
+      deck: 33,
+      station: { at: s.stationAt, length: i.length, stairs: i.stairs },
+      plaza: a,
+    }),
+    t
+  );
+}
+function C(e, t) {
+  let n = (e) => {
+      let t = String(e).replace(/^demo-/, ``);
+      return (
+        /^(capture-canopy-|viaduct-|compact-loading-van-|compact-dumpster-)/.test(
+          t,
+        ) || /^compact-street-car-[123]$/.test(t)
+      );
+    },
+    r = (e.props ?? []).filter((e) => n(e.id));
+  ((e.props = (e.props ?? []).filter((e) => !n(e.id))),
+    (e.objects = e.objects.filter((e) => !n(e.id))),
+    (e.colliderDefs = e.colliderDefs.filter((e) => !n(e.id))),
+    (e.lights = (e.lights ?? []).filter(
+      (e) =>
+        !r.some(
+          (t) =>
+            Math.hypot((e.pos?.[0] ?? e.x) - t.x, (e.pos?.[2] ?? e.z) - t.z) <
+            3.5,
+        ),
+    )));
+  let i = [];
+  for (let n of e.objects)
+    if (
+      n.kind === `box` &&
+      /^avenue-(0|walk-0-|kerb-0-)/.test(n.id) &&
+      n.x - n.sx / 2 < -33 &&
+      n.x + n.sx / 2 > 33
+    ) {
+      let e = n.x - n.sx / 2,
+        r = n.x + n.sx / 2,
+        a = n.y - t(n.x, n.z),
+        o = (e - 33) / 2,
+        s = (33 + r) / 2;
+      i.push(
+        { ...n, id: n.id + `-w`, x: o, y: t(o, n.z) + a, sx: -33 - e },
+        { ...n, id: n.id + `-e`, x: s, y: t(s, n.z) + a, sx: r - 33 },
+      );
+    } else (/^avenue-dash-0-/.test(n.id) && Math.abs(n.x) < 36) || i.push(n);
+  e.objects = i;
+  for (let t of e.objectives ?? []) t.radius = 17;
+}
+function w(e, i, a, o, s, { side: c, dir: l }) {
+  let p = +(c > 0),
+    m = (e, t) => {
+      let n = c * e,
+        r = -l * t;
+      return [a.x + a.tz * n + a.tx * r, a.z - a.tx * n + a.tz * r];
+    },
+    h = 20.3 / 2,
+    [g, _] = m(h, -17.029999999999998),
+    v = i(g, _) - s,
+    y = r,
+    b = (y - v) / 60,
+    x = (t, r, i, a, c, d) => {
+      let [p, g] = m(h, (r + a) / 2),
+        _ = Math.abs(r - a) / 2,
+        v = -l * Math.sign(a - r);
+      f(e, t, {
+        x: u(p),
+        z: u(g),
+        yaw: o,
+        hx: n / 2,
+        hz: _,
+        y0: s + Math.min(i, c) - d,
+        y1: s + Math.max(i, c),
+        ...(i === c
+          ? {}
+          : { ramp: { z0: -v * _, z1: v * _, y: s + i, rise: c - i } }),
+        thickness: d,
+      });
+    };
+  x(`rail-stair-${p}-top`, 6.8, y, 4, y, 0.3);
+  let S = 4,
+    C = y,
+    w = 0,
+    T = [];
+  for (let n = 0; n < 3; n++) {
+    let r = S,
+      i = C;
+    ((S = r - 19 * t),
+      (C = i - 20 * b),
+      x(`rail-stair-${p}-f${n}`, r, i, S, C, 0.4),
+      T.push([r, i, S, C]));
+    let [a, c] = m(10.25, (r + S) / 2),
+      d = Math.abs(r - S) / 2,
+      h = -l * Math.sign(S - r);
+    (f(
+      e,
+      `rail-stair-${p}-roof${n}`,
+      {
+        x: u(a),
+        z: u(c),
+        yaw: o,
+        hx: 1.65,
+        hz: d,
+        y0: s + Math.min(i, C) + 2.6,
+        y1: s + Math.max(i, C) + 2.9,
+        ramp: { z0: -h * d, z1: h * d, y: s + i + 2.9, rise: C - i },
+        thickness: 0.3,
+      },
+      { noPlayer: !0 },
+    ),
+      n < 2 &&
+        (x(`rail-stair-${p}-l${n}`, S, C, S - 2, C, 0.3),
+        T.push([S, C, S - 2, C]),
+        (S -= 2)));
+  }
+  for (let t of [8.950000000000001, 11.35])
+    for (let [n, r, i, a] of T) {
+      let o = Math.max(1, Math.ceil(Math.abs(n - i) / 0.42));
+      for (let c = 0; c <= o; c++) {
+        let l = c / o,
+          u = n + (i - n) * l,
+          f = r + (a - r) * l,
+          [h, g] = m(t, u);
+        d(
+          e,
+          `rail-bal-${p}-${w++}`,
+          h - 0.13,
+          s + f - 0.1,
+          g - 0.13,
+          h + 0.13,
+          s + f + 1.05,
+          g + 0.13,
+        );
+      }
+    }
+}
+function T(e) {
+  let {
+      y0: t,
+      y1: n,
+      y2: r,
+      outer: [i, o, s, c],
+      inner: [l, u, p, m],
+      pad: [h, g, _, v],
+    } = a,
+    y = -0.1;
+  (d(e, `plaza-rim-n`, h - 2, r + y, g - 2, _ + 2, t, o),
+    d(e, `plaza-rim-s`, h - 2, r + y, c, _ + 2, t, v + 2),
+    d(e, `plaza-rim-w`, h - 2, r + y, o, i, t, c),
+    d(e, `plaza-rim-e`, s, r + y, o, _ + 2, t, c),
+    d(e, `plaza-terrace-n`, i, r + y, o, s, n, u),
+    d(e, `plaza-terrace-s`, i, r + y, m, s, n, c),
+    d(e, `plaza-terrace-w`, i, r + y, u, l, n, m),
+    d(e, `plaza-terrace-e`, p, r + y, u, s, n, m));
+  let b = (t, [n, r, i, a], o, s, c, l) => {
+    let u = (n + i) / 2,
+      p = (r + a) / 2,
+      m = r === a,
+      h = Math.sign(c - u),
+      g = Math.sign(l - p),
+      _ = m ? (g > 0 ? 0 : Math.PI) : h > 0 ? Math.PI / 2 : -Math.PI / 2,
+      v = 1.36;
+    f(e, t, {
+      x: u + (m ? 0 : (h * v) / 2),
+      z: p + (m ? (g * v) / 2 : 0),
+      yaw: _,
+      hx: (m ? i - n : Math.abs(a - r)) / 2,
+      hz: v / 2,
+      y0: s + y,
+      y1: o,
+      ramp: { z0: -1.36 / 2, z1: v / 2, y: o, rise: s - o },
+    });
+    for (let [c, l] of (m ? [n, i] : [r, a]).entries()) {
+      let i = m ? r : n,
+        [a, u] =
+          (m ? g : h) > 0 ? [i - 0.3, i + v - 0.17] : [i - v + 0.17, i + 0.3];
+      m
+        ? d(e, `${t}-cheek-${c}`, l - 0.15, s + y, a, l + 0.15, o, u)
+        : d(e, `${t}-cheek-${c}`, a, s + y, l - 0.15, u, o, l + 0.15);
+    }
+  };
+  (a.outerGaps.forEach((e, r) => b(`plaza-steps-o${r}`, e, t, n, 0, 0)),
+    a.innerGaps.forEach((e, t) => b(`plaza-steps-i${t}`, e, n, r, 0, 0)),
+    d(e, `plaza-monument`, -2.3, r, -2.3, 2.3, r + 0.6, 2.3),
+    d(e, `plaza-monument-die`, -1.6, r, -1.6, 1.6, r + 2.45, 1.6));
+  for (let [t, n] of [
+    [-4.5, 2.8],
+    [4.5, -2.8],
+  ])
+    d(
+      e,
+      `plaza-bench-c${+(t > 0)}`,
+      t - 1.3,
+      r,
+      n - 0.25,
+      t + 1.3,
+      r + 0.46,
+      n + 0.25,
+    );
+  d(e, `plaza-planter-t`, -12.1, n, 1.4, -10.5, n + 1, 5.4);
+  for (let [n, r] of [
+    [-23, -11],
+    [23, 11],
+  ])
+    d(
+      e,
+      `plaza-kiosk-${+(n > 0)}`,
+      n - 1.25,
+      t,
+      r - 1.65,
+      n + 1.25,
+      t + 2.72,
+      r + 1.65,
+    );
+  for (let [n, r] of [
+    [-21, 11.8],
+    [21, -11.8],
+  ])
+    d(
+      e,
+      `plaza-planter-${+(n > 0)}`,
+      n - 3.05,
+      t,
+      r - 0.85,
+      n + 3.05,
+      t + 1.05,
+      r + 0.85,
+    );
+  for (let n of [-1, 1]) {
+    for (let r of [-5, 0, 5])
+      d(
+        e,
+        `plaza-end-planter-${+(n > 0)}-${r}`,
+        n * 33.1 - 0.95,
+        t,
+        r - 1.25,
+        n * 33.1 + 0.95,
+        t + 0.9,
+        r + 1.25,
+      );
+    for (let r of [-7, 7])
+      d(
+        e,
+        `plaza-bollard-${+(n > 0)}-${r}`,
+        n * 33.1 - 0.12,
+        t,
+        r - 0.12,
+        n * 33.1 + 0.12,
+        t + 0.92,
+        r + 0.12,
+      );
+    let r = n * 38,
+      i = n * 8.2,
+      a = i + n * 0.75;
+    d(
+      e,
+      `plaza-shelter-${+(n > 0)}`,
+      r - 2.4,
+      t,
+      Math.min(a, a + n * 0.12),
+      r + 2.4,
+      t + 2.36,
+      Math.max(a, a + n * 0.12),
+    );
+    for (let [a, o, s] of [
+      [0, -2.36, 0.05],
+      [1, 2.35, 0.09],
+    ]) {
+      let c = r - n * o,
+        l = i - n * -0.72,
+        u = i - n * 0.45;
+      d(
+        e,
+        `plaza-shelter-${+(n > 0)}-end-${a}`,
+        c - s,
+        t,
+        Math.min(l, u),
+        c + s,
+        t + 2.3,
+        Math.max(l, u),
+      );
+    }
+    d(
+      e,
+      `plaza-shelter-roof-${+(n > 0)}`,
+      r - 2.55,
+      t + 2.5,
+      i - 1,
+      r + 2.55,
+      t + 2.7,
+      i + 1,
+      { noPlayer: !0 },
+    );
+  }
+  for (let [n, r] of [
+    [-30.5, -15.5],
+    [30.5, 15.5],
+    [-30.5, 8.5],
+    [30.5, -8.5],
+    [-17, 9],
+    [17, -9],
+  ])
+    d(
+      e,
+      `plaza-lamp-${n}-${r}`,
+      n - 0.12,
+      t,
+      r - 0.12,
+      n + 0.12,
+      t + 4.8,
+      r + 0.12,
+    );
+  for (let [n, r, i] of [
+    [-12, 14.6, 0],
+    [12, -14.6, 1],
+  ])
+    d(e, `plaza-bench-${i}`, n - 1.2, t, r - 0.3, n + 1.2, t + 0.9, r + 0.3);
+}
+export { c as a, l as i, S as n, b as r, a as t };
+//# sourceMappingURL=greywater-centre-hZuxA5K7.js.map

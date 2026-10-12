@@ -1,0 +1,255 @@
+{
+  "version": 1,
+  "footsteps": {
+    "road": [
+      {
+        "file": "concrete-213-1.wav",
+        "durationMs": 315,
+        "sha256": "0ca1b6cf0a6561f7c8db25025877d525c7806a26920bdb990cdc35f1382591ca"
+      },
+      {
+        "file": "concrete-213-2.wav",
+        "durationMs": 270,
+        "sha256": "00726265393933d6488d3e7efff5bfaf45b7b606dc7b5c3885cd4ad13caf7d47"
+      },
+      {
+        "file": "concrete-213-3.wav",
+        "durationMs": 325,
+        "sha256": "8ceda14bde188def342d41b7cef57f6e9306f673eea028d01af114c3c4b99dd9"
+      },
+      {
+        "file": "concrete-213-4.wav",
+        "durationMs": 280,
+        "sha256": "94eb18ad28b4eab3eb500ffd7057c303177a12d07b0dff6c4f83dc3ab3f85a8f"
+      }
+    ],
+    "wood": [
+      {
+        "file": "wood-213-1.wav",
+        "durationMs": 325,
+        "sha256": "6c1d5a2b6b3dedf9aa3d790a7bd42c1a9afb30615f3373c133457180642f0323"
+      },
+      {
+        "file": "wood-213-2.wav",
+        "durationMs": 325,
+        "sha256": "4dab659ca1a8bd5f7e356c2ed43dcb268f823bfe77276221d9fe29b2bc84583e"
+      },
+      {
+        "file": "wood-213-3.wav",
+        "durationMs": 325,
+        "sha256": "7e6e519e442dace28c6f989076e6614f2969b1ad60a44ec0b416b7700b56150f"
+      },
+      {
+        "file": "wood-213-4.wav",
+        "durationMs": 325,
+        "sha256": "13052e7bc439181ab1201ee932830cba031d81cd9f914380e787def7623808e0"
+      }
+    ],
+    "grass": [
+      {
+        "file": "leaves-213-1.wav",
+        "durationMs": 325,
+        "sha256": "eb5ebd6910075198bf36d38e97846655c3ef96436ae6c13d89160cb71fe4d6a4"
+      },
+      {
+        "file": "leaves-213-2.wav",
+        "durationMs": 325,
+        "sha256": "a5d0c44be8900e87deff204915addd618bb08b915811488bbc6b736a3b4b0a75"
+      },
+      {
+        "file": "leaves-213-3.wav",
+        "durationMs": 325,
+        "sha256": "b9b8bf8b36947c4443feab0331b1b2481e749a93c16a81fb5e2ee8aa930b02b4"
+      },
+      {
+        "file": "leaves-213-4.wav",
+        "durationMs": 325,
+        "sha256": "2a8a40e760bb21fe407ced192676480faa829affe49c96f427228c05eba4a988"
+      }
+    ],
+    "snow": [
+      {
+        "file": "snow-213-1.wav",
+        "durationMs": 325,
+        "sha256": "b6fe3d5e2f573f7f746e0309d9e3ab5954b7d5e46e2e8b417ff6ed7fd2c2a053"
+      },
+      {
+        "file": "snow-213-2.wav",
+        "durationMs": 325,
+        "sha256": "033ccd7fbf9277efc52b9ac9fde4cccf0ef37f171116fcdef06a9558cfb86b8d"
+      },
+      {
+        "file": "snow-213-3.wav",
+        "durationMs": 295,
+        "sha256": "76cb3a970b56ef51a605e2c36ac23fc24395bf8ed1f1dbb974b4e25c41e0baa6"
+      },
+      {
+        "file": "snow-213-4.wav",
+        "durationMs": 300,
+        "sha256": "bb8439813c66b6febdb0090a99b78ba9d5ef19449651bdbfd3f9025a51eba1db"
+      }
+    ],
+    "dirt": [
+      {
+        "file": "dirt-boots-213-1.wav",
+        "durationMs": 325,
+        "sha256": "0a2ca2c0907b4403a30576386be1972fb95e896da17d5e3a2c59aacffb4faf6d"
+      },
+      {
+        "file": "dirt-boots-213-2.wav",
+        "durationMs": 325,
+        "sha256": "7b9cdb1309ead5c9f274e7c6695f531c996391403db29f531e30acd7e0dbe232"
+      },
+      {
+        "file": "dirt-boots-213-3.wav",
+        "durationMs": 310,
+        "sha256": "337740ceedae0660b551fbcb51fc8f145f157a6e38760325ab73a26bf4e4e067"
+      },
+      {
+        "file": "dirt-boots-213-4.wav",
+        "durationMs": 265,
+        "sha256": "6eddf0a4f08b13269f67642ddeb6079f51c23b886ddc5984608c5c4d2a403b5d"
+      },
+      {
+        "file": "dirt-boots-213-5.wav",
+        "durationMs": 325,
+        "sha256": "ec4a1cd1d44a118992fbd4f54aee910b1f64210def021da5bbb8ec9f776c59b6"
+      },
+      {
+        "file": "dirt-boots-213-6.wav",
+        "durationMs": 325,
+        "sha256": "f71e20fcee25b6faa722a264ad9b1d51459f721d9ef6ea6df6e9b625e3911fbb"
+      }
+    ]
+  },
+  "rotor": {
+    "file": "helicopter-hover-213.wav",
+    "sha256": "686ea8dede83a108c58a70b009a647f536b20a1e7f6903039a2c90ad6074179c",
+    "sampleRate": 48000,
+    "channels": 1,
+    "loopCrossfadeMs": 50
+  },
+  "sources": [
+    {
+      "id": 854493,
+      "author": "qubodup",
+      "filename": "854493__qubodup__uh60-black-hawk-helicopter-hover-loop-1.wav",
+      "use": "rotor",
+      "title": "UH60 Black Hawk Helicopter Hover Loop 1",
+      "license": "unknown",
+      "url": "https://freesound.org/people/qubodup/sounds/854493/",
+      "sha256": "a984060730bb0582403252d67975d48ec8415ea5c7134b3eae7408c5f07467c2",
+      "decoded": {
+        "sampleRate": 48000,
+        "channels": 1,
+        "durationMs": 2612
+      }
+    },
+    {
+      "id": 216570,
+      "author": "qubodup",
+      "filename": "216570__qubodup__snow-footsteps-running.flac",
+      "use": "snow",
+      "title": "Snow Footsteps Running",
+      "license": "CC-BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/legalcode",
+      "url": "https://freesound.org/people/qubodup/sounds/216570/",
+      "sha256": "e454e2229e8f8898563489055ca3880185f6cbbde512a24290b28c1f1b7097a1",
+      "decoded": {
+        "sampleRate": 48000,
+        "channels": 1,
+        "durationMs": 5744
+      }
+    },
+    {
+      "id": 235470,
+      "author": "jcdecha",
+      "filename": "235470__jcdecha__running_boots_medium_speed.wav",
+      "use": "dirt",
+      "title": "Running boots medium speed",
+      "license": "unknown",
+      "url": "https://freesound.org/people/jcdecha/sounds/235470/",
+      "sha256": "51c412ec60c0607674661871aa525a60e97965e19d8905ee975c2abf24c0aae3",
+      "decoded": {
+        "sampleRate": 48000,
+        "channels": 1,
+        "durationMs": 14214
+      }
+    },
+    {
+      "id": 363470,
+      "author": "taure",
+      "filename": "363470__taure__running_wood.wav",
+      "use": "wood",
+      "title": "Running Wood",
+      "license": "unknown",
+      "url": "https://freesound.org/people/taure/sounds/363470/",
+      "sha256": "efd233963304a7e31f39a608b6fc1312b229256ef83d8cd364e44bb07751576b",
+      "decoded": {
+        "sampleRate": 48000,
+        "channels": 1,
+        "durationMs": 5500
+      }
+    },
+    {
+      "id": 392483,
+      "author": "gpag1",
+      "filename": "392483__gpag1__footsteps-boots.wav",
+      "use": "dirt",
+      "title": "Footsteps Boots",
+      "license": "unknown",
+      "url": "https://freesound.org/people/gpag1/sounds/392483/",
+      "sha256": "84f84b64048e9c12832e3bde5a8220df344d75d33d3ac494dd6e95c681f07147",
+      "decoded": {
+        "sampleRate": 48000,
+        "channels": 1,
+        "durationMs": 3581
+      }
+    },
+    {
+      "id": 407654,
+      "author": "nagwense",
+      "filename": "407654__nagwense__running-over-dead-leaves.wav",
+      "use": "grass",
+      "title": "Running Over Dead Leaves",
+      "license": "unknown",
+      "url": "https://freesound.org/people/nagwense/sounds/407654/",
+      "sha256": "e4455131746ee9f9cd588664d775c910465868b99519b5c7e4ae7273fdbe6b2e",
+      "decoded": {
+        "sampleRate": 48000,
+        "channels": 1,
+        "durationMs": 7000
+      }
+    },
+    {
+      "id": 418545,
+      "author": "14FPanskaBubik_Lukas",
+      "filename": "418545__14fpanskabubik_lukas__running-on-concrete.wav",
+      "use": "road",
+      "title": "Running on Concrete",
+      "license": "unknown",
+      "url": "https://freesound.org/people/14FPanskaBubik_Lukas/sounds/418545/",
+      "sha256": "ff15b6e0ed5e09060c560bdbd1e41c9fbcb442e6a892e53d0642c932347964d3",
+      "decoded": {
+        "sampleRate": 48000,
+        "channels": 1,
+        "durationMs": 12584
+      }
+    },
+    {
+      "id": 485515,
+      "author": "doctor_sinister",
+      "filename": "485515__doctor_sinister__runinigaway.wav",
+      "use": "dirt",
+      "title": "Runinigaway",
+      "license": "unknown",
+      "url": "https://freesound.org/people/doctor_sinister/sounds/485515/",
+      "sha256": "7e529acd220567e3b188b7ddbec6c8aea32467b111ee48993d8b2b2cc81478a2",
+      "decoded": {
+        "sampleRate": 48000,
+        "channels": 1,
+        "durationMs": 6341
+      }
+    }
+  ]
+}

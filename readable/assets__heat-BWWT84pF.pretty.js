@@ -1,0 +1,75 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+var e = Object.freeze([
+    Object.freeze({
+      name: `Cannon`,
+      perShot: 0.3,
+      cooling: 0.075,
+      delay: 0.5,
+      resume: 0.4,
+    }),
+    Object.freeze({
+      name: `Coax`,
+      perShot: 0.024,
+      cooling: 0.26,
+      delay: 0.35,
+      resume: 0.4,
+    }),
+  ]),
+  t = Object.freeze({
+    2: e,
+    3: Object.freeze([
+      Object.freeze({
+        name: `Gun`,
+        perShot: 0.028,
+        cooling: 0.26,
+        delay: 0.35,
+        resume: 0.4,
+      }),
+    ]),
+    4: Object.freeze([
+      Object.freeze({
+        name: `Cannon`,
+        perShot: 0.2,
+        cooling: 0.092,
+        delay: 0.5,
+        resume: 0.4,
+      }),
+    ]),
+  }),
+  n = (e) => t[e] ?? null;
+function r(e) {
+  e.heat = (n(e.v.weapon) ?? []).map(() => ({
+    value: 0,
+    locked: !1,
+    lastShot: -1e4,
+  }));
+}
+function i(e, t, r) {
+  let i = n(e.v.weapon);
+  i &&
+    e.heat.forEach((e, n) => {
+      let a = i[n];
+      ((t - e.lastShot) / 60 >= a.delay &&
+        (e.value = Math.max(0, e.value - a.cooling * r)),
+        e.locked && e.value <= a.resume && (e.locked = !1));
+    });
+}
+function a(e, t) {
+  return !e.heat?.[t]?.locked;
+}
+function o(e, t, r) {
+  let i = n(e.v.weapon)?.[t],
+    a = e.heat?.[t];
+  i &&
+    a &&
+    ((a.value = Math.min(1, a.value + i.perShot)),
+    (a.lastShot = r),
+    a.value >= 1 && (a.locked = !0));
+}
+function s(e) {
+  return n(e.v.weapon)
+    ? e.heat.map((e) => ({ value: e.value, locked: e.locked }))
+    : null;
+}
+export { s as a, o as i, a as n, r as o, n as r, i as t };
+//# sourceMappingURL=heat-BWWT84pF.js.map

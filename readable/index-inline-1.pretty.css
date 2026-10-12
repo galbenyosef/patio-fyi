@@ -1,0 +1,65 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0b0f14;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+#app canvas {
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+/* Phones held upright: the game is landscape only. */
+#rotate-hint {
+  display: none;
+}
+@media (orientation: portrait) and (pointer: coarse) {
+  #rotate-hint {
+    display: grid;
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    place-content: center;
+    gap: 14px;
+    padding: 32px;
+    text-align: center;
+    background: #0b0f14f2;
+    color: #edf2f4;
+    font:
+      600 20px/1.35 system-ui,
+      sans-serif;
+  }
+  #rotate-hint b {
+    font-size: 56px;
+    line-height: 1;
+  }
+  #rotate-hint small {
+    font-weight: 400;
+    font-size: 15px;
+    color: #9fb2bd;
+  }
+}
+#app {
+  position: fixed;
+  inset: 0;
+}
+#app canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+#ui-root {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+#ui-root > * {
+  pointer-events: auto;
+}

@@ -1,0 +1,3 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+function e(e,t,n){let r=n.map((e,n)=>e-t[n]),i=Math.hypot(...r);if(i<.5||!e?.raycast)return{blocked:!1,gain:1,cutoff:2e4};let a=r.map(e=>e/i),o=e.raycast(t,a,Math.max(0,i-.02));if(!o)return{blocked:!1,gain:1,cutoff:2e4};let s=o.surface??`concrete`,[c,l]=s===`wood`?[.52,2200]:s===`glass`?[.65,3400]:s===`metal`?[.3,1100]:[.38,1500];return{blocked:!0,gain:c,cutoff:l,surface:s}}function t(e,t,n=`dirt`){let r=e.world.map.raycast([t[0],t[1]+.18,t[2]],[0,-1,0],.65);return r?.surface&&r.colliderId!==`terrain`&&r.colliderId!==`ground`?r.surface:e.modules.get(`terrain`)?.getMaterialAt?.(t[0],t[2])??n}export{e as n,t};
+//# sourceMappingURL=acoustics-BfYC1rA2.js.map
