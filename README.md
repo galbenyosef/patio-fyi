@@ -106,6 +106,7 @@ full HUD.
 ```
 node tools/verify.mjs            # re-hash the capture against the manifest
 node tools/audit.js              # derived-layer integrity gate → AUDIT PASS
+node tools/check-exports.mjs   # the derived layer still exports every public name
 node tools/capture.mjs --check   # residual closure audit → 0 new unresolved
 ```
 
