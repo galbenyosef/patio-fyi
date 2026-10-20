@@ -25,7 +25,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PROJ = path.resolve(HERE, "..");
@@ -253,9 +253,17 @@ function publicExportNames(text) {
       const name = ts[i + 2];
       if (name && name.t === "id") names.add(name.v);
     } else if (n1.t === "id" && (n1.v === "const" || n1.v === "let" || n1.v === "var")) {
+      // Only the declarator NAMES of the declaration count. The
+      // initializer's own object-literal properties are NOT exports:
+      // `export const _debug = () => ({ ctx, master, ... })` exports
+      // `_debug`, not `ctx` or `master`. So the scan tracks brace depth
+      // and stops at the end of the DECLARATION.
+      let depth = 0;
       for (let k = i + 2; k < ts.length && k < i + 400; k++) {
         const tk = ts[k];
-        if (tk.t === "id") {
+        if (tk.t === "pun" && (tk.v === "{" || tk.v === "(" || tk.v === "[")) depth++;
+        else if (tk.t === "pun" && (tk.v === "}" || tk.v === ")" || tk.v === "]")) depth--;
+        if (tk.t === "id" && depth === 0) {
           const nx = ts[k + 1];
           const isDeclarator =
             nx &&
@@ -263,8 +271,8 @@ function publicExportNames(text) {
               nx.t === "id");
           if (isDeclarator && tk.v !== "of" && tk.v !== "in") names.add(tk.v);
         }
-        if (tk.t === "pun" && tk.v === ";") break;
-        if (tk.t === "pun" && tk.v === "}" && ts[k - 1]?.t === "pun" && ts[k - 1].v === "{") break;
+        if (tk.t === "pun" && tk.v === ";" && depth === 0) break;
+        if (tk.t === "pun" && tk.v === "}" && depth === 0 && ts[k - 1]?.t === "pun" && ts[k - 1].v === "{") break;
       }
     }
   }
@@ -316,9 +324,12 @@ if (!fs.existsSync(specPath)) {
 }
 const spec = JSON.parse(fs.readFileSync(specPath, "utf8"));
 
-// the src slices, grouped by the source file their header names
-const slicesBySource = new Map();
+// The src files, by their path relative to src/ and by basename — a spec's
+// `file` field sometimes omits the path prefix the file actually carries
+// (`12-part.js` on disk as `src/\12-part.js`), so a lookup needs both.
 const srcDir = path.join(PROJ, "src");
+const srcByRel = new Map();
+const srcByBase = new Map();
 if (fs.existsSync(srcDir)) {
   const walk = (dir, out = []) => {
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -329,12 +340,53 @@ if (fs.existsSync(srcDir)) {
     return out;
   };
   for (const f of walk(srcDir)) {
+    const rel = path.relative(srcDir, f).replace(/\\/g, "/");
+    srcByRel.set(rel, f);
+    const base = rel.split("/").pop();
+    if (!srcByBase.has(base)) srcByBase.set(base, f);
+  }
+}
+/** every src file that could be this section's file */
+const resolveSrcAll = (name) => {
+  if (!name) return [];
+  const rel = String(name).replace(/\\/g, "/").replace(/^\.?\//, "");
+  const base = rel.split("/").pop();
+  const out = [];
+  const exact = srcByRel.get(rel);
+  if (exact) out.push(exact);
+  // a file whose name carries a leading backslash (a Windows path artefact)
+  // is the same file to the spec; and a mirror may hold several candidates
+  for (const [key, p] of srcByBase) {
+    if (key.replace(/^\\/, "") === base && !out.includes(p)) out.push(p);
+  }
+  return out;
+};
+
+// The src slices, grouped by the source file they belong to. The SPEC's
+// sections are the authority — they carry the file, the source and the line
+// range — and the slice's own `Lines X-Y of Z` header is the fallback for
+// mirrors whose spec omits the ranges. The header alone was not enough: the
+// older generation's whole-file slices carry a title ("Sequential whole-file
+// section") instead of a range header, so a header-only discovery missed them.
+const slicesBySource = new Map();
+const addSlice = (key, entry) => {
+  if (!key) return;
+  if (!slicesBySource.has(key)) slicesBySource.set(key, []);
+  slicesBySource.get(key).push(entry);
+};
+for (const sec of spec.sections || []) {
+  if (!sec.file || !sec.sourceFile || sec.skipped) continue;
+  const onDisk = resolveSrcAll(sec.file);
+  if (!onDisk.length) continue;
+  if (!Number.isInteger(sec.startLine) || !Number.isInteger(sec.endLine)) continue;
+  addSlice(sec.sourceFile, { file: onDisk.join("\n"), from: sec.startLine, to: sec.endLine });
+}
+if (fs.existsSync(srcDir)) {
+  for (const f of srcByRel.values()) {
     const head = read(f).split(/\r?\n/).slice(0, 4).join("\n");
     const m = head.match(/Lines\s+(\d+)-(\d+)\s+of\s+(\S+)/);
     if (!m) continue;
-    const key = m[3];
-    if (!slicesBySource.has(key)) slicesBySource.set(key, []);
-    slicesBySource.get(key).push({ file: f, from: +m[1], to: +m[2] });
+    addSlice(m[3], { file: f, from: +m[1], to: +m[2] });
   }
 }
 
@@ -360,9 +412,24 @@ let applyBindingMap = null;
   }
 }
 
+// The source list: `spec.sources[]` when the mirror has one, else DERIVED
+// from the sections' `sourceFile` — the older generation records only
+// `spec.sections[]`, and walking `sources` alone left those layers unchecked.
+let sources = spec.sources || [];
+if (!sources.length) {
+  const seen = new Map();
+  for (const sec of spec.sections || []) {
+    if (!sec.sourceFile) continue;
+    if (!seen.has(sec.sourceFile)) seen.set(sec.sourceFile, { sourceFile: sec.sourceFile, capture: null });
+    const e = seen.get(sec.sourceFile);
+    if (!e.capture && sec.capture) e.capture = sec.capture;
+  }
+  sources = [...seen.values()];
+}
+
 let checked = 0;
 let lost = 0;
-for (const src of spec.sources || []) {
+for (const src of sources) {
   if (!src.sourceFile) continue;
   const pristineText = read(path.join(PROJ, src.sourceFile)) ?? (src.capture ? read(path.join(PROJ, src.capture)) : null);
   if (pristineText == null) continue;
