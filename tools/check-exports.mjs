@@ -666,30 +666,45 @@ let sources = (spec.sources || []).map((s) => ({
   //
   // The capture must EXIST on disk: a `title` naming a file that is not
   // there stays prose, and is not treated as a mapping.
+  //
+  // The candidates, in the order they are tried:
+  //   - the section's own `wholeFile` field, when it is a path: the section's
+  //     `file` is the DERIVED text (under the derived root) and `wholeFile`
+  //     is the pristine it was cut from (at the mirror root). 244 sections
+  //     across 31 mirrors are shaped this way, and their export tables were
+  //     invisible to this gate.
+  //   - a `capture`/`source`/`origin`/`from` field.
+  //   - a .js path named in `title`/`note`/`desc`/`description`.
+  //
+  // EVERY candidate must resolve to a file DIFFERENT from the section's
+  // derived text. A mirror whose spec says "src = capture" (the derived
+  // layer IS the capture) would otherwise be compared with ITSELF: a
+  // comparison that can only ever pass, and that proves nothing about the
+  // layer. 63 mirrors are shaped that way, and every one of their tables
+  // was a self-compare.
+  const derivedCandidates = (sec) => [
+    path.join(srcDir, sec.file),
+    path.join(PROJ, sec.file),
+    path.join(srcDir, path.basename(sec.file || "")),
+  ];
   const captureOf = (sec) => {
-    // A whole-file section's own `wholeFile` field names its PRISTINE when
-    // it is a path: the section's `file` is the DERIVED text (under the
-    // derived root) and `wholeFile` is the pristine it was cut from (at the
-    // mirror root). 244 sections across 31 mirrors are shaped this way, and
-    // their export tables were invisible to this gate.
-    //
-    // The two must resolve to DIFFERENT files: a section whose pristine and
-    // derived text are the same file would be compared with itself, which
-    // proves nothing.
-    if (typeof sec.wholeFile === "string" && /\.(?:js|mjs|cjs|jsx)$/i.test(sec.wholeFile)) {
-      const pristine = path.join(PROJ, sec.wholeFile);
-      const derived = [path.join(srcDir, sec.file), path.join(PROJ, sec.file), path.join(srcDir, path.basename(sec.file))];
-      if (fs.existsSync(pristine) && !derived.some((d) => d === pristine)) return sec.wholeFile;
-    }
+    const derived = derivedCandidates(sec).map((d) => path.resolve(d));
+    const usable = (v) => {
+      if (typeof v !== "string" || !/\.(?:js|mjs|cjs|jsx)$/i.test(v)) return false;
+      const p = path.resolve(path.join(PROJ, v));
+      if (!fs.existsSync(p)) return false;
+      // the pristine must be a DIFFERENT file from the derived text
+      return !derived.includes(p);
+    };
+    if (typeof sec.wholeFile === "string" && usable(sec.wholeFile)) return sec.wholeFile;
     for (const f of ["capture", "source", "origin", "from"]) {
-      const v = sec[f];
-      if (typeof v === "string" && /\.(?:js|mjs|cjs|jsx)$/i.test(v)) return v;
+      if (usable(sec[f])) return sec[f];
     }
     for (const f of ["title", "note", "desc", "description"]) {
       const v = sec[f];
       if (typeof v !== "string") continue;
       const m = v.match(/([\w./@-]+\.(?:js|mjs|cjs|jsx))/);
-      if (m) return m[1];
+      if (m && usable(m[1])) return m[1];
     }
     return null;
   };
@@ -697,7 +712,6 @@ let sources = (spec.sources || []).map((s) => ({
     if (!sec.wholeFile || sec.sourceFile || !sec.file) continue;
     const cap = captureOf(sec);
     if (!cap) continue;
-    if (!fs.existsSync(path.join(PROJ, cap))) continue;
     const key = `wholefile:${cap}`;
     if (known.has(key)) continue;
     known.add(key);
