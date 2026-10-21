@@ -8,7 +8,8 @@
 //   capture assets/<name>.js|css -> readable/<name>.pretty.js|css   (pinned prettier 3.9.6, single pass)
 //   readable app chunks          -> src/<name>-NN.js                (statement-aligned slices)
 //   readable vendor bundle       -> split-spec wholeFile section    (three.js r185 graphics engine: never sliced)
-//   readable export tables       -> split-spec skipped sections     (final export {…} tables: indexed, not sliced)
+//   readable export tables       -> split-spec skipped sections     (final export {…} tables: indexed, not sliced,
+//                                                                     with the region's text recorded)
 //   capture index.html           -> inline <script>/<style> scan    (twins + index-inline-map.json
 //                                                                     when content blocks exist)
 //   binary payloads              -> split-spec notRendered records   (bytes + sha256, no pretty pass)
@@ -20,7 +21,13 @@
 //      *.pretty.js|css sourceFile and in-bounds startLine/endLine; wholeFile sections
 //      (three.js graphics-engine vendor bundle, stylesheet) must NOT have a src file;
 //      `skipped` sections (final export tables) must NOT have a src file and are
-//      re-verified textually against their recorded firstLine/lastLine.
+//      re-verified textually against their recorded firstLine/lastLine AND their
+//      recorded text (the layer's own text for the region — the export gate reads it).
+//   2b. The layer's public API is the capture's: for every JS source, the public
+//      export names the capture chunk exported and the names the layer (readable
+//      pretty) exports are the same set — a name lost or invented by the derivation
+//      is a problem. The frozen export gate compares a table in the LAYER's text, so
+//      it cannot see the capture's own table; this rule can.
 //   3. The ranges of each sourceFile tile it exactly: first starts at line 1, each next
 //      starts at previous end + 1, last ends at EOF — no gaps, no overlaps.
 //   4. Byte-exact round-trip: every src slice minus its exact 2-line header
@@ -371,7 +378,46 @@ for (const s of sections) {
     problem(`skipped section ${s.file}: no firstLine/lastLine recorded`);
   else if (first !== s.firstLine || last !== s.lastLine)
     problem(`skipped section ${s.file}: range text does not match the recorded first/last lines`);
-  else skippedOK++;
+  else if (typeof s.text !== "string")
+    // the region carries no derived text, so the frozen export gate has
+    // nothing to compare the chunk's public export table with
+    problem(`skipped section ${s.file}: no text recorded — the export gate cannot reach this region`);
+  else {
+    // the recorded text IS the layer's text for the region: it must be the
+    // sourceFile's lines, byte for byte
+    const expect = lines.slice(s.startLine - 1, s.endLine).join("\n");
+    if (s.text !== expect)
+      problem(`skipped section ${s.file}: recorded text is not the byte-exact text of ${s.sourceFile} lines ${s.startLine}-${s.endLine}`);
+    else skippedOK++;
+  }
+}
+
+// ── the layer's public API vs the capture's ─────────────────────────────
+// A chunk's public export table IS its public API: 102 captured chunks import
+// from the vendor chunk alone, and every app chunk's table names the names
+// its importers ask for. The frozen export gate compares the table in the
+// LAYER's own text, so it cannot see the capture's own table; this gate can.
+// For every JS source the public export names the CAPTURE exported and the
+// names the layer (readable pretty) exports must be the same set — a name
+// lost or invented by the derivation is a problem, not a note.
+let apiOK = 0,
+  apiTotal = 0;
+for (const s of Array.isArray(spec?.sources) ? spec.sources : []) {
+  if (!s || typeof s.sourceFile !== "string" || typeof s.capture !== "string") continue;
+  if (!/\.(?:js|mjs|cjs|jsx)$/i.test(s.sourceFile)) continue;
+  const prettyAbs = path.join(proj, s.sourceFile);
+  const capAbs = path.join(proj, s.capture);
+  if (!fs.existsSync(prettyAbs) || !fs.existsSync(capAbs)) continue;
+  apiTotal++;
+  const capNames = exportsOf(fs.readFileSync(capAbs, "utf8"));
+  const layNames = exportsOf(fs.readFileSync(prettyAbs, "utf8"));
+  const lost = [...capNames].filter((n) => !layNames.has(n)).sort();
+  const gained = [...layNames].filter((n) => !capNames.has(n)).sort();
+  if (lost.length || gained.length) {
+    problem(`${s.sourceFile}: the layer's public export names differ from ${s.capture}'s`);
+    if (lost.length) problem(`  lost by the derivation: ${lost.join(" ")}`);
+    if (gained.length) problem(`  invented by the derivation: ${gained.join(" ")}`);
+  } else apiOK++;
 }
 
 // ── every src + pretty parses standalone ────────────────────────────────
@@ -659,6 +705,7 @@ function loadPinnedPrettier() {
     `AUDIT PASS — ${sections.length} spec sections (${roundOK}/${ranged} src↔pretty round-trips byte-exact, ` +
       `${tiledOK}/${bySource.size} pretty sources tiled contiguously, ` +
       `${skippedOK}/${skippedTotal} skipped export-table sections re-verified textually, ` +
+      `${apiOK}/${apiTotal} layers export exactly the public names the capture exported, ` +
       `${checkOK}/${onDisk.length} src slices + ${prettyOK}/${prettyParsed} readable/*.pretty.js parse standalone (node --input-type=module --check -), ` +
       `${derivedOK}/${prettyFiles.length} pretties provably distinct from their capture source, ` +
       `${indexOnlyFiles.size} index-only wholeFile/skipped sections carry no src file, ` +

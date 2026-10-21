@@ -43,7 +43,10 @@
 //
 // Non-standalone parts are indexed but never sliced (skipped sections): every
 // app chunk's final `export {…}` table (the bindings live in the earlier
-// slices).
+// slices, so a slice carrying the table could not parse standalone). The
+// section records the region's TEXT, so the frozen export gate can compare
+// every chunk's public export table with the layer's: without it the table is
+// named but never compared, and the chunk's public API goes unverified.
 //
 // Identifiers in src/ are the bundle's own minified names — the rename
 // campaign (PLAN §5) is recorded as an open task in README.md. usage:
@@ -420,7 +423,7 @@ async function main() {
         kind: "skip",
         file: `${tag}-tail-export.js`,
         title: `${tag} — final export table (not sliced)`,
-        desc: `Lines ${lastStmt.startLine}-${lastStmt.endLine}. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.`,
+        desc: `Lines ${lastStmt.startLine}-${lastStmt.endLine}. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.`,
       });
     }
 
@@ -496,6 +499,14 @@ async function main() {
           sourceFile,
           firstLine: lines[b.A - 1],
           lastLine: lines[b.B - 1],
+          // The layer's OWN text for this region. The tail is not sliced (an
+          // export table re-exports bindings that live in the EARLIER slices,
+          // so a slice carrying it cannot parse standalone), but the region is
+          // still part of the derived layer and the frozen export gate needs
+          // its text to compare the chunk's public export table with the
+          // layer's. Without it the gate has no derived text for the table and
+          // reports it as NOT covered — named, never compared.
+          text: lines.slice(b.A - 1, b.B).join("\n"),
         });
       }
     }

@@ -44,6 +44,22 @@ POSTs best-effort boot telemetry to `/diag/boot`. A local static serve therefore
 boots the UI but reports "Multiplayer server unavailable" — the build has no
 solo fallback; multiplayer needs the live host.
 
+**One dangling import set in the capture (a capture property, not a mirror
+gap)** — `assets/sim-DKJ0nrRU.js` is the shipped RAW player-sim source
+(unminified, with its own comments). It imports `../core/world.js`,
+`../demo/{lifts,hangar,bascule,mesa}-sim.js`, `./zipline.js` and
+`./ladder.js` — sibling paths of the SERVER's source tree, not of the served
+bundle. Upstream never serves them: the capture probed every one of them at
+the chunk's own directory and at the origin root and each probe 404s (they are
+in `_mirror-report.json`'s `unresolved` list), and the live origin 404s them
+too. The chunk is only ever loaded by the Node branch of
+`assets/sim-loader-D7voNPuy.js`, which imports it from the server's own
+filesystem (`node:fs` + `new URL(...)` + `import(fileURL)`); the browser
+branch never touches it — it mocks `../player/sim.js` with the browser chunk
+`./sim-D8F3HPJq.js`. So those 15 named imports are dangling in the CAPTURE
+itself; the mirror reproduces them faithfully, and `tools/audit.js` accepts
+them as recorded 404 gaps.
+
 ## Layout
 
 - `index.html` + `session.js` + `assets/` + `__modules.json` — the capture at the
@@ -195,12 +211,19 @@ derived layers from the v2 build.
   engine (WebGLRenderer + `__THREE__` revision registration), content-anchored
   and guarded. Stylesheet rule: `assets/ui-B08v0AKp.css` is wholeFile.
   Non-standalone parts are skipped sections, indexed but never sliced (156
-  skipped — every app chunk's final `export {…}` table).
+  skipped — every app chunk's final `export {…}` table). Each one records the
+  region's TEXT as well, so the export gate can compare every chunk's public
+  export table with the layer's (the table re-exports bindings that live in
+  the earlier slices, so a slice carrying it could not parse standalone).
 - **notRendered** — 338 hashed payload records in `split-spec.json` (167 audio,
   109 models, 57 images, 5 fonts; bytes + sha256, no pretty pass).
 - **Gates**: `node tools/verify.mjs` → `506 files checked, 0 problems`;
   `node tools/audit.js` → `AUDIT PASS` (1,023/1,023 round-trips, 163/163
   pretties re-render byte-exact, 1,182 sections, 1 inline block with twin);
+  `node tools/check-exports.mjs` → `233 export table(s) checked, 1 NOT
+  covered, no public export name lost` (the one uncovered table is the vendor
+  chunk's, which the frozen gate counts twice — its capture-side table IS
+  compared with the layer's through the wholeFile section);
   `node tools/capture.mjs --check` → `0 new unresolved`; independent 3-slice
   round-trip check → 3/3 byte-exact. Boot test: mirror served on loopback
   through the boot harness, opened through opencli — the deploy screen

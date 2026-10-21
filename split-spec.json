@@ -2435,12 +2435,13 @@
       "file": "assets__index-CBqjwezZ-tail-export.js",
       "skipped": true,
       "title": "assets__index-CBqjwezZ — final export table (not sliced)",
-      "desc": "Lines 5797-5818. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 5797-5818. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 5797,
       "endLine": 5819,
       "sourceFile": "readable/assets__index-CBqjwezZ.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=index-CBqjwezZ.js.map"
+      "lastLine": "//# sourceMappingURL=index-CBqjwezZ.js.map",
+      "text": "export {\n  ut as _,\n  Rn as a,\n  H as b,\n  G as c,\n  Et as d,\n  _t as f,\n  ft as g,\n  mt as h,\n  Hn as i,\n  Dt as l,\n  W as m,\n  Gn as n,\n  Ln as o,\n  ht as p,\n  Jn as r,\n  Mt as s,\n  Kn as t,\n  Ot as u,\n  lt as v,\n  ot as y,\n};\n//# sourceMappingURL=index-CBqjwezZ.js.map"
     },
     {
       "file": "assets____vite-browser-external-CQsZtIpU-01.js",
@@ -2462,12 +2463,13 @@
       "file": "assets__achievements-DUR0hBOB-tail-export.js",
       "skipped": true,
       "title": "assets__achievements-DUR0hBOB — final export table (not sliced)",
-      "desc": "Lines 393-393. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 393-393. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 393,
       "endLine": 394,
       "sourceFile": "readable/assets__achievements-DUR0hBOB.pretty.js",
       "firstLine": "export { t as n, n as r, r as t };",
-      "lastLine": "//# sourceMappingURL=achievements-DUR0hBOB.js.map"
+      "lastLine": "//# sourceMappingURL=achievements-DUR0hBOB.js.map",
+      "text": "export { t as n, n as r, r as t };\n//# sourceMappingURL=achievements-DUR0hBOB.js.map"
     },
     {
       "file": "assets__acoustics-BfYC1rA2-01.js",
@@ -2481,12 +2483,13 @@
       "file": "assets__acoustics-BfYC1rA2-tail-export.js",
       "skipped": true,
       "title": "assets__acoustics-BfYC1rA2 — final export table (not sliced)",
-      "desc": "Lines 26-26. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 26-26. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 26,
       "endLine": 27,
       "sourceFile": "readable/assets__acoustics-BfYC1rA2.pretty.js",
       "firstLine": "export { e as n, t };",
-      "lastLine": "//# sourceMappingURL=acoustics-BfYC1rA2.js.map"
+      "lastLine": "//# sourceMappingURL=acoustics-BfYC1rA2.js.map",
+      "text": "export { e as n, t };\n//# sourceMappingURL=acoustics-BfYC1rA2.js.map"
     },
     {
       "file": "assets__aim-BX_kIDKd-01.js",
@@ -2500,12 +2503,13 @@
       "file": "assets__aim-BX_kIDKd-tail-export.js",
       "skipped": true,
       "title": "assets__aim-BX_kIDKd — final export table (not sliced)",
-      "desc": "Lines 297-308. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 297-308. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 297,
       "endLine": 309,
       "sourceFile": "readable/assets__aim-BX_kIDKd.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=aim-BX_kIDKd.js.map"
+      "lastLine": "//# sourceMappingURL=aim-BX_kIDKd.js.map",
+      "text": "export {\n  b as a,\n  g as c,\n  E as i,\n  v as l,\n  C as n,\n  S as o,\n  w as r,\n  y as s,\n  T as t,\n  f as u,\n};\n//# sourceMappingURL=aim-BX_kIDKd.js.map"
     },
     {
       "file": "assets__ammo-box-CWU_ijOn-01.js",
@@ -2535,12 +2539,13 @@
       "file": "assets__ammo-box-CWU_ijOn-tail-export.js",
       "skipped": true,
       "title": "assets__ammo-box-CWU_ijOn — final export table (not sliced)",
-      "desc": "Lines 682-694. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 682-694. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 682,
       "endLine": 695,
       "sourceFile": "readable/assets__ammo-box-CWU_ijOn.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=ammo-box-CWU_ijOn.js.map"
+      "lastLine": "//# sourceMappingURL=ammo-box-CWU_ijOn.js.map",
+      "text": "export {\n  C as a,\n  E as c,\n  y as d,\n  j as i,\n  g as l,\n  A as n,\n  D as o,\n  M as r,\n  w as s,\n  O as t,\n  S as u,\n};\n//# sourceMappingURL=ammo-box-CWU_ijOn.js.map"
     },
     {
       "file": "assets__animation-DTvaGqA--01.js",
@@ -2650,12 +2655,13 @@
       "file": "assets__animation-DTvaGqA--tail-export.js",
       "skipped": true,
       "title": "assets__animation-DTvaGqA- — final export table (not sliced)",
-      "desc": "Lines 3596-3596. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 3596-3596. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 3596,
       "endLine": 3597,
       "sourceFile": "readable/assets__animation-DTvaGqA-.pretty.js",
       "firstLine": "export { ci as default };",
-      "lastLine": "//# sourceMappingURL=animation-DTvaGqA-.js.map"
+      "lastLine": "//# sourceMappingURL=animation-DTvaGqA-.js.map",
+      "text": "export { ci as default };\n//# sourceMappingURL=animation-DTvaGqA-.js.map"
     },
     {
       "file": "assets__attachments-DZaUzy_Q-01.js",
@@ -2677,12 +2683,13 @@
       "file": "assets__attachments-DZaUzy_Q-tail-export.js",
       "skipped": true,
       "title": "assets__attachments-DZaUzy_Q — final export table (not sliced)",
-      "desc": "Lines 424-436. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 424-436. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 424,
       "endLine": 437,
       "sourceFile": "readable/assets__attachments-DZaUzy_Q.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=attachments-DZaUzy_Q.js.map"
+      "lastLine": "//# sourceMappingURL=attachments-DZaUzy_Q.js.map",
+      "text": "export {\n  y as a,\n  j as c,\n  A as d,\n  S as i,\n  M as l,\n  C as n,\n  D as o,\n  w as r,\n  T as s,\n  s as t,\n  P as u,\n};\n//# sourceMappingURL=attachments-DZaUzy_Q.js.map"
     },
     {
       "file": "assets__audio-BO2SJEp_-01.js",
@@ -2784,12 +2791,13 @@
       "file": "assets__audio-BO2SJEp_-tail-export.js",
       "skipped": true,
       "title": "assets__audio-BO2SJEp_ — final export table (not sliced)",
-      "desc": "Lines 3495-3495. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 3495-3495. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 3495,
       "endLine": 3496,
       "sourceFile": "readable/assets__audio-BO2SJEp_.pretty.js",
       "firstLine": "export { Ze as BLAST_LAYER, mt as default, it as weaponClass };",
-      "lastLine": "//# sourceMappingURL=audio-BO2SJEp_.js.map"
+      "lastLine": "//# sourceMappingURL=audio-BO2SJEp_.js.map",
+      "text": "export { Ze as BLAST_LAYER, mt as default, it as weaponClass };\n//# sourceMappingURL=audio-BO2SJEp_.js.map"
     },
     {
       "file": "assets__autumn-trees-B3HPNfpi-01.js",
@@ -2835,12 +2843,13 @@
       "file": "assets__autumn-trees-B3HPNfpi-tail-export.js",
       "skipped": true,
       "title": "assets__autumn-trees-B3HPNfpi — final export table (not sliced)",
-      "desc": "Lines 1353-1374. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1353-1374. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1353,
       "endLine": 1375,
       "sourceFile": "readable/assets__autumn-trees-B3HPNfpi.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=autumn-trees-B3HPNfpi.js.map"
+      "lastLine": "//# sourceMappingURL=autumn-trees-B3HPNfpi.js.map",
+      "text": "export {\n  T as _,\n  G as a,\n  v as b,\n  V as c,\n  E as d,\n  N as f,\n  H as g,\n  S as h,\n  q as i,\n  W as l,\n  L as m,\n  U as n,\n  J as o,\n  F as p,\n  g as r,\n  B as s,\n  _ as t,\n  Y as u,\n  P as v,\n  M as y,\n};\n//# sourceMappingURL=autumn-trees-B3HPNfpi.js.map"
     },
     {
       "file": "assets__barranco-BULGw4rd-01.js",
@@ -2862,12 +2871,13 @@
       "file": "assets__barranco-BULGw4rd-tail-export.js",
       "skipped": true,
       "title": "assets__barranco-BULGw4rd — final export table (not sliced)",
-      "desc": "Lines 2303-2303. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2303-2303. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2303,
       "endLine": 2304,
       "sourceFile": "readable/assets__barranco-BULGw4rd.pretty.js",
       "firstLine": "export { Y as i, ie as n, o as r, l as t };",
-      "lastLine": "//# sourceMappingURL=barranco-BULGw4rd.js.map"
+      "lastLine": "//# sourceMappingURL=barranco-BULGw4rd.js.map",
+      "text": "export { Y as i, ie as n, o as r, l as t };\n//# sourceMappingURL=barranco-BULGw4rd.js.map"
     },
     {
       "file": "assets__bascule-CwYMJcrN-01.js",
@@ -2889,12 +2899,13 @@
       "file": "assets__bascule-CwYMJcrN-tail-export.js",
       "skipped": true,
       "title": "assets__bascule-CwYMJcrN — final export table (not sliced)",
-      "desc": "Lines 2792-2792. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2792-2792. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2792,
       "endLine": 2793,
       "sourceFile": "readable/assets__bascule-CwYMJcrN.pretty.js",
       "firstLine": "export { B as i, z as n, i as r, s as t };",
-      "lastLine": "//# sourceMappingURL=bascule-CwYMJcrN.js.map"
+      "lastLine": "//# sourceMappingURL=bascule-CwYMJcrN.js.map",
+      "text": "export { B as i, z as n, i as r, s as t };\n//# sourceMappingURL=bascule-CwYMJcrN.js.map"
     },
     {
       "file": "assets__bascule-view-D4Ql_83X-01.js",
@@ -2932,12 +2943,13 @@
       "file": "assets__bascule-view-D4Ql_83X-tail-export.js",
       "skipped": true,
       "title": "assets__bascule-view-D4Ql_83X — final export table (not sliced)",
-      "desc": "Lines 2700-2700. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2700-2700. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2700,
       "endLine": 2701,
       "sourceFile": "readable/assets__bascule-view-D4Ql_83X.pretty.js",
       "firstLine": "export { U as createBasculeView };",
-      "lastLine": "//# sourceMappingURL=bascule-view-D4Ql_83X.js.map"
+      "lastLine": "//# sourceMappingURL=bascule-view-D4Ql_83X.js.map",
+      "text": "export { U as createBasculeView };\n//# sourceMappingURL=bascule-view-D4Ql_83X.js.map"
     },
     {
       "file": "assets__beacon-itgUvZ40-01.js",
@@ -2951,12 +2963,13 @@
       "file": "assets__beacon-itgUvZ40-tail-export.js",
       "skipped": true,
       "title": "assets__beacon-itgUvZ40 — final export table (not sliced)",
-      "desc": "Lines 99-99. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 99-99. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 99,
       "endLine": 100,
       "sourceFile": "readable/assets__beacon-itgUvZ40.pretty.js",
       "firstLine": "export { o as a, t as i, n, s as r, e as t };",
-      "lastLine": "//# sourceMappingURL=beacon-itgUvZ40.js.map"
+      "lastLine": "//# sourceMappingURL=beacon-itgUvZ40.js.map",
+      "text": "export { o as a, t as i, n, s as r, e as t };\n//# sourceMappingURL=beacon-itgUvZ40.js.map"
     },
     {
       "file": "assets__beacon-server-9ZjzIK3g-01.js",
@@ -2970,12 +2983,13 @@
       "file": "assets__beacon-server-9ZjzIK3g-tail-export.js",
       "skipped": true,
       "title": "assets__beacon-server-9ZjzIK3g — final export table (not sliced)",
-      "desc": "Lines 244-244. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 244-244. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 244,
       "endLine": 245,
       "sourceFile": "readable/assets__beacon-server-9ZjzIK3g.pretty.js",
       "firstLine": "export { h as n, p as t };",
-      "lastLine": "//# sourceMappingURL=beacon-server-9ZjzIK3g.js.map"
+      "lastLine": "//# sourceMappingURL=beacon-server-9ZjzIK3g.js.map",
+      "text": "export { h as n, p as t };\n//# sourceMappingURL=beacon-server-9ZjzIK3g.js.map"
     },
     {
       "file": "assets__camera-Dw_uu2XJ-01.js",
@@ -2989,12 +3003,13 @@
       "file": "assets__camera-Dw_uu2XJ-tail-export.js",
       "skipped": true,
       "title": "assets__camera-Dw_uu2XJ — final export table (not sliced)",
-      "desc": "Lines 66-66. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 66-66. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 66,
       "endLine": 67,
       "sourceFile": "readable/assets__camera-Dw_uu2XJ.pretty.js",
       "firstLine": "export { t };",
-      "lastLine": "//# sourceMappingURL=camera-Dw_uu2XJ.js.map"
+      "lastLine": "//# sourceMappingURL=camera-Dw_uu2XJ.js.map",
+      "text": "export { t };\n//# sourceMappingURL=camera-Dw_uu2XJ.js.map"
     },
     {
       "file": "assets__car-kit-BmG7pAgW-01.js",
@@ -3032,12 +3047,13 @@
       "file": "assets__car-kit-BmG7pAgW-tail-export.js",
       "skipped": true,
       "title": "assets__car-kit-BmG7pAgW — final export table (not sliced)",
-      "desc": "Lines 997-997. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 997-997. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 997,
       "endLine": 998,
       "sourceFile": "readable/assets__car-kit-BmG7pAgW.pretty.js",
       "firstLine": "export { B as n, N as r, F as t };",
-      "lastLine": "//# sourceMappingURL=car-kit-BmG7pAgW.js.map"
+      "lastLine": "//# sourceMappingURL=car-kit-BmG7pAgW.js.map",
+      "text": "export { B as n, N as r, F as t };\n//# sourceMappingURL=car-kit-BmG7pAgW.js.map"
     },
     {
       "file": "assets__catalog-BxMwgLUT-01.js",
@@ -3067,12 +3083,13 @@
       "file": "assets__catalog-BxMwgLUT-tail-export.js",
       "skipped": true,
       "title": "assets__catalog-BxMwgLUT — final export table (not sliced)",
-      "desc": "Lines 756-778. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 756-778. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 756,
       "endLine": 779,
       "sourceFile": "readable/assets__catalog-BxMwgLUT.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=catalog-BxMwgLUT.js.map"
+      "lastLine": "//# sourceMappingURL=catalog-BxMwgLUT.js.map",
+      "text": "export {\n  y as _,\n  ce as a,\n  _ as b,\n  le as c,\n  p as d,\n  T as f,\n  E as g,\n  m as h,\n  re as i,\n  V as l,\n  C as m,\n  te as n,\n  se as o,\n  f as p,\n  ne as r,\n  G as s,\n  D as t,\n  H as u,\n  x as v,\n  b as x,\n  w as y,\n};\n//# sourceMappingURL=catalog-BxMwgLUT.js.map"
     },
     {
       "file": "assets__cay-qp9Dahfv-01.js",
@@ -3102,12 +3119,13 @@
       "file": "assets__cay-qp9Dahfv-tail-export.js",
       "skipped": true,
       "title": "assets__cay-qp9Dahfv — final export table (not sliced)",
-      "desc": "Lines 2094-2094. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2094-2094. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2094,
       "endLine": 2095,
       "sourceFile": "readable/assets__cay-qp9Dahfv.pretty.js",
       "firstLine": "export { h as i, N as n, F as r, v as t };",
-      "lastLine": "//# sourceMappingURL=cay-qp9Dahfv.js.map"
+      "lastLine": "//# sourceMappingURL=cay-qp9Dahfv.js.map",
+      "text": "export { h as i, N as n, F as r, v as t };\n//# sourceMappingURL=cay-qp9Dahfv.js.map"
     },
     {
       "file": "assets__chat-B5rOvjz0-01.js",
@@ -3121,12 +3139,13 @@
       "file": "assets__chat-B5rOvjz0-tail-export.js",
       "skipped": true,
       "title": "assets__chat-B5rOvjz0 — final export table (not sliced)",
-      "desc": "Lines 52-52. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 52-52. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 52,
       "endLine": 53,
       "sourceFile": "readable/assets__chat-B5rOvjz0.pretty.js",
       "firstLine": "export { n, t };",
-      "lastLine": "//# sourceMappingURL=chat-B5rOvjz0.js.map"
+      "lastLine": "//# sourceMappingURL=chat-B5rOvjz0.js.map",
+      "text": "export { n, t };\n//# sourceMappingURL=chat-B5rOvjz0.js.map"
     },
     {
       "file": "assets__combat-tuning--WnQFiKN-01.js",
@@ -3172,12 +3191,13 @@
       "file": "assets__combat-tuning--WnQFiKN-tail-export.js",
       "skipped": true,
       "title": "assets__combat-tuning--WnQFiKN — final export table (not sliced)",
-      "desc": "Lines 3416-3430. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 3416-3430. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 3416,
       "endLine": 3431,
       "sourceFile": "readable/assets__combat-tuning--WnQFiKN.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=combat-tuning--WnQFiKN.js.map"
+      "lastLine": "//# sourceMappingURL=combat-tuning--WnQFiKN.js.map",
+      "text": "export {\n  Y as a,\n  A as c,\n  M as d,\n  m as f,\n  q as i,\n  P as l,\n  Q as n,\n  G as o,\n  p,\n  Z as r,\n  F as s,\n  ee as t,\n  N as u,\n};\n//# sourceMappingURL=combat-tuning--WnQFiKN.js.map"
     },
     {
       "file": "assets__continental-kit-cMnzi5gd-01.js",
@@ -3199,12 +3219,13 @@
       "file": "assets__continental-kit-cMnzi5gd-tail-export.js",
       "skipped": true,
       "title": "assets__continental-kit-cMnzi5gd — final export table (not sliced)",
-      "desc": "Lines 533-533. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 533-533. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 533,
       "endLine": 534,
       "sourceFile": "readable/assets__continental-kit-cMnzi5gd.pretty.js",
       "firstLine": "export { V as a, R as i, L as n, I as o, j as r, A as s, F as t };",
-      "lastLine": "//# sourceMappingURL=continental-kit-cMnzi5gd.js.map"
+      "lastLine": "//# sourceMappingURL=continental-kit-cMnzi5gd.js.map",
+      "text": "export { V as a, R as i, L as n, I as o, j as r, A as s, F as t };\n//# sourceMappingURL=continental-kit-cMnzi5gd.js.map"
     },
     {
       "file": "assets__cube-soldier-BRpW8Tqo-01.js",
@@ -3354,12 +3375,13 @@
       "file": "assets__cube-soldier-BRpW8Tqo-tail-export.js",
       "skipped": true,
       "title": "assets__cube-soldier-BRpW8Tqo — final export table (not sliced)",
-      "desc": "Lines 5523-5604. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 5523-5604. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 5523,
       "endLine": 5605,
       "sourceFile": "readable/assets__cube-soldier-BRpW8Tqo.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=cube-soldier-BRpW8Tqo.js.map"
+      "lastLine": "//# sourceMappingURL=cube-soldier-BRpW8Tqo.js.map",
+      "text": "export {\n  H as $,\n  hi as A,\n  ir as B,\n  ra as C,\n  Le as Ct,\n  ja as D,\n  Aa as E,\n  ae as Et,\n  ti as F,\n  qn as G,\n  Zt as H,\n  ri as I,\n  Gt as J,\n  en as K,\n  Nr as L,\n  ta as M,\n  mi as N,\n  $i as O,\n  Gr as P,\n  Lt as Q,\n  Fr as R,\n  Ji as S,\n  Ve as St,\n  xi as T,\n  Be as Tt,\n  W as U,\n  nn as V,\n  tn as W,\n  Yt as X,\n  Jt as Y,\n  Pt as Z,\n  Qi as _,\n  he as _t,\n  Yi as a,\n  et as at,\n  J as b,\n  ve as bt,\n  Bi as c,\n  ut as ct,\n  ci as d,\n  vt as dt,\n  Bt as et,\n  ya as f,\n  We as ft,\n  Na as g,\n  pe as gt,\n  ui as h,\n  ge as ht,\n  si as i,\n  Xe as it,\n  Si as j,\n  Hi as k,\n  Vi as l,\n  lt,\n  Q as m,\n  qe as mt,\n  ii as n,\n  At as nt,\n  oi as o,\n  tt as ot,\n  li as p,\n  Je as pt,\n  Nn as q,\n  Fa as r,\n  ot as rt,\n  Ma as s,\n  yt as st,\n  ba as t,\n  zt as tt,\n  va as u,\n  _t as ut,\n  X as v,\n  me as vt,\n  fi as w,\n  ze as wt,\n  Zi as x,\n  be as xt,\n  bi as y,\n  fe as yt,\n  rr as z,\n};\n//# sourceMappingURL=cube-soldier-BRpW8Tqo.js.map"
     },
     {
       "file": "assets__damage-direction-Bh_T3kaX-01.js",
@@ -3373,12 +3395,13 @@
       "file": "assets__damage-direction-Bh_T3kaX-tail-export.js",
       "skipped": true,
       "title": "assets__damage-direction-Bh_T3kaX — final export table (not sliced)",
-      "desc": "Lines 16-16. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 16-16. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 16,
       "endLine": 17,
       "sourceFile": "readable/assets__damage-direction-Bh_T3kaX.pretty.js",
       "firstLine": "export { t as n, e as t };",
-      "lastLine": "//# sourceMappingURL=damage-direction-Bh_T3kaX.js.map"
+      "lastLine": "//# sourceMappingURL=damage-direction-Bh_T3kaX.js.map",
+      "text": "export { t as n, e as t };\n//# sourceMappingURL=damage-direction-Bh_T3kaX.js.map"
     },
     {
       "file": "assets__deadweight-Db5xFjvu-01.js",
@@ -3416,12 +3439,13 @@
       "file": "assets__deadweight-Db5xFjvu-tail-export.js",
       "skipped": true,
       "title": "assets__deadweight-Db5xFjvu — final export table (not sliced)",
-      "desc": "Lines 1430-1430. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1430-1430. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1430,
       "endLine": 1431,
       "sourceFile": "readable/assets__deadweight-Db5xFjvu.pretty.js",
       "firstLine": "export { n as i, A as n, W as r, a as t };",
-      "lastLine": "//# sourceMappingURL=deadweight-Db5xFjvu.js.map"
+      "lastLine": "//# sourceMappingURL=deadweight-Db5xFjvu.js.map",
+      "text": "export { n as i, A as n, W as r, a as t };\n//# sourceMappingURL=deadweight-Db5xFjvu.js.map"
     },
     {
       "file": "assets__decor-kit-DeQwKaKF-01.js",
@@ -3627,12 +3651,13 @@
       "file": "assets__decor-kit-DeQwKaKF-tail-export.js",
       "skipped": true,
       "title": "assets__decor-kit-DeQwKaKF — final export table (not sliced)",
-      "desc": "Lines 7421-7421. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 7421-7421. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 7421,
       "endLine": 7422,
       "sourceFile": "readable/assets__decor-kit-DeQwKaKF.pretty.js",
       "firstLine": "export { Vn as t };",
-      "lastLine": "//# sourceMappingURL=decor-kit-DeQwKaKF.js.map"
+      "lastLine": "//# sourceMappingURL=decor-kit-DeQwKaKF.js.map",
+      "text": "export { Vn as t };\n//# sourceMappingURL=decor-kit-DeQwKaKF.js.map"
     },
     {
       "file": "assets__decor-util-BEVl-RC6-01.js",
@@ -3646,12 +3671,13 @@
       "file": "assets__decor-util-BEVl-RC6-tail-export.js",
       "skipped": true,
       "title": "assets__decor-util-BEVl-RC6 — final export table (not sliced)",
-      "desc": "Lines 269-301. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 269-301. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 269,
       "endLine": 302,
       "sourceFile": "readable/assets__decor-util-BEVl-RC6.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=decor-util-BEVl-RC6.js.map"
+      "lastLine": "//# sourceMappingURL=decor-util-BEVl-RC6.js.map",
+      "text": "export {\n  L as A,\n  J as C,\n  v as D,\n  P as E,\n  V as O,\n  D as S,\n  E as T,\n  S as _,\n  T as a,\n  R as b,\n  w as c,\n  C as d,\n  F as f,\n  U as g,\n  B as h,\n  j as i,\n  H as j,\n  q as k,\n  W as l,\n  Y as m,\n  A as n,\n  X as o,\n  I as p,\n  O as r,\n  M as s,\n  k as t,\n  N as u,\n  x as v,\n  G as w,\n  b as x,\n  K as y,\n};\n//# sourceMappingURL=decor-util-BEVl-RC6.js.map"
     },
     {
       "file": "assets__defaultmap-BVQrOy1s-01.js",
@@ -3665,12 +3691,13 @@
       "file": "assets__defaultmap-BVQrOy1s-tail-export.js",
       "skipped": true,
       "title": "assets__defaultmap-BVQrOy1s — final export table (not sliced)",
-      "desc": "Lines 26-26. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 26-26. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 26,
       "endLine": 27,
       "sourceFile": "readable/assets__defaultmap-BVQrOy1s.pretty.js",
       "firstLine": "export { e as t };",
-      "lastLine": "//# sourceMappingURL=defaultmap-BVQrOy1s.js.map"
+      "lastLine": "//# sourceMappingURL=defaultmap-BVQrOy1s.js.map",
+      "text": "export { e as t };\n//# sourceMappingURL=defaultmap-BVQrOy1s.js.map"
     },
     {
       "file": "assets__defs-BsSJWPNa-01.js",
@@ -3716,12 +3743,13 @@
       "file": "assets__defs-BsSJWPNa-tail-export.js",
       "skipped": true,
       "title": "assets__defs-BsSJWPNa — final export table (not sliced)",
-      "desc": "Lines 1587-1600. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1587-1600. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1587,
       "endLine": 1601,
       "sourceFile": "readable/assets__defs-BsSJWPNa.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=defs-BsSJWPNa.js.map"
+      "lastLine": "//# sourceMappingURL=defs-BsSJWPNa.js.map",
+      "text": "export {\n  l as a,\n  I as c,\n  c as d,\n  n as f,\n  j as i,\n  o as l,\n  C as n,\n  P as o,\n  N as r,\n  A as s,\n  F as t,\n  s as u,\n};\n//# sourceMappingURL=defs-BsSJWPNa.js.map"
     },
     {
       "file": "assets__demo-CYaenSpr-01.js",
@@ -3823,12 +3851,13 @@
       "file": "assets__demo-CYaenSpr-tail-export.js",
       "skipped": true,
       "title": "assets__demo-CYaenSpr — final export table (not sliced)",
-      "desc": "Lines 3794-3794. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 3794-3794. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 3794,
       "endLine": 3795,
       "sourceFile": "readable/assets__demo-CYaenSpr.pretty.js",
       "firstLine": "export { fn as default };",
-      "lastLine": "//# sourceMappingURL=demo-CYaenSpr.js.map"
+      "lastLine": "//# sourceMappingURL=demo-CYaenSpr.js.map",
+      "text": "export { fn as default };\n//# sourceMappingURL=demo-CYaenSpr.js.map"
     },
     {
       "file": "assets__destruction-BbHyhMIq-01.js",
@@ -3858,12 +3887,13 @@
       "file": "assets__destruction-BbHyhMIq-tail-export.js",
       "skipped": true,
       "title": "assets__destruction-BbHyhMIq — final export table (not sliced)",
-      "desc": "Lines 686-686. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 686-686. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 686,
       "endLine": 687,
       "sourceFile": "readable/assets__destruction-BbHyhMIq.pretty.js",
       "firstLine": "export { N as default };",
-      "lastLine": "//# sourceMappingURL=destruction-BbHyhMIq.js.map"
+      "lastLine": "//# sourceMappingURL=destruction-BbHyhMIq.js.map",
+      "text": "export { N as default };\n//# sourceMappingURL=destruction-BbHyhMIq.js.map"
     },
     {
       "file": "assets__effects-BZzGHRRU-01.js",
@@ -3941,12 +3971,13 @@
       "file": "assets__effects-BZzGHRRU-tail-export.js",
       "skipped": true,
       "title": "assets__effects-BZzGHRRU — final export table (not sliced)",
-      "desc": "Lines 4132-4132. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 4132-4132. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 4132,
       "endLine": 4133,
       "sourceFile": "readable/assets__effects-BZzGHRRU.pretty.js",
       "firstLine": "export { W as default };",
-      "lastLine": "//# sourceMappingURL=effects-BZzGHRRU.js.map"
+      "lastLine": "//# sourceMappingURL=effects-BZzGHRRU.js.map",
+      "text": "export { W as default };\n//# sourceMappingURL=effects-BZzGHRRU.js.map"
     },
     {
       "file": "assets__environment-CVWKhKHP-01.js",
@@ -4048,12 +4079,13 @@
       "file": "assets__environment-CVWKhKHP-tail-export.js",
       "skipped": true,
       "title": "assets__environment-CVWKhKHP — final export table (not sliced)",
-      "desc": "Lines 3504-3504. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 3504-3504. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 3504,
       "endLine": 3505,
       "sourceFile": "readable/assets__environment-CVWKhKHP.pretty.js",
       "firstLine": "export { $ as default };",
-      "lastLine": "//# sourceMappingURL=environment-CVWKhKHP.js.map"
+      "lastLine": "//# sourceMappingURL=environment-CVWKhKHP.js.map",
+      "text": "export { $ as default };\n//# sourceMappingURL=environment-CVWKhKHP.js.map"
     },
     {
       "file": "assets__explosion-profile-Dq6PS3Ks-01.js",
@@ -4067,12 +4099,13 @@
       "file": "assets__explosion-profile-Dq6PS3Ks-tail-export.js",
       "skipped": true,
       "title": "assets__explosion-profile-Dq6PS3Ks — final export table (not sliced)",
-      "desc": "Lines 11-11. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 11-11. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 11,
       "endLine": 12,
       "sourceFile": "readable/assets__explosion-profile-Dq6PS3Ks.pretty.js",
       "firstLine": "export { e as t };",
-      "lastLine": "//# sourceMappingURL=explosion-profile-Dq6PS3Ks.js.map"
+      "lastLine": "//# sourceMappingURL=explosion-profile-Dq6PS3Ks.js.map",
+      "text": "export { e as t };\n//# sourceMappingURL=explosion-profile-Dq6PS3Ks.js.map"
     },
     {
       "file": "assets__facade-buildings-B-dMZaU6-01.js",
@@ -4086,12 +4119,13 @@
       "file": "assets__facade-buildings-B-dMZaU6-tail-export.js",
       "skipped": true,
       "title": "assets__facade-buildings-B-dMZaU6 — final export table (not sliced)",
-      "desc": "Lines 33-33. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 33-33. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 33,
       "endLine": 34,
       "sourceFile": "readable/assets__facade-buildings-B-dMZaU6.pretty.js",
       "firstLine": "export { r as addFacadeBuildings };",
-      "lastLine": "//# sourceMappingURL=facade-buildings-B-dMZaU6.js.map"
+      "lastLine": "//# sourceMappingURL=facade-buildings-B-dMZaU6.js.map",
+      "text": "export { r as addFacadeBuildings };\n//# sourceMappingURL=facade-buildings-B-dMZaU6.js.map"
     },
     {
       "file": "assets__facade-id-storage-BLzjEjZ9-01.js",
@@ -4105,12 +4139,13 @@
       "file": "assets__facade-id-storage-BLzjEjZ9-tail-export.js",
       "skipped": true,
       "title": "assets__facade-id-storage-BLzjEjZ9 — final export table (not sliced)",
-      "desc": "Lines 318-318. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 318-318. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 318,
       "endLine": 319,
       "sourceFile": "readable/assets__facade-id-storage-BLzjEjZ9.pretty.js",
       "firstLine": "export { T as i, x as n, w as r, E as t };",
-      "lastLine": "//# sourceMappingURL=facade-id-storage-BLzjEjZ9.js.map"
+      "lastLine": "//# sourceMappingURL=facade-id-storage-BLzjEjZ9.js.map",
+      "text": "export { T as i, x as n, w as r, E as t };\n//# sourceMappingURL=facade-id-storage-BLzjEjZ9.js.map"
     },
     {
       "file": "assets__facade-kit-DGwo5rab-01.js",
@@ -4196,12 +4231,13 @@
       "file": "assets__facade-kit-DGwo5rab-tail-export.js",
       "skipped": true,
       "title": "assets__facade-kit-DGwo5rab — final export table (not sliced)",
-      "desc": "Lines 2653-2672. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2653-2672. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2653,
       "endLine": 2673,
       "sourceFile": "readable/assets__facade-kit-DGwo5rab.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=facade-kit-DGwo5rab.js.map"
+      "lastLine": "//# sourceMappingURL=facade-kit-DGwo5rab.js.map",
+      "text": "export {\n  re as _,\n  ke as a,\n  Y as c,\n  M as d,\n  T as f,\n  Te as g,\n  N as h,\n  he as i,\n  Z as l,\n  te as m,\n  pe as n,\n  w as o,\n  le as p,\n  C as r,\n  ue as s,\n  V as t,\n  ce as u,\n  X as v,\n};\n//# sourceMappingURL=facade-kit-DGwo5rab.js.map"
     },
     {
       "file": "assets__floor-nav-Djxj4YpQ-01.js",
@@ -4231,12 +4267,13 @@
       "file": "assets__floor-nav-Djxj4YpQ-tail-export.js",
       "skipped": true,
       "title": "assets__floor-nav-Djxj4YpQ — final export table (not sliced)",
-      "desc": "Lines 974-974. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 974-974. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 974,
       "endLine": 975,
       "sourceFile": "readable/assets__floor-nav-Djxj4YpQ.pretty.js",
       "firstLine": "export { M as n, oe as r, w as t };",
-      "lastLine": "//# sourceMappingURL=floor-nav-Djxj4YpQ.js.map"
+      "lastLine": "//# sourceMappingURL=floor-nav-Djxj4YpQ.js.map",
+      "text": "export { M as n, oe as r, w as t };\n//# sourceMappingURL=floor-nav-Djxj4YpQ.js.map"
     },
     {
       "file": "assets__front-desk-DGPHybWS-01.js",
@@ -4314,12 +4351,13 @@
       "file": "assets__frostline-DC8_Sipw-tail-export.js",
       "skipped": true,
       "title": "assets__frostline-DC8_Sipw — final export table (not sliced)",
-      "desc": "Lines 1086-1086. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1086-1086. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1086,
       "endLine": 1087,
       "sourceFile": "readable/assets__frostline-DC8_Sipw.pretty.js",
       "firstLine": "export { c as i, T as n, E as r, d as t };",
-      "lastLine": "//# sourceMappingURL=frostline-DC8_Sipw.js.map"
+      "lastLine": "//# sourceMappingURL=frostline-DC8_Sipw.js.map",
+      "text": "export { c as i, T as n, E as r, d as t };\n//# sourceMappingURL=frostline-DC8_Sipw.js.map"
     },
     {
       "file": "assets__gadget-defs-Ko74xZW2-01.js",
@@ -4333,12 +4371,13 @@
       "file": "assets__gadget-defs-Ko74xZW2-tail-export.js",
       "skipped": true,
       "title": "assets__gadget-defs-Ko74xZW2 — final export table (not sliced)",
-      "desc": "Lines 100-110. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 100-110. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 100,
       "endLine": 111,
       "sourceFile": "readable/assets__gadget-defs-Ko74xZW2.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=gadget-defs-Ko74xZW2.js.map"
+      "lastLine": "//# sourceMappingURL=gadget-defs-Ko74xZW2.js.map",
+      "text": "export {\n  u as a,\n  l as c,\n  d as i,\n  f as l,\n  g as n,\n  p as o,\n  s as r,\n  m as s,\n  h as t,\n};\n//# sourceMappingURL=gadget-defs-Ko74xZW2.js.map"
     },
     {
       "file": "assets__gamemodes-Lk9D-0V6-01.js",
@@ -4368,12 +4407,13 @@
       "file": "assets__gamemodes-Lk9D-0V6-tail-export.js",
       "skipped": true,
       "title": "assets__gamemodes-Lk9D-0V6 — final export table (not sliced)",
-      "desc": "Lines 736-736. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 736-736. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 736,
       "endLine": 737,
       "sourceFile": "readable/assets__gamemodes-Lk9D-0V6.pretty.js",
       "firstLine": "export { k as default };",
-      "lastLine": "//# sourceMappingURL=gamemodes-Lk9D-0V6.js.map"
+      "lastLine": "//# sourceMappingURL=gamemodes-Lk9D-0V6.js.map",
+      "text": "export { k as default };\n//# sourceMappingURL=gamemodes-Lk9D-0V6.js.map"
     },
     {
       "file": "assets__gamepad-C2J19Zis-01.js",
@@ -4387,12 +4427,13 @@
       "file": "assets__gamepad-C2J19Zis-tail-export.js",
       "skipped": true,
       "title": "assets__gamepad-C2J19Zis — final export table (not sliced)",
-      "desc": "Lines 181-181. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 181-181. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 181,
       "endLine": 182,
       "sourceFile": "readable/assets__gamepad-C2J19Zis.pretty.js",
       "firstLine": "export { u as n, d as r, f as t };",
-      "lastLine": "//# sourceMappingURL=gamepad-C2J19Zis.js.map"
+      "lastLine": "//# sourceMappingURL=gamepad-C2J19Zis.js.map",
+      "text": "export { u as n, d as r, f as t };\n//# sourceMappingURL=gamepad-C2J19Zis.js.map"
     },
     {
       "file": "assets__grenade-sim-BPkr3Qs6-01.js",
@@ -4406,12 +4447,13 @@
       "file": "assets__grenade-sim-BPkr3Qs6-tail-export.js",
       "skipped": true,
       "title": "assets__grenade-sim-BPkr3Qs6 — final export table (not sliced)",
-      "desc": "Lines 114-114. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 114-114. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 114,
       "endLine": 115,
       "sourceFile": "readable/assets__grenade-sim-BPkr3Qs6.pretty.js",
       "firstLine": "export { o as a, s as i, d as n, l as o, c as r, u as s, a as t };",
-      "lastLine": "//# sourceMappingURL=grenade-sim-BPkr3Qs6.js.map"
+      "lastLine": "//# sourceMappingURL=grenade-sim-BPkr3Qs6.js.map",
+      "text": "export { o as a, s as i, d as n, l as o, c as r, u as s, a as t };\n//# sourceMappingURL=grenade-sim-BPkr3Qs6.js.map"
     },
     {
       "file": "assets__grenade-view-BrGxzfLZ-01.js",
@@ -4457,12 +4499,13 @@
       "file": "assets__grenade-view-BrGxzfLZ-tail-export.js",
       "skipped": true,
       "title": "assets__grenade-view-BrGxzfLZ — final export table (not sliced)",
-      "desc": "Lines 1408-1408. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1408-1408. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1408,
       "endLine": 1409,
       "sourceFile": "readable/assets__grenade-view-BrGxzfLZ.pretty.js",
       "firstLine": "export { q as a, Y as i, Ye as n, J as r, Ze as t };",
-      "lastLine": "//# sourceMappingURL=grenade-view-BrGxzfLZ.js.map"
+      "lastLine": "//# sourceMappingURL=grenade-view-BrGxzfLZ.js.map",
+      "text": "export { q as a, Y as i, Ye as n, J as r, Ze as t };\n//# sourceMappingURL=grenade-view-BrGxzfLZ.js.map"
     },
     {
       "file": "assets__greywater-centre-hZuxA5K7-01.js",
@@ -4492,12 +4535,13 @@
       "file": "assets__greywater-centre-hZuxA5K7-tail-export.js",
       "skipped": true,
       "title": "assets__greywater-centre-hZuxA5K7 — final export table (not sliced)",
-      "desc": "Lines 861-861. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 861-861. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 861,
       "endLine": 862,
       "sourceFile": "readable/assets__greywater-centre-hZuxA5K7.pretty.js",
       "firstLine": "export { c as a, l as i, S as n, b as r, a as t };",
-      "lastLine": "//# sourceMappingURL=greywater-centre-hZuxA5K7.js.map"
+      "lastLine": "//# sourceMappingURL=greywater-centre-hZuxA5K7.js.map",
+      "text": "export { c as a, l as i, S as n, b as r, a as t };\n//# sourceMappingURL=greywater-centre-hZuxA5K7.js.map"
     },
     {
       "file": "assets__greywater-centre-view-Cf3_SbRw-01.js",
@@ -4583,12 +4627,13 @@
       "file": "assets__greywater-centre-view-Cf3_SbRw-tail-export.js",
       "skipped": true,
       "title": "assets__greywater-centre-view-Cf3_SbRw — final export table (not sliced)",
-      "desc": "Lines 2815-2815. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2815-2815. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2815,
       "endLine": 2816,
       "sourceFile": "readable/assets__greywater-centre-view-Cf3_SbRw.pretty.js",
       "firstLine": "export { bt as addGreywaterCentre };",
-      "lastLine": "//# sourceMappingURL=greywater-centre-view-Cf3_SbRw.js.map"
+      "lastLine": "//# sourceMappingURL=greywater-centre-view-Cf3_SbRw.js.map",
+      "text": "export { bt as addGreywaterCentre };\n//# sourceMappingURL=greywater-centre-view-Cf3_SbRw.js.map"
     },
     {
       "file": "assets__greywater-DsgkBTd3-01.js",
@@ -4618,12 +4663,13 @@
       "file": "assets__greywater-DsgkBTd3-tail-export.js",
       "skipped": true,
       "title": "assets__greywater-DsgkBTd3 — final export table (not sliced)",
-      "desc": "Lines 762-762. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 762-762. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 762,
       "endLine": 763,
       "sourceFile": "readable/assets__greywater-DsgkBTd3.pretty.js",
       "firstLine": "export { b as n, v as t };",
-      "lastLine": "//# sourceMappingURL=greywater-DsgkBTd3.js.map"
+      "lastLine": "//# sourceMappingURL=greywater-DsgkBTd3.js.map",
+      "text": "export { b as n, v as t };\n//# sourceMappingURL=greywater-DsgkBTd3.js.map"
     },
     {
       "file": "assets__greywater-grounds-DtDaJ4sV-01.js",
@@ -4669,12 +4715,13 @@
       "file": "assets__greywater-grounds-DtDaJ4sV-tail-export.js",
       "skipped": true,
       "title": "assets__greywater-grounds-DtDaJ4sV — final export table (not sliced)",
-      "desc": "Lines 1848-1848. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1848-1848. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1848,
       "endLine": 1849,
       "sourceFile": "readable/assets__greywater-grounds-DtDaJ4sV.pretty.js",
       "firstLine": "export { Le as createGreywaterGrounds };",
-      "lastLine": "//# sourceMappingURL=greywater-grounds-DtDaJ4sV.js.map"
+      "lastLine": "//# sourceMappingURL=greywater-grounds-DtDaJ4sV.js.map",
+      "text": "export { Le as createGreywaterGrounds };\n//# sourceMappingURL=greywater-grounds-DtDaJ4sV.js.map"
     },
     {
       "file": "assets__greywater-harbor-BSIBZxXc-01.js",
@@ -4696,12 +4743,13 @@
       "file": "assets__greywater-harbor-BSIBZxXc-tail-export.js",
       "skipped": true,
       "title": "assets__greywater-harbor-BSIBZxXc — final export table (not sliced)",
-      "desc": "Lines 443-447. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 443-447. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 443,
       "endLine": 448,
       "sourceFile": "readable/assets__greywater-harbor-BSIBZxXc.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=greywater-harbor-BSIBZxXc.js.map"
+      "lastLine": "//# sourceMappingURL=greywater-harbor-BSIBZxXc.js.map",
+      "text": "export {\n  _ as HARBOR_SECTORS,\n  b as addGreywaterHarbor,\n  y as buildHarborSurround,\n};\n//# sourceMappingURL=greywater-harbor-BSIBZxXc.js.map"
     },
     {
       "file": "assets__greywater-landmarks-view-BqWgNxEz-01.js",
@@ -4739,12 +4787,13 @@
       "file": "assets__greywater-landmarks-view-BqWgNxEz-tail-export.js",
       "skipped": true,
       "title": "assets__greywater-landmarks-view-BqWgNxEz — final export table (not sliced)",
-      "desc": "Lines 1065-1065. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1065-1065. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1065,
       "endLine": 1066,
       "sourceFile": "readable/assets__greywater-landmarks-view-BqWgNxEz.pretty.js",
       "firstLine": "export { B as addGreywaterLandmarks };",
-      "lastLine": "//# sourceMappingURL=greywater-landmarks-view-BqWgNxEz.js.map"
+      "lastLine": "//# sourceMappingURL=greywater-landmarks-view-BqWgNxEz.js.map",
+      "text": "export { B as addGreywaterLandmarks };\n//# sourceMappingURL=greywater-landmarks-view-BqWgNxEz.js.map"
     },
     {
       "file": "assets__greywater-map-CJ8kbtVA-01.js",
@@ -4966,12 +5015,13 @@
       "file": "assets__greywater-map-CJ8kbtVA-tail-export.js",
       "skipped": true,
       "title": "assets__greywater-map-CJ8kbtVA — final export table (not sliced)",
-      "desc": "Lines 176085-176085. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 176085-176085. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 176085,
       "endLine": 176086,
       "sourceFile": "readable/assets__greywater-map-CJ8kbtVA.pretty.js",
       "firstLine": "export { $t as a, Zt as i, $ as n, Ht as o, Q as r, zt as s, Wt as t };",
-      "lastLine": "//# sourceMappingURL=greywater-map-CJ8kbtVA.js.map"
+      "lastLine": "//# sourceMappingURL=greywater-map-CJ8kbtVA.js.map",
+      "text": "export { $t as a, Zt as i, $ as n, Ht as o, Q as r, zt as s, Wt as t };\n//# sourceMappingURL=greywater-map-CJ8kbtVA.js.map"
     },
     {
       "file": "assets__greywater-nests-5ECPKgjn-01.js",
@@ -4993,12 +5043,13 @@
       "file": "assets__greywater-nests-5ECPKgjn-tail-export.js",
       "skipped": true,
       "title": "assets__greywater-nests-5ECPKgjn — final export table (not sliced)",
-      "desc": "Lines 1991-1991. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1991-1991. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1991,
       "endLine": 1992,
       "sourceFile": "readable/assets__greywater-nests-5ECPKgjn.pretty.js",
       "firstLine": "export { s as a, o as i, d as n, e as o, u as r, t };",
-      "lastLine": "//# sourceMappingURL=greywater-nests-5ECPKgjn.js.map"
+      "lastLine": "//# sourceMappingURL=greywater-nests-5ECPKgjn.js.map",
+      "text": "export { s as a, o as i, d as n, e as o, u as r, t };\n//# sourceMappingURL=greywater-nests-5ECPKgjn.js.map"
     },
     {
       "file": "assets__greywater-nests-view-DL2K5mmv-01.js",
@@ -5060,12 +5111,13 @@
       "file": "assets__greywater-nests-view-DL2K5mmv-tail-export.js",
       "skipped": true,
       "title": "assets__greywater-nests-view-DL2K5mmv — final export table (not sliced)",
-      "desc": "Lines 2204-2204. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2204-2204. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2204,
       "endLine": 2205,
       "sourceFile": "readable/assets__greywater-nests-view-DL2K5mmv.pretty.js",
       "firstLine": "export { me as addGreywaterNests, he as addGreywaterNestsAsync };",
-      "lastLine": "//# sourceMappingURL=greywater-nests-view-DL2K5mmv.js.map"
+      "lastLine": "//# sourceMappingURL=greywater-nests-view-DL2K5mmv.js.map",
+      "text": "export { me as addGreywaterNests, he as addGreywaterNestsAsync };\n//# sourceMappingURL=greywater-nests-view-DL2K5mmv.js.map"
     },
     {
       "file": "assets__greywater-setpieces-view-CRqPs-L5-01.js",
@@ -5255,12 +5307,13 @@
       "file": "assets__greywater-setpieces-view-CRqPs-L5-tail-export.js",
       "skipped": true,
       "title": "assets__greywater-setpieces-view-CRqPs-L5 — final export table (not sliced)",
-      "desc": "Lines 9295-9295. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 9295-9295. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 9295,
       "endLine": 9296,
       "sourceFile": "readable/assets__greywater-setpieces-view-CRqPs-L5.pretty.js",
       "firstLine": "export { wr as addGreywaterSetpieces, Tr as addGreywaterSetpiecesAsync };",
-      "lastLine": "//# sourceMappingURL=greywater-setpieces-view-CRqPs-L5.js.map"
+      "lastLine": "//# sourceMappingURL=greywater-setpieces-view-CRqPs-L5.js.map",
+      "text": "export { wr as addGreywaterSetpieces, Tr as addGreywaterSetpiecesAsync };\n//# sourceMappingURL=greywater-setpieces-view-CRqPs-L5.js.map"
     },
     {
       "file": "assets__greywater-signs-view-b4Ps_Ogz-01.js",
@@ -5370,12 +5423,13 @@
       "file": "assets__greywater-signs-view-b4Ps_Ogz-tail-export.js",
       "skipped": true,
       "title": "assets__greywater-signs-view-b4Ps_Ogz — final export table (not sliced)",
-      "desc": "Lines 5519-5519. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 5519-5519. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 5519,
       "endLine": 5520,
       "sourceFile": "readable/assets__greywater-signs-view-b4Ps_Ogz.pretty.js",
       "firstLine": "export { Ve as addGreywaterSigns, He as addGreywaterSignsAsync };",
-      "lastLine": "//# sourceMappingURL=greywater-signs-view-b4Ps_Ogz.js.map"
+      "lastLine": "//# sourceMappingURL=greywater-signs-view-b4Ps_Ogz.js.map",
+      "text": "export { Ve as addGreywaterSigns, He as addGreywaterSignsAsync };\n//# sourceMappingURL=greywater-signs-view-b4Ps_Ogz.js.map"
     },
     {
       "file": "assets__ground-textures-Bt7xe4qs-01.js",
@@ -5389,12 +5443,13 @@
       "file": "assets__ground-textures-Bt7xe4qs-tail-export.js",
       "skipped": true,
       "title": "assets__ground-textures-Bt7xe4qs — final export table (not sliced)",
-      "desc": "Lines 275-275. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 275-275. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 275,
       "endLine": 276,
       "sourceFile": "readable/assets__ground-textures-Bt7xe4qs.pretty.js",
       "firstLine": "export { _ as i, g as n, h as r, p as t };",
-      "lastLine": "//# sourceMappingURL=ground-textures-Bt7xe4qs.js.map"
+      "lastLine": "//# sourceMappingURL=ground-textures-Bt7xe4qs.js.map",
+      "text": "export { _ as i, g as n, h as r, p as t };\n//# sourceMappingURL=ground-textures-Bt7xe4qs.js.map"
     },
     {
       "file": "assets__hangar-Do5KStz2-01.js",
@@ -5416,12 +5471,13 @@
       "file": "assets__hangar-Do5KStz2-tail-export.js",
       "skipped": true,
       "title": "assets__hangar-Do5KStz2 — final export table (not sliced)",
-      "desc": "Lines 2938-2938. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2938-2938. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2938,
       "endLine": 2939,
       "sourceFile": "readable/assets__hangar-Do5KStz2.pretty.js",
       "firstLine": "export { d as i, C as n, w as r, m as t };",
-      "lastLine": "//# sourceMappingURL=hangar-Do5KStz2.js.map"
+      "lastLine": "//# sourceMappingURL=hangar-Do5KStz2.js.map",
+      "text": "export { d as i, C as n, w as r, m as t };\n//# sourceMappingURL=hangar-Do5KStz2.js.map"
     },
     {
       "file": "assets__hangar-view--r_UA7k--01.js",
@@ -5555,12 +5611,13 @@
       "file": "assets__hangar-view--r_UA7k--tail-export.js",
       "skipped": true,
       "title": "assets__hangar-view--r_UA7k- — final export table (not sliced)",
-      "desc": "Lines 13698-13698. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 13698-13698. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 13698,
       "endLine": 13699,
       "sourceFile": "readable/assets__hangar-view--r_UA7k-.pretty.js",
       "firstLine": "export { zn as createHangarView };",
-      "lastLine": "//# sourceMappingURL=hangar-view--r_UA7k-.js.map"
+      "lastLine": "//# sourceMappingURL=hangar-view--r_UA7k-.js.map",
+      "text": "export { zn as createHangarView };\n//# sourceMappingURL=hangar-view--r_UA7k-.js.map"
     },
     {
       "file": "assets__harbor-land-DePGpw_9-01.js",
@@ -5574,12 +5631,13 @@
       "file": "assets__harbor-land-DePGpw_9-tail-export.js",
       "skipped": true,
       "title": "assets__harbor-land-DePGpw_9 — final export table (not sliced)",
-      "desc": "Lines 67-67. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 67-67. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 67,
       "endLine": 68,
       "sourceFile": "readable/assets__harbor-land-DePGpw_9.pretty.js",
       "firstLine": "export { i as n, o as r, c as t };",
-      "lastLine": "//# sourceMappingURL=harbor-land-DePGpw_9.js.map"
+      "lastLine": "//# sourceMappingURL=harbor-land-DePGpw_9.js.map",
+      "text": "export { i as n, o as r, c as t };\n//# sourceMappingURL=harbor-land-DePGpw_9.js.map"
     },
     {
       "file": "assets__heat-BWWT84pF-01.js",
@@ -5593,12 +5651,13 @@
       "file": "assets__heat-BWWT84pF-tail-export.js",
       "skipped": true,
       "title": "assets__heat-BWWT84pF — final export table (not sliced)",
-      "desc": "Lines 74-74. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 74-74. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 74,
       "endLine": 75,
       "sourceFile": "readable/assets__heat-BWWT84pF.pretty.js",
       "firstLine": "export { s as a, o as i, a as n, r as o, n as r, i as t };",
-      "lastLine": "//# sourceMappingURL=heat-BWWT84pF.js.map"
+      "lastLine": "//# sourceMappingURL=heat-BWWT84pF.js.map",
+      "text": "export { s as a, o as i, a as n, r as o, n as r, i as t };\n//# sourceMappingURL=heat-BWWT84pF.js.map"
     },
     {
       "file": "assets__helicopter-kit-DBJtwl3L-01.js",
@@ -5628,12 +5687,13 @@
       "file": "assets__helicopter-kit-DBJtwl3L-tail-export.js",
       "skipped": true,
       "title": "assets__helicopter-kit-DBJtwl3L — final export table (not sliced)",
-      "desc": "Lines 839-839. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 839-839. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 839,
       "endLine": 840,
       "sourceFile": "readable/assets__helicopter-kit-DBJtwl3L.pretty.js",
       "firstLine": "export { L as t };",
-      "lastLine": "//# sourceMappingURL=helicopter-kit-DBJtwl3L.js.map"
+      "lastLine": "//# sourceMappingURL=helicopter-kit-DBJtwl3L.js.map",
+      "text": "export { L as t };\n//# sourceMappingURL=helicopter-kit-DBJtwl3L.js.map"
     },
     {
       "file": "assets__helipad-kit-DK8Pj1KR-01.js",
@@ -5647,12 +5707,13 @@
       "file": "assets__helipad-kit-DK8Pj1KR-tail-export.js",
       "skipped": true,
       "title": "assets__helipad-kit-DK8Pj1KR — final export table (not sliced)",
-      "desc": "Lines 204-204. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 204-204. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 204,
       "endLine": 205,
       "sourceFile": "readable/assets__helipad-kit-DK8Pj1KR.pretty.js",
       "firstLine": "export { a as n, e as t };",
-      "lastLine": "//# sourceMappingURL=helipad-kit-DK8Pj1KR.js.map"
+      "lastLine": "//# sourceMappingURL=helipad-kit-DK8Pj1KR.js.map",
+      "text": "export { a as n, e as t };\n//# sourceMappingURL=helipad-kit-DK8Pj1KR.js.map"
     },
     {
       "file": "assets__homes-styles-n68aJ6aV-01.js",
@@ -5826,12 +5887,13 @@
       "file": "assets__homes-styles-n68aJ6aV-tail-export.js",
       "skipped": true,
       "title": "assets__homes-styles-n68aJ6aV — final export table (not sliced)",
-      "desc": "Lines 6991-7003. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 6991-7003. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 6991,
       "endLine": 7004,
       "sourceFile": "readable/assets__homes-styles-n68aJ6aV.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=homes-styles-n68aJ6aV.js.map"
+      "lastLine": "//# sourceMappingURL=homes-styles-n68aJ6aV.js.map",
+      "text": "export {\n  A as a,\n  j as c,\n  O as d,\n  M as i,\n  E as l,\n  _e as n,\n  k as o,\n  T as r,\n  he as s,\n  Wt as t,\n  N as u,\n};\n//# sourceMappingURL=homes-styles-n68aJ6aV.js.map"
     },
     {
       "file": "assets__horn-CzY1ZFbi-01.js",
@@ -5845,12 +5907,13 @@
       "file": "assets__horn-CzY1ZFbi-tail-export.js",
       "skipped": true,
       "title": "assets__horn-CzY1ZFbi — final export table (not sliced)",
-      "desc": "Lines 59-59. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 59-59. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 59,
       "endLine": 60,
       "sourceFile": "readable/assets__horn-CzY1ZFbi.pretty.js",
       "firstLine": "export { t as n, n as t };",
-      "lastLine": "//# sourceMappingURL=horn-CzY1ZFbi.js.map"
+      "lastLine": "//# sourceMappingURL=horn-CzY1ZFbi.js.map",
+      "text": "export { t as n, n as t };\n//# sourceMappingURL=horn-CzY1ZFbi.js.map"
     },
     {
       "file": "assets__hostility-BAA0I7XB-01.js",
@@ -5864,12 +5927,13 @@
       "file": "assets__hostility-BAA0I7XB-tail-export.js",
       "skipped": true,
       "title": "assets__hostility-BAA0I7XB — final export table (not sliced)",
-      "desc": "Lines 13-13. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 13-13. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 13,
       "endLine": 14,
       "sourceFile": "readable/assets__hostility-BAA0I7XB.pretty.js",
       "firstLine": "export { n, e as r, t };",
-      "lastLine": "//# sourceMappingURL=hostility-BAA0I7XB.js.map"
+      "lastLine": "//# sourceMappingURL=hostility-BAA0I7XB.js.map",
+      "text": "export { n, e as r, t };\n//# sourceMappingURL=hostility-BAA0I7XB.js.map"
     },
     {
       "file": "assets__housefire-Qhc_Y3R0-01.js",
@@ -5891,12 +5955,13 @@
       "file": "assets__housefire-Qhc_Y3R0-tail-export.js",
       "skipped": true,
       "title": "assets__housefire-Qhc_Y3R0 — final export table (not sliced)",
-      "desc": "Lines 2813-2813. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2813-2813. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2813,
       "endLine": 2814,
       "sourceFile": "readable/assets__housefire-Qhc_Y3R0.pretty.js",
       "firstLine": "export { r as i, g as n, x as r, o as t };",
-      "lastLine": "//# sourceMappingURL=housefire-Qhc_Y3R0.js.map"
+      "lastLine": "//# sourceMappingURL=housefire-Qhc_Y3R0.js.map",
+      "text": "export { r as i, g as n, x as r, o as t };\n//# sourceMappingURL=housefire-Qhc_Y3R0.js.map"
     },
     {
       "file": "assets__housefire-sim-D_OSgDgj-01.js",
@@ -5918,12 +5983,13 @@
       "file": "assets__housefire-sim-D_OSgDgj-tail-export.js",
       "skipped": true,
       "title": "assets__housefire-sim-D_OSgDgj — final export table (not sliced)",
-      "desc": "Lines 500-528. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 500-528. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 500,
       "endLine": 529,
       "sourceFile": "readable/assets__housefire-sim-D_OSgDgj.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=housefire-sim-D_OSgDgj.js.map"
+      "lastLine": "//# sourceMappingURL=housefire-sim-D_OSgDgj.js.map",
+      "text": "export {\n  r as FIRE_DPS,\n  e as GROW,\n  i as HAZARD,\n  n as HEAT_BREAK,\n  t as PANE_HP,\n  d as carHeat,\n  y as engineAt,\n  x as engineBoxes,\n  c as freshState,\n  m as heatAt,\n  M as installHouseFire,\n  b as ladderOpen,\n  E as paneBox,\n  C as paneBrokeAt,\n  S as paneBroken,\n  w as panesAlong,\n  T as panesNear,\n  A as prepare,\n  D as propaneBox,\n  O as propaneGone,\n  k as rayProp,\n  p as roomAt,\n  u as roomHeat,\n  _ as smokeAt,\n  v as smokeBlocks,\n  h as smokeBottom,\n  l as stateOf,\n};\n//# sourceMappingURL=housefire-sim-D_OSgDgj.js.map"
     },
     {
       "file": "assets__housefire-view-7U8AhLMH-01.js",
@@ -5945,12 +6011,13 @@
       "file": "assets__housefire-view-7U8AhLMH-tail-export.js",
       "skipped": true,
       "title": "assets__housefire-view-7U8AhLMH — final export table (not sliced)",
-      "desc": "Lines 803-803. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 803-803. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 803,
       "endLine": 804,
       "sourceFile": "readable/assets__housefire-view-7U8AhLMH.pretty.js",
       "firstLine": "export { h as createHouseFireView };",
-      "lastLine": "//# sourceMappingURL=housefire-view-7U8AhLMH.js.map"
+      "lastLine": "//# sourceMappingURL=housefire-view-7U8AhLMH.js.map",
+      "text": "export { h as createHouseFireView };\n//# sourceMappingURL=housefire-view-7U8AhLMH.js.map"
     },
     {
       "file": "assets__input-glyphs-CoM_yJmy-01.js",
@@ -5964,12 +6031,13 @@
       "file": "assets__input-glyphs-CoM_yJmy-tail-export.js",
       "skipped": true,
       "title": "assets__input-glyphs-CoM_yJmy — final export table (not sliced)",
-      "desc": "Lines 219-237. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 219-237. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 219,
       "endLine": 238,
       "sourceFile": "readable/assets__input-glyphs-CoM_yJmy.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=input-glyphs-CoM_yJmy.js.map"
+      "lastLine": "//# sourceMappingURL=input-glyphs-CoM_yJmy.js.map",
+      "text": "export {\n  d as _,\n  E as a,\n  u as c,\n  p as d,\n  g as f,\n  h as g,\n  f as h,\n  D as i,\n  l,\n  _ as m,\n  T as n,\n  C as o,\n  c as p,\n  w as r,\n  n as s,\n  O as t,\n  i as u,\n};\n//# sourceMappingURL=input-glyphs-CoM_yJmy.js.map"
     },
     {
       "file": "assets__ironwood-BHbdGmuz-01.js",
@@ -5999,12 +6067,13 @@
       "file": "assets__ironwood-BHbdGmuz-tail-export.js",
       "skipped": true,
       "title": "assets__ironwood-BHbdGmuz — final export table (not sliced)",
-      "desc": "Lines 2665-2665. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2665-2665. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2665,
       "endLine": 2666,
       "sourceFile": "readable/assets__ironwood-BHbdGmuz.pretty.js",
       "firstLine": "export { c as i, I as n, L as r, d as t };",
-      "lastLine": "//# sourceMappingURL=ironwood-BHbdGmuz.js.map"
+      "lastLine": "//# sourceMappingURL=ironwood-BHbdGmuz.js.map",
+      "text": "export { c as i, I as n, L as r, d as t };\n//# sourceMappingURL=ironwood-BHbdGmuz.js.map"
     },
     {
       "file": "assets__javelin-BUaEG5R2-01.js",
@@ -6018,12 +6087,13 @@
       "file": "assets__javelin-BUaEG5R2-tail-export.js",
       "skipped": true,
       "title": "assets__javelin-BUaEG5R2 — final export table (not sliced)",
-      "desc": "Lines 230-230. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 230-230. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 230,
       "endLine": 231,
       "sourceFile": "readable/assets__javelin-BUaEG5R2.pretty.js",
       "firstLine": "export { f as a, v as c, o as i, l as n, u as o, _ as r, m as s, i as t };",
-      "lastLine": "//# sourceMappingURL=javelin-BUaEG5R2.js.map"
+      "lastLine": "//# sourceMappingURL=javelin-BUaEG5R2.js.map",
+      "text": "export { f as a, v as c, o as i, l as n, u as o, _ as r, m as s, i as t };\n//# sourceMappingURL=javelin-BUaEG5R2.js.map"
     },
     {
       "file": "assets__kepler-BUDn6dZs-01.js",
@@ -6045,12 +6115,13 @@
       "file": "assets__kepler-BUDn6dZs-tail-export.js",
       "skipped": true,
       "title": "assets__kepler-BUDn6dZs — final export table (not sliced)",
-      "desc": "Lines 2440-2453. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2440-2453. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2440,
       "endLine": 2454,
       "sourceFile": "readable/assets__kepler-BUDn6dZs.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=kepler-BUDn6dZs.js.map"
+      "lastLine": "//# sourceMappingURL=kepler-BUDn6dZs.js.map",
+      "text": "export {\n  i as a,\n  s as c,\n  v as d,\n  t as f,\n  c as i,\n  S as l,\n  f as n,\n  g as o,\n  m as r,\n  d as s,\n  a as t,\n  y as u,\n};\n//# sourceMappingURL=kepler-BUDn6dZs.js.map"
     },
     {
       "file": "assets__kepler-sim-CZsZKMi2-01.js",
@@ -6064,12 +6135,13 @@
       "file": "assets__kepler-sim-CZsZKMi2-tail-export.js",
       "skipped": true,
       "title": "assets__kepler-sim-CZsZKMi2 — final export table (not sliced)",
-      "desc": "Lines 255-277. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 255-277. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 255,
       "endLine": 278,
       "sourceFile": "readable/assets__kepler-sim-CZsZKMi2.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=kepler-sim-CZsZKMi2.js.map"
+      "lastLine": "//# sourceMappingURL=kepler-sim-CZsZKMi2.js.map",
+      "text": "export {\n  m as BETA,\n  d as EARTH_ANG,\n  u as EARTH_DIR,\n  o as FIRST_SHADOW,\n  i as ORBIT,\n  v as ORBIT_N,\n  y as ORBIT_W,\n  a as SHADOW,\n  b as VIS,\n  j as armAt,\n  I as armBoxes,\n  M as armPoints,\n  T as auroraOrbit,\n  A as craneAt,\n  F as craneBoxes,\n  O as inKeelZone,\n  L as installKepler,\n  w as orbitAt,\n  S as orbitT,\n  C as sunDirAt,\n  E as visibilityAt,\n};\n//# sourceMappingURL=kepler-sim-CZsZKMi2.js.map"
     },
     {
       "file": "assets__kepler-view-jIBABGFb-01.js",
@@ -6107,12 +6179,13 @@
       "file": "assets__kepler-view-jIBABGFb-tail-export.js",
       "skipped": true,
       "title": "assets__kepler-view-jIBABGFb — final export table (not sliced)",
-      "desc": "Lines 2225-2225. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2225-2225. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2225,
       "endLine": 2226,
       "sourceFile": "readable/assets__kepler-view-jIBABGFb.pretty.js",
       "firstLine": "export { Fe as createKeplerView };",
-      "lastLine": "//# sourceMappingURL=kepler-view-jIBABGFb.js.map"
+      "lastLine": "//# sourceMappingURL=kepler-view-jIBABGFb.js.map",
+      "text": "export { Fe as createKeplerView };\n//# sourceMappingURL=kepler-view-jIBABGFb.js.map"
     },
     {
       "file": "assets__kit-B7uNFdQ6-01.js",
@@ -6126,12 +6199,13 @@
       "file": "assets__kit-B7uNFdQ6-tail-export.js",
       "skipped": true,
       "title": "assets__kit-B7uNFdQ6 — final export table (not sliced)",
-      "desc": "Lines 291-307. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 291-307. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 291,
       "endLine": 308,
       "sourceFile": "readable/assets__kit-B7uNFdQ6.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=kit-B7uNFdQ6.js.map"
+      "lastLine": "//# sourceMappingURL=kit-B7uNFdQ6.js.map",
+      "text": "export {\n  E as a,\n  x as c,\n  A as d,\n  N as f,\n  D as h,\n  k as i,\n  j as l,\n  M as m,\n  O as n,\n  L as o,\n  T as p,\n  w as r,\n  S as s,\n  C as t,\n  b as u,\n};\n//# sourceMappingURL=kit-B7uNFdQ6.js.map"
     },
     {
       "file": "assets__knife-pose-sWCbR3uv-01.js",
@@ -6145,12 +6219,13 @@
       "file": "assets__knife-pose-sWCbR3uv-tail-export.js",
       "skipped": true,
       "title": "assets__knife-pose-sWCbR3uv — final export table (not sliced)",
-      "desc": "Lines 46-46. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 46-46. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 46,
       "endLine": 47,
       "sourceFile": "readable/assets__knife-pose-sWCbR3uv.pretty.js",
       "firstLine": "export { r as i, e as n, c as r, t };",
-      "lastLine": "//# sourceMappingURL=knife-pose-sWCbR3uv.js.map"
+      "lastLine": "//# sourceMappingURL=knife-pose-sWCbR3uv.js.map",
+      "text": "export { r as i, e as n, c as r, t };\n//# sourceMappingURL=knife-pose-sWCbR3uv.js.map"
     },
     {
       "file": "assets__lab-buildings-view-DJVr8phc-01.js",
@@ -7956,12 +8031,13 @@
       "file": "assets__lab-buildings-view-DJVr8phc-tail-export.js",
       "skipped": true,
       "title": "assets__lab-buildings-view-DJVr8phc — final export table (not sliced)",
-      "desc": "Lines 70814-70814. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 70814-70814. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 70814,
       "endLine": 70815,
       "sourceFile": "readable/assets__lab-buildings-view-DJVr8phc.pretty.js",
       "firstLine": "export { eS as addLabBuildings };",
-      "lastLine": "//# sourceMappingURL=lab-buildings-view-DJVr8phc.js.map"
+      "lastLine": "//# sourceMappingURL=lab-buildings-view-DJVr8phc.js.map",
+      "text": "export { eS as addLabBuildings };\n//# sourceMappingURL=lab-buildings-view-DJVr8phc.js.map"
     },
     {
       "file": "assets__lab-city-7bAu2SXh-01.js",
@@ -8023,12 +8099,13 @@
       "file": "assets__lab-city-7bAu2SXh-tail-export.js",
       "skipped": true,
       "title": "assets__lab-city-7bAu2SXh — final export table (not sliced)",
-      "desc": "Lines 40388-40388. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 40388-40388. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 40388,
       "endLine": 40389,
       "sourceFile": "readable/assets__lab-city-7bAu2SXh.pretty.js",
       "firstLine": "export { F as a, N as i, P as n, a as o, x as r, C as t };",
-      "lastLine": "//# sourceMappingURL=lab-city-7bAu2SXh.js.map"
+      "lastLine": "//# sourceMappingURL=lab-city-7bAu2SXh.js.map",
+      "text": "export { F as a, N as i, P as n, a as o, x as r, C as t };\n//# sourceMappingURL=lab-city-7bAu2SXh.js.map"
     },
     {
       "file": "assets__lab-doors-BzTQZbnf-01.js",
@@ -8050,12 +8127,13 @@
       "file": "assets__lab-doors-BzTQZbnf-tail-export.js",
       "skipped": true,
       "title": "assets__lab-doors-BzTQZbnf — final export table (not sliced)",
-      "desc": "Lines 446-446. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 446-446. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 446,
       "endLine": 447,
       "sourceFile": "readable/assets__lab-doors-BzTQZbnf.pretty.js",
       "firstLine": "export { a, l as i, o as n, v as o, u as r, r as s, y as t };",
-      "lastLine": "//# sourceMappingURL=lab-doors-BzTQZbnf.js.map"
+      "lastLine": "//# sourceMappingURL=lab-doors-BzTQZbnf.js.map",
+      "text": "export { a, l as i, o as n, v as o, u as r, r as s, y as t };\n//# sourceMappingURL=lab-doors-BzTQZbnf.js.map"
     },
     {
       "file": "assets__lab-footprints-Bots4mYb-01.js",
@@ -8069,12 +8147,13 @@
       "file": "assets__lab-footprints-Bots4mYb-tail-export.js",
       "skipped": true,
       "title": "assets__lab-footprints-Bots4mYb — final export table (not sliced)",
-      "desc": "Lines 3019-3019. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 3019-3019. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 3019,
       "endLine": 3020,
       "sourceFile": "readable/assets__lab-footprints-Bots4mYb.pretty.js",
       "firstLine": "export { e as t };",
-      "lastLine": "//# sourceMappingURL=lab-footprints-Bots4mYb.js.map"
+      "lastLine": "//# sourceMappingURL=lab-footprints-Bots4mYb.js.map",
+      "text": "export { e as t };\n//# sourceMappingURL=lab-footprints-Bots4mYb.js.map"
     },
     {
       "file": "assets__linden-4qafj8hA-01.js",
@@ -8120,12 +8199,13 @@
       "file": "assets__linden-4qafj8hA-tail-export.js",
       "skipped": true,
       "title": "assets__linden-4qafj8hA — final export table (not sliced)",
-      "desc": "Lines 1341-1341. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1341-1341. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1341,
       "endLine": 1342,
       "sourceFile": "readable/assets__linden-4qafj8hA.pretty.js",
       "firstLine": "export { u as i, q as n, Q as r, p as t };",
-      "lastLine": "//# sourceMappingURL=linden-4qafj8hA.js.map"
+      "lastLine": "//# sourceMappingURL=linden-4qafj8hA.js.map",
+      "text": "export { u as i, q as n, Q as r, p as t };\n//# sourceMappingURL=linden-4qafj8hA.js.map"
     },
     {
       "file": "assets__linden-sim-lCb_uLzG-01.js",
@@ -8139,12 +8219,13 @@
       "file": "assets__linden-sim-lCb_uLzG-tail-export.js",
       "skipped": true,
       "title": "assets__linden-sim-lCb_uLzG — final export table (not sliced)",
-      "desc": "Lines 113-119. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 113-119. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 113,
       "endLine": 120,
       "sourceFile": "readable/assets__linden-sim-lCb_uLzG.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=linden-sim-lCb_uLzG.js.map"
+      "lastLine": "//# sourceMappingURL=linden-sim-lCb_uLzG.js.map",
+      "text": "export {\n  n as FENCE_HP,\n  i as fenceState,\n  o as installLindenFences,\n  s as panelAlong,\n  c as panelsNear,\n};\n//# sourceMappingURL=linden-sim-lCb_uLzG.js.map"
     },
     {
       "file": "assets__load-backoff-Cpa3_Evg-01.js",
@@ -8158,12 +8239,13 @@
       "file": "assets__load-backoff-Cpa3_Evg-tail-export.js",
       "skipped": true,
       "title": "assets__load-backoff-Cpa3_Evg — final export table (not sliced)",
-      "desc": "Lines 24-24. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 24-24. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 24,
       "endLine": 25,
       "sourceFile": "readable/assets__load-backoff-Cpa3_Evg.pretty.js",
       "firstLine": "export { e as t };",
-      "lastLine": "//# sourceMappingURL=load-backoff-Cpa3_Evg.js.map"
+      "lastLine": "//# sourceMappingURL=load-backoff-Cpa3_Evg.js.map",
+      "text": "export { e as t };\n//# sourceMappingURL=load-backoff-Cpa3_Evg.js.map"
     },
     {
       "file": "assets__localserver-jBq0Ft3r-01.js",
@@ -8177,12 +8259,13 @@
       "file": "assets__localserver-jBq0Ft3r-tail-export.js",
       "skipped": true,
       "title": "assets__localserver-jBq0Ft3r — final export table (not sliced)",
-      "desc": "Lines 34-34. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 34-34. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 34,
       "endLine": 35,
       "sourceFile": "readable/assets__localserver-jBq0Ft3r.pretty.js",
       "firstLine": "export { r as startLocalServer };",
-      "lastLine": "//# sourceMappingURL=localserver-jBq0Ft3r.js.map"
+      "lastLine": "//# sourceMappingURL=localserver-jBq0Ft3r.js.map",
+      "text": "export { r as startLocalServer };\n//# sourceMappingURL=localserver-jBq0Ft3r.js.map"
     },
     {
       "file": "assets__map-collider-Bdq_bUeN-01.js",
@@ -8220,12 +8303,13 @@
       "file": "assets__map-collider-Bdq_bUeN-tail-export.js",
       "skipped": true,
       "title": "assets__map-collider-Bdq_bUeN — final export table (not sliced)",
-      "desc": "Lines 1292-1307. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1292-1307. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1292,
       "endLine": 1308,
       "sourceFile": "readable/assets__map-collider-Bdq_bUeN.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=map-collider-Bdq_bUeN.js.map"
+      "lastLine": "//# sourceMappingURL=map-collider-Bdq_bUeN.js.map",
+      "text": "export {\n  A as a,\n  j as c,\n  s as d,\n  l as f,\n  T as i,\n  D as l,\n  t as m,\n  M as n,\n  N as o,\n  i as p,\n  _ as r,\n  v as s,\n  z as t,\n  w as u,\n};\n//# sourceMappingURL=map-collider-Bdq_bUeN.js.map"
     },
     {
       "file": "assets__map-palette-DooGSDy--01.js",
@@ -8239,12 +8323,13 @@
       "file": "assets__map-palette-DooGSDy--tail-export.js",
       "skipped": true,
       "title": "assets__map-palette-DooGSDy- — final export table (not sliced)",
-      "desc": "Lines 280-280. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 280-280. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 280,
       "endLine": 281,
       "sourceFile": "readable/assets__map-palette-DooGSDy-.pretty.js",
       "firstLine": "export { e as t };",
-      "lastLine": "//# sourceMappingURL=map-palette-DooGSDy-.js.map"
+      "lastLine": "//# sourceMappingURL=map-palette-DooGSDy-.js.map",
+      "text": "export { e as t };\n//# sourceMappingURL=map-palette-DooGSDy-.js.map"
     },
     {
       "file": "assets__marabas-BxjXwomw-01.js",
@@ -8266,12 +8351,13 @@
       "file": "assets__marabas-BxjXwomw-tail-export.js",
       "skipped": true,
       "title": "assets__marabas-BxjXwomw — final export table (not sliced)",
-      "desc": "Lines 1336-1336. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1336-1336. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1336,
       "endLine": 1337,
       "sourceFile": "readable/assets__marabas-BxjXwomw.pretty.js",
       "firstLine": "export { o as i, x as n, S as r, l as t };",
-      "lastLine": "//# sourceMappingURL=marabas-BxjXwomw.js.map"
+      "lastLine": "//# sourceMappingURL=marabas-BxjXwomw.js.map",
+      "text": "export { o as i, x as n, S as r, l as t };\n//# sourceMappingURL=marabas-BxjXwomw.js.map"
     },
     {
       "file": "assets__match-B58BLNG0-01.js",
@@ -8293,12 +8379,13 @@
       "file": "assets__match-B58BLNG0-tail-export.js",
       "skipped": true,
       "title": "assets__match-B58BLNG0 — final export table (not sliced)",
-      "desc": "Lines 452-452. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 452-452. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 452,
       "endLine": 453,
       "sourceFile": "readable/assets__match-B58BLNG0.pretty.js",
       "firstLine": "export { f as createMatch };",
-      "lastLine": "//# sourceMappingURL=match-B58BLNG0.js.map"
+      "lastLine": "//# sourceMappingURL=match-B58BLNG0.js.map",
+      "text": "export { f as createMatch };\n//# sourceMappingURL=match-B58BLNG0.js.map"
     },
     {
       "file": "assets__melee-B7zsK4jg-01.js",
@@ -8312,12 +8399,13 @@
       "file": "assets__melee-B7zsK4jg-tail-export.js",
       "skipped": true,
       "title": "assets__melee-B7zsK4jg — final export table (not sliced)",
-      "desc": "Lines 12-12. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 12-12. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 12,
       "endLine": 13,
       "sourceFile": "readable/assets__melee-B7zsK4jg.pretty.js",
       "firstLine": "export { n as t };",
-      "lastLine": "//# sourceMappingURL=melee-B7zsK4jg.js.map"
+      "lastLine": "//# sourceMappingURL=melee-B7zsK4jg.js.map",
+      "text": "export { n as t };\n//# sourceMappingURL=melee-B7zsK4jg.js.map"
     },
     {
       "file": "assets__meridian-Ce1pZotr-01.js",
@@ -8371,12 +8459,13 @@
       "file": "assets__meridian-Ce1pZotr-tail-export.js",
       "skipped": true,
       "title": "assets__meridian-Ce1pZotr — final export table (not sliced)",
-      "desc": "Lines 3062-3062. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 3062-3062. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 3062,
       "endLine": 3063,
       "sourceFile": "readable/assets__meridian-Ce1pZotr.pretty.js",
       "firstLine": "export { t as i, d as n, v as r, i as t };",
-      "lastLine": "//# sourceMappingURL=meridian-Ce1pZotr.js.map"
+      "lastLine": "//# sourceMappingURL=meridian-Ce1pZotr.js.map",
+      "text": "export { t as i, d as n, v as r, i as t };\n//# sourceMappingURL=meridian-Ce1pZotr.js.map"
     },
     {
       "file": "assets__meridian-sim-Cefyo3f2-01.js",
@@ -8398,12 +8487,13 @@
       "file": "assets__meridian-sim-Cefyo3f2-tail-export.js",
       "skipped": true,
       "title": "assets__meridian-sim-Cefyo3f2 — final export table (not sliced)",
-      "desc": "Lines 638-663. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 638-663. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 638,
       "endLine": 664,
       "sourceFile": "readable/assets__meridian-sim-Cefyo3f2.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=meridian-sim-Cefyo3f2.js.map"
+      "lastLine": "//# sourceMappingURL=meridian-sim-Cefyo3f2.js.map",
+      "text": "export {\n  x as PANE_CLEARS_WHOLE,\n  e as PANE_HP,\n  t as PANE_T,\n  s as craneAt,\n  _ as craneBrokeAt,\n  O as craneVictims,\n  v as fabricDown,\n  D as glassAt,\n  N as installMeridian,\n  p as jamAt,\n  P as jibBars,\n  c as jibSegment,\n  j as paneBox,\n  b as paneBroken,\n  w as paneFracture,\n  E as paneLocal,\n  T as paneShards,\n  y as paneTorn,\n  k as panesAlong,\n  A as panesNear,\n  g as powerAt,\n  m as powerOutAt,\n  I as rayBars,\n  o as swingTimes,\n};\n//# sourceMappingURL=meridian-sim-Cefyo3f2.js.map"
     },
     {
       "file": "assets__meridian-skyline-BNU0XLQu-01.js",
@@ -8433,12 +8523,13 @@
       "file": "assets__meridian-skyline-BNU0XLQu-tail-export.js",
       "skipped": true,
       "title": "assets__meridian-skyline-BNU0XLQu — final export table (not sliced)",
-      "desc": "Lines 1570-1570. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1570-1570. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1570,
       "endLine": 1571,
       "sourceFile": "readable/assets__meridian-skyline-BNU0XLQu.pretty.js",
       "firstLine": "export { x as AVENUES, N as createMeridianSkyline };",
-      "lastLine": "//# sourceMappingURL=meridian-skyline-BNU0XLQu.js.map"
+      "lastLine": "//# sourceMappingURL=meridian-skyline-BNU0XLQu.js.map",
+      "text": "export { x as AVENUES, N as createMeridianSkyline };\n//# sourceMappingURL=meridian-skyline-BNU0XLQu.js.map"
     },
     {
       "file": "assets__meridian-view-8PfXs4Ea-01.js",
@@ -8500,12 +8591,13 @@
       "file": "assets__meridian-view-8PfXs4Ea-tail-export.js",
       "skipped": true,
       "title": "assets__meridian-view-8PfXs4Ea — final export table (not sliced)",
-      "desc": "Lines 2979-2979. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2979-2979. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2979,
       "endLine": 2980,
       "sourceFile": "readable/assets__meridian-view-8PfXs4Ea.pretty.js",
       "firstLine": "export { ve as createMeridianView };",
-      "lastLine": "//# sourceMappingURL=meridian-view-8PfXs4Ea.js.map"
+      "lastLine": "//# sourceMappingURL=meridian-view-8PfXs4Ea.js.map",
+      "text": "export { ve as createMeridianView };\n//# sourceMappingURL=meridian-view-8PfXs4Ea.js.map"
     },
     {
       "file": "assets__mesa-Cnng6RGj-01.js",
@@ -8527,12 +8619,13 @@
       "file": "assets__mesa-Cnng6RGj-tail-export.js",
       "skipped": true,
       "title": "assets__mesa-Cnng6RGj — final export table (not sliced)",
-      "desc": "Lines 2635-2654. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2635-2654. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2635,
       "endLine": 2655,
       "sourceFile": "readable/assets__mesa-Cnng6RGj.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=mesa-Cnng6RGj.js.map"
+      "lastLine": "//# sourceMappingURL=mesa-Cnng6RGj.js.map",
+      "text": "export {\n  ee as _,\n  j as a,\n  h as c,\n  l as d,\n  f,\n  M as g,\n  p as h,\n  o as i,\n  _ as l,\n  v as m,\n  T as n,\n  m as o,\n  C as p,\n  s as r,\n  w as s,\n  c as t,\n  S as u,\n  r as v,\n};\n//# sourceMappingURL=mesa-Cnng6RGj.js.map"
     },
     {
       "file": "assets__mesa-view-BpSuH7GP-01.js",
@@ -8554,12 +8647,13 @@
       "file": "assets__mesa-view-BpSuH7GP-tail-export.js",
       "skipped": true,
       "title": "assets__mesa-view-BpSuH7GP — final export table (not sliced)",
-      "desc": "Lines 3076-3076. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 3076-3076. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 3076,
       "endLine": 3077,
       "sourceFile": "readable/assets__mesa-view-BpSuH7GP.pretty.js",
       "firstLine": "export { xe as createMesaView };",
-      "lastLine": "//# sourceMappingURL=mesa-view-BpSuH7GP.js.map"
+      "lastLine": "//# sourceMappingURL=mesa-view-BpSuH7GP.js.map",
+      "text": "export { xe as createMesaView };\n//# sourceMappingURL=mesa-view-BpSuH7GP.js.map"
     },
     {
       "file": "assets__metro-BEjF4eDq-01.js",
@@ -8589,12 +8683,13 @@
       "file": "assets__metro-BEjF4eDq-tail-export.js",
       "skipped": true,
       "title": "assets__metro-BEjF4eDq — final export table (not sliced)",
-      "desc": "Lines 2021-2021. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2021-2021. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2021,
       "endLine": 2022,
       "sourceFile": "readable/assets__metro-BEjF4eDq.pretty.js",
       "firstLine": "export { a as i, W as n, G as r, c as t };",
-      "lastLine": "//# sourceMappingURL=metro-BEjF4eDq.js.map"
+      "lastLine": "//# sourceMappingURL=metro-BEjF4eDq.js.map",
+      "text": "export { a as i, W as n, G as r, c as t };\n//# sourceMappingURL=metro-BEjF4eDq.js.map"
     },
     {
       "file": "assets__models-CPhSKjCU-01.js",
@@ -8624,12 +8719,13 @@
       "file": "assets__models-CPhSKjCU-tail-export.js",
       "skipped": true,
       "title": "assets__models-CPhSKjCU — final export table (not sliced)",
-      "desc": "Lines 487-487. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 487-487. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 487,
       "endLine": 488,
       "sourceFile": "readable/assets__models-CPhSKjCU.pretty.js",
       "firstLine": "export { P as n, M as r, N as t };",
-      "lastLine": "//# sourceMappingURL=models-CPhSKjCU.js.map"
+      "lastLine": "//# sourceMappingURL=models-CPhSKjCU.js.map",
+      "text": "export { P as n, M as r, N as t };\n//# sourceMappingURL=models-CPhSKjCU.js.map"
     },
     {
       "file": "assets__naval-vJ9I-D0A-01.js",
@@ -8675,12 +8771,13 @@
       "file": "assets__naval-vJ9I-D0A-tail-export.js",
       "skipped": true,
       "title": "assets__naval-vJ9I-D0A — final export table (not sliced)",
-      "desc": "Lines 2443-2443. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2443-2443. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2443,
       "endLine": 2444,
       "sourceFile": "readable/assets__naval-vJ9I-D0A.pretty.js",
       "firstLine": "export { A as createNavalBattle };",
-      "lastLine": "//# sourceMappingURL=naval-vJ9I-D0A.js.map"
+      "lastLine": "//# sourceMappingURL=naval-vJ9I-D0A.js.map",
+      "text": "export { A as createNavalBattle };\n//# sourceMappingURL=naval-vJ9I-D0A.js.map"
     },
     {
       "file": "assets__netcode-BOGEP_um-01.js",
@@ -8734,12 +8831,13 @@
       "file": "assets__netcode-BOGEP_um-tail-export.js",
       "skipped": true,
       "title": "assets__netcode-BOGEP_um — final export table (not sliced)",
-      "desc": "Lines 2202-2202. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2202-2202. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2202,
       "endLine": 2203,
       "sourceFile": "readable/assets__netcode-BOGEP_um.pretty.js",
       "firstLine": "export { U as default };",
-      "lastLine": "//# sourceMappingURL=netcode-BOGEP_um.js.map"
+      "lastLine": "//# sourceMappingURL=netcode-BOGEP_um.js.map",
+      "text": "export { U as default };\n//# sourceMappingURL=netcode-BOGEP_um.js.map"
     },
     {
       "file": "assets__observatory-Cfe5jL1q-01.js",
@@ -8761,12 +8859,13 @@
       "file": "assets__observatory-Cfe5jL1q-tail-export.js",
       "skipped": true,
       "title": "assets__observatory-Cfe5jL1q — final export table (not sliced)",
-      "desc": "Lines 3548-3548. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 3548-3548. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 3548,
       "endLine": 3549,
       "sourceFile": "readable/assets__observatory-Cfe5jL1q.pretty.js",
       "firstLine": "export { n as i, h as n, g as r, a as t };",
-      "lastLine": "//# sourceMappingURL=observatory-Cfe5jL1q.js.map"
+      "lastLine": "//# sourceMappingURL=observatory-Cfe5jL1q.js.map",
+      "text": "export { n as i, h as n, g as r, a as t };\n//# sourceMappingURL=observatory-Cfe5jL1q.js.map"
     },
     {
       "file": "assets__observatory-sim-BYYrPAWg-01.js",
@@ -8780,12 +8879,13 @@
       "file": "assets__observatory-sim-BYYrPAWg-tail-export.js",
       "skipped": true,
       "title": "assets__observatory-sim-BYYrPAWg — final export table (not sliced)",
-      "desc": "Lines 278-293. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 278-293. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 278,
       "endLine": 294,
       "sourceFile": "readable/assets__observatory-sim-BYYrPAWg.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=observatory-sim-BYYrPAWg.js.map"
+      "lastLine": "//# sourceMappingURL=observatory-sim-BYYrPAWg.js.map",
+      "text": "export {\n  n as CYCLE,\n  a as cycleT,\n  c as domeAt,\n  m as domeRaycast,\n  l as domeState,\n  p as inSlot,\n  x as installObservatory,\n  u as laserOn,\n  d as nextSlew,\n  g as paneBroken,\n  v as panesAlong,\n  y as panesNear,\n  f as shellSegments,\n  h as telescopeBoxes,\n};\n//# sourceMappingURL=observatory-sim-BYYrPAWg.js.map"
     },
     {
       "file": "assets__observatory-view-D3oaNGlt-01.js",
@@ -8807,12 +8907,13 @@
       "file": "assets__observatory-view-D3oaNGlt-tail-export.js",
       "skipped": true,
       "title": "assets__observatory-view-D3oaNGlt — final export table (not sliced)",
-      "desc": "Lines 1020-1020. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1020-1020. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1020,
       "endLine": 1021,
       "sourceFile": "readable/assets__observatory-view-D3oaNGlt.pretty.js",
       "firstLine": "export { O as createObservatoryView };",
-      "lastLine": "//# sourceMappingURL=observatory-view-D3oaNGlt.js.map"
+      "lastLine": "//# sourceMappingURL=observatory-view-D3oaNGlt.js.map",
+      "text": "export { O as createObservatoryView };\n//# sourceMappingURL=observatory-view-D3oaNGlt.js.map"
     },
     {
       "file": "assets__panel-array-Dv4Qe9B3-01.js",
@@ -8826,12 +8927,13 @@
       "file": "assets__panel-array-Dv4Qe9B3-tail-export.js",
       "skipped": true,
       "title": "assets__panel-array-Dv4Qe9B3 — final export table (not sliced)",
-      "desc": "Lines 311-311. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 311-311. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 311,
       "endLine": 312,
       "sourceFile": "readable/assets__panel-array-Dv4Qe9B3.pretty.js",
       "firstLine": "export { p as a, f as i, h as n, g as r, m as t };",
-      "lastLine": "//# sourceMappingURL=panel-array-Dv4Qe9B3.js.map"
+      "lastLine": "//# sourceMappingURL=panel-array-Dv4Qe9B3.js.map",
+      "text": "export { p as a, f as i, h as n, g as r, m as t };\n//# sourceMappingURL=panel-array-Dv4Qe9B3.js.map"
     },
     {
       "file": "assets__perf-report-CFmIjehF-01.js",
@@ -8845,12 +8947,13 @@
       "file": "assets__perf-report-CFmIjehF-tail-export.js",
       "skipped": true,
       "title": "assets__perf-report-CFmIjehF — final export table (not sliced)",
-      "desc": "Lines 169-169. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 169-169. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 169,
       "endLine": 170,
       "sourceFile": "readable/assets__perf-report-CFmIjehF.pretty.js",
       "firstLine": "export { u as a, p as i, _ as n, d as o, c as r, g as t };",
-      "lastLine": "//# sourceMappingURL=perf-report-CFmIjehF.js.map"
+      "lastLine": "//# sourceMappingURL=perf-report-CFmIjehF.js.map",
+      "text": "export { u as a, p as i, _ as n, d as o, c as r, g as t };\n//# sourceMappingURL=perf-report-CFmIjehF.js.map"
     },
     {
       "file": "assets__placement-build-C0quzNjY-01.js",
@@ -8864,12 +8967,13 @@
       "file": "assets__placement-build-C0quzNjY-tail-export.js",
       "skipped": true,
       "title": "assets__placement-build-C0quzNjY — final export table (not sliced)",
-      "desc": "Lines 21-21. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 21-21. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 21,
       "endLine": 22,
       "sourceFile": "readable/assets__placement-build-C0quzNjY.pretty.js",
       "firstLine": "export { t as n, e as t };",
-      "lastLine": "//# sourceMappingURL=placement-build-C0quzNjY.js.map"
+      "lastLine": "//# sourceMappingURL=placement-build-C0quzNjY.js.map",
+      "text": "export { t as n, e as t };\n//# sourceMappingURL=placement-build-C0quzNjY.js.map"
     },
     {
       "file": "assets__player-vyh7zp35-01.js",
@@ -8971,12 +9075,13 @@
       "file": "assets__player-vyh7zp35-tail-export.js",
       "skipped": true,
       "title": "assets__player-vyh7zp35 — final export table (not sliced)",
-      "desc": "Lines 3850-3850. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 3850-3850. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 3850,
       "endLine": 3851,
       "sourceFile": "readable/assets__player-vyh7zp35.pretty.js",
       "firstLine": "export { Rt as default };",
-      "lastLine": "//# sourceMappingURL=player-vyh7zp35.js.map"
+      "lastLine": "//# sourceMappingURL=player-vyh7zp35.js.map",
+      "text": "export { Rt as default };\n//# sourceMappingURL=player-vyh7zp35.js.map"
     },
     {
       "file": "assets__pointer-lock-policy-DsB7e7Fn-01.js",
@@ -8990,12 +9095,13 @@
       "file": "assets__pointer-lock-policy-DsB7e7Fn-tail-export.js",
       "skipped": true,
       "title": "assets__pointer-lock-policy-DsB7e7Fn — final export table (not sliced)",
-      "desc": "Lines 41-41. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 41-41. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 41,
       "endLine": 42,
       "sourceFile": "readable/assets__pointer-lock-policy-DsB7e7Fn.pretty.js",
       "firstLine": "export { t as i, n, e as r, r as t };",
-      "lastLine": "//# sourceMappingURL=pointer-lock-policy-DsB7e7Fn.js.map"
+      "lastLine": "//# sourceMappingURL=pointer-lock-policy-DsB7e7Fn.js.map",
+      "text": "export { t as i, n, e as r, r as t };\n//# sourceMappingURL=pointer-lock-policy-DsB7e7Fn.js.map"
     },
     {
       "file": "assets__prediction-1yCEFwrS-01.js",
@@ -9009,12 +9115,13 @@
       "file": "assets__prediction-1yCEFwrS-tail-export.js",
       "skipped": true,
       "title": "assets__prediction-1yCEFwrS — final export table (not sliced)",
-      "desc": "Lines 84-84. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 84-84. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 84,
       "endLine": 85,
       "sourceFile": "readable/assets__prediction-1yCEFwrS.pretty.js",
       "firstLine": "export { d as a, o as i, u as n, l as o, s as r, f as s, a as t };",
-      "lastLine": "//# sourceMappingURL=prediction-1yCEFwrS.js.map"
+      "lastLine": "//# sourceMappingURL=prediction-1yCEFwrS.js.map",
+      "text": "export { d as a, o as i, u as n, l as o, s as r, f as s, a as t };\n//# sourceMappingURL=prediction-1yCEFwrS.js.map"
     },
     {
       "file": "assets__prop-collision-1B5nWLcW-01.js",
@@ -9028,12 +9135,13 @@
       "file": "assets__prop-collision-1B5nWLcW-tail-export.js",
       "skipped": true,
       "title": "assets__prop-collision-1B5nWLcW — final export table (not sliced)",
-      "desc": "Lines 67-67. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 67-67. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 67,
       "endLine": 68,
       "sourceFile": "readable/assets__prop-collision-1B5nWLcW.pretty.js",
       "firstLine": "export { o as t };",
-      "lastLine": "//# sourceMappingURL=prop-collision-1B5nWLcW.js.map"
+      "lastLine": "//# sourceMappingURL=prop-collision-1B5nWLcW.js.map",
+      "text": "export { o as t };\n//# sourceMappingURL=prop-collision-1B5nWLcW.js.map"
     },
     {
       "file": "assets__repair-D2xEpUMg-01.js",
@@ -9047,12 +9155,13 @@
       "file": "assets__repair-D2xEpUMg-tail-export.js",
       "skipped": true,
       "title": "assets__repair-D2xEpUMg — final export table (not sliced)",
-      "desc": "Lines 237-237. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 237-237. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 237,
       "endLine": 238,
       "sourceFile": "readable/assets__repair-D2xEpUMg.pretty.js",
       "firstLine": "export { l as a, f as i, m as n, c as o, p as r, u as t };",
-      "lastLine": "//# sourceMappingURL=repair-D2xEpUMg.js.map"
+      "lastLine": "//# sourceMappingURL=repair-D2xEpUMg.js.map",
+      "text": "export { l as a, f as i, m as n, c as o, p as r, u as t };\n//# sourceMappingURL=repair-D2xEpUMg.js.map"
     },
     {
       "file": "assets__rifle-pose-CdM47EZt-01.js",
@@ -9346,12 +9455,13 @@
       "file": "assets__rifle-pose-CdM47EZt-tail-export.js",
       "skipped": true,
       "title": "assets__rifle-pose-CdM47EZt — final export table (not sliced)",
-      "desc": "Lines 34035-34082. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 34035-34082. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 34035,
       "endLine": 34083,
       "sourceFile": "readable/assets__rifle-pose-CdM47EZt.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=rifle-pose-CdM47EZt.js.map"
+      "lastLine": "//# sourceMappingURL=rifle-pose-CdM47EZt.js.map",
+      "text": "export {\n  gt as A,\n  qe as B,\n  Ht as C,\n  St as D,\n  Ct as E,\n  pt as F,\n  we as G,\n  Fe as H,\n  nt as I,\n  ke as K,\n  at as L,\n  et as M,\n  mt as N,\n  ht as O,\n  rt as P,\n  Je as R,\n  jt as S,\n  wt as T,\n  Ee as U,\n  De as V,\n  xe as W,\n  Jr as _,\n  Va as a,\n  H as b,\n  va as c,\n  Ca as d,\n  Ta as f,\n  Hr as g,\n  qr as h,\n  Ea as i,\n  ft as j,\n  tt as k,\n  aa as l,\n  zi as m,\n  $a as n,\n  za as o,\n  fa as p,\n  Qa as r,\n  _a as s,\n  Ha as t,\n  xa as u,\n  Qt as v,\n  Pt as w,\n  Ft as x,\n  Zt as y,\n  Te as z,\n};\n//# sourceMappingURL=rifle-pose-CdM47EZt.js.map"
     },
     {
       "file": "assets__rotor-spool-BGBN_bun-01.js",
@@ -9365,12 +9475,13 @@
       "file": "assets__rotor-spool-BGBN_bun-tail-export.js",
       "skipped": true,
       "title": "assets__rotor-spool-BGBN_bun — final export table (not sliced)",
-      "desc": "Lines 17-17. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 17-17. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 17,
       "endLine": 18,
       "sourceFile": "readable/assets__rotor-spool-BGBN_bun.pretty.js",
       "firstLine": "export { r as i, n, i as r, e as t };",
-      "lastLine": "//# sourceMappingURL=rotor-spool-BGBN_bun.js.map"
+      "lastLine": "//# sourceMappingURL=rotor-spool-BGBN_bun.js.map",
+      "text": "export { r as i, n, i as r, e as t };\n//# sourceMappingURL=rotor-spool-BGBN_bun.js.map"
     },
     {
       "file": "assets__round-collider-CyTIuJfx-01.js",
@@ -9384,12 +9495,13 @@
       "file": "assets__round-collider-CyTIuJfx-tail-export.js",
       "skipped": true,
       "title": "assets__round-collider-CyTIuJfx — final export table (not sliced)",
-      "desc": "Lines 22-22. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 22-22. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 22,
       "endLine": 23,
       "sourceFile": "readable/assets__round-collider-CyTIuJfx.pretty.js",
       "firstLine": "export { t };",
-      "lastLine": "//# sourceMappingURL=round-collider-CyTIuJfx.js.map"
+      "lastLine": "//# sourceMappingURL=round-collider-CyTIuJfx.js.map",
+      "text": "export { t };\n//# sourceMappingURL=round-collider-CyTIuJfx.js.map"
     },
     {
       "file": "assets__RoundedBoxGeometry-BodHbp3F-01.js",
@@ -9403,12 +9515,13 @@
       "file": "assets__RoundedBoxGeometry-BodHbp3F-tail-export.js",
       "skipped": true,
       "title": "assets__RoundedBoxGeometry-BodHbp3F — final export table (not sliced)",
-      "desc": "Lines 95-95. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 95-95. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 95,
       "endLine": 96,
       "sourceFile": "readable/assets__RoundedBoxGeometry-BodHbp3F.pretty.js",
       "firstLine": "export { i as t };",
-      "lastLine": "//# sourceMappingURL=RoundedBoxGeometry-BodHbp3F.js.map"
+      "lastLine": "//# sourceMappingURL=RoundedBoxGeometry-BodHbp3F.js.map",
+      "text": "export { i as t };\n//# sourceMappingURL=RoundedBoxGeometry-BodHbp3F.js.map"
     },
     {
       "file": "assets__server-BhxQgEgF-01.js",
@@ -9430,12 +9543,13 @@
       "file": "assets__server-BhxQgEgF-tail-export.js",
       "skipped": true,
       "title": "assets__server-BhxQgEgF — final export table (not sliced)",
-      "desc": "Lines 1388-1392. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1388-1392. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1388,
       "endLine": 1393,
       "sourceFile": "readable/assets__server-BhxQgEgF.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=server-BhxQgEgF.js.map"
+      "lastLine": "//# sourceMappingURL=server-BhxQgEgF.js.map",
+      "text": "export {\n  B as VEHICLE_RESPAWN_SECONDS,\n  V as VEHICLE_RESPAWN_TICKS,\n  U as default,\n};\n//# sourceMappingURL=server-BhxQgEgF.js.map"
     },
     {
       "file": "assets__server-BwRlXNQi-01.js",
@@ -9449,12 +9563,13 @@
       "file": "assets__server-BwRlXNQi-tail-export.js",
       "skipped": true,
       "title": "assets__server-BwRlXNQi — final export table (not sliced)",
-      "desc": "Lines 73-73. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 73-73. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 73,
       "endLine": 74,
       "sourceFile": "readable/assets__server-BwRlXNQi.pretty.js",
       "firstLine": "export { i as default };",
-      "lastLine": "//# sourceMappingURL=server-BwRlXNQi.js.map"
+      "lastLine": "//# sourceMappingURL=server-BwRlXNQi.js.map",
+      "text": "export { i as default };\n//# sourceMappingURL=server-BwRlXNQi.js.map"
     },
     {
       "file": "assets__server-BZHe1cjv-01.js",
@@ -9516,12 +9631,13 @@
       "file": "assets__server-BZHe1cjv-tail-export.js",
       "skipped": true,
       "title": "assets__server-BZHe1cjv — final export table (not sliced)",
-      "desc": "Lines 1655-1655. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1655-1655. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1655,
       "endLine": 1656,
       "sourceFile": "readable/assets__server-BZHe1cjv.pretty.js",
       "firstLine": "export { qe as carriedInventory, Ye as default };",
-      "lastLine": "//# sourceMappingURL=server-BZHe1cjv.js.map"
+      "lastLine": "//# sourceMappingURL=server-BZHe1cjv.js.map",
+      "text": "export { qe as carriedInventory, Ye as default };\n//# sourceMappingURL=server-BZHe1cjv.js.map"
     },
     {
       "file": "assets__server-CKjtCiO9-01.js",
@@ -9703,12 +9819,13 @@
       "file": "assets__server-CKjtCiO9-tail-export.js",
       "skipped": true,
       "title": "assets__server-CKjtCiO9 — final export table (not sliced)",
-      "desc": "Lines 6758-6758. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 6758-6758. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 6758,
       "endLine": 6759,
       "sourceFile": "readable/assets__server-CKjtCiO9.pretty.js",
       "firstLine": "export { xi as default, Gr as teamSpottedTarget };",
-      "lastLine": "//# sourceMappingURL=server-CKjtCiO9.js.map"
+      "lastLine": "//# sourceMappingURL=server-CKjtCiO9.js.map",
+      "text": "export { xi as default, Gr as teamSpottedTarget };\n//# sourceMappingURL=server-CKjtCiO9.js.map"
     },
     {
       "file": "assets__server-ClHwNWhT-01.js",
@@ -9722,12 +9839,13 @@
       "file": "assets__server-ClHwNWhT-tail-export.js",
       "skipped": true,
       "title": "assets__server-ClHwNWhT — final export table (not sliced)",
-      "desc": "Lines 187-187. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 187-187. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 187,
       "endLine": 188,
       "sourceFile": "readable/assets__server-ClHwNWhT.pretty.js",
       "firstLine": "export { t as KILLCAM_TRACK, a as default };",
-      "lastLine": "//# sourceMappingURL=server-ClHwNWhT.js.map"
+      "lastLine": "//# sourceMappingURL=server-ClHwNWhT.js.map",
+      "text": "export { t as KILLCAM_TRACK, a as default };\n//# sourceMappingURL=server-ClHwNWhT.js.map"
     },
     {
       "file": "assets__server-CoHTvJjy-01.js",
@@ -9773,12 +9891,13 @@
       "file": "assets__server-CoHTvJjy-tail-export.js",
       "skipped": true,
       "title": "assets__server-CoHTvJjy — final export table (not sliced)",
-      "desc": "Lines 1596-1596. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1596-1596. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1596,
       "endLine": 1597,
       "sourceFile": "readable/assets__server-CoHTvJjy.pretty.js",
       "firstLine": "export { ce as default };",
-      "lastLine": "//# sourceMappingURL=server-CoHTvJjy.js.map"
+      "lastLine": "//# sourceMappingURL=server-CoHTvJjy.js.map",
+      "text": "export { ce as default };\n//# sourceMappingURL=server-CoHTvJjy.js.map"
     },
     {
       "file": "assets__server-CpSHfa52-01.js",
@@ -9792,12 +9911,13 @@
       "file": "assets__server-CpSHfa52-tail-export.js",
       "skipped": true,
       "title": "assets__server-CpSHfa52 — final export table (not sliced)",
-      "desc": "Lines 117-117. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 117-117. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 117,
       "endLine": 118,
       "sourceFile": "readable/assets__server-CpSHfa52.pretty.js",
       "firstLine": "export { r as default };",
-      "lastLine": "//# sourceMappingURL=server-CpSHfa52.js.map"
+      "lastLine": "//# sourceMappingURL=server-CpSHfa52.js.map",
+      "text": "export { r as default };\n//# sourceMappingURL=server-CpSHfa52.js.map"
     },
     {
       "file": "assets__server-CrE8VPVo-01.js",
@@ -9835,12 +9955,13 @@
       "file": "assets__server-CrE8VPVo-tail-export.js",
       "skipped": true,
       "title": "assets__server-CrE8VPVo — final export table (not sliced)",
-      "desc": "Lines 1037-1037. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1037-1037. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1037,
       "endLine": 1038,
       "sourceFile": "readable/assets__server-CrE8VPVo.pretty.js",
       "firstLine": "export { ie as default };",
-      "lastLine": "//# sourceMappingURL=server-CrE8VPVo.js.map"
+      "lastLine": "//# sourceMappingURL=server-CrE8VPVo.js.map",
+      "text": "export { ie as default };\n//# sourceMappingURL=server-CrE8VPVo.js.map"
     },
     {
       "file": "assets__server-CZiUO-nf-01.js",
@@ -9854,12 +9975,13 @@
       "file": "assets__server-CZiUO-nf-tail-export.js",
       "skipped": true,
       "title": "assets__server-CZiUO-nf — final export table (not sliced)",
-      "desc": "Lines 92-92. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 92-92. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 92,
       "endLine": 93,
       "sourceFile": "readable/assets__server-CZiUO-nf.pretty.js",
       "firstLine": "export { o as default };",
-      "lastLine": "//# sourceMappingURL=server-CZiUO-nf.js.map"
+      "lastLine": "//# sourceMappingURL=server-CZiUO-nf.js.map",
+      "text": "export { o as default };\n//# sourceMappingURL=server-CZiUO-nf.js.map"
     },
     {
       "file": "assets__server-D6cVGIqJ-01.js",
@@ -9889,12 +10011,13 @@
       "file": "assets__server-D6cVGIqJ-tail-export.js",
       "skipped": true,
       "title": "assets__server-D6cVGIqJ — final export table (not sliced)",
-      "desc": "Lines 1370-1370. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1370-1370. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1370,
       "endLine": 1371,
       "sourceFile": "readable/assets__server-D6cVGIqJ.pretty.js",
       "firstLine": "export { wt as default };",
-      "lastLine": "//# sourceMappingURL=server-D6cVGIqJ.js.map"
+      "lastLine": "//# sourceMappingURL=server-D6cVGIqJ.js.map",
+      "text": "export { wt as default };\n//# sourceMappingURL=server-D6cVGIqJ.js.map"
     },
     {
       "file": "assets__setpiece-ladders-BjER_Jg5-01.js",
@@ -9908,12 +10031,13 @@
       "file": "assets__setpiece-ladders-BjER_Jg5-tail-export.js",
       "skipped": true,
       "title": "assets__setpiece-ladders-BjER_Jg5 — final export table (not sliced)",
-      "desc": "Lines 7-7. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 7-7. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 7,
       "endLine": 8,
       "sourceFile": "readable/assets__setpiece-ladders-BjER_Jg5.pretty.js",
       "firstLine": "export { e as t };",
-      "lastLine": "//# sourceMappingURL=setpiece-ladders-BjER_Jg5.js.map"
+      "lastLine": "//# sourceMappingURL=setpiece-ladders-BjER_Jg5.js.map",
+      "text": "export { e as t };\n//# sourceMappingURL=setpiece-ladders-BjER_Jg5.js.map"
     },
     {
       "file": "assets__shaders-Cdr8DLNO-01.js",
@@ -9943,12 +10067,13 @@
       "file": "assets__shaders-Cdr8DLNO-tail-export.js",
       "skipped": true,
       "title": "assets__shaders-Cdr8DLNO — final export table (not sliced)",
-      "desc": "Lines 985-985. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 985-985. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 985,
       "endLine": 986,
       "sourceFile": "readable/assets__shaders-Cdr8DLNO.pretty.js",
       "firstLine": "export { I as i, K as n, B as r, V as t };",
-      "lastLine": "//# sourceMappingURL=shaders-Cdr8DLNO.js.map"
+      "lastLine": "//# sourceMappingURL=shaders-Cdr8DLNO.js.map",
+      "text": "export { I as i, K as n, B as r, V as t };\n//# sourceMappingURL=shaders-Cdr8DLNO.js.map"
     },
     {
       "file": "assets__shared-DPd8kRBt-01.js",
@@ -9962,12 +10087,13 @@
       "file": "assets__shared-DPd8kRBt-tail-export.js",
       "skipped": true,
       "title": "assets__shared-DPd8kRBt — final export table (not sliced)",
-      "desc": "Lines 42-42. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 42-42. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 42,
       "endLine": 43,
       "sourceFile": "readable/assets__shared-DPd8kRBt.pretty.js",
       "firstLine": "export { t as a, r as i, i as n, n as r, e as t };",
-      "lastLine": "//# sourceMappingURL=shared-DPd8kRBt.js.map"
+      "lastLine": "//# sourceMappingURL=shared-DPd8kRBt.js.map",
+      "text": "export { t as a, r as i, i as n, n as r, e as t };\n//# sourceMappingURL=shared-DPd8kRBt.js.map"
     },
     {
       "file": "assets__shells-CPYGRlwG-01.js",
@@ -9981,12 +10107,13 @@
       "file": "assets__shells-CPYGRlwG-tail-export.js",
       "skipped": true,
       "title": "assets__shells-CPYGRlwG — final export table (not sliced)",
-      "desc": "Lines 44-44. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 44-44. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 44,
       "endLine": 45,
       "sourceFile": "readable/assets__shells-CPYGRlwG.pretty.js",
       "firstLine": "export { n as t };",
-      "lastLine": "//# sourceMappingURL=shells-CPYGRlwG.js.map"
+      "lastLine": "//# sourceMappingURL=shells-CPYGRlwG.js.map",
+      "text": "export { n as t };\n//# sourceMappingURL=shells-CPYGRlwG.js.map"
     },
     {
       "file": "assets__ship-dressing-y_vqKCl7-01.js",
@@ -10048,12 +10175,13 @@
       "file": "assets__ship-dressing-y_vqKCl7-tail-export.js",
       "skipped": true,
       "title": "assets__ship-dressing-y_vqKCl7 — final export table (not sliced)",
-      "desc": "Lines 2410-2410. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2410-2410. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2410,
       "endLine": 2411,
       "sourceFile": "readable/assets__ship-dressing-y_vqKCl7.pretty.js",
       "firstLine": "export { Be as createShipDressing, Le as waveHeight };",
-      "lastLine": "//# sourceMappingURL=ship-dressing-y_vqKCl7.js.map"
+      "lastLine": "//# sourceMappingURL=ship-dressing-y_vqKCl7.js.map",
+      "text": "export { Be as createShipDressing, Le as waveHeight };\n//# sourceMappingURL=ship-dressing-y_vqKCl7.js.map"
     },
     {
       "file": "assets__showcase-1sunEboh-01.js",
@@ -10075,12 +10203,13 @@
       "file": "assets__showcase-1sunEboh-tail-export.js",
       "skipped": true,
       "title": "assets__showcase-1sunEboh — final export table (not sliced)",
-      "desc": "Lines 1010-1010. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1010-1010. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1010,
       "endLine": 1011,
       "sourceFile": "readable/assets__showcase-1sunEboh.pretty.js",
       "firstLine": "export { p as createShowcase };",
-      "lastLine": "//# sourceMappingURL=showcase-1sunEboh.js.map"
+      "lastLine": "//# sourceMappingURL=showcase-1sunEboh.js.map",
+      "text": "export { p as createShowcase };\n//# sourceMappingURL=showcase-1sunEboh.js.map"
     },
     {
       "file": "assets__sim-Baa4KD2R-01.js",
@@ -10110,12 +10239,13 @@
       "file": "assets__sim-Baa4KD2R-tail-export.js",
       "skipped": true,
       "title": "assets__sim-Baa4KD2R — final export table (not sliced)",
-      "desc": "Lines 1307-1307. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1307-1307. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1307,
       "endLine": 1308,
       "sourceFile": "readable/assets__sim-Baa4KD2R.pretty.js",
       "firstLine": "export { i as a, l as c, s as i, g as n, r as o, u as r, d as s, p as t };",
-      "lastLine": "//# sourceMappingURL=sim-Baa4KD2R.js.map"
+      "lastLine": "//# sourceMappingURL=sim-Baa4KD2R.js.map",
+      "text": "export { i as a, l as c, s as i, g as n, r as o, u as r, d as s, p as t };\n//# sourceMappingURL=sim-Baa4KD2R.js.map"
     },
     {
       "file": "assets__sim-CbSN8jt0-01.js",
@@ -10137,12 +10267,13 @@
       "file": "assets__sim-CbSN8jt0-tail-export.js",
       "skipped": true,
       "title": "assets__sim-CbSN8jt0 — final export table (not sliced)",
-      "desc": "Lines 501-513. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 501-513. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 501,
       "endLine": 514,
       "sourceFile": "readable/assets__sim-CbSN8jt0.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=sim-CbSN8jt0.js.map"
+      "lastLine": "//# sourceMappingURL=sim-CbSN8jt0.js.map",
+      "text": "export {\n  y as a,\n  F as c,\n  a as d,\n  O as i,\n  m as l,\n  x as n,\n  _ as o,\n  P as r,\n  g as s,\n  M as t,\n  i as u,\n};\n//# sourceMappingURL=sim-CbSN8jt0.js.map"
     },
     {
       "file": "assets__sim-D8F3HPJq-01.js",
@@ -10316,12 +10447,13 @@
       "file": "assets__sim-D8F3HPJq-tail-export.js",
       "skipped": true,
       "title": "assets__sim-D8F3HPJq — final export table (not sliced)",
-      "desc": "Lines 6451-6576. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 6451-6576. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 6451,
       "endLine": 6577,
       "sourceFile": "readable/assets__sim-D8F3HPJq.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=sim-D8F3HPJq.js.map"
+      "lastLine": "//# sourceMappingURL=sim-D8F3HPJq.js.map",
+      "text": "export {\n  Pr as $,\n  Ce as $t,\n  qo as A,\n  nn as At,\n  ra as B,\n  He as Bt,\n  is as C,\n  Ln as Ct,\n  Xo as D,\n  On as Dt,\n  To as E,\n  wn as Et,\n  J as F,\n  Tt as Ft,\n  zi as G,\n  Ae as Gt,\n  $i as H,\n  lt as Ht,\n  Wi as I,\n  N as It,\n  Ti as J,\n  fe as Jt,\n  Vi as K,\n  A as Kt,\n  q as L,\n  Xt as Lt,\n  ma as M,\n  $t as Mt,\n  sa as N,\n  wt as Nt,\n  ns as O,\n  fn as Ot,\n  Gi as P,\n  P as Pt,\n  wi as Q,\n  he as Qt,\n  Ii as R,\n  j as Rt,\n  es as S,\n  Rn as St,\n  go as T,\n  Pn as Tt,\n  ta as U,\n  Ue as Ut,\n  Ai as V,\n  ut as Vt,\n  na as W,\n  Ve as Wt,\n  ki as X,\n  ye as Xt,\n  ui as Y,\n  ce as Yt,\n  gi as Z,\n  me as Zt,\n  $o as _,\n  ur as _t,\n  Da as a,\n  E as an,\n  Tr as at,\n  Qo as b,\n  R as bt,\n  Ua as c,\n  w as cn,\n  Ur as ct,\n  Na as d,\n  pe as dn,\n  ii as dt,\n  xe as en,\n  Fr as et,\n  Ma as f,\n  d as fn,\n  Rr as ft,\n  rs as g,\n  l as gn,\n  xr as gt,\n  Oa as h,\n  s as hn,\n  hr as ht,\n  ts as i,\n  D as in,\n  Vr as it,\n  Eo as j,\n  en as jt,\n  ba as k,\n  pn as kt,\n  ja as l,\n  oe as ln,\n  ri as lt,\n  Ca as m,\n  c as mn,\n  _r as mt,\n  po as n,\n  f as nn,\n  Br as nt,\n  X as o,\n  ue as on,\n  li as ot,\n  Y as p,\n  u as pn,\n  fr as pt,\n  G as q,\n  _e as qt,\n  xa as r,\n  ve as rn,\n  Hr as rt,\n  Ea as s,\n  T as sn,\n  ti as st,\n  Wa as t,\n  de as tn,\n  Mr as tt,\n  Aa as u,\n  ie as un,\n  ei as ut,\n  Jo as v,\n  dr as vt,\n  ds as w,\n  Tn as wt,\n  Zo as x,\n  En as xt,\n  us as y,\n  z as yt,\n  Bi as z,\n  Be as zt,\n};\n//# sourceMappingURL=sim-D8F3HPJq.js.map"
     },
     {
       "file": "assets__sim-DKJ0nrRU-01.js",
@@ -10383,12 +10515,13 @@
       "file": "assets__sim-DQ2nevDc-tail-export.js",
       "skipped": true,
       "title": "assets__sim-DQ2nevDc — final export table (not sliced)",
-      "desc": "Lines 651-668. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 651-668. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 651,
       "endLine": 669,
       "sourceFile": "readable/assets__sim-DQ2nevDc.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=sim-DQ2nevDc.js.map"
+      "lastLine": "//# sourceMappingURL=sim-DQ2nevDc.js.map",
+      "text": "export {\n  I as a,\n  k as c,\n  P as d,\n  N as f,\n  i as g,\n  o as h,\n  g as i,\n  O as l,\n  a as m,\n  y as n,\n  C as o,\n  E as p,\n  b as r,\n  m as s,\n  n as t,\n  F as u,\n};\n//# sourceMappingURL=sim-DQ2nevDc.js.map"
     },
     {
       "file": "assets__sim-Dw8jCQAI-01.js",
@@ -10418,12 +10551,13 @@
       "file": "assets__sim-Dw8jCQAI-tail-export.js",
       "skipped": true,
       "title": "assets__sim-Dw8jCQAI — final export table (not sliced)",
-      "desc": "Lines 589-602. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 589-602. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 589,
       "endLine": 603,
       "sourceFile": "readable/assets__sim-Dw8jCQAI.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=sim-Dw8jCQAI.js.map"
+      "lastLine": "//# sourceMappingURL=sim-Dw8jCQAI.js.map",
+      "text": "export {\n  E as a,\n  D as c,\n  f as d,\n  u as f,\n  b as i,\n  O as l,\n  C as n,\n  x as o,\n  S as r,\n  N as s,\n  p as t,\n  A as u,\n};\n//# sourceMappingURL=sim-Dw8jCQAI.js.map"
     },
     {
       "file": "assets__sim-loader-D7voNPuy-01.js",
@@ -10461,12 +10595,13 @@
       "file": "assets__sim-loader-D7voNPuy-tail-export.js",
       "skipped": true,
       "title": "assets__sim-loader-D7voNPuy — final export table (not sliced)",
-      "desc": "Lines 1034-1055. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1034-1055. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1034,
       "endLine": 1056,
       "sourceFile": "readable/assets__sim-loader-D7voNPuy.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=sim-loader-D7voNPuy.js.map"
+      "lastLine": "//# sourceMappingURL=sim-loader-D7voNPuy.js.map",
+      "text": "export {\n  fe as _,\n  L as a,\n  G as b,\n  le as c,\n  S as d,\n  m as f,\n  ne as g,\n  N as h,\n  c as i,\n  g as l,\n  R as m,\n  he as n,\n  te as o,\n  re as p,\n  s as r,\n  P as s,\n  ge as t,\n  b as u,\n  ee as v,\n  E as y,\n};\n//# sourceMappingURL=sim-loader-D7voNPuy.js.map"
     },
     {
       "file": "assets__sky-TniNiCfE-01.js",
@@ -10480,12 +10615,13 @@
       "file": "assets__sky-TniNiCfE-tail-export.js",
       "skipped": true,
       "title": "assets__sky-TniNiCfE — final export table (not sliced)",
-      "desc": "Lines 152-152. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 152-152. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 152,
       "endLine": 153,
       "sourceFile": "readable/assets__sky-TniNiCfE.pretty.js",
       "firstLine": "export { s as t };",
-      "lastLine": "//# sourceMappingURL=sky-TniNiCfE.js.map"
+      "lastLine": "//# sourceMappingURL=sky-TniNiCfE.js.map",
+      "text": "export { s as t };\n//# sourceMappingURL=sky-TniNiCfE.js.map"
     },
     {
       "file": "assets__squads-3RTK34-j-01.js",
@@ -10507,12 +10643,13 @@
       "file": "assets__squads-3RTK34-j-tail-export.js",
       "skipped": true,
       "title": "assets__squads-3RTK34-j — final export table (not sliced)",
-      "desc": "Lines 534-534. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 534-534. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 534,
       "endLine": 535,
       "sourceFile": "readable/assets__squads-3RTK34-j.pretty.js",
       "firstLine": "export { c as a, d as i, u as n, l as r, f as t };",
-      "lastLine": "//# sourceMappingURL=squads-3RTK34-j.js.map"
+      "lastLine": "//# sourceMappingURL=squads-3RTK34-j.js.map",
+      "text": "export { c as a, d as i, u as n, l as r, f as t };\n//# sourceMappingURL=squads-3RTK34-j.js.map"
     },
     {
       "file": "assets__static-bake-DEfkgcUk-01.js",
@@ -10534,12 +10671,13 @@
       "file": "assets__static-bake-DEfkgcUk-tail-export.js",
       "skipped": true,
       "title": "assets__static-bake-DEfkgcUk — final export table (not sliced)",
-      "desc": "Lines 580-580. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 580-580. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 580,
       "endLine": 581,
       "sourceFile": "readable/assets__static-bake-DEfkgcUk.pretty.js",
       "firstLine": "export { v as i, O as n, w as r, k as t };",
-      "lastLine": "//# sourceMappingURL=static-bake-DEfkgcUk.js.map"
+      "lastLine": "//# sourceMappingURL=static-bake-DEfkgcUk.js.map",
+      "text": "export { v as i, O as n, w as r, k as t };\n//# sourceMappingURL=static-bake-DEfkgcUk.js.map"
     },
     {
       "file": "assets__street-surfaces-Bu4Nhn2h-01.js",
@@ -10553,12 +10691,13 @@
       "file": "assets__street-surfaces-Bu4Nhn2h-tail-export.js",
       "skipped": true,
       "title": "assets__street-surfaces-Bu4Nhn2h — final export table (not sliced)",
-      "desc": "Lines 53-53. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 53-53. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 53,
       "endLine": 54,
       "sourceFile": "readable/assets__street-surfaces-Bu4Nhn2h.pretty.js",
       "firstLine": "export { c as createStreetSurfaces, r as streetKind };",
-      "lastLine": "//# sourceMappingURL=street-surfaces-Bu4Nhn2h.js.map"
+      "lastLine": "//# sourceMappingURL=street-surfaces-Bu4Nhn2h.js.map",
+      "text": "export { c as createStreetSurfaces, r as streetKind };\n//# sourceMappingURL=street-surfaces-Bu4Nhn2h.js.map"
     },
     {
       "file": "assets__streetlife-Ce2BEs1X-01.js",
@@ -10596,12 +10735,13 @@
       "file": "assets__streetlife-Ce2BEs1X-tail-export.js",
       "skipped": true,
       "title": "assets__streetlife-Ce2BEs1X — final export table (not sliced)",
-      "desc": "Lines 758-758. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 758-758. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 758,
       "endLine": 759,
       "sourceFile": "readable/assets__streetlife-Ce2BEs1X.pretty.js",
       "firstLine": "export { v as n, g as r, _ as t };",
-      "lastLine": "//# sourceMappingURL=streetlife-Ce2BEs1X.js.map"
+      "lastLine": "//# sourceMappingURL=streetlife-Ce2BEs1X.js.map",
+      "text": "export { v as n, g as r, _ as t };\n//# sourceMappingURL=streetlife-Ce2BEs1X.js.map"
     },
     {
       "file": "assets__suburb-plan-Bou2JYbm-01.js",
@@ -10615,12 +10755,13 @@
       "file": "assets__suburb-plan-Bou2JYbm-tail-export.js",
       "skipped": true,
       "title": "assets__suburb-plan-Bou2JYbm — final export table (not sliced)",
-      "desc": "Lines 232-232. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 232-232. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 232,
       "endLine": 233,
       "sourceFile": "readable/assets__suburb-plan-Bou2JYbm.pretty.js",
       "firstLine": "export { a, s as i, n, o, t as r, r as t };",
-      "lastLine": "//# sourceMappingURL=suburb-plan-Bou2JYbm.js.map"
+      "lastLine": "//# sourceMappingURL=suburb-plan-Bou2JYbm.js.map",
+      "text": "export { a, s as i, n, o, t as r, r as t };\n//# sourceMappingURL=suburb-plan-Bou2JYbm.js.map"
     },
     {
       "file": "assets__suburb-view-rGO8_xlp-01.js",
@@ -10666,12 +10807,13 @@
       "file": "assets__suburb-view-rGO8_xlp-tail-export.js",
       "skipped": true,
       "title": "assets__suburb-view-rGO8_xlp — final export table (not sliced)",
-      "desc": "Lines 1583-1583. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 1583-1583. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 1583,
       "endLine": 1584,
       "sourceFile": "readable/assets__suburb-view-rGO8_xlp.pretty.js",
       "firstLine": "export { ue as addSuburb };",
-      "lastLine": "//# sourceMappingURL=suburb-view-rGO8_xlp.js.map"
+      "lastLine": "//# sourceMappingURL=suburb-view-rGO8_xlp.js.map",
+      "text": "export { ue as addSuburb };\n//# sourceMappingURL=suburb-view-rGO8_xlp.js.map"
     },
     {
       "file": "assets__synth-xINWorK6-01.js",
@@ -10773,12 +10915,13 @@
       "file": "assets__synth-xINWorK6-tail-export.js",
       "skipped": true,
       "title": "assets__synth-xINWorK6 — final export table (not sliced)",
-      "desc": "Lines 3499-3510. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 3499-3510. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 3499,
       "endLine": 3511,
       "sourceFile": "readable/assets__synth-xINWorK6.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=synth-xINWorK6.js.map"
+      "lastLine": "//# sourceMappingURL=synth-xINWorK6.js.map",
+      "text": "export {\n  y as a,\n  s as c,\n  st as i,\n  r as l,\n  Z as n,\n  o,\n  ct as r,\n  a as s,\n  $ as t,\n  c as u,\n};\n//# sourceMappingURL=synth-xINWorK6.js.map"
     },
     {
       "file": "assets__terrain-C3lt_eD1-01.js",
@@ -11016,12 +11159,13 @@
       "file": "assets__terrain-C3lt_eD1-tail-export.js",
       "skipped": true,
       "title": "assets__terrain-C3lt_eD1 — final export table (not sliced)",
-      "desc": "Lines 10133-10133. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 10133-10133. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 10133,
       "endLine": 10134,
       "sourceFile": "readable/assets__terrain-C3lt_eD1.pretty.js",
       "firstLine": "export { Di as default };",
-      "lastLine": "//# sourceMappingURL=terrain-C3lt_eD1.js.map"
+      "lastLine": "//# sourceMappingURL=terrain-C3lt_eD1.js.map",
+      "text": "export { Di as default };\n//# sourceMappingURL=terrain-C3lt_eD1.js.map"
     },
     {
       "file": "assets__tower-styles-DZ2NTXsa-01.js",
@@ -11043,12 +11187,13 @@
       "file": "assets__tower-styles-DZ2NTXsa-tail-export.js",
       "skipped": true,
       "title": "assets__tower-styles-DZ2NTXsa — final export table (not sliced)",
-      "desc": "Lines 522-522. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 522-522. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 522,
       "endLine": 523,
       "sourceFile": "readable/assets__tower-styles-DZ2NTXsa.pretty.js",
       "firstLine": "export { u as n, o as t };",
-      "lastLine": "//# sourceMappingURL=tower-styles-DZ2NTXsa.js.map"
+      "lastLine": "//# sourceMappingURL=tower-styles-DZ2NTXsa.js.map",
+      "text": "export { u as n, o as t };\n//# sourceMappingURL=tower-styles-DZ2NTXsa.js.map"
     },
     {
       "file": "assets__town-beds-r2XtrPD_-01.js",
@@ -11062,12 +11207,13 @@
       "file": "assets__town-beds-r2XtrPD_-tail-export.js",
       "skipped": true,
       "title": "assets__town-beds-r2XtrPD_ — final export table (not sliced)",
-      "desc": "Lines 303-303. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 303-303. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 303,
       "endLine": 304,
       "sourceFile": "readable/assets__town-beds-r2XtrPD_.pretty.js",
       "firstLine": "export { d as a, h as i, p as n, l as o, g as r, f as t };",
-      "lastLine": "//# sourceMappingURL=town-beds-r2XtrPD_.js.map"
+      "lastLine": "//# sourceMappingURL=town-beds-r2XtrPD_.js.map",
+      "text": "export { d as a, h as i, p as n, l as o, g as r, f as t };\n//# sourceMappingURL=town-beds-r2XtrPD_.js.map"
     },
     {
       "file": "assets__trains-sim-BhrrY_Za-01.js",
@@ -11081,12 +11227,13 @@
       "file": "assets__trains-sim-BhrrY_Za-tail-export.js",
       "skipped": true,
       "title": "assets__trains-sim-BhrrY_Za — final export table (not sliced)",
-      "desc": "Lines 189-197. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 189-197. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 189,
       "endLine": 198,
       "sourceFile": "readable/assets__trains-sim-BhrrY_Za.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=trains-sim-BhrrY_Za.js.map"
+      "lastLine": "//# sourceMappingURL=trains-sim-BhrrY_Za.js.map",
+      "text": "export {\n  n as RAIL_Y,\n  t as TRAIN_SIM,\n  s as carBoxes,\n  u as installTrains,\n  i as lineAt,\n  d as trainVictims,\n  o as trainsAt,\n};\n//# sourceMappingURL=trains-sim-BhrrY_Za.js.map"
     },
     {
       "file": "assets__ui-D46k2G3Q-01.js",
@@ -11380,12 +11527,13 @@
       "file": "assets__ui-D46k2G3Q-tail-export.js",
       "skipped": true,
       "title": "assets__ui-D46k2G3Q — final export table (not sliced)",
-      "desc": "Lines 16512-16512. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 16512-16512. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 16512,
       "endLine": 16513,
       "sourceFile": "readable/assets__ui-D46k2G3Q.pretty.js",
       "firstLine": "export { bo as default };",
-      "lastLine": "//# sourceMappingURL=ui-D46k2G3Q.js.map"
+      "lastLine": "//# sourceMappingURL=ui-D46k2G3Q.js.map",
+      "text": "export { bo as default };\n//# sourceMappingURL=ui-D46k2G3Q.js.map"
     },
     {
       "file": "assets__vehicles-CqLF20DK-01.js",
@@ -11471,12 +11619,13 @@
       "file": "assets__vehicles-CqLF20DK-tail-export.js",
       "skipped": true,
       "title": "assets__vehicles-CqLF20DK — final export table (not sliced)",
-      "desc": "Lines 2849-2849. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 2849-2849. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 2849,
       "endLine": 2850,
       "sourceFile": "readable/assets__vehicles-CqLF20DK.pretty.js",
       "firstLine": "export { Ke as default };",
-      "lastLine": "//# sourceMappingURL=vehicles-CqLF20DK.js.map"
+      "lastLine": "//# sourceMappingURL=vehicles-CqLF20DK.js.map",
+      "text": "export { Ke as default };\n//# sourceMappingURL=vehicles-CqLF20DK.js.map"
     },
     {
       "file": "assets__voice-CiumGhKs-01.js",
@@ -11498,12 +11647,13 @@
       "file": "assets__voice-CiumGhKs-tail-export.js",
       "skipped": true,
       "title": "assets__voice-CiumGhKs — final export table (not sliced)",
-      "desc": "Lines 564-564. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 564-564. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 564,
       "endLine": 565,
       "sourceFile": "readable/assets__voice-CiumGhKs.pretty.js",
       "firstLine": "export { V as default };",
-      "lastLine": "//# sourceMappingURL=voice-CiumGhKs.js.map"
+      "lastLine": "//# sourceMappingURL=voice-CiumGhKs.js.map",
+      "text": "export { V as default };\n//# sourceMappingURL=voice-CiumGhKs.js.map"
     },
     {
       "file": "assets__weapon-drops-DbIZUUXu-01.js",
@@ -11525,12 +11675,13 @@
       "file": "assets__weapon-drops-DbIZUUXu-tail-export.js",
       "skipped": true,
       "title": "assets__weapon-drops-DbIZUUXu — final export table (not sliced)",
-      "desc": "Lines 405-420. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 405-420. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 405,
       "endLine": 421,
       "sourceFile": "readable/assets__weapon-drops-DbIZUUXu.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=weapon-drops-DbIZUUXu.js.map"
+      "lastLine": "//# sourceMappingURL=weapon-drops-DbIZUUXu.js.map",
+      "text": "export {\n  E as a,\n  g as c,\n  p as d,\n  l as f,\n  D as i,\n  u as l,\n  v as m,\n  k as n,\n  _ as o,\n  f as p,\n  x as r,\n  h as s,\n  O as t,\n  y as u,\n};\n//# sourceMappingURL=weapon-drops-DbIZUUXu.js.map"
     },
     {
       "file": "assets__weapons-D4QomYwC-01.js",
@@ -11624,12 +11775,13 @@
       "file": "assets__weapons-D4QomYwC-tail-export.js",
       "skipped": true,
       "title": "assets__weapons-D4QomYwC — final export table (not sliced)",
-      "desc": "Lines 3321-3321. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 3321-3321. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 3321,
       "endLine": 3322,
       "sourceFile": "readable/assets__weapons-D4QomYwC.pretty.js",
       "firstLine": "export { un as default };",
-      "lastLine": "//# sourceMappingURL=weapons-D4QomYwC.js.map"
+      "lastLine": "//# sourceMappingURL=weapons-D4QomYwC.js.map",
+      "text": "export { un as default };\n//# sourceMappingURL=weapons-D4QomYwC.js.map"
     },
     {
       "file": "assets__wear-levels-C35ZGfVS-01.js",
@@ -11643,12 +11795,13 @@
       "file": "assets__wear-levels-C35ZGfVS-tail-export.js",
       "skipped": true,
       "title": "assets__wear-levels-C35ZGfVS — final export table (not sliced)",
-      "desc": "Lines 9-9. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 9-9. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 9,
       "endLine": 10,
       "sourceFile": "readable/assets__wear-levels-C35ZGfVS.pretty.js",
       "firstLine": "export { t as n, n as r, e as t };",
-      "lastLine": "//# sourceMappingURL=wear-levels-C35ZGfVS.js.map"
+      "lastLine": "//# sourceMappingURL=wear-levels-C35ZGfVS.js.map",
+      "text": "export { t as n, n as r, e as t };\n//# sourceMappingURL=wear-levels-C35ZGfVS.js.map"
     },
     {
       "file": "assets__workshop-equipment-DYDXE0R0-01.js",
@@ -11662,12 +11815,13 @@
       "file": "assets__workshop-equipment-DYDXE0R0-tail-export.js",
       "skipped": true,
       "title": "assets__workshop-equipment-DYDXE0R0 — final export table (not sliced)",
-      "desc": "Lines 42-48. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 42-48. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 42,
       "endLine": 49,
       "sourceFile": "readable/assets__workshop-equipment-DYDXE0R0.pretty.js",
       "firstLine": "export {",
-      "lastLine": "//# sourceMappingURL=workshop-equipment-DYDXE0R0.js.map"
+      "lastLine": "//# sourceMappingURL=workshop-equipment-DYDXE0R0.js.map",
+      "text": "export {\n  r as WORKSHOP_EQUIPMENT_URL,\n  i as WORKSHOP_ROOF_URL,\n  s as addWorkshopEquipment,\n  o as instantiateWorkshopEquipment,\n  a as instantiateWorkshopRoof,\n};\n//# sourceMappingURL=workshop-equipment-DYDXE0R0.js.map"
     },
     {
       "file": "assets__workshop-finish-_6cKd7K1-01.js",
@@ -11681,12 +11835,13 @@
       "file": "assets__workshop-finish-_6cKd7K1-tail-export.js",
       "skipped": true,
       "title": "assets__workshop-finish-_6cKd7K1 — final export table (not sliced)",
-      "desc": "Lines 53-53. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 53-53. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 53,
       "endLine": 54,
       "sourceFile": "readable/assets__workshop-finish-_6cKd7K1.pretty.js",
       "firstLine": "export { e as t };",
-      "lastLine": "//# sourceMappingURL=workshop-finish-_6cKd7K1.js.map"
+      "lastLine": "//# sourceMappingURL=workshop-finish-_6cKd7K1.js.map",
+      "text": "export { e as t };\n//# sourceMappingURL=workshop-finish-_6cKd7K1.js.map"
     },
     {
       "file": "assets__yard-dressing-view-Du2F6MWT-01.js",
@@ -12188,12 +12343,13 @@
       "file": "assets__yard-dressing-view-Du2F6MWT-tail-export.js",
       "skipped": true,
       "title": "assets__yard-dressing-view-Du2F6MWT — final export table (not sliced)",
-      "desc": "Lines 17562-17562. The chunk's final export {…} table — the exported bindings live in the earlier slices; a standalone tail carries no new statements, so it is indexed only.",
+      "desc": "Lines 17562-17562. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.",
       "startLine": 17562,
       "endLine": 17563,
       "sourceFile": "readable/assets__yard-dressing-view-Du2F6MWT.pretty.js",
       "firstLine": "export { as as addYardDressing };",
-      "lastLine": "//# sourceMappingURL=yard-dressing-view-Du2F6MWT.js.map"
+      "lastLine": "//# sourceMappingURL=yard-dressing-view-Du2F6MWT.js.map",
+      "text": "export { as as addYardDressing };\n//# sourceMappingURL=yard-dressing-view-Du2F6MWT.js.map"
     },
     {
       "file": "session-01.js",
