@@ -481,24 +481,41 @@ if (manifest) {
 }
 
 // ── vendor rule: wholeFile sections carry the recorded shape ────────────
+// The vendor section is found by the pretty it was cut from (`sourceFile`),
+// not by a file name: its `file` IS that pretty — the derived text, the
+// chunk's only derived form — and its `origin` records the pristine the
+// pretty was rendered from (the captured chunk), the file that still carries
+// the chunk's PUBLIC export table. The pair is what the frozen export gate
+// reads; a `file` that names a path nothing holds leaves the table invisible.
 const VENDOR_GUARDS = [
-  ["assets__graphics-quality-BsjABS0s-vendor.js", /WebGLRenderer/, /__THREE__/],
-  ["assets__graphics-quality-BsjABS0s-vendor.js", /REVISION\s*:\s*\(\)\s*=>\s*[`"']185[`"']/, /getContext/],
+  ["assets__graphics-quality-BsjABS0s", /WebGLRenderer/, /__THREE__/],
+  ["assets__graphics-quality-BsjABS0s", /REVISION\s*:\s*\(\)\s*=>\s*[`"']185[`"']/, /getContext/],
 ];
-for (const [file, reA, reB] of VENDOR_GUARDS) {
-  const sec = sections.find((s) => s.file === file);
+for (const [tag, reA, reB] of VENDOR_GUARDS) {
+  const sec = sections.find(
+    (s) => s.wholeFile === true && typeof s.sourceFile === "string" && s.sourceFile.includes(tag),
+  );
   if (!sec) {
-    problem(`vendor section ${file} missing from split-spec.json`);
-    continue;
-  }
-  if (sec.wholeFile !== true) {
-    problem(`vendor section ${file} is not wholeFile`);
+    problem(`vendor section ${tag} missing from split-spec.json`);
     continue;
   }
   const text = getLines(path.join(proj, sec.sourceFile))
     .slice(sec.startLine - 1, sec.endLine)
     .join("\n");
-  if (!reA.test(text) || !reB.test(text)) problem(`vendor section ${file}: content guard failed — readable changed shape`);
+  if (!reA.test(text) || !reB.test(text)) problem(`vendor section ${tag}: content guard failed — readable changed shape`);
+  // the derived text the section names must exist, and the pristine must be
+  // a DIFFERENT file from it: a section that pointed at itself would make
+  // the export gate compare the pretty with itself.
+  const derivedAbs = path.join(proj, sec.file);
+  if (!fs.existsSync(derivedAbs)) problem(`vendor section ${tag}: derived text missing: ${sec.file}`);
+  const origin = typeof sec.origin === "string" ? sec.origin : null;
+  if (!origin) problem(`vendor section ${tag}: no pristine recorded (origin)`);
+  else {
+    const originAbs = path.join(proj, origin);
+    if (!fs.existsSync(originAbs)) problem(`vendor section ${tag}: pristine missing: ${origin}`);
+    else if (path.resolve(originAbs) === path.resolve(derivedAbs))
+      problem(`vendor section ${tag}: the pristine is the derived text (self-compare)`);
+  }
 }
 
 // ── the hard rule: src/ import resolution against the capture ───────────

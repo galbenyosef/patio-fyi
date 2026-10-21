@@ -12204,24 +12204,15 @@
       "sourceFile": "readable/session.pretty.js"
     },
     {
-      "file": "assets__graphics-quality-BsjABS0s-vendor.js",
-      "wholeFile": true,
-      "title": "assets__graphics-quality-BsjABS0s — bundled three.js r185 graphics engine (vendor, whole-file, never sliced)",
-      "desc": "Lines 1-36504 of readable/assets__graphics-quality-BsjABS0s.pretty.js: the bundled three.js r185 graphics engine — the vendored `__THREE__` revision registration, WebGLRenderer, math/geometry/material/texture/renderer machinery and the app's graphics-quality kit layered on top — third-party engine code, not app logic. Vendor rule — indexed whole-file in readable/, never sliced or rewritten.",
-      "note": "whole-file (vendor rule): indexed in readable/, never sliced",
-      "startLine": 1,
-      "endLine": 36504,
-      "sourceFile": "readable/assets__graphics-quality-BsjABS0s.pretty.js"
-    },
-    {
       "file": "readable/assets__graphics-quality-BsjABS0s.pretty.js",
       "wholeFile": true,
       "origin": "assets/graphics-quality-BsjABS0s.js",
       "title": "assets__graphics-quality-BsjABS0s — bundled three.js r185 graphics engine (vendor, whole-file, never sliced)",
-      "desc": "Lines 1-36504 of readable/assets__graphics-quality-BsjABS0s.pretty.js. The pristine is the captured chunk (origin); the derived text is its readable pretty — the vendor rule never slices or renames the chunk, so the pretty is its only derived form. The chunk's export table is its public API: 102 captured chunks import from \"./graphics-quality-BsjABS0s.js\" (101 by named binding, 158 distinct public names), so the table's 160 public names are load-bearing. The pristine is named in `origin`, not `capture`: a whole-file section that named it in `capture` would also attach to the sources[] entry whose own pristine IS the readable pretty, and the gate would compare the pretty with itself.",
-      "note": "whole-file (vendor rule): the pristine is the captured chunk, the derived text is the readable pretty",
+      "desc": "Lines 1-36504 of readable/assets__graphics-quality-BsjABS0s.pretty.js: the bundled three.js r185 graphics engine — the vendored `__THREE__` revision registration, WebGLRenderer, math/geometry/material/texture/renderer machinery and the app's graphics-quality kit layered on top — third-party engine code, not app logic. Vendor rule — indexed whole-file in readable/, never sliced or rewritten.",
+      "note": "whole-file (vendor rule): indexed in readable/, never sliced; `file` is the readable pretty (the derived text), `origin` the captured chunk (the pristine)",
       "startLine": 1,
-      "endLine": 36504
+      "endLine": 36504,
+      "sourceFile": "readable/assets__graphics-quality-BsjABS0s.pretty.js"
     },
     {
       "file": "assets__ui-B08v0AKp.css",

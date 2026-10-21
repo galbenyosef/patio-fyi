@@ -19,7 +19,12 @@
 //   vendor bundle      -> readable/ + wholeFile section (vendor rule): the
 //                        bundled three.js r185 graphics engine chunk
 //                        (assets/graphics-quality-BsjABS0s.js) is indexed
-//                        whole, never sliced.
+//                        whole, never sliced. The wholeFile record's `file`
+//                        IS the readable pretty (the derived text) and its
+//                        `origin` the captured chunk (the pristine): the
+//                        pretty is the chunk's only derived form, so the
+//                        pair is what lets the frozen export gate compare
+//                        the chunk's public export table with the layer's.
 //   app chunks         -> statement-aligned slices src/<name>-NN.js at
 //                        top-level declaration boundaries, ~250-350 line
 //                        windows (oversized single declarations stay whole),
@@ -344,11 +349,19 @@ async function main() {
       if (cls.guard && !cls.guard(region))
         throw new Error(`${rel}: whole-file guard failed — readable changed shape`);
       sections.push({
-        file: `${tag}-vendor.js`,
+        // `file` is the DERIVED TEXT and it must exist: the vendor rule never
+        // slices or renames the chunk, so the readable pretty is the chunk's
+        // only derived form. `origin` records the PRISTINE it was rendered
+        // from (the captured chunk) — the file that still carries the
+        // chunk's public export table. The frozen export gate reads that
+        // pair; a `file` that names a path nothing holds (the old
+        // `<tag>-vendor.js`) leaves the table invisible.
+        file: sourceFile,
         wholeFile: true,
+        origin: rel,
         title: cls.title,
         desc: `Lines 1-${lines.length} of ${sourceFile}: ${cls.desc}`,
-        note: "whole-file (vendor rule): indexed in readable/, never sliced",
+        note: "whole-file (vendor rule): indexed in readable/, never sliced; `file` is the readable pretty (the derived text), `origin` the captured chunk (the pristine)",
         startLine: 1,
         endLine: lines.length,
         sourceFile,
