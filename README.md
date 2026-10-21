@@ -212,9 +212,13 @@ derived layers from the v2 build.
   and guarded. Stylesheet rule: `assets/ui-B08v0AKp.css` is wholeFile.
   Non-standalone parts are skipped sections, indexed but never sliced (156
   skipped — every app chunk's final `export {…}` table). Each one records the
-  region's TEXT as well, so the export gate can compare every chunk's public
-  export table with the layer's (the table re-exports bindings that live in
-  the earlier slices, so a slice carrying it could not parse standalone).
+  SERVED chunk's own export statement as its text (the capture's minified
+  `export{…}`, matched by public names), so the export gate compares two
+  genuinely different files — the reading copy's rendered table against the
+  served chunk's statement — and a public name the served chunk exports and
+  the reading copy does not is caught. (The table re-exports bindings that
+  live in the earlier slices, so a slice carrying it could not parse
+  standalone.)
 - **notRendered** — 338 hashed payload records in `split-spec.json` (167 audio,
   109 models, 57 images, 5 fonts; bytes + sha256, no pretty pass).
 - **Gates**: `node tools/verify.mjs` → `506 files checked, 0 problems`;

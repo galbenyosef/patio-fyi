@@ -44,9 +44,11 @@
 // Non-standalone parts are indexed but never sliced (skipped sections): every
 // app chunk's final `export {…}` table (the bindings live in the earlier
 // slices, so a slice carrying the table could not parse standalone). The
-// section records the region's TEXT, so the frozen export gate can compare
-// every chunk's public export table with the layer's: without it the table is
-// named but never compared, and the chunk's public API goes unverified.
+// section records the SERVED chunk's own export statement as its text, so the
+// frozen export gate compares two genuinely different files — the reading
+// copy's rendered table and the served chunk's statement — instead of the
+// reading copy with itself: without it the table is named but never compared,
+// and the chunk's public API goes unverified.
 //
 // Identifiers in src/ are the bundle's own minified names — the rename
 // campaign (PLAN §5) is recorded as an open task in README.md. usage:
@@ -207,6 +209,50 @@ function markers(text, n = 2) {
   return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, n);
 }
 const markerText = (ms) => ms.map(([w, c]) => `${w}(${c})`).join(", ");
+
+// ── the SERVED chunk's own export statement ─────────────────────────────
+// An app chunk's final `export { … }` table is an index-only tail: the table
+// re-exports bindings that live in the EARLIER slices, so it cannot parse
+// standalone and no src slice carries it. The public export names of every
+// served chunk were therefore enumerated by the export gate and compared with
+// NOTHING.
+//
+// The served capture DOES carry the table — in its own minified rendering.
+// That rendering is the text the reading copy's table must still match, and
+// it is a DIFFERENT text from the reading copy's lines, so the gate's
+// comparison is real and not a tautology.
+//
+// The statement is matched by its PUBLIC NAMES, so a fragment of a string
+// that happens to contain `export {` is never mistaken for it, and nothing
+// is invented: when the capture carries no statement with the tail's names,
+// the tail stays a plain skipped record and the gate keeps reporting it
+// unchecked.
+function exportListNames(text) {
+  const out = new Set();
+  for (const m of text.matchAll(/export\s*\{([^}]*)\}/g)) {
+    for (const part of m[1].split(",")) {
+      const seg = part.trim();
+      if (!seg) continue;
+      const as = seg.split(/\s+as\s+/);
+      out.add((as.length === 2 ? as[1] : seg).trim());
+    }
+  }
+  return out;
+}
+
+// the served capture's own export statement, matched by PUBLIC NAMES
+function captureExportStatement(captureText, tailText) {
+  const want = exportListNames(tailText);
+  if (!want.size) return null;
+  let found = null;
+  for (const m of captureText.matchAll(/export\s*\{[^}]*\}\s*;?/g)) {
+    const names = exportListNames(m[0]);
+    if (names.size !== want.size) continue;
+    if (![...want].every((n) => names.has(n))) continue;
+    found = m[0];
+  }
+  return found;
+}
 
 // ── windowize: cut only at statement starts; ≤350 lines, a single ───────
 // ── oversized declaration is a window of its own ────────────────────────
@@ -419,11 +465,18 @@ async function main() {
       /^export\s*\{[\s\S]*\}\s*;?$/.test(lastStmt.text.trim()) &&
       !/\bfrom\b/.test(lastStmt.text)
     ) {
+      // the SERVED chunk's own export statement: the tail records it as its
+      // text, so the export gate compares the reading copy's rendered table
+      // against the served chunk — two different files, never a self-compare
+      const served = captureExportStatement(text, lastStmt.text);
+      if (!served)
+        throw new Error(`${rel}: the served capture carries no export statement with the reading copy's public names`);
       claim(stmts.length - 1, stmts.length - 1, {
         kind: "skip",
         file: `${tag}-tail-export.js`,
         title: `${tag} — final export table (not sliced)`,
-        desc: `Lines ${lastStmt.startLine}-${lastStmt.endLine}. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here and its text is recorded, so the export gate can compare the chunk's public export table with the layer's.`,
+        desc: `Lines ${lastStmt.startLine}-${lastStmt.endLine}. The chunk's final export {…} table — the exported bindings live in the earlier slices, so a slice carrying the table could not parse standalone; the region is indexed here, and its recorded text is the served chunk's own export statement — the statement the reading copy's table must still match.`,
+        text: served,
       });
     }
 
@@ -499,14 +552,15 @@ async function main() {
           sourceFile,
           firstLine: lines[b.A - 1],
           lastLine: lines[b.B - 1],
-          // The layer's OWN text for this region. The tail is not sliced (an
-          // export table re-exports bindings that live in the EARLIER slices,
-          // so a slice carrying it cannot parse standalone), but the region is
-          // still part of the derived layer and the frozen export gate needs
-          // its text to compare the chunk's public export table with the
-          // layer's. Without it the gate has no derived text for the table and
-          // reports it as NOT covered — named, never compared.
-          text: lines.slice(b.A - 1, b.B).join("\n"),
+          // the SERVED chunk's own export statement — the text the reading
+          // copy's table must still match (the export gate compares them).
+          // It is a DIFFERENT text from the reading copy's lines, so the
+          // comparison is real: a public name the served chunk exports and
+          // the reading copy does not is caught, which a comparison of the
+          // reading copy with itself could never do.
+          ...(b.text ? { text: b.text } : {}),
+          // the served chunk this tail's statement came from
+          ...(b.text ? { capture: rel } : {}),
         });
       }
     }
@@ -738,7 +792,11 @@ async function main() {
       "engine (the vendored WebGLRenderer + __THREE__ revision registration + renderer machinery with the " +
       "app's graphics-quality kit on top), content-anchored and guarded. Stylesheet rule — " +
       "assets/ui-B08v0AKp.css is wholeFile. Non-standalone parts are skipped sections, indexed but never " +
-      "sliced: every app chunk's final export {…} table (the bindings live in the earlier slices). Inline " +
+      "sliced: every app chunk's final export {…} table (the bindings live in the earlier slices). Each such " +
+      "tail records the SERVED chunk's own export statement as its text — the capture's minified export{…}, " +
+      "matched by public names — so the public-export gate compares two genuinely different files (the " +
+      "reading copy's rendered table and the served chunk's statement) instead of the reading copy with itself. " +
+      "Inline " +
       "<script>/<style> scan: index.html references external chunks (the /session.js bootstrap and the " +
       "module entry) and carries one inline <style> block (the rotate-hint/UI CSS), which gets a wholeFile " +
       "twin readable/index-inline-1.pretty.css + a readable/index-inline-map.json entry with its exact byte " +
