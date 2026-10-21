@@ -123,8 +123,21 @@ full HUD.
 node tools/verify.mjs            # re-hash the capture against the manifest
 node tools/audit.js              # derived-layer integrity gate → AUDIT PASS
 node tools/check-exports.mjs     # the derived layer still exports every public name
+node tools/check-imports.mjs     # every relative import resolves to a chunk the layer carries
 node tools/capture.mjs --check   # residual closure audit → 0 new unresolved
 ```
+
+`check-imports.mjs` guards the half of the import class `audit.js` does not
+ask: `audit.js` resolves every relative specifier in `src/` against the
+CAPTURE, so a chunk the capture holds but the layer never cut would satisfy it
+and still leave the import dangling in the layer. This gate resolves the same
+specifiers against the layer's own inventory — the `sources[]` of
+`split-spec.json` — and fails when the target is a chunk the capture carries
+but the layer does not. The eight paths upstream never served (the shipped raw
+player-sim source's sibling paths: `./zipline.js`, `./ladder.js`,
+`../core/world.js`, `../demo/*-sim.js` and three more) are accepted because
+the capture's own record lists each of them as a 404 in
+`_mirror-report.json`; the gate prints them and stays green.
 
 ## Updating from upstream
 
