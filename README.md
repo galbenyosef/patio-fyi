@@ -124,8 +124,21 @@ node tools/verify.mjs            # re-hash the capture against the manifest
 node tools/audit.js              # derived-layer integrity gate → AUDIT PASS
 node tools/check-exports.mjs     # the derived layer still exports every public name
 node tools/check-imports.mjs     # every relative import resolves to a chunk the layer carries
+node tools/check-links.mjs       # every export table names a binding the layer declares
 node tools/capture.mjs --check   # residual closure audit → 0 new unresolved
 ```
+
+`check-links.mjs` guards the EXPORT side of the layer graph, the side
+`check-exports.mjs` cannot see: `check-exports.mjs` compares a CAPTURE's
+export table with the layer's PUBLIC names and never asks whether the layer's
+own export statement names a binding the layer declares. This gate reassembles
+every module of the layer from the layer's own bytes — each slice contributes
+its payload, every range the layer does not carry (an index-only export-table
+tail) contributes the mirror's own recorded bytes — and links it with Node's
+own module parser. A chunk whose export table names a binding no slice
+declares is a real break and is named; a slice that carries the table but
+cannot parse on its own is a fragment of a whole module, and is reported as
+such.
 
 `check-imports.mjs` guards the half of the import class `audit.js` does not
 ask: `audit.js` resolves every relative specifier in `src/` against the
