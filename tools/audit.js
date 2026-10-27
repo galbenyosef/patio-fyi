@@ -662,13 +662,20 @@ if (manifest) {
 }
 
 // ── best-effort: re-render every pretty with the pinned prettier 3.9.6 ─
+// The renderer is VENDORED IN THIS MIRROR at tools/vendor/prettier/ (the
+// published npm tarball prettier-3.9.6.tgz, byte for byte — see that
+// directory's VENDOR-README.md). The audit used to fall back to a path in
+// ANOTHER mirror's node_modules: gitignored, committed nowhere, so the
+// re-render check only ran on whichever machine happened to install it.
 const prettierCandidates = [
   process.env.PRETTIER_MJS,
+  path.join(proj, "tools", "vendor", "prettier", "index.mjs"),
   path.join(proj, "node_modules", "prettier", "index.mjs"),
-  "D:/repos/mirrors/metropolygonia/node_modules/prettier/index.mjs",
 ].filter(Boolean);
+const prettierTried = [];
 function loadPinnedPrettier() {
   for (const c of prettierCandidates) {
+    prettierTried.push(c);
     if (!fs.existsSync(c)) continue;
     try {
       const pkg = JSON.parse(fs.readFileSync(path.join(path.dirname(c), "package.json"), "utf8"));
@@ -682,8 +689,21 @@ function loadPinnedPrettier() {
 }
 
 (async () => {
-  let renderNote = `prettier ${PINNED} not importable — renderOptions recorded, re-render check skipped`;
   const prettierPath = loadPinnedPrettier();
+  // When the pinned renderer cannot be found, the re-render check is skipped —
+  // and the message says WHICH paths were tried and HOW to get the renderer
+  // back. A missing dependency, not a broken layer.
+  let renderNote = `prettier ${PINNED} not importable — renderOptions recorded, re-render check skipped ` +
+    `(tried: ${prettierTried.join("; ")})`;
+  if (!prettierPath) {
+    console.error(
+      `audit: pinned prettier ${PINNED} not found. Tried:\n` +
+        prettierTried.map((c) => `  - ${c}`).join("\n") +
+        `\nRestore the committed copy:  git checkout -- tools/vendor/prettier/\n` +
+        `or install the same version locally:  npm install --no-save prettier@${PINNED}\n` +
+        `or point $PRETTIER_MJS at a prettier ${PINNED} index.mjs.`,
+    );
+  }
   if (prettierPath) {
     const prettier = (await import(pathToFileURL(prettierPath).href)).default;
     // the recorded derivation method is format-to-a-layout-fixed-point (1 or 2

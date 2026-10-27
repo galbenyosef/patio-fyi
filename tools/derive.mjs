@@ -139,13 +139,22 @@ const prettyRelFor = (capRel) =>
   "readable/" + tagOf(capRel) + (/\.css$/i.test(capRel) ? ".pretty.css" : ".pretty.js");
 
 // ── pinned prettier (module API, exactly 3.9.6) ─────────────────────────
+// The renderer is VENDORED IN THIS MIRROR at tools/vendor/prettier/ (the
+// published npm tarball prettier-3.9.6.tgz, byte for byte — see that
+// directory's VENDOR-README.md). The derive used to fall back to a path in
+// ANOTHER mirror's node_modules: gitignored, committed nowhere, so the
+// derivation only worked on whichever machine happened to install it, and its
+// failure looked like a broken tool rather than a missing dependency. The
+// vendored copy is committed, so a clean checkout can always re-derive.
 async function loadPrettier() {
   const candidates = [
     process.env.PRETTIER_MJS,
+    path.join(proj, "tools", "vendor", "prettier", "index.mjs"),
     path.join(proj, "node_modules", "prettier", "index.mjs"),
-    "D:/repos/mirrors/metropolygonia/node_modules/prettier/index.mjs",
   ].filter(Boolean);
+  const tried = [];
   for (const c of candidates) {
+    tried.push(c);
     if (!fs.existsSync(c)) continue;
     try {
       const pkg = JSON.parse(fs.readFileSync(path.join(path.dirname(c), "package.json"), "utf8"));
@@ -156,7 +165,15 @@ async function loadPrettier() {
       /* try next */
     }
   }
-  throw new Error(`pinned prettier ${PINNED} not found (set PRETTIER_MJS to its index.mjs)`);
+  // The message names EVERY path it looked for, and the exact command that
+  // puts the vendored copy back: a missing dependency, said plainly.
+  throw new Error(
+    `pinned prettier ${PINNED} not found. Tried:\n` +
+      tried.map((c) => `  - ${c}`).join("\n") +
+      `\nRestore the committed copy:  git checkout -- tools/vendor/prettier/\n` +
+      `or install the same version locally:  npm install --no-save prettier@${PINNED}\n` +
+      `or point $PRETTIER_MJS at a prettier ${PINNED} index.mjs.`,
+  );
 }
 
 // single pass + idempotency proof: prettier output must be a fixed point of

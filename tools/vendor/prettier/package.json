@@ -1,0 +1,6 @@
+{
+  "name": "prettier",
+  "version": "3.9.6",
+  "license": "MIT",
+  "description": "Vendored prettier 3.9.6 (module API) - see VENDOR-README.md in this directory."
+}

@@ -78,6 +78,10 @@ them as recorded 404 gaps.
 - `tools/verify.mjs` — re-hash the capture against the manifest
 - `tools/update.mjs` — read-only drift probe against the live origin
 - `tools/audit.js` — integrity gate for the derived layers (`AUDIT PASS`)
+- `tools/vendor/prettier/` — pinned prettier 3.9.6 vendored in-tree (module
+  API, published-tarball bytes). `derive.mjs` and `audit.js` resolve it before
+  any local `node_modules`, so a clean checkout re-derives and re-renders
+  without reaching into another mirror's tree
 
 ## Assets
 
