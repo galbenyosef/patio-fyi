@@ -114,12 +114,37 @@ served at the origin root; no build step):
 npx serve .
 ```
 
+The mirror also ships a zero-dependency server, `node tools/serve.mjs 4901`
+(binds 127.0.0.1 only, repo root as the document root, honest 404s), used for
+the 2026-10-27 offline boot test below.
+
 The UI boots from the captured files; multiplayer needs the live host (see
 "What this is"). The boot evidence in `docs/boot-2026-10-12.png` was taken
 through a local boot harness that answers `/session.js` with an empty 200 (boot
 test only — the capture itself is never modified), which lets the same captured
 chunks reach the game's in-page offline path; the deploy screen renders with the
 full HUD.
+
+## Boot test (2026-10-27)
+
+- Entry: `http://127.0.0.1:4901/` served by `tools/serve.mjs` with the network
+  blocked (`MAP * 127.0.0.1`).
+- Outcome: **blocked** — the deploy/lobby UI paints (callsign field, "Host
+  options", Reload and "Return to session lobby") under the banner "The game
+  could not start (Multiplayer server unavailable. No solo fallback…)", and no
+  canvas or gameplay ever appears.
+- Evidence: body 219 chars; canvas none; 1 console error; 15 failed same-origin
+  requests (live-backend endpoints `/health` ×11, `/socket` ×3, `/diag/boot` ×1),
+  0 blocked cross-origin; screenshot `docs/boot-2026-10-27.png`.
+- Gaps seen: none for captured assets — all 89 same-origin asset requests
+  returned 200; the only 404s are the live backend endpoints the capture does
+  not include.
+
+The boot confirms the existing "playable build gated on the live host" claim:
+the runtime graph loads and initialises (terrain, environment, effects, rig,
+Bascule demo props), then boot stops at the multiplayer handshake. The
+2026-10-12 screenshot relied on a stubbed `/session.js`; with the captured
+bootstrap served byte-exact, the game refuses to start offline.
 
 ## Verify
 
