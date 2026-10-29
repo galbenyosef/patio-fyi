@@ -1,0 +1,488 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import {
+  F as e,
+  I as t,
+  K as n,
+  L as r,
+  Lt as i,
+  W as a,
+  at as o,
+  mt as s,
+  q as c,
+  v as l,
+} from "./graphics-quality-CrL3qbU3.js";
+import { o as u } from "./sim-CY547Hbc.js";
+var d = (e) => new a(e);
+function f(e, n) {
+  let r = e.attributes.position,
+    i = new Float32Array(r.count * 3),
+    o = new a();
+  for (let e = 0; e < r.count; e++)
+    (n(o, r.getX(e), r.getY(e), r.getZ(e), e),
+      (i[e * 3] = o.r),
+      (i[e * 3 + 1] = o.g),
+      (i[e * 3 + 2] = o.b));
+  return (e.setAttribute(`color`, new t(i, 3)), e);
+}
+function p(e, t, n) {
+  let r = e.attributes.position;
+  for (let e = 0; e < r.count; e++) {
+    let i = r.getX(e),
+      a = r.getY(e),
+      o = r.getZ(e),
+      s = Math.round(i * 100),
+      c = Math.round(o * 100 + a * 37);
+    r.setXYZ(
+      e,
+      i + (u(s, c, n) - 0.5) * t,
+      a + (u(s + 7, c, n) - 0.5) * t,
+      o + (u(s, c + 7, n) - 0.5) * t,
+    );
+  }
+  return e;
+}
+function m(e) {
+  let t = l(
+    e.map((e) => (e.index ? e.toNonIndexed() : e)),
+    !1,
+  );
+  for (let t of e) t.dispose();
+  return (t.computeBoundingSphere(), t);
+}
+function h(e, t, n, r, i, a) {
+  let o = new c(e, t, n, r, 1, !1);
+  return (o.translate(0, i, 0), f(o, a));
+}
+function g(e, t, r, i, a) {
+  let o = new n(e, t, r, 1, !1);
+  return (o.translate(0, i, 0), f(o, a));
+}
+function _(e, t, n, r, i, a, o, c, l) {
+  let u = new s(1, 0);
+  return (c && p(u, c, l), u.scale(e, t, n), u.translate(r, i, a), f(u, o));
+}
+var v = d(4996915),
+  y = d(6772298),
+  b = d(12104354),
+  x = d(7301726),
+  S = d(3748652),
+  C = d(2573103),
+  w = d(3891520),
+  T = d(4021296),
+  E = d(6589244),
+  D = d(8229190),
+  O = d(10395730),
+  k = d(15002610),
+  A = {
+    BARK: d(4536876),
+    BARK_LIGHT: d(6180928),
+    PINE_DARK: d(1915425),
+    PINE_LIGHT: d(3104300),
+    OAK_DARK: d(2576671),
+    OAK_LIGHT: d(5214503),
+    BIRCH_BARK: d(9077863),
+    BIRCH_BASE: d(5130806),
+    BIRCH_DARK: d(3814950),
+    BIRCH_LEAF: d(3963434),
+    BIRCH_LEAF_HI: d(6793274),
+  },
+  j = {
+    BARK: d(5917242),
+    BARK_LIGHT: d(7693135),
+    PINE_DARK: d(3889725),
+    PINE_LIGHT: d(7113566),
+    OAK_DARK: d(2906658),
+    OAK_LIGHT: d(6265388),
+    BIRCH_BARK: d(10720634),
+    BIRCH_BASE: d(7628879),
+    BIRCH_DARK: d(5195318),
+    BIRCH_LEAF: d(5213226),
+    BIRCH_LEAF_HI: d(10207304),
+  };
+function M(t = {}) {
+  let n = t.jungle ? A : t.tropical ? j : null,
+    r = n?.BARK ?? v,
+    a = n?.BARK_LIGHT ?? y,
+    o = n?.PINE_DARK ?? C,
+    s = n?.PINE_LIGHT ?? w,
+    l = n?.OAK_DARK ?? T,
+    d = n?.OAK_LIGHT ?? E,
+    M = n?.BIRCH_BARK ?? b,
+    N = n?.BIRCH_BASE ?? x,
+    P = n?.BIRCH_DARK ?? S,
+    F = n?.BIRCH_LEAF ?? D,
+    I = n?.BIRCH_LEAF_HI ?? O,
+    L = (e, n) =>
+      t.snow
+        ? (t, r, i, a) => {
+            (e(t, r, i, a), t.lerp(k, n(r, i, a)));
+          }
+        : e,
+    R = (e, t, n) => e.copy(r).lerp(a, 0.3 + 0.2 * Math.sin(t * 20 + n * 3)),
+    z = (e, t, n, r) =>
+      L(
+        (i, a, o, s) => {
+          let c = (o - n) / r;
+          i.copy(e)
+            .lerp(t, 0.22 + 0.72 * c)
+            .multiplyScalar(0.9 + 0.14 * Math.sin(a * 7 + s * 5));
+        },
+        (e, t, a) =>
+          i.clamp(
+            0.9 * i.smoothstep((t - n) / r, 0.12, 0.62) +
+              0.12 * Math.sin(e * 5.3 + a * 4.1),
+            0,
+            0.88,
+          ),
+      ),
+    B = [
+      [
+        [2.4, 3.3, 3],
+        [1.9, 3.1, 5],
+        [1.45, 2.9, 6.9],
+        [0.95, 2.7, 8.6],
+      ],
+      [
+        [2.7, 3, 2.4],
+        [2.15, 3.4, 4.2],
+        [1.35, 3.6, 6.6],
+      ],
+      [
+        [2.1, 2.8, 3.4],
+        [1.75, 2.9, 5.2],
+        [1.4, 2.8, 6.8],
+        [1.05, 2.6, 8.2],
+        [0.6, 2.2, 9.6],
+      ],
+    ].map((e, t) =>
+      m([
+        h(0.2 + 0.04 * t, 0.34 + 0.03 * t, 3.2, 6, 1.6, R),
+        ...e.map(([e, n, r], i) =>
+          p(g(e, n, 7, r + n / 2, z(o, s, r, n)), 0.24, 3 + i + t * 11),
+        ),
+      ]),
+    ),
+    V = m([
+      h(0.24, 0.34, 3.2, 5, 1.6, R),
+      g(2.35, 4.2, 6, 4.5, z(o, s, 2.4, 4.2)),
+      g(1.75, 3.9, 6, 6.6, z(o, s, 4.6, 3.9)),
+      g(1.05, 3.2, 6, 8.6, z(o, s, 7, 3.2)),
+    ]),
+    H = m([h(0.25, 0.34, 3, 4, 1.5, R), g(2.2, 8, 6, 6.6, z(o, s, 2.6, 8))]),
+    U = (e) =>
+      L(
+        (t, n, r, a) => {
+          t.copy(l)
+            .lerp(d, i.clamp((r - 3.2) / 4.4, 0, 1))
+            .multiplyScalar(e + 0.09 * Math.sin(n * 4 + a * 6));
+        },
+        (e, t, n) => 0.62 + 0.2 * Math.sin(e * 3.1 + n * 2.7),
+      ),
+    W = [
+      [
+        [2.9, 2.4, 2.9, 0, 5.6, 0, 1],
+        [2.1, 1.8, 2.1, 1.9, 4.7, 0.7, 0.92],
+        [2, 1.7, 2, -1.7, 4.9, -0.9, 0.96],
+        [1.9, 1.6, 1.9, 0.5, 4.4, 2, 0.9],
+        [1.8, 1.6, 1.8, -0.6, 4.6, -2, 0.94],
+      ],
+      [
+        [3.3, 2, 2.6, 0.3, 5.1, -0.2, 0.98],
+        [2.4, 1.9, 2.2, -2.1, 4.4, 1.1, 0.9],
+        [1.7, 1.5, 1.9, 1.6, 5.6, 1.4, 1.02],
+      ],
+      [
+        [2.4, 2.7, 2.3, -0.4, 6.2, 0.4, 1],
+        [2.6, 2, 2.5, 1.5, 4.6, -1.4, 0.93],
+        [1.6, 1.4, 1.6, -1.9, 5.2, -1.6, 0.97],
+        [1.5, 1.3, 1.5, 0.2, 3.9, 2.2, 0.88],
+        [1.3, 1.2, 1.3, 2.3, 6.1, 0.6, 1.03],
+        [1.2, 1.1, 1.2, -1.2, 3.7, -2.1, 0.9],
+      ],
+    ].map((e, t) =>
+      m([
+        h(0.3, 0.48, 3.6, 6, 1.8, R),
+        h(0.1, 0.18, 2.4, 5, 0, R)
+          .rotateZ(0.55 + 0.1 * t)
+          .translate(0.3, 3.9, 0.2),
+        h(0.1, 0.18, 2.2, 5, 0, R)
+          .rotateZ(-0.6)
+          .rotateY(1.2 + t)
+          .translate(-0.3, 3.8, -0.2),
+        ...e.map(([e, n, r, i, a, o, s], c) =>
+          _(e, n, r, i, a, o, U(s), 0.22, 11 + c + t * 13),
+        ),
+      ]),
+    ),
+    G = m([
+      h(0.3, 0.46, 3.6, 5, 1.8, R),
+      _(3, 2.4, 3, 0, 5.5, 0, U(1), 0.22, 15),
+      _(2, 1.7, 2, 1.6, 4.6, -0.9, U(0.92), 0.2, 17),
+    ]),
+    ee = m([
+      h(0.32, 0.46, 3.4, 4, 1.7, R),
+      _(3.5, 2.9, 3.5, 0, 5.3, 0, U(0.98), 0.2, 16),
+    ]),
+    K = (e, t, n) => {
+      let r = +(Math.sin(n * 3.7 + t * 9) > 0.7);
+      (e.copy(M).lerp(P, r * 0.8),
+        e.lerp(N, i.clamp(1 - n / 1.4, 0, 1) * 0.85));
+    },
+    q = (e) =>
+      L(
+        (t, n, r, a) => {
+          t.copy(F)
+            .lerp(I, i.clamp((r - 5) / 4, 0, 1) * 0.7)
+            .multiplyScalar(e + 0.07 * Math.sin(n * 5 + a * 7));
+        },
+        (e, t, n) => 0.7 + 0.18 * Math.sin(e * 4.3 + n * 3.3),
+      ),
+    J = [
+      [
+        [1.6, 2.5, 1.6, 0, 7.6, 0, 1],
+        [1.25, 2, 1.25, 0.95, 6.1, 0.45, 0.94],
+        [1.15, 1.9, 1.15, -0.85, 6.5, -0.55, 0.97],
+      ],
+      [
+        [1.35, 3, 1.35, 0.2, 8, -0.15, 1],
+        [1.5, 1.8, 1.4, -0.9, 6, 0.7, 0.92],
+      ],
+      [
+        [1.5, 2.2, 1.5, -0.3, 7.1, 0.3, 0.99],
+        [1.1, 1.7, 1.1, 1.05, 6.4, -0.6, 0.93],
+        [0.95, 1.5, 0.95, -1, 5.6, -0.8, 0.96],
+        [0.85, 1.4, 0.85, 0.4, 8.6, 0.5, 1.04],
+      ],
+    ],
+    Y = (
+      n
+        ? J.map((e) =>
+            e.map(([e, t, n, r, i, a, o]) => [
+              e * 1.55,
+              t * 0.52,
+              n * 1.55,
+              r * 1.5,
+              i + 1.9,
+              a * 1.5,
+              o,
+            ]),
+          )
+        : J
+    ).map((e, t) =>
+      m([
+        h(0.12 + 0.01 * t, 0.25, 7.2, 5, 3.6, K),
+        ...e.map(([e, n, r, i, a, o, s], c) =>
+          _(e, n, r, i, a, o, q(s), 0.18, 21 + c + t * 9),
+        ),
+      ]),
+    ),
+    X = m([
+      h(0.13, 0.25, 7.2, 5, 3.6, K),
+      _(1.65, 2.6, 1.65, 0, 7.5, 0, q(1), 0.18, 23),
+      _(1.2, 1.9, 1.2, 0.9, 6.1, 0.5, q(0.93), 0.18, 25),
+    ]),
+    Z = m([
+      h(0.15, 0.25, 6.8, 4, 3.4, K),
+      _(2, 3.3, 2, 0, 6.9, 0, q(0.98), 0.18, 24),
+    ]),
+    Q = (e, t = 5, n = 3) => {
+      let r = new c(0.15, 0.26, 7.2, t, n, !1);
+      r.translate(0, 3.6, 0);
+      let a = r.attributes.position;
+      for (let t = 0; t < a.count; t++) {
+        let n = a.getY(t);
+        a.setX(t, a.getX(t) + (n / 7.2) * e * (n / 7.2));
+      }
+      return f(r, (e, t, n) => {
+        (e.copy(M).lerp(P, Math.sin(n * 6.2) > 0.55 ? 0.45 : 0),
+          e.lerp(N, i.clamp(1 - n / 1.2, 0, 1) * 0.7));
+      });
+    },
+    te = (e, t, n, r) => {
+      e.copy(F).lerp(I, i.clamp(Math.hypot(t, r) / 3.8 - 0.1, 0, 1) * 0.85);
+    },
+    ne = (t, n, r, i, a, o, s, c = 2) => {
+      let l = new e(t, 0.07, n, c, 1, 1);
+      l.translate(t / 2, 0, 0);
+      let u = l.attributes.position;
+      for (let e = 0; e < u.count; e++) {
+        let n = u.getX(e),
+          r = n / t;
+        (u.setY(e, u.getY(e) + i * n - a * r * r * t * 0.55),
+          u.setZ(e, u.getZ(e) * (1 - 0.8 * r)));
+      }
+      return (l.rotateY(r), l.translate(o, s, 0), f(l, te));
+    },
+    $ = (e, t, n, r, i, a = 1, o = 2) =>
+      Array.from({ length: e }, (s, c) =>
+        ne(
+          t * (0.85 + 0.3 * u(c, i, 5)),
+          0.95,
+          ((c + 0.4 * u(c, i, 7)) / e) * Math.PI * 2,
+          0.32 - 0.12 * u(c, i, 3),
+          a * (0.85 + 0.5 * u(c, i, 9)),
+          n,
+          r,
+          o,
+        ),
+      ),
+    re = (e, t) =>
+      _(
+        0.42,
+        0.36,
+        0.42,
+        e,
+        t - 0.35,
+        0,
+        (e) => e.copy(N).lerp(F, 0.35),
+        0.06,
+        31,
+      ),
+    ie = t.tropical
+      ? [
+          [7, 3.9, 0.32, 1],
+          [8, 4.3, -0.4, 1.15],
+          [7, 3.6, 0.12, 0.9],
+        ].map(([e, t, n, r], i) =>
+          m([Q(n), re(n, 7.35), ...$(e, t, n, 7.4, 40 + i * 13, r)]),
+        )
+      : null,
+    ae = t.tropical
+      ? m([Q(0.25, 4, 1), ...$(5, 4, 0.25, 7.4, 77, 1, 1)])
+      : null,
+    oe = t.tropical
+      ? m([
+          h(0.15, 0.25, 7.2, 4, 3.6, K),
+          _(2.6, 0.9, 2.6, 0, 7.2, 0, q(0.98), 0.12, 24),
+        ])
+      : null;
+  return [
+    { name: `pine`, near: B, mid: V, far: H, height: 10.2 },
+    { name: `oak`, near: W, mid: G, far: ee, height: 8 },
+    t.tropical
+      ? { name: `birch`, near: ie, mid: ae, far: oe, height: 10.1 }
+      : { name: `birch`, near: Y, mid: X, far: Z, height: 10.1 },
+  ];
+}
+(d(7565160), d(9604483), d(4802112), d(5599033));
+function N(e = 0) {
+  let t =
+      [
+        {
+          blades: 5,
+          w: 0.03,
+          wm: 0.02,
+          h: [0.19, 0.29],
+          lean: [0.09, 0.19],
+          base: [0.6, 0.72, 0.42],
+          tip: [1.1, 1.22, 0.72],
+        },
+        {
+          blades: 3,
+          w: 0.062,
+          wm: 0.048,
+          h: [0.14, 0.22],
+          lean: [0.12, 0.21],
+          base: [0.52, 0.68, 0.38],
+          tip: [0.96, 1.16, 0.6],
+        },
+        {
+          blades: 6,
+          w: 0.032,
+          wm: 0.017,
+          h: [0.13, 0.24],
+          lean: [0.16, 0.27],
+          base: [0.72, 0.66, 0.44],
+          tip: [1.2, 1.06, 0.62],
+        },
+        {
+          blades: 4,
+          w: 0.04,
+          wm: 0.026,
+          h: [0.22, 0.33],
+          lean: [0.05, 0.13],
+          base: [0.54, 0.66, 0.4],
+          tip: [0.88, 1.1, 0.58],
+        },
+      ][e] || null,
+    n = 9 + e * 31;
+  if (!t) throw Error(`grass variant`);
+  let i = [],
+    a = [],
+    s = [],
+    c = (e, t, n, r, o, c, l, u) => {
+      (i.push(...e, ...t, ...n),
+        s.push(...r, ...o, ...c),
+        a.push(...l, ...l, ...u),
+        i.push(...t, ...e, ...n),
+        s.push(...o, ...r, ...c),
+        a.push(...l, ...l, ...u));
+    };
+  for (let e = 0; e < t.blades; e++) {
+    let r = (e / t.blades) * Math.PI * 2 + u(e, 3, n) * 1.1,
+      i = Math.cos(r),
+      a = Math.sin(r),
+      o = -a,
+      s = i,
+      l = t.lean[0] + (t.lean[1] - t.lean[0]) * u(e, 5, n),
+      d = t.h[0] + (t.h[1] - t.h[0]) * u(e, 7, n),
+      f = i * 0.028,
+      p = a * 0.028,
+      m = t.w,
+      h = t.wm,
+      g = [o * 0.28, 0.72, s * 0.28],
+      _ = Math.hypot(g[0], g[1], g[2]),
+      v = [g[0] / _, g[1] / _, g[2] / _],
+      y = [-o * 0.28, 0.72, -s * 0.28],
+      b = Math.hypot(y[0], y[1], y[2]),
+      x = [y[0] / b, y[1] / b, y[2] / b],
+      S = [f - o * m, 0, p - s * m],
+      C = [f + o * m, 0, p + s * m],
+      w = f + i * l * 0.42,
+      T = p + a * l * 0.42,
+      E = d * 0.52,
+      D = [w - o * h, E, T - s * h],
+      O = [w + o * h, E, T + s * h],
+      k = [f + i * l, d, p + a * l],
+      A = t.base,
+      j = [
+        (t.base[0] + t.tip[0]) / 2,
+        (t.base[1] + t.tip[1]) / 2,
+        (t.base[2] + t.tip[2]) / 2,
+      ];
+    (c(S, C, O, v, v, x, A, j),
+      c(S, O, D, v, x, v, A, j),
+      c(D, O, k, v, x, v, j, t.tip));
+  }
+  let l = new r();
+  return (
+    l.setAttribute(`position`, new o(i, 3)),
+    l.setAttribute(`color`, new o(a, 3)),
+    l.setAttribute(`normal`, new o(s, 3)),
+    l.computeBoundingSphere(),
+    l
+  );
+}
+function P() {
+  let e = [],
+    t = (e, t, n) => {
+      e.setRGB(0.19, 0.3, 0.13).lerp(
+        new a(0.42, 0.5, 0.2),
+        i.clamp(n / 1.2, 0, 1),
+      );
+    };
+  for (let n = 0; n < 9; n++) {
+    let r = u(n, 1, 55) * 6.2831,
+      i = 0.12 + 0.5 * u(n, 2, 55),
+      a = 0.55 + 0.6 * u(n, 3, 55),
+      o = new c(0.012, 0.03, a, 3, 1, !1);
+    (o.translate(0, a / 2, 0),
+      o.rotateZ((u(n, 4, 55) - 0.5) * 0.5),
+      o.rotateY(r),
+      o.translate(Math.cos(r) * i, 0, Math.sin(r) * i),
+      e.push(f(o, t)));
+  }
+  return m(e);
+}
+export { P as n, M as r, N as t };
+//# sourceMappingURL=models-Df-1HzmN.js.map

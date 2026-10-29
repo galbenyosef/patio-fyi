@@ -66,7 +66,7 @@
 //   - The layer is src/ (1,023 statement-aligned slices over the 163
 //     sources). THE LAYER ROOT IS THE ONLY PLACE A LAYER FILE IS LOOKED FOR:
 //     split-spec.json also indexes the mirror's own reading copies under
-//     `readable/…` (e.g. `readable/assets__graphics-quality-BsjABS0s.pretty.js`)
+//     `readable/…` (e.g. `readable/assets__graphics-quality-CrL3qbU3.pretty.js`)
 //     and the served captures live at the mirror root under `assets/…`, so a
 //     search that starts at the mirror root picks up a reading copy or a
 //     capture where a layer file belongs.

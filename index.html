@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head><script src="/session.js" data-ruleset="r17-bascule-v1" data-lobby="1" data-map-name="Bascule" data-map-blurb="Rush · a double-tower bascule bridge at blue hour · every three minutes the leaves lift for a tall ship and the only way across is over the high walkways · 8v8" data-backdrop="/assets/maps/bascule-v1.jpg" data-code="0" data-owner=""></script>
+<head><script src="/session.js" data-ruleset="r15-hangar-v1" data-lobby="1" data-map-name="Hangar Nine" data-map-blurb="Three flags at a high-desert airfield hangar, 17:10, a thunderstorm building in the east · B rides in the hold of a C-130 the tug tows out to the test pad and back every four minutes · 16v16" data-backdrop="/assets/maps/hangar-v1.jpg" data-code="0" data-owner=""></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <meta name="mobile-web-app-capable" content="yes" />
@@ -21,11 +21,12 @@
     }
     #app { position: fixed; inset: 0; }
     #app canvas { display: block; width: 100%; height: 100%; }
-    #ui-root { position: fixed; inset: 0; pointer-events: none; }
+    /* The game keeps its own colours under Windows contrast themes: colour and shape carry meaning (team, squad, enemy), and a theme turned every HUD glyph into a white dot on a solid box. */
+    #ui-root { position: fixed; inset: 0; pointer-events: none; forced-color-adjust: none; }
     #ui-root > * { pointer-events: auto; }
   </style>
-  <script type="module" crossorigin src="/assets/index-CBqjwezZ.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/graphics-quality-BsjABS0s.js">
+  <script type="module" crossorigin src="/assets/index-D8RniaPa.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/graphics-quality-CrL3qbU3.js">
 </head>
 <body>
   <div id="app"></div>
@@ -33,4 +34,4 @@
   <div id="rotate-hint"><b>⟳</b>Turn your phone sideways to play<small>Phone controls are basic. The full game is made for keyboard and mouse.</small></div>
 </body>
 </html>
-<!-- front-desk: assets/front-desk-DGPHybWS.js -->
+<!-- front-desk: assets/front-desk-EjjcU289.js -->

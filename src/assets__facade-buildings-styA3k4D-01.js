@@ -1,0 +1,34 @@
+// assets__facade-buildings-styA3k4D 01 — abs
+// Lines 1-32 of readable/assets__facade-buildings-styA3k4D.pretty.js (statement-aligned).
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import { a as e } from "./facade-kit-DPPNwSDt.js";
+import { n as t } from "./tower-styles-CJw6ppEa.js";
+var n = null;
+function r(r, i, a) {
+  let o = a.facadeBuildings ?? [];
+  if (!o.length) return [];
+  n ??= new Map(t().map((e) => [e.key, e]));
+  let s = r.modules.get(`environment`),
+    c = [];
+  for (let t of o) {
+    let a = n.get(t.spec);
+    if (!a) {
+      r.warn?.(`facade building ${t.id}: unknown spec ${t.spec}`);
+      continue;
+    }
+    let o = e(a, t.x, t.z, { y: t.y, rotY: t.rotY });
+    ((Math.abs(a.W - t.w) > 0.01 ||
+      Math.abs(a.D - t.d) > 0.01 ||
+      Math.abs(o.userData.H - t.h) > 0.5) &&
+      r.warn?.(
+        `facade building ${t.id}: collider ${t.w}x${t.d}x${t.h} does not match ${a.key} ${a.W}x${a.D}x${o.userData.H.toFixed(1)}`,
+      ),
+      (o.name = `facade-${t.id}`),
+      o.traverse((e) => {
+        e.isMesh && e.castShadow && s?.configureCaster?.(e.material);
+      }),
+      i.add(o),
+      c.push(o));
+  }
+  return c;
+}

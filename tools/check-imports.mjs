@@ -28,7 +28,7 @@
 //      chunk's own directory in the capture tree.
 //   2. THE RECORDED GAPS — an import that resolves to nothing is only
 //      acceptable when the capture itself records it as a 404: the shipped
-//      raw player-sim source (assets/sim-DKJ0nrRU.js) imports sibling paths
+//      raw player-sim source (assets/sim-dCf7ngvf.js) imports sibling paths
 //      of the SERVER's source tree (./zipline.js, ./ladder.js,
 //      ../core/world.js, ../demo/*-sim.js) that upstream never serves, and
 //      the capture recorded every one of them in _mirror-report.json's

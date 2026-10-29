@@ -1,0 +1,312 @@
+// assets__panel-array-Bf7DqJNM 01 — map
+// Lines 1-310 of readable/assets__panel-array-Bf7DqJNM.pretty.js (statement-aligned).
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import {
+  Bt as e,
+  It as t,
+  X as n,
+  Y as r,
+  Zt as i,
+  at as a,
+  v as o,
+} from "./graphics-quality-CrL3qbU3.js";
+var s = [
+    `mapping`,
+    `channel`,
+    `wrapS`,
+    `wrapT`,
+    `magFilter`,
+    `minFilter`,
+    `anisotropy`,
+    `format`,
+    `type`,
+    `internalFormat`,
+    `colorSpace`,
+    `generateMipmaps`,
+    `premultiplyAlpha`,
+    `unpackAlignment`,
+  ],
+  c = new Set([
+    `id`,
+    `uuid`,
+    `name`,
+    `version`,
+    `_listeners`,
+    `map`,
+    `emissiveMap`,
+  ]),
+  l = (e) =>
+    JSON.stringify(
+      Object.fromEntries(
+        Object.keys(e)
+          .filter((e) => !c.has(e))
+          .map((t) => [t, e[t]]),
+      ),
+    ),
+  u = (e) => [e.image.width, e.image.height, ...s.map((t) => e[t])].join(`|`),
+  d = (e) =>
+    e.matrixAutoUpdate &&
+    e.offset.x === 0 &&
+    e.offset.y === 0 &&
+    e.repeat.x === 1 &&
+    e.repeat.y === 1 &&
+    e.rotation === 0,
+  f = (e) => [u(e.map), l(e), !!e.emissiveMap].join(`|`);
+function p(e) {
+  let n = e?.material,
+    r = e?.geometry,
+    a = n?.map;
+  if (
+    !e?.isMesh ||
+    e.isInstancedMesh ||
+    e.isSkinnedMesh ||
+    !e.parent ||
+    !e.visible ||
+    e.children.length ||
+    e.customDepthMaterial ||
+    e.customDistanceMaterial
+  )
+    return !1;
+  for (let t = e; t; t = t.parent)
+    if (
+      t.isLOD ||
+      !t.visible ||
+      t.userData.dynamicShadow ||
+      t.userData.noBake ||
+      t.userData.blink
+    )
+      return !1;
+  for (let t of [
+    `onBeforeRender`,
+    `onAfterRender`,
+    `onBeforeShadow`,
+    `onAfterShadow`,
+  ])
+    if (e[t] !== i.prototype[t]) return !1;
+  return !(
+    Object.keys(e.userData).some((e) => ![`keep`, `nightGlow`].includes(e)) ||
+    n?.type !== `MeshStandardMaterial` ||
+    n.onBeforeCompile !== t.prototype.onBeforeCompile ||
+    n.customProgramCacheKey !== t.prototype.customProgramCacheKey ||
+    n.onBeforeRender !== t.prototype.onBeforeRender ||
+    n.transparent ||
+    n.opacity !== 1 ||
+    n.alphaTest ||
+    n.alphaHash ||
+    n.wireframe ||
+    !n.visible ||
+    n.clippingPlanes ||
+    n.blending !== 1 ||
+    n.userData.noBake ||
+    !a?.isCanvasTexture ||
+    a.userData.opaquePanel !== !0 ||
+    typeof a.image?.getContext != `function` ||
+    !d(a) ||
+    a.channel !== 0 ||
+    a.mipmaps.length ||
+    a.premultiplyAlpha ||
+    a.mapping !== 300 ||
+    a.format !== 1023 ||
+    a.type !== 1009 ||
+    (n.emissiveMap && n.emissiveMap !== a) ||
+    Object.keys(n).some(
+      (e) => /Map$/.test(e) && ![`emissiveMap`].includes(e) && n[e],
+    ) ||
+    !r?.attributes.position ||
+    !r.attributes.normal ||
+    !r.attributes.uv ||
+    Object.keys(r.attributes).some(
+      (e) => ![`position`, `normal`, `uv`].includes(e),
+    ) ||
+    Object.keys(r.morphAttributes).length ||
+    r.drawRange.start !== 0 ||
+    r.drawRange.count !== 1 / 0 ||
+    Object.values(r.attributes).some(
+      (e) =>
+        e.isInterleavedBufferAttribute ||
+        e.normalized ||
+        e.array.constructor !== Float32Array,
+    )
+  );
+}
+function m(e) {
+  let t = e[0];
+  if (!t || e.some((e) => u(e) !== u(t)))
+    throw Error(`Incompatible panel array textures`);
+  let { width: n, height: i } = t.image,
+    a = n * 4,
+    o = a * i,
+    c = new Uint8Array(o * e.length);
+  e.forEach((e, t) => {
+    let r = e.image.getContext(`2d`).getImageData(0, 0, n, i).data;
+    for (let e = 3; e < r.length; e += 4)
+      if (r[e] !== 255) throw Error(`Opaque panel contains transparent pixels`);
+    for (let n = 0; n < i; n++) {
+      let s = (e.flipY ? i - n - 1 : n) * a;
+      c.set(r.subarray(s, s + a), t * o + n * a);
+    }
+  });
+  let l = new r(c, n, i, e.length);
+  for (let e of s) l[e] = t[e];
+  return ((l.flipY = !1), (l.needsUpdate = !0), l);
+}
+function h(e, t) {
+  let r = new n(new Uint8Array([255, 255, 255, 255]), 1, 1);
+  r.needsUpdate = !0;
+  let i = e.clone();
+  return (
+    (i.name = `setpiece-panel-array`),
+    (i.map = r),
+    (i.emissiveMap = e.emissiveMap ? r : null),
+    (i.onBeforeCompile = (e) => {
+      ((e.uniforms.uPanelMaps = { value: t }),
+        (e.vertexShader =
+          `attribute float panelLayer;
+varying float vPanelLayer;
+` +
+          e.vertexShader.replace(
+            `#include <begin_vertex>`,
+            `#include <begin_vertex>
+vPanelLayer = panelLayer;`,
+          )),
+        (e.fragmentShader =
+          `uniform mediump sampler2DArray uPanelMaps;
+varying float vPanelLayer;
+` +
+          e.fragmentShader
+            .replace(
+              `#include <map_fragment>`,
+              `diffuseColor *= texture( uPanelMaps, vec3( vMapUv, vPanelLayer ) );`,
+            )
+            .replace(
+              `#include <emissivemap_fragment>`,
+              `#ifdef USE_EMISSIVEMAP
+totalEmissiveRadiance *= texture( uPanelMaps, vec3( vEmissiveMapUv, vPanelLayer ) ).rgb;
+#endif`,
+            )));
+    }),
+    (i.customProgramCacheKey = () => `setpiece-panel-array-v1`),
+    { material: i, dummy: r }
+  );
+}
+function g(t, { captureSources: n = !1, maxTextureSize: r = 1 / 0 } = {}) {
+  let i = new Map(),
+    s = [],
+    c = [],
+    l = [],
+    u = 0;
+  t.traverse((e) => {
+    if (
+      !p(e) ||
+      Math.max(e.material.map.image.width, e.material.map.image.height) > r
+    )
+      return;
+    let t = [
+      e.parent.uuid,
+      f(e.material),
+      e.userData.nightGlow ?? ``,
+      e.castShadow,
+      e.receiveShadow,
+      e.frustumCulled,
+      e.renderOrder,
+      e.layers.mask,
+    ].join(`|`);
+    (i.has(t) || i.set(t, []), i.get(t).push(e));
+  });
+  for (let t of i.values())
+    if (!(t.length < 2))
+      for (let r = 0; r < t.length; r += 128) {
+        let i = t.slice(r, r + 128);
+        if (i.length < 2) continue;
+        let d = [...new Set(i.map((e) => e.material.map))],
+          f = new Map(d.map((e, t) => [e, t])),
+          p;
+        try {
+          p = m(d);
+        } catch (e) {
+          l.push(String(e.message));
+          continue;
+        }
+        let g = i.map((e) => {
+            let t = e.geometry.clone();
+            if (
+              (t.clearGroups(),
+              t.index ||
+                t.setIndex(
+                  Array.from(
+                    { length: t.attributes.position.count },
+                    (e, t) => t,
+                  ),
+                ),
+              e.matrixAutoUpdate && e.updateMatrix(),
+              t.applyMatrix4(e.matrix),
+              e.matrix.determinant() < 0)
+            ) {
+              let e = t.index.array;
+              for (let t = 0; t < e.length; t += 3)
+                [e[t + 1], e[t + 2]] = [e[t + 2], e[t + 1]];
+            }
+            return (
+              t.setAttribute(
+                `panelLayer`,
+                new a(
+                  new Float32Array(t.attributes.position.count).fill(
+                    f.get(e.material.map),
+                  ),
+                  1,
+                ),
+              ),
+              t
+            );
+          }),
+          _ = o(g, !1);
+        for (let e of g) e.dispose();
+        if (!_) {
+          p.dispose();
+          continue;
+        }
+        let v = i[0],
+          { material: y, dummy: b } = h(v.material, p),
+          x = new e(_, y);
+        (_.computeBoundingBox(), _.computeBoundingSphere());
+        for (let e of [
+          `castShadow`,
+          `receiveShadow`,
+          `frustumCulled`,
+          `renderOrder`,
+        ])
+          x[e] = v[e];
+        ((x.layers.mask = v.layers.mask),
+          (x.name = `setpiece-panel-array`),
+          v.userData.nightGlow != null &&
+            (x.userData.nightGlow = v.userData.nightGlow),
+          v.parent.add(x));
+        for (let e of i)
+          (e.removeFromParent(), e.geometry.dispose(), u++, n && c.push(e));
+        s.push({
+          mesh: x,
+          array: p,
+          dummy: b,
+          sourceCount: i.length,
+          ...(n ? { textures: d, sources: i } : {}),
+        });
+      }
+  return (
+    i.clear(),
+    {
+      batches: s,
+      sources: c,
+      sourceCount: u,
+      rejected: l,
+      dispose() {
+        for (let { mesh: e, array: t, dummy: n } of s)
+          (e.removeFromParent(),
+            e.geometry.dispose(),
+            e.material.dispose(),
+            t.dispose(),
+            n.dispose());
+        ((s.length = 0), (c.length = 0));
+      },
+    }
+  );
+}

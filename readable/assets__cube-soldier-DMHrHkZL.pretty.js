@@ -1,0 +1,6057 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import {
+  An as e,
+  Bt as t,
+  Dn as n,
+  F as r,
+  G as i,
+  Gt as a,
+  Hn as o,
+  I as s,
+  In as c,
+  L as l,
+  Ut as u,
+  V as d,
+  Vt as f,
+  W as p,
+  Zt as m,
+  _n as h,
+  at as g,
+  cn as _,
+  dt as v,
+  gt as y,
+  hn as b,
+  kn as x,
+  nn as S,
+  nt as C,
+  q as w,
+  qt as T,
+  rn as E,
+  rt as D,
+  tt as ee,
+  v as te,
+  vt as O,
+  xn as k,
+  y as A,
+  yn as ne,
+  z as j,
+  zt as M,
+} from "./graphics-quality-CrL3qbU3.js";
+import { l as re } from "./sim-CCeMdhLh.js";
+import { i as ie, r as ae } from "./knife-pose-sWCbR3uv.js";
+var oe = class extends ne {
+  constructor() {
+    (super(), (this.name = `RoomEnvironment`), (this.position.y = -3.5));
+    let e = new r();
+    e.deleteAttribute(`uv`);
+    let n = new a({ side: 1 }),
+      i = new a(),
+      o = new E(16777215, 900, 28, 2);
+    (o.position.set(0.418, 16.199, 0.3), this.add(o));
+    let s = new t(e, n);
+    (s.position.set(-0.757, 13.219, 0.717),
+      s.scale.set(31.713, 28.305, 28.591),
+      this.add(s));
+    let c = new O(e, i, 6),
+      l = new m();
+    (l.position.set(-10.906, 2.009, 1.846),
+      l.rotation.set(0, -0.195, 0),
+      l.scale.set(2.328, 7.905, 4.651),
+      l.updateMatrix(),
+      c.setMatrixAt(0, l.matrix),
+      l.position.set(-5.607, -0.754, -0.758),
+      l.rotation.set(0, 0.994, 0),
+      l.scale.set(1.97, 1.534, 3.955),
+      l.updateMatrix(),
+      c.setMatrixAt(1, l.matrix),
+      l.position.set(6.167, 0.857, 7.803),
+      l.rotation.set(0, 0.561, 0),
+      l.scale.set(3.927, 6.285, 3.687),
+      l.updateMatrix(),
+      c.setMatrixAt(2, l.matrix),
+      l.position.set(-2.017, 0.018, 6.124),
+      l.rotation.set(0, 0.333, 0),
+      l.scale.set(2.002, 4.566, 2.064),
+      l.updateMatrix(),
+      c.setMatrixAt(3, l.matrix),
+      l.position.set(2.291, -0.756, -2.621),
+      l.rotation.set(0, -0.286, 0),
+      l.scale.set(1.546, 1.552, 1.496),
+      l.updateMatrix(),
+      c.setMatrixAt(4, l.matrix),
+      l.position.set(-2.193, -0.369, -5.547),
+      l.rotation.set(0, 0.516, 0),
+      l.scale.set(3.875, 3.487, 2.986),
+      l.updateMatrix(),
+      c.setMatrixAt(5, l.matrix),
+      this.add(c));
+    let u = new t(e, se(50));
+    (u.position.set(-16.116, 14.37, 8.208),
+      u.scale.set(0.1, 2.428, 2.739),
+      this.add(u));
+    let d = new t(e, se(50));
+    (d.position.set(-16.109, 18.021, -8.207),
+      d.scale.set(0.1, 2.425, 2.751),
+      this.add(d));
+    let f = new t(e, se(17));
+    (f.position.set(14.904, 12.198, -1.832),
+      f.scale.set(0.15, 4.265, 6.331),
+      this.add(f));
+    let p = new t(e, se(43));
+    (p.position.set(-0.462, 8.89, 14.52),
+      p.scale.set(4.38, 5.441, 0.088),
+      this.add(p));
+    let h = new t(e, se(20));
+    (h.position.set(3.235, 11.486, -12.541),
+      h.scale.set(2.5, 2, 0.1),
+      this.add(h));
+    let g = new t(e, se(100));
+    (g.position.set(0, 20, 0), g.scale.set(1, 0.1, 1), this.add(g));
+  }
+  dispose() {
+    let e = new Set();
+    this.traverse((t) => {
+      t.isMesh && (e.add(t.geometry), e.add(t.material));
+    });
+    for (let t of e) t.dispose();
+  }
+};
+function se(e) {
+  return new u({ color: 0, emissive: 16777215, emissiveIntensity: e });
+}
+var N = [
+    [`Hale`, 13212280, 3156e3, 0, 0, 0],
+    [`Reed`, 8410943, 2236187, 1, 1, 1],
+    [`Ash`, 14726036, 5259829, 2, 2, 2],
+    [`Flint`, 10974033, 2367773, 3, 3, 3],
+    [`Vale`, 6438958, 1645593, 4, 0, 4],
+    [`Rowan`, 12749410, 7421479, 1, 2, 0],
+    [`Moss`, 14069384, 6445899, 2, 1, 1],
+    [`Rook`, 9790530, 2434339, 3, 0, 2],
+    [`Tern`, 12157020, 3420716, 4, 3, 3],
+    [`Slate`, 7359800, 2368288, 0, 2, 4],
+    [`Briar`, 14728096, 6440750, 3, 1, 0],
+    [`Pike`, 10451030, 3618097, 4, 2, 1],
+    [`Wren`, 13803902, 5652011, 0, 3, 2],
+    [`Cairn`, 7950651, 2433310, 1, 0, 3],
+    [`Sable`, 11830114, 4735544, 2, 3, 4],
+    [`Dune`, 5848110, 2170395, 4, 1, 0],
+    [`Cedar`, 14003340, 8410424, 0, 2, 1],
+    [`Gale`, 11237723, 2630945, 1, 3, 2],
+    [`Frost`, 14269603, 7894122, 2, 0, 3],
+    [`Stone`, 8938571, 3354924, 3, 1, 4],
+  ].map(([e, t, n, r, i, a], o) => ({
+    name: e,
+    skin: t,
+    hair: n,
+    beard: r,
+    paint: i,
+    headgear: a,
+    index: o,
+  })),
+  ce = [
+    [`helmet`, `boonie`, `netted`, `cap`, `beanie`],
+    [`goggles`, `nvg`, `balaclava`, `respirator`, `glasses`],
+  ],
+  le = [
+    `none`,
+    `scarf`,
+    `radio`,
+    `bandolier`,
+    `bedroll`,
+    `knife`,
+    `admin`,
+    `heavy`,
+  ];
+function ue(e) {
+  let t = Number.isFinite(e) ? Math.abs(Math.trunc(e)) : 0;
+  return {
+    face: t % 20,
+    uniform: Math.floor(t / 5) % 4,
+    kit: (t * 3 + Math.floor(t / 20) * 5) % le.length,
+  };
+}
+function de(e, t, n = null) {
+  let r = e.attributes.color,
+    i = e.attributes.aTeam,
+    a = new Float32Array(e.attributes.position.count),
+    o = n == null ? null : new p(n);
+  for (let e = 0; e < a.length; e++) {
+    let n = r.getX(e),
+      s = r.getY(e),
+      c = r.getZ(e),
+      l = o && Math.abs(n - o.r) + Math.abs(s - o.g) + Math.abs(c - o.b) < 0.01;
+    ((a[e] = l
+      ? 0.95
+      : t === `head`
+        ? 0.24
+        : /ghillie|sniper/.test(t)
+          ? 0.22
+          : i?.getX(e) >= 2 && i.getX(e) < 4
+            ? 0.5 + 0.2 * (n * 0.21 + s * 0.72 + c * 0.07)
+            : t === `fore`
+              ? 0.5
+              : 0.38),
+      [`weapon`, `kite`, `breaker`].includes(t) && (a[e] = 0.05));
+  }
+  e.setAttribute(`thermalHeat`, new s(a, 1));
+}
+var fe = 0.37,
+  pe = 0.32,
+  me = 0.5,
+  he = 0.275,
+  ge = 0.125,
+  _e = 0.78,
+  ve = 0.3,
+  ye = 0.75,
+  be = 1.08,
+  xe = 1.4,
+  Se = 1.18,
+  Ce = 1.3,
+  we = (e) => (e === 8 || e === 9 || e === 10 ? 1 : Ce),
+  Te = new o(Se, 1, Se),
+  Ee = new M(),
+  De = {
+    ghillieHood: [`sniper`, `head`, 1],
+    ghillieArm: [`sniper`, `arm`, 2],
+    ghillieLeg: [`sniper`, `thigh`, 2],
+    ghillieShin: [`sniper`, `shin`, 2],
+    supportArm: [`support`, `arm`, 2],
+    supportLeg: [`support`, `thigh`, 2],
+    engineerLeg: [`engineer`, `thigh`, 2],
+    engineerFore: [`engineer`, `fore`, 2],
+    medicArm: [`medic`, `arm`, 2],
+  },
+  Oe = [
+    `torso`,
+    `head`,
+    `arm`,
+    `fore`,
+    `thigh`,
+    `shin`,
+    `weapon`,
+    `kite`,
+    `breaker`,
+    `assault`,
+    `sniper`,
+    `support`,
+    `engineer`,
+    `medic`,
+    ...Object.keys(De),
+  ],
+  P = {
+    torso: 1,
+    head: 1,
+    arm: 2,
+    fore: 2,
+    thigh: 2,
+    shin: 2,
+    weapon: 1,
+    kite: 1,
+    breaker: 1,
+    assault: 1,
+    sniper: 1,
+    support: 1,
+    engineer: 1,
+    medic: 1,
+  };
+for (let [e, [, , t]] of Object.entries(De)) P[e] = t;
+var ke = {
+    uniform: 9209443,
+    uniformDark: 7104592,
+    vest: 3815987,
+    vestDark: 2829094,
+    helmet: 11117706,
+    helmetRim: 7302236,
+    boot: 1907480,
+    skin: 13214334,
+    weapon: 3091753,
+    weaponDark: 2039323,
+    weaponWood: 5916210,
+  },
+  Ae = {
+    uniform: 12437708,
+    uniformDark: 8360341,
+    vest: 4609625,
+    vestDark: 3161408,
+    helmet: 14015966,
+    helmetRim: 6715258,
+    boot: 2436398,
+    skin: 13214334,
+    weapon: 3093813,
+    weaponDark: 2107175,
+    weaponWood: 5661019,
+  },
+  F = { ...ke },
+  je = new p();
+function I(e, t, n, r) {
+  let i = e.attributes.position.count,
+    a = new Float32Array(i * 3),
+    o = new Float32Array(i);
+  je.set(t).multiplyScalar(r);
+  for (let e = 0; e < i; e++)
+    ((a[e * 3] = je.r),
+      (a[e * 3 + 1] = je.g),
+      (a[e * 3 + 2] = je.b),
+      (o[e] = n));
+  (e.setAttribute(`color`, new s(a, 3)), e.setAttribute(`aTeam`, new s(o, 1)));
+}
+function L(e, t, n, i, a, o, s, c = {}) {
+  let l = new r(e, t, n);
+  return (
+    c.rotX && l.rotateX(c.rotX),
+    c.rotZ && l.rotateZ(c.rotZ),
+    l.translate(i, a, o),
+    I(l, c.team ? 16777215 : s, +!!c.team, c.shade ?? 1),
+    l
+  );
+}
+function R(e) {
+  for (let t of e) t.deleteAttribute(`uv`);
+  let t = te(
+    e.map((e) => (e.index ? e.toNonIndexed() : e)),
+    !1,
+  );
+  for (let t of e) t.dispose();
+  return (t.deleteAttribute(`uv`), t.computeBoundingSphere(), t);
+}
+function z(e, t, n, r, i, a, o, s = 0.84) {
+  let c = [],
+    u = [],
+    d = [
+      [-0.36, -0.5],
+      [0.36, -0.5],
+      [0.5, -0.34],
+      [0.5, 0.34],
+      [0.36, 0.5],
+      [-0.36, 0.5],
+      [-0.5, 0.34],
+      [-0.5, -0.34],
+    ];
+  for (let [o, l] of [
+    [-0.5, s],
+    [-0.36, 1],
+    [0.32, 1],
+    [0.5, 0.88],
+  ])
+    for (let [s, u] of d) c.push(r + s * e * l, i + o * t, a + u * n * l);
+  for (let e = 0; e < 3; e++)
+    for (let t = 0; t < 8; t++) {
+      let n = e * 8 + t,
+        r = e * 8 + ((t + 1) % 8);
+      u.push(r, n, n + 8, r, n + 8, r + 8);
+    }
+  for (let e = 1; e < 7; e++) u.push(0, e, e + 1, 24, 25 + e, 24 + e);
+  let f = new l();
+  return (
+    f.setAttribute(`position`, new g(c, 3)),
+    f.setIndex(u),
+    f.computeVertexNormals(),
+    I(f, o, 0, 1),
+    f
+  );
+}
+function Me(e, t, n, r, i, a, o) {
+  let s = [z(e, t, n, r, i, a, o)];
+  for (let o of [-1, 1])
+    for (let c = 0; c < 14; c++) {
+      let l = ((c * 7) % 13) / 13 - 0.5,
+        u = ((c * 5) % 11) / 11 - 0.5;
+      s.push(
+        L(
+          e * 0.19,
+          t * 0.065,
+          0.002,
+          r + l * e * 0.63,
+          i + u * t * 0.68,
+          a + o * (n * 0.5 + 0.001),
+          [5397829, 9868664, 7107928][c % 3],
+        ),
+      );
+    }
+  let c = R(s);
+  return (c.attributes.aTeam.array.fill(2), c);
+}
+var Ne = (e, t, n, r, i, a, o = `y`, s = 8) => {
+  let c = new w(e, e, t, s);
+  return (
+    o === `z` ? c.rotateX(Math.PI / 2) : o === `x` && c.rotateZ(Math.PI / 2),
+    c.translate(n, r, i),
+    I(c, a, 0, 1),
+    c
+  );
+};
+function Pe(e, t = 0) {
+  let { skin: r, hair: i, index: a } = e,
+    o = ce[+!!t][e.headgear],
+    s = o === `balaclava` || o === `respirator`,
+    c =
+      o === `balaclava` || (o === `respirator` && e.beard !== 2) ? 0 : e.beard,
+    l = o === `balaclava` ? 0 : e.paint,
+    u = 0.188 + (a % 3) * 0.008,
+    d = 0.039 + (a % 4) * 0.002,
+    f = [
+      z(u, 0.218, 0.195, 0, -0.027, 0, r, 0.72 + (a % 4) * 0.05),
+      z(0.105, 0.072, 0.11, 0, -0.137, 0.012, r),
+      ...[-1, 1].flatMap((e) => [
+        z(0.028, 0.057, 0.036, u * 0.49 * e, -0.035, 0, r),
+        L(0.037, 0.017, 0.004, e * d, -0.02, -0.1, 13813681),
+        L(
+          0.012,
+          0.017,
+          0.005,
+          e * d + (a % 2 ? -0.004 : 0.003),
+          -0.02,
+          -0.103,
+          [5262389, 3620155, 6636338][a % 3],
+        ),
+        L(0.006, 0.012, 0.006, e * d, -0.02, -0.106, 2106145),
+        L(0.041, 0.008, 0.007, e * d, -0.003, -0.103, i, {
+          rotZ: e * (0.06 + (a % 4) * 0.09),
+        }),
+      ]),
+      z(0.023 + (a % 3) * 0.004, 0.04, 0.029, 0, -0.044, -0.108, r),
+      L(
+        0.038 + (a % 4) * 0.006,
+        0.006 + (a % 3) * 0.002,
+        0.006,
+        0,
+        -0.089,
+        -0.101,
+        7359811,
+      ),
+      L(0.038, 0.006, 0.004, 0, -0.102, -0.096, r),
+    ];
+  if (
+    ((c === 1 || c === 3) &&
+      f.push(L(0.06, 0.014, 0.007, 0, -0.073, -0.105, i)),
+    (c === 2 || c === 3) &&
+      f.push(
+        z(0.118, 0.037, 0.023, 0, -0.112, -0.077, i),
+        ...[-1, 1].map((e) =>
+          L(0.024, 0.05, 0.01, e * 0.073, -0.08, -0.084, i),
+        ),
+      ),
+    c === 4 && f.push(L(0.035, 0.022, 0.007, 0, -0.112, -0.09, i)),
+    l === 1)
+  )
+    for (let e of [-1, 1])
+      f.push(
+        L(0.051, 0.017, 0.007, e * 0.053, -0.051, -0.102, 3753527, {
+          rotZ: e * 0.24,
+        }),
+      );
+  if (l === 2)
+    for (let e of [-1, 1])
+      f.push(
+        L(0.018, 0.062, 0.007, e * 0.063, -0.049, -0.102, 4278329, {
+          rotZ: -0.28,
+        }),
+      );
+  l === 3 &&
+    f.push(
+      L(0.006, 0.03, 0.008, 0.059, -0.047, -0.103, 11371113, { rotZ: 0.32 }),
+      L(0.025, 0.004, 0.006, -0.044, -0.039, -0.104, 7953224),
+    );
+  let p = t === 0 ? F.helmet : F.helmetRim,
+    m = [0.071, 0.064, -0.111];
+  if (o === `cap`)
+    f.push(
+      z(0.219, 0.09, 0.217, 0, 0.086, 0.005, p),
+      L(0.195, 0.013, 0.11, 0, 0.046, -0.117, p),
+    );
+  else if (o === `boonie`) {
+    let e = new w(0.112, 0.126, 0.088, 10);
+    (e.scale(1, 1, 1.08), e.translate(0, 0.087, 0.008), I(e, F.helmet, 0, 1));
+    let t = new w(0.198, 0.214, 0.012, 12);
+    (t.scale(1, 1, 1.08), t.translate(0, 0.044, 0.008), I(t, F.helmet, 0, 0.9));
+    let n = new w(0.128, 0.128, 0.022, 10, 1, !0);
+    (n.scale(1, 1, 1.08),
+      n.translate(0, 0.06, 0.008),
+      I(n, F.helmetRim, 0, 1),
+      f.push(
+        e,
+        t,
+        n,
+        L(0.16, 0.035, 0.03, 0, 0.012, 0.098, i),
+        ...[-1, 1].map((e) =>
+          L(0.006, 0.12, 0.006, e * 0.098, -0.055, -0.02, F.vestDark, {
+            rotZ: e * 0.12,
+          }),
+        ),
+      ),
+      (m = [0.05, 0.082, -0.134]));
+  } else if (o === `beanie`) {
+    let e = new n(0.112, 8, 4, 0, Math.PI * 2, 0, Math.PI * 0.5);
+    (e.scale(1, 0.62, 1.05),
+      e.translate(0, 0.118, 0.008),
+      I(e, F.helmetRim, 0, 1),
+      f.push(
+        z(0.212, 0.095, 0.214, 0, 0.074, 0.008, F.helmetRim, 0.96),
+        e,
+        z(0.224, 0.042, 0.226, 0, 0.036, 0.008, F.helmet),
+        L(0.15, 0.03, 0.03, 0, 0.004, 0.1, i),
+        ...[-1, 1].map((e) =>
+          L(0.012, 0.035, 0.03, e * 0.098, -0.005, -0.06, i),
+        ),
+      ),
+      (m = [0.058, 0.037, -0.119]));
+  } else {
+    let e = new n(0.137, 8, 5, 0, Math.PI * 2, 0, Math.PI * 0.54);
+    (e.scale(
+      t === 0 ? 1.08 : 0.97,
+      t === 0 ? 0.78 : 1.02,
+      t === 0 ? 1.15 : 1.05,
+    ),
+      e.translate(0, 0.048, 0.008),
+      I(e, p, 0, 1),
+      f.push(e));
+    let r = new w(0.136, 0.144, 0.021, 8);
+    (r.scale(1, 1, 1.12),
+      r.translate(0, 0.037, 0.008),
+      I(r, F.helmetRim, 0, 1),
+      f.push(r));
+    for (let e of [-1, 1])
+      f.push(
+        L(0.025, 0.08, 0.012, e * 0.091, -0.035, -0.042, F.helmetRim, {
+          rotZ: e * 0.15,
+        }),
+      );
+    f.push(
+      L(0.07, 0.014, 0.08, -0.045, 0.146, 0.015, F.helmet),
+      L(0.035, 0.018, 0.057, 0.052, 0.129, -0.044, F.helmetRim),
+    );
+  }
+  if (o === `netted`) {
+    let e = new w(0.152, 0.156, 0.018, 8, 1, !0);
+    (e.scale(1, 1, 1.12),
+      e.translate(0, 0.075, 0.008),
+      I(e, F.vestDark, 0, 1),
+      f.push(e));
+    for (let e = 0; e < 4; e++)
+      f.push(
+        L(
+          0.006,
+          0.006,
+          0.3,
+          -0.075 + e * 0.05,
+          0.118 - Math.abs(e - 1.5) * 0.012,
+          0.008,
+          F.helmetRim,
+        ),
+        L(
+          0.25,
+          0.006,
+          0.006,
+          0,
+          0.118 - Math.abs(e - 1.5) * 0.012,
+          -0.09 + e * 0.06,
+          F.helmetRim,
+        ),
+      );
+    for (let e = 0; e < 7; e++) {
+      let t = e * 0.9 + 0.3;
+      f.push(
+        L(
+          0.03,
+          0.05 + (e % 3) * 0.014,
+          0.012,
+          Math.sin(t) * 0.158,
+          0.07,
+          Math.cos(t) * 0.172 + 0.008,
+          F.uniformDark,
+          { rotZ: Math.sin(t) * 0.22 },
+        ),
+      );
+    }
+  }
+  return (
+    f.push(L(0.052, 0.029, 0.007, ...m, 0, { team: 1 })),
+    o === `goggles` &&
+      f.push(
+        L(0.158, 0.041, 0.021, 0, 0.076, -0.139, F.vestDark),
+        ...[-1, 1].map((e) =>
+          L(0.061, 0.027, 0.007, e * 0.039, 0.076, -0.153, F.helmet),
+        ),
+      ),
+    o === `nvg` &&
+      f.push(
+        L(0.055, 0.042, 0.022, 0, 0.088, -0.143, F.weaponDark),
+        L(0.032, 0.05, 0.034, 0, 0.112, -0.166, F.weaponDark),
+        ...[-1, 1].flatMap((e) => {
+          let t = Ne(0.019, 0.075, e * 0.027, 0.14, -0.176, F.weaponDark);
+          return (
+            t.translate(0, -0.14, 0.176),
+            t.rotateX(-0.45),
+            t.translate(0, 0.14, -0.176),
+            [t, L(0.03, 0.006, 0.03, e * 0.027, 0.178, -0.19, 2767413)]
+          );
+        }),
+        L(0.085, 0.06, 0.045, 0, 0.075, 0.15, F.vestDark),
+        L(0.07, 0.012, 0.012, 0, 0.106, 0.15, F.helmetRim),
+      ),
+    o === `glasses` &&
+      f.push(
+        L(0.15, 0.022, 0.008, 0, -0.02, -0.109, 2830128),
+        L(0.13, 0.004, 0.004, 0, -0.008, -0.114, 6777698),
+        Ne(0.018, 0.07, 0.142, 0.055, -0.02, F.weaponDark, `z`),
+        L(0.018, 0.018, 0.004, 0.142, 0.055, -0.057, 14210240),
+      ),
+    o === `balaclava` &&
+      f.push(
+        z(u + 0.014, 0.112, 0.214, 0, -0.091, 0.001, F.vestDark, 0.72),
+        L(u + 0.004, 0.022, 0.006, 0, 0.007, -0.101, F.vestDark),
+        z(0.03, 0.046, 0.034, 0, -0.045, -0.108, F.vestDark),
+        ...[-1, 1].map((e) =>
+          z(0.034, 0.06, 0.04, u * 0.49 * e, -0.035, 0, F.vestDark),
+        ),
+      ),
+    o === `respirator` &&
+      f.push(
+        z(0.105, 0.078, 0.05, 0, -0.084, -0.104, F.weaponDark),
+        L(0.03, 0.02, 0.012, 0, -0.107, -0.131, F.helmetRim),
+        ...[-1, 1].map((e) => {
+          let t = Ne(0.027, 0.03, 0, 0, 0, F.helmetRim, `z`, 10);
+          return (
+            t.rotateY(e * 0.7),
+            t.translate(e * 0.052, -0.092, -0.118),
+            t
+          );
+        }),
+        ...[-1, 1].map((e) =>
+          L(0.006, 0.012, 0.1, e * 0.1, -0.07, -0.05, F.vestDark),
+        ),
+      ),
+    !s &&
+      (a === 9 || a === 14) &&
+      f.push(
+        z(0.174, 0.081, 0.033, 0, -0.09, -0.087, F.vestDark),
+        ...[0, 1, 2].map((e) =>
+          L(0.11, 0.004, 0.004, 0, -0.066 - e * 0.016, -0.107, F.helmetRim),
+        ),
+      ),
+    o !== `cap` &&
+      o !== `boonie` &&
+      f.push(
+        ...[-1, 1].map((e) =>
+          z(0.035, 0.066, 0.063, e * 0.127, -0.015, 0.009, F.vestDark),
+        ),
+        L(0.009, 0.011, 0.085, 0.108, -0.067, -0.048, F.vestDark),
+        L(0.026, 0.014, 0.021, 0.09, -0.067, -0.09, F.vestDark),
+      ),
+    t === 1 &&
+      f.push(
+        L(0.19, 0.027, 0.1, 0, 0.165, 0.008, F.helmet),
+        L(0.026, 0.07, 0.045, 0.142, 0.075, 0.015, F.helmetRim),
+      ),
+    R(f)
+  );
+}
+var Fe = { sniper: [`scarf`, `bedroll`, `heavy`] };
+function Ie(e) {
+  let t = [];
+  if (e === `scarf`) {
+    for (let e = 0; e < 8; e++) {
+      let n = (e / 8) * Math.PI * 2,
+        r = z(0.1, 0.08, 0.065, 0, 0, 0, e % 2 ? F.helmet : F.helmetRim);
+      (r.rotateY(-n),
+        r.translate(Math.sin(n) * 0.155, 0.575, Math.cos(n) * 0.13),
+        t.push(r));
+    }
+    t.push(
+      z(0.12, 0.19, 0.03, 0.05, 0.45, 0.17, F.helmet),
+      ...[0, 1, 2].map((e) =>
+        L(0.12, 0.008, 0.004, 0.05, 0.39 + e * 0.05, 0.187, F.vestDark),
+      ),
+      z(0.15, 0.11, 0.035, -0.02, 0.49, -0.185, F.helmet),
+      ...[0, 1].map((e) =>
+        L(0.13, 0.008, 0.004, -0.02, 0.47 + e * 0.04, -0.204, F.vestDark),
+      ),
+    );
+  }
+  if (
+    (e === `radio` &&
+      t.push(
+        z(0.12, 0.17, 0.07, -0.13, 0.42, 0.175, F.vestDark),
+        L(0.1, 0.02, 0.06, -0.13, 0.51, 0.175, F.weaponDark),
+        L(0.008, 0.66, 0.008, -0.16, 0.84, 0.19, F.weaponDark, { rotZ: 0.1 }),
+        L(0.016, 0.03, 0.016, -0.193, 1.17, 0.19, F.weaponDark),
+        L(0.038, 0.075, 0.032, -0.155, 0.5, -0.185, F.weaponDark),
+      ),
+    e === `bandolier`)
+  ) {
+    t.push(
+      L(0.055, 0.64, 0.014, -0.01, 0.31, -0.205, F.vestDark, { rotZ: -0.57 }),
+      L(0.055, 0.6, 0.014, -0.01, 0.31, 0.2, F.vestDark, { rotZ: 0.57 }),
+    );
+    for (let e = 0; e < 9; e++) {
+      let n = e / 8 - 0.5;
+      t.push(
+        L(
+          0.03,
+          0.042,
+          0.022,
+          -0.01 + n * 0.33,
+          0.31 + n * 0.52,
+          -0.214,
+          e % 2 ? F.weaponWood : F.helmetRim,
+          { rotZ: -0.57 },
+        ),
+      );
+    }
+  }
+  return (
+    e === `bedroll` &&
+      t.push(
+        Ne(0.062, 0.38, 0, 0.64, 0.17, F.uniformDark, `x`, 10),
+        ...[-0.12, 0.12].map((e) =>
+          Ne(0.066, 0.02, e, 0.64, 0.17, F.vestDark, `x`, 10),
+        ),
+        ...[-0.12, 0.12].map((e) =>
+          L(0.018, 0.14, 0.012, e, 0.57, 0.21, F.vestDark),
+        ),
+      ),
+    e === `knife` &&
+      t.push(
+        L(0.03, 0.16, 0.02, -0.15, 0.36, -0.198, F.boot, { rotZ: 0.15 }),
+        L(0.022, 0.07, 0.022, -0.162, 0.47, -0.2, F.weaponWood, { rotZ: 0.15 }),
+        L(0.04, 0.012, 0.03, -0.158, 0.435, -0.2, F.weaponDark),
+        z(0.15, 0.13, 0.085, 0.13, 0.07, 0.165, F.vestDark),
+        Ne(0.045, 0.105, -0.215, 0.09, 0.07, F.uniformDark, `y`, 10),
+        Ne(0.02, 0.02, -0.215, 0.152, 0.07, F.weaponDark, `y`, 8),
+      ),
+    e === `admin` &&
+      t.push(
+        z(0.18, 0.13, 0.03, 0, 0.43, -0.21, F.vestDark),
+        L(0.15, 0.09, 0.004, 0, 0.43, -0.227, F.helmetRim),
+        Ne(0.019, 0.09, 0.13, 0.52, -0.2, F.weaponDark, `z`),
+        L(0.026, 0.026, 0.006, 0.13, 0.52, -0.247, 14210240),
+        ...[0, 1].map((e) =>
+          L(0.012, 0.07, 0.012, -0.13 + e * 0.02, 0.47, -0.205, 9420890),
+        ),
+        L(0.07, 0.022, 0.006, 0.1, 0.46, -0.214, 0, { team: 1 }),
+      ),
+    e === `heavy` &&
+      t.push(
+        z(0.3, 0.06, 0.28, 0, 0.575, 0, F.vestDark, 0.95),
+        ...[-1, 1].map((e) =>
+          z(0.045, 0.21, 0.18, e * 0.22, 0.3, 0, F.vestDark),
+        ),
+        z(0.19, 0.14, 0.04, 0, -0.02, -0.16, F.vestDark, 0.9),
+        L(0.12, 0.03, 0.006, 0, 0.03, -0.182, F.helmetRim),
+      ),
+    t.length ? R(t) : null
+  );
+}
+function Le(e, t, n, r, i, a, o, s = !1) {
+  let c = [];
+  for (let u = 0; u < o; u++) {
+    let o = s ? -1.3 + (((u * 53) % 97) / 97) * 2.6 : u * 2.399963,
+      d = 0.88 + ((u * 7) % 11) * 0.012,
+      f = r + Math.sin(o) * e * 0.5 * d,
+      p = i + t * (((u * 37) % 101) / 101 - 0.5),
+      m = a + Math.cos(o) * n * 0.5 * d,
+      h = 0.026 + (u % 4) * 0.008,
+      _ = 0.075 + (u % 5) * 0.016,
+      v = new l();
+    (v.setAttribute(
+      `position`,
+      new g(
+        [
+          -h,
+          0,
+          0,
+          h,
+          0,
+          0,
+          0,
+          -_ * 0.45,
+          0.025,
+          h * 0.35,
+          -_,
+          0.014,
+          -h * 0.5,
+          -_ * 0.82,
+          0.009,
+        ],
+        3,
+      ),
+    ),
+      v.setIndex([
+        0, 1, 2, 0, 2, 4, 2, 3, 4, 1, 3, 2, 2, 1, 0, 4, 2, 0, 4, 3, 2, 2, 3, 1,
+      ]),
+      v.rotateY(o),
+      v.translate(f, p, m),
+      v.computeVertexNormals(),
+      I(v, [4740666, 6647882, 8749925, 3623219, 7568208][u % 5], 0, 1),
+      c.push(v));
+  }
+  return R(c);
+}
+function Re() {
+  let e = R([
+      Me(0.4, 0.56, 0.24, 0, 0.28, 0, F.uniform),
+      L(0.2, 0.06, 0.15, 0, 0.585, 0, F.uniformDark),
+      L(0.42, 0.055, 0.27, 0, 0.075, 0, F.vestDark),
+      L(0.055, 0.038, 0.013, 0, 0.075, -0.142, 8750969),
+    ]),
+    t = new n(0.175, 8, 5, 0, Math.PI * 2, 0, Math.PI * 0.55);
+  (t.scale(1, 0.86, 1.06), t.translate(0, 0.055, -0.005), I(t, F.helmet, 0, 1));
+  let r = new w(0.185, 0.198, 0.032, 8);
+  (r.translate(0, 0.05, -0.005), I(r, F.helmetRim, 0, 1));
+  let i = new w(0.188, 0.192, 0.045, 8, 1, !0);
+  (i.translate(0, 0.095, -0.005), I(i, 16777215, 1, 1));
+  let a = R([
+      z(0.185, 0.2, 0.19, 0, -0.03, 0, F.skin, 0.78),
+      L(0.062, 0.025, 0.028, -0.1, -0.005, 0, 5593928),
+      L(0.062, 0.025, 0.028, 0.1, -0.005, 0, 5593928),
+      L(0.075, 0.04, 0.028, 0, 0.095, -0.174, 3488307),
+      L(0.04, 0.025, 0.014, 0, 0.095, -0.194, 8752e3),
+      ...[-0.145, 0.145].map((e) =>
+        z(0.042, 0.08, 0.065, e, -0.028, 0.008, 4475968),
+      ),
+      L(0.028, 0.012, 0.008, -0.043, -0.018, -0.098, 2434850),
+      L(0.028, 0.012, 0.008, 0.043, -0.018, -0.098, 2434850),
+      L(0.022, 0.037, 0.027, 0, -0.041, -0.104, F.skin),
+      L(0.044, 0.009, 0.008, 0, -0.085, -0.098, 6311491),
+      L(0.054, 0.018, 0.009, -0.051, -0.049, -0.099, 3752757),
+      L(0.054, 0.018, 0.009, 0.051, -0.061, -0.099, 3752757),
+      L(0.192, 0.028, 0.197, 0, -0.118, 0, F.vestDark),
+      t,
+      r,
+      i,
+      L(0.09, 0.045, 0.06, -0.13, 0.06, 0.1, F.vestDark),
+    ]),
+    o = R([
+      Me(0.155, 0.34, 0.16, 0, -0.15, 0, F.uniform),
+      z(0.17, 0.105, 0.18, 0, -0.005, 0, 6450259),
+      L(0.15, 0.09, 0.15, 0, 0.005, 0, 0, { team: 1 }),
+      L(0.145, 0.05, 0.145, 0, -0.12, 0, 0, { team: 1 }),
+    ]),
+    s = R([
+      Me(0.13, 0.26, 0.14, 0, -0.13, 0, F.uniformDark),
+      z(0.14, 0.09, 0.045, 0, -0.045, 0.08, 5134148),
+      L(0.137, 0.034, 0.147, 0, -0.245, 0, 7765089),
+      L(0.1, 0.11, 0.11, 0, -0.3, 0, F.boot),
+    ]);
+  for (let e = 0; e < s.attributes.position.count; e++)
+    s.attributes.aTeam.getX(e) === 2 &&
+      s.attributes.position.getY(e) < -0.09 &&
+      s.attributes.aTeam.setX(e, 3);
+  let c = R([
+      Me(0.185, fe, 0.205, 0, -0.37 / 2, 0, F.uniformDark),
+      z(0.1, 0.13, 0.045, 0.087, -0.21, 0, 7568477),
+      L(0.194, 0.028, 0.213, 0, -0.12, 0, 5002308),
+    ]),
+    l = R([
+      Me(0.16, pe, 0.18, 0, -0.32 / 2, 0, F.uniformDark),
+      z(0.135, 0.14, 0.055, 0, -0.065, -0.11, 4279101),
+      L(0.168, 0.025, 0.19, 0, -0.08, 0, 3423025),
+      L(0.15, 0.09, 0.17, 0, -0.3, 0, F.vestDark),
+      z(0.175, 0.14, 0.28, 0, -0.325, -0.035, F.boot),
+      L(0.17, 0.023, 0.275, 0, -0.387, -0.035, 3750706),
+    ]),
+    u = R([
+      L(0.05, 0.11, 0.24, 0, -0.02, -0.12, F.weaponWood),
+      L(0.055, 0.09, 0.34, 0, 0, -0.4, F.weapon),
+      L(0.03, 0.03, 0.3, 0, 0.02, -0.72, F.weaponDark),
+      L(0.05, 0.06, 0.22, 0, 0, -0.66, F.weaponWood),
+      L(0.035, 0.15, 0.07, 0, -0.11, -0.44, F.weaponDark, { rotX: 0.25 }),
+      L(0.035, 0.1, 0.05, 0, -0.09, -0.28, F.weaponWood, { rotX: -0.3 }),
+      L(0.03, 0.045, 0.11, 0, 0.065, -0.34, F.weaponDark),
+    ]),
+    d = (e, t, n) => {
+      let r = (e, t, n, r) => {
+        let i = new w(e, e, t, 10);
+        return (i.rotateX(Math.PI / 2), i.translate(0, 0, n), I(i, r, 0, 1), i);
+      };
+      return R([
+        r(e, t, -t / 2, n),
+        r(e * 1.16, 0.06, -0.04, F.weaponDark),
+        r(e * 1.16, 0.06, -t + 0.03, F.weaponDark),
+        L(0.05, 0.14, 0.08, 0, -0.12, -0.24, F.weaponDark),
+        L(0.06, 0.05, 0.18, 0, e + 0.035, -0.22, F.weaponDark),
+      ]);
+    },
+    f = R([
+      z(0.11, 0.16, 0.09, -0.13, 0.27, -0.2, 5591869),
+      z(0.11, 0.16, 0.09, 0.13, 0.27, -0.2, 5591869),
+      z(0.13, 0.22, 0.11, 0.24, 0.17, 0.02, 5989707),
+      L(0.09, 0.032, 0.12, 0.24, 0.25, 0.02, 9145457),
+      L(0.018, 0.14, 0.02, 0.24, 0.17, -0.048, 3160109),
+    ]),
+    p = R([
+      Me(0.43, 0.1, 0.32, 0, 0.54, 0.03, 4608315),
+      Me(0.1, 0.25, 0.06, -0.2, 0.39, 0.09, 4608315),
+      z(0.22, 0.34, 0.14, 0, 0.31, 0.3, 4740675),
+      L(0.024, 0.36, 0.017, 0, 0.32, 0.381, 8619373),
+      ...[-0.13, 0.13].map((e) =>
+        L(0.035, 0.15, 0.031, e, 0.52, -0.17, 7173723, {
+          rotZ: e > 0 ? 0.2 : -0.2,
+        }),
+      ),
+    ]),
+    m = R([
+      z(0.38, 0.36, 0.23, 0, 0.32, 0.34, 6448199),
+      z(0.16, 0.13, 0.1, -0.15, 0.2, -0.2, 6448199),
+      ...[-0.16, 0.16].map((e) => z(0.1, 0.22, 0.12, e, 0.24, 0.44, 7895131)),
+      L(0.32, 0.04, 0.24, 0, 0.43, 0.34, 10197368),
+      ...[-0.09, 0.09].map((e) =>
+        L(0.022, 0.32, 0.017, e, 0.31, 0.464, 3423024),
+      ),
+    ]),
+    h = R([
+      z(0.18, 0.3, 0.16, 0.2, 0.27, 0.25, 6705988),
+      L(0.025, 0.42, 0.035, -0.17, 0.4, 0.32, 3750970),
+      L(0.12, 0.025, 0.045, -0.17, 0.6, 0.32, 7830642),
+      z(0.12, 0.26, 0.12, -0.23, 0.13, 0.06, 6574399),
+      ...[0, 1, 2].map((e) =>
+        L(0.018, 0.11, 0.025, -0.27 + e * 0.038, 0.16, -0.008, 9210485),
+      ),
+    ]),
+    g = (e, t, n, r) => z(e, t, n, 0, 0.34, 0, r),
+    _ = (e) => [
+      L(0.06, 0.045, 0.012, 0.105, 0.46, -e, 0, { team: 1 }),
+      L(0.14, 0.025, 0.012, 0, 0.45, e, 0, { team: 1 }),
+    ],
+    v = R([
+      f,
+      g(0.36, 0.31, 0.28, 4344899),
+      ...[-0.12, 0.12].map((e) => L(0.035, 0.3, 0.025, e, 0.4, -0.15, 8750960)),
+      z(0.23, 0.27, 0.1, 0, 0.35, 0.19, 5397833),
+      ..._(0.16),
+    ]),
+    y = R([
+      p,
+      z(0.49, 0.19, 0.35, 0, 0.5, 0.02, 4608314),
+      Le(0.52, 0.24, 0.38, 0, 0.48, 0.015, 130),
+      Le(0.46, 0.52, 0.4, 0, 0.3, 0.22, 140, !0),
+      ..._(0.235),
+    ]),
+    b = R([
+      m,
+      g(0.46, 0.43, 0.36, 4475970),
+      z(0.32, 0.16, 0.055, 0, 0.08, -0.185, 5593930),
+      ...Array.from({ length: 10 }, (e, t) =>
+        L(
+          0.055,
+          0.021,
+          0.031,
+          -0.17 + t * 0.038,
+          0.51 - t * 0.032,
+          -0.202,
+          11182203,
+          { rotZ: 0.4 },
+        ),
+      ),
+      ..._(0.205),
+    ]),
+    x = R([
+      h,
+      ...[-1, 1].map((e) =>
+        L(0.065, 0.45, 0.028, e * 0.11, 0.34, -0.15, 9992535, {
+          rotZ: e * 0.28,
+        }),
+      ),
+      z(0.36, 0.1, 0.33, 0, 0.1, 0, 6902075),
+      z(0.25, 0.29, 0.15, 0, 0.32, 0.21, 7691846),
+      ...[-0.17, 0, 0.17].map((e) =>
+        z(0.115, 0.12, 0.1, e, 0.045, -0.18, 8875084),
+      ),
+      ..._(0.17),
+    ]),
+    S = (...e) => {
+      let t = L(...e);
+      return (t.attributes.aTeam.array.fill(0.001), t);
+    },
+    C = (e, t, n, r, i) =>
+      [
+        [r, r * 0.3],
+        [r * 0.3, r],
+      ].map(([r, a]) =>
+        i
+          ? S(0.006, a, r, e, t, n, 13639466)
+          : S(r, a, 0.008, e, t, n, 13639466),
+      ),
+    T = R([
+      g(0.37, 0.31, 0.28, 4608063),
+      z(0.3, 0.3, 0.17, 0, 0.31, 0.25, 5923910),
+      S(0.15, 0.15, 0.01, 0, 0.33, 0.337, 15856108),
+      ...C(0, 0.33, 0.344, 0.11),
+      ...[-0.1, 0.1].map((e) => z(0.1, 0.12, 0.08, e, 0.22, -0.19, 5595199)),
+      L(0.3, 0.035, 0.2, 0, 0.46, 0.25, 4015158),
+      ..._(0.16),
+    ]),
+    E = R([
+      S(0.165, 0.06, 0.17, 0, -0.19, 0, 15856108),
+      ...[-1, 1].flatMap((e) => C(e * 0.084, -0.19, 0, 0.045, !0)),
+    ]),
+    D = new n(0.174, 8, 5, 0, Math.PI * 2, 0, Math.PI * 0.5);
+  return (
+    D.scale(1, 0.9, 1.12),
+    D.translate(0, 0.047, 0.02),
+    I(D, 4871742, 0, 1),
+    {
+      torso: e,
+      head: a,
+      arm: o,
+      fore: s,
+      thigh: c,
+      shin: l,
+      weapon: u,
+      assault: v,
+      sniper: y,
+      support: b,
+      engineer: x,
+      medic: T,
+      medicArm: E,
+      ghillieHood: R([
+        D,
+        z(0.27, 0.19, 0.055, 0, 0.005, 0.16, 4871742),
+        Le(0.34, 0.13, 0.36, 0, 0.135, 0.02, 65),
+        Le(0.28, 0.17, 0.1, 0, 0.005, 0.15, 35, !0),
+        ...[-1, 1].flatMap((e) => [
+          z(0.055, 0.21, 0.22, e * 0.139, 0.015, 0.034, 4871742),
+          Le(0.06, 0.23, 0.24, e * 0.145, 0.02, 0.04, 24),
+        ]),
+      ]),
+      ghillieArm: Le(0.21, 0.3, 0.22, 0, -0.12, 0.015, 42),
+      ghillieLeg: Le(0.23, 0.37, 0.25, 0, -0.2, 0.015, 40),
+      ghillieShin: Le(0.2, 0.29, 0.22, 0, -0.14, 0.012, 30),
+      supportArm: R([
+        z(0.23, 0.19, 0.25, 0, -0.03, 0.015, 5002568),
+        L(0.13, 0.035, 0.012, 0, -0.03, -0.118, 0, { team: 1 }),
+      ]),
+      supportLeg: R([
+        z(0.19, 0.25, 0.065, 0, -0.23, -0.129, 5266508),
+        ...[-0.1, 0.1].map((e) =>
+          z(0.08, 0.18, 0.12, e, -0.17, 0.005, 6449230),
+        ),
+      ]),
+      engineerLeg: R([
+        L(0.2, 0.035, 0.22, 0, -0.13, 0, 5850930),
+        z(0.17, 0.22, 0.095, 0, -0.23, -0.14, 9137997),
+        ...[-0.045, 0, 0.045].map((e) =>
+          L(0.018, 0.16, 0.018, e, -0.19, -0.193, 9606539),
+        ),
+      ]),
+      engineerFore: R([
+        z(0.155, 0.14, 0.055, 0, -0.05, 0.105, 8089688),
+        L(0.15, 0.025, 0.16, 0, -0.11, 0, 5327675),
+      ]),
+      kite: d(0.075, 0.92, 5857858),
+      breaker: d(0.105, 1.2, 7626820),
+    }
+  );
+}
+function ze(e = !1) {
+  Object.assign(F, e ? Ae : ke);
+  let t = Re(),
+    n = { weapon: t.weapon, kite: t.kite, breaker: t.breaker };
+  for (let [e, r] of Object.entries(t)) n[e] || r.dispose();
+  return n;
+}
+function Be() {
+  let e = new a({
+    vertexColors: !0,
+    flatShading: !0,
+    roughness: 0.88,
+    metalness: 0,
+  });
+  e.onBeforeCompile = (e) => {
+    e.vertexShader = e.vertexShader
+      .replace(
+        `#include <common>`,
+        `#include <common>
+attribute float aTeam;`,
+      )
+      .replace(
+        `#include <color_vertex>`,
+        [
+          `vColor = vec4(1.0);`,
+          `#ifdef USE_COLOR`,
+          `vColor.rgb = color.rgb;`,
+          `#endif`,
+          `#ifdef USE_INSTANCING_COLOR`,
+          `if(aTeam > 3.5) vColor.rgb = mix(vColor.rgb, iGear, 0.78); else if(aTeam > 2.5) vColor.rgb = mix(iCloth * (0.7 + dot(color.rgb,vec3(0.2126,0.7152,0.0722))*0.6), iSkin.rgb, iSkin.a); else if(aTeam > 1.5) vColor.rgb = iCloth * (0.7 + dot(color.rgb,vec3(0.2126,0.7152,0.0722))*0.6); else vColor.rgb = mix(vColor.rgb, instanceColor.rgb, aTeam);`,
+          `#endif`,
+        ].join(`
+`),
+      );
+  };
+  let t = e.onBeforeCompile;
+  e.onBeforeCompile = (e) => {
+    (t(e),
+      (e.vertexShader = e.vertexShader.replace(
+        `attribute float aTeam;`,
+        `attribute float aTeam;
+attribute vec3 iCloth;
+attribute vec3 iGear;
+attribute vec4 iSkin;`,
+      )));
+  };
+  let n = e.onBeforeCompile;
+  return (
+    (e.onBeforeCompile = (e) => {
+      (n(e),
+        (e.fragmentShader = e.fragmentShader.replace(
+          `#include <opaque_fragment>`,
+          `outgoingLight = max(outgoingLight, diffuseColor.rgb * 0.13);
+#include <opaque_fragment>`,
+        )));
+    }),
+    (e.customProgramCacheKey = () => `salient-faction-recognition-212`),
+    e
+  );
+}
+var Ve = new M().set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+function He(e, t = 128, n = !1) {
+  Object.assign(F, n ? Ae : ke);
+  let r = Re();
+  (r.head.dispose(), (r.head = Pe(N[0])));
+  for (let e of [
+    `assault`,
+    `sniper`,
+    `support`,
+    `engineer`,
+    `medic`,
+    ...Object.keys(De),
+  ]) {
+    let t = r[e].attributes.aTeam;
+    for (let e = 0; e < t.count; e++) t.getX(e) === 0 && t.setX(e, 4);
+  }
+  let i = Be(),
+    a = new v();
+  a.name = `soldiers`;
+  let o = {};
+  for (let e of Oe) {
+    n &&
+      (de(r[e], e),
+      r[e].setAttribute(
+        `thermalStrength`,
+        new y(new Float32Array(t * P[e]).fill(1), 1),
+      ));
+    let s = new O(r[e], i, t * P[e]);
+    ((s.name = `soldier_` + e),
+      (s.castShadow = !0),
+      (s.receiveShadow = !0),
+      (s.frustumCulled = !1),
+      s.instanceMatrix.setUsage(ee),
+      s.geometry.setAttribute(
+        `iCloth`,
+        new y(new Float32Array(t * P[e] * 3).fill(1), 3),
+      ),
+      s.geometry.setAttribute(
+        `iGear`,
+        new y(new Float32Array(t * P[e] * 3).fill(0.2), 3),
+      ),
+      s.geometry.setAttribute(
+        `iSkin`,
+        new y(new Float32Array(t * P[e] * 4), 4),
+      ));
+    for (let e = 0; e < s.count; e++)
+      (s.setMatrixAt(e, Ve), s.setColorAt(e, je.set(16777215)));
+    ((s.count = 0), (o[e] = s), a.add(s));
+  }
+  e.add(a);
+  let s = [0, 1]
+      .flatMap((e) => N.map((t) => ({ f: t, team: e })))
+      .map(({ f: e, team: r }, o) => {
+        let s = Pe(e, r);
+        (n &&
+          (de(s, `head`, e.skin),
+          s.setAttribute(
+            `thermalStrength`,
+            new y(new Float32Array(t).fill(1), 1),
+          )),
+          s.setAttribute(`iCloth`, new y(new Float32Array(t * 3).fill(1), 3)),
+          s.setAttribute(`iGear`, new y(new Float32Array(t * 3).fill(0.2), 3)),
+          s.setAttribute(`iSkin`, new y(new Float32Array(t * 4), 4)));
+        let c = new O(s, i, t);
+        ((c.name = `identity_${r}_${e.name}`),
+          (c.castShadow = !0),
+          (c.receiveShadow = !0),
+          (c.frustumCulled = !1),
+          (c.count = 0));
+        for (let e = 0; e < t; e++) c.setColorAt(e, new p(16777215));
+        return (a.add(c), c);
+      }),
+    c = le.map((e) => {
+      let r = Ie(e);
+      if (!r) return null;
+      (n &&
+        (de(r, `kit`),
+        r.setAttribute(
+          `thermalStrength`,
+          new y(new Float32Array(t).fill(1), 1),
+        )),
+        r.setAttribute(`iCloth`, new y(new Float32Array(t * 3).fill(1), 3)),
+        r.setAttribute(`iGear`, new y(new Float32Array(t * 3).fill(0.2), 3)),
+        r.setAttribute(`iSkin`, new y(new Float32Array(t * 4), 4)));
+      let o = new O(r, i, t);
+      ((o.name = `kit_${e}`),
+        (o.castShadow = !0),
+        (o.receiveShadow = !0),
+        (o.frustumCulled = !1),
+        (o.count = 0));
+      for (let e = 0; e < t; e++) o.setColorAt(e, new p(16777215));
+      return (a.add(o), o);
+    }),
+    l = Array.from({ length: t }, () => Ve.clone()),
+    u = Array.from({ length: t }, () => ue(0)),
+    d = Array.from({ length: t }, () => Ve.clone()),
+    f = new Uint8Array(t),
+    m = new Int32Array(t),
+    h = Array.from({ length: t }, () => new p(16777215)),
+    g = new Float32Array(t).fill(1),
+    _ = Object.fromEntries(Oe.map((e) => [e, { first: 1 / 0, last: -1 }]));
+  function b(e, t) {
+    let n = _[e];
+    ((n.first = Math.min(n.first, t)), (n.last = Math.max(n.last, t)));
+  }
+  function x(e, t, n) {
+    let r = t + n;
+    for (let n of e.updateRanges)
+      ((t = Math.min(t, n.start)), (r = Math.max(r, n.start + n.count)));
+    (e.clearUpdateRanges(), e.addUpdateRange(t, r - t), (e.needsUpdate = !0));
+  }
+  let S = 0;
+  return {
+    group: a,
+    pools: o,
+    material: i,
+    max: t,
+    get count() {
+      return S;
+    },
+    kitOf(e) {
+      return u[e].kit;
+    },
+    setHeat(e, t) {
+      if (n && g[e] !== t) {
+        g[e] = t;
+        for (let n of Oe) {
+          let r = o[n].geometry.attributes.thermalStrength;
+          for (let i = 0; i < P[n]; i++) r.setX(e * P[n] + i, t);
+          x(r, e * P[n], P[n]);
+        }
+      }
+    },
+    setCount(e) {
+      S = e;
+      for (let t of Oe) o[t].count = e * P[t];
+    },
+    setMatrix(e, t, n, r) {
+      if (e === `head`) {
+        d[t].copy(r);
+        return;
+      }
+      if (e === `kit`) {
+        l[t].copy(r);
+        return;
+      }
+      let i = t * P[e] + n;
+      (o[e].setMatrixAt(i, r), b(e, i));
+    },
+    hide(e) {
+      (d[e].copy(Ve), l[e].copy(Ve));
+      for (let t of Oe)
+        for (let n = 0; n < P[t]; n++) {
+          let r = e * P[t] + n;
+          (o[t].setMatrixAt(r, Ve), b(t, r));
+        }
+    },
+    setColor(e, t) {
+      h[e].copy(t);
+      for (let n of Oe)
+        for (let r = 0; r < P[n]; r++) o[n].setColorAt(e * P[n] + r, t);
+      for (let t of Oe) x(o[t].instanceColor, e * P[t] * 3, P[t] * 3);
+    },
+    setFaction(e, t) {
+      ((f[e] = +(t === 1)), this.setIdentity(e, m[e]));
+    },
+    setIdentity(e, t) {
+      m[e] = t;
+      let r = ue(t);
+      u[e] = r;
+      let i = f[e],
+        a = [1, 0.94, 1.04, 0.98][r.uniform],
+        s = new p(
+          n ? (i === 0 ? 13160915 : 11843258) : i === 0 ? 13220758 : 3552827,
+        ).multiplyScalar(a),
+        c = new p(
+          n ? (i === 0 ? 5268061 : 7220268) : i === 0 ? 4344643 : 8137258,
+        ),
+        l = new p(N[r.face].skin),
+        d = +(r.face % 3 == 0);
+      for (let t of Oe) {
+        let n = o[t].geometry.attributes.iCloth;
+        for (let r = 0; r < P[t]; r++) n.setXYZ(e * P[t] + r, s.r, s.g, s.b);
+        x(n, e * P[t] * 3, P[t] * 3);
+        let r = o[t].geometry.attributes.iGear;
+        for (let n = 0; n < P[t]; n++) r.setXYZ(e * P[t] + n, c.r, c.g, c.b);
+        x(r, e * P[t] * 3, P[t] * 3);
+        let i = o[t].geometry.attributes.iSkin;
+        for (let n = 0; n < P[t]; n++)
+          i.setXYZW(e * P[t] + n, l.r, l.g, l.b, d);
+        x(i, e * P[t] * 4, P[t] * 4);
+      }
+    },
+    flush() {
+      for (let e of s) e.count = 0;
+      for (let e = 0; e < S; e++) {
+        if (d[e].elements[15] === 0) continue;
+        let t = s[f[e] * N.length + u[e].face],
+          r = t.count++;
+        (t.setMatrixAt(r, d[e]),
+          t.setColorAt(r, h[e]),
+          n && t.geometry.attributes.thermalStrength.setX(r, g[e]));
+      }
+      for (let e of c) e && (e.count = 0);
+      for (let e = 0; e < S; e++) {
+        let t = c[u[e].kit];
+        if (!t || l[e].elements[15] === 0) continue;
+        let r = t.count++;
+        (t.setMatrixAt(r, l[e]),
+          t.setColorAt(r, h[e]),
+          n && t.geometry.attributes.thermalStrength.setX(r, g[e]));
+      }
+      for (let e of [...s, ...c])
+        e?.count &&
+          ((e.instanceMatrix.needsUpdate = !0),
+          (e.instanceColor.needsUpdate = !0),
+          n && (e.geometry.attributes.thermalStrength.needsUpdate = !0));
+      o.head.count = 0;
+      for (let e of Oe) {
+        let t = _[e];
+        t.last < t.first ||
+          (x(o[e].instanceMatrix, t.first * 16, (t.last - t.first + 1) * 16),
+          (t.first = 1 / 0),
+          (t.last = -1));
+      }
+    },
+    dispose() {
+      e.remove(a);
+      for (let e of Oe) (o[e].geometry.dispose(), o[e].dispose());
+      i.dispose();
+      for (let e of [...s, ...c]) e && (e.geometry.dispose(), e.dispose());
+    },
+  };
+}
+function Ue() {
+  let e = (e, t, n = 0, r = 0, i = 0, a = `XYZ`) => {
+      let o = new m();
+      return (
+        (o.name = e),
+        o.position.set(n, r, i),
+        (o.rotation.order = a),
+        t && t.add(o),
+        o
+      );
+    },
+    t = e(`root`, null, 0, 0, 0, `YXZ`),
+    n = e(`hips`, t, 0, ye, 0, `YXZ`),
+    r = e(`torso`, n, 0, 0, 0, `YXZ`);
+  r.scale.setScalar(be);
+  let i = e(`head`, r, 0, _e, 0.01, `YXZ`);
+  i.scale.setScalar(xe);
+  let a = e(`armL`, r, -0.275, me, 0),
+    o = e(`armR`, r, he, me, 0),
+    s = e(`foreL`, a, 0, -0.3, 0),
+    c = e(`foreR`, o, 0, -0.3, 0),
+    l = e(`legL`, n, -0.125, 0, 0),
+    u = e(`legR`, n, ge, 0, 0),
+    d = e(`shinL`, l, 0, -0.37, 0),
+    f = e(`shinR`, u, 0, -0.37, 0),
+    p = e(`weapon`, r, 0, 0, 0, `YXZ`);
+  return (
+    p.scale.setScalar(Ce),
+    {
+      root: t,
+      hips: n,
+      torso: r,
+      head: i,
+      armL: a,
+      armR: o,
+      foreL: s,
+      foreR: c,
+      legL: l,
+      legR: u,
+      shinL: d,
+      shinR: f,
+      weapon: p,
+    }
+  );
+}
+function We(e, t, n, r, i, a = 0, o = null, s = `assault`) {
+  ((e.hips.position.y = t.hipY),
+    e.hips.rotation.set(t.hipPitch, t.hipYaw, 0),
+    e.torso.rotation.set(t.torsoTilt, t.torsoYaw, t.torsoRoll),
+    e.head.rotation.set(t.headPitch, t.headYaw, 0),
+    e.legL.rotation.set(t.legLx, 0, t.legLz),
+    e.legR.rotation.set(t.legRx, 0, t.legRz),
+    e.shinL.rotation.set(t.shinL, 0, 0),
+    e.shinR.rotation.set(t.shinR, 0, 0),
+    e.armL.rotation.set(t.armLx, t.armLy, t.armLz),
+    e.armR.rotation.set(t.armRx, t.armRy, t.armRz),
+    e.foreL.rotation.set(t.foreL, 0, 0),
+    e.foreR.rotation.set(t.foreR, 0, 0),
+    e.weapon.position.set(t.wpnX, t.wpnY, t.wpnZ),
+    e.weapon.rotation.set(t.wpnPitch, t.wpnYaw, t.wpnRoll),
+    o?.(e),
+    e.root.updateMatrixWorld(!0));
+  let c = !i || i === `none`;
+  for (let [t, [i, a, o]] of Object.entries(De))
+    for (let l = 0; l < o; l++) {
+      let o =
+          a === `head`
+            ? e.head
+            : e[
+                {
+                  arm: [`armL`, `armR`],
+                  fore: [`foreL`, `foreR`],
+                  thigh: [`legL`, `legR`],
+                  shin: [`shinL`, `shinR`],
+                }[a][l]
+              ],
+        u = i === s && (c || a === `thigh` || a === `shin`);
+      n.setMatrix(
+        t,
+        r,
+        l,
+        u
+          ? a === `thigh` || a === `shin`
+            ? Ee.copy(o.matrixWorld).scale(Te)
+            : o.matrixWorld
+          : Ve,
+      );
+    }
+  (n.setMatrix(`torso`, r, 0, c ? e.torso.matrixWorld : Ve),
+    n.setMatrix(
+      `kit`,
+      r,
+      0,
+      c && !Fe[s]?.includes(le[n.kitOf(r)]) ? e.torso.matrixWorld : Ve,
+    ),
+    n.setMatrix(`head`, r, 0, c ? e.head.matrixWorld : Ve));
+  for (let t of [`assault`, `sniper`, `support`, `engineer`, `medic`])
+    n.setMatrix(t, r, 0, c && t === s ? e.torso.matrixWorld : Ve);
+  (n.setMatrix(`arm`, r, 0, c ? e.armL.matrixWorld : Ve),
+    n.setMatrix(`arm`, r, 1, c ? e.armR.matrixWorld : Ve),
+    n.setMatrix(`fore`, r, 0, c ? e.foreL.matrixWorld : Ve),
+    n.setMatrix(`fore`, r, 1, c ? e.foreR.matrixWorld : Ve));
+  let l =
+    a < 0 || (a >= 31 && a <= 34)
+      ? null
+      : a === 9 || a === 10
+        ? `breaker`
+        : a === 8
+          ? `kite`
+          : `weapon`;
+  for (let t of [`weapon`, `kite`, `breaker`])
+    n.setMatrix(t, r, 0, c && t === l ? e.weapon.matrixWorld : Ve);
+  (n.setMatrix(`thigh`, r, 0, Ee.copy(e.legL.matrixWorld).scale(Te)),
+    n.setMatrix(`thigh`, r, 1, Ee.copy(e.legR.matrixWorld).scale(Te)),
+    n.setMatrix(`shin`, r, 0, Ee.copy(e.shinL.matrixWorld).scale(Te)),
+    n.setMatrix(`shin`, r, 1, Ee.copy(e.shinR.matrixWorld).scale(Te)));
+}
+var Ge = (e) => ((e = e < 0 ? 0 : e > 1 ? 1 : e), e * e * (3 - 2 * e));
+function Ke(e, t, n) {
+  let r = 1;
+  for (; r < e.length - 1 && t > e[r][0];) r++;
+  let i = e[r - 1],
+    a = e[r],
+    o = Ge((t - i[0]) / Math.max(1e-6, a[0] - i[0]));
+  for (let e = 1; e < i.length; e++) n[e - 1] = i[e] + (a[e] - i[e]) * o;
+  return n;
+}
+var qe = {
+  order: {
+    T: 1.8,
+    fadeIn: 0.24,
+    fadeOut: [1.13, 0.55],
+    fp: [
+      [0, -0.2, -0.3, -0.45],
+      [0.41, -0.09, -0.035, -0.6],
+      [0.94, -0.085, -0.03, -0.62],
+      [1.42, -0.26, -0.48, -0.36],
+      [1.8, -0.26, -0.48, -0.36],
+    ],
+    tp: [
+      [0, 1, 0.1, 0.6, 0, 0],
+      [0.41, 1.72, -0.05, 0.04, 0.08, 0.06],
+      [0.94, 1.75, -0.05, 0.04, 0.08, 0.06],
+      [1.42, 0.3, -0.1, 0.2, 0, 0],
+      [1.8, 0.3, -0.1, 0.2, 0, 0],
+    ],
+  },
+};
+qe.spot = qe.order;
+var Je = [0, 0, 0, 0, 0],
+  Ye = (e, t) => Ge(t / e.fadeIn) * (1 - Ge((t - e.fadeOut[0]) / e.fadeOut[1]));
+function Xe(e, t, n = {}) {
+  let r = qe[e];
+  return !r || !(t >= 0 && t < r.T)
+    ? null
+    : (Ke(r.tp, t, Je),
+      (n.armLx = Je[0]),
+      (n.armLz = Je[1]),
+      (n.foreL = Je[2]),
+      (n.yaw = Je[3]),
+      (n.look = Je[4]),
+      (n.w = Ye(r, t)),
+      n);
+}
+function Ze(e, t, n = { wrist: [0, 0, 0] }) {
+  let r = qe[e];
+  return !r || !(t >= 0 && t < r.T)
+    ? null
+    : (Ke(r.fp, t, n.wrist), (n.w = Ye(r, t)), n);
+}
+var Qe = (e) => ((e = e < 0 ? 0 : e > 1 ? 1 : e), e * e * (3 - 2 * e)),
+  $e = Object.freeze({
+    discharge: 0.25,
+    T: 0.8,
+    rubRate: 11,
+    rubLift: 0.12,
+    paddleAt: 0.2,
+  }),
+  et = [-0.15, -0.9, -1.3, 1.8, 0],
+  tt = [
+    [-0.9, 0.65, 1, 0.5, 0.1],
+    [-0.45, 1.15, 1, 0.45, 0.05],
+    [0, 1.65, 0.7, 0.4, 0.2],
+    [0.3, 1.35, 0.9, 0.95, 0.55],
+  ],
+  nt = [0, 0, 0, 0, -0.08];
+function rt(e) {
+  let t = Math.max(tt[0][0], Math.min(tt[tt.length - 1][0], e)),
+    n = 1;
+  for (; n < tt.length - 1 && t > tt[n][0];) n++;
+  let r = tt[n - 1],
+    i = tt[n],
+    a = (t - r[0]) / (i[0] - r[0]);
+  for (let e = 0; e < 4; e++) nt[e] = r[e + 1] + (i[e + 1] - r[e + 1]) * a;
+  return nt;
+}
+var it = [0, 0, 0, 0, 0],
+  at = [
+    [0, 1, 0],
+    [0.16, 0, 1],
+    [0.5, 0, 1],
+    [0.8, 1, 0],
+  ];
+function ot(e, t) {
+  let n = 1;
+  for (; n < at.length - 1 && e > at[n][0];) n++;
+  let r = at[n - 1],
+    i = at[n],
+    a = Qe((e - r[0]) / Math.max(1e-6, i[0] - r[0])),
+    o = r[1] + (i[1] - r[1]) * a,
+    s = r[2] + (i[2] - r[2]) * a,
+    c = rt(t);
+  for (let e = 0; e < 5; e++) it[e] = et[e] * o + c[e] * s;
+  return o;
+}
+function st(e, t, n) {
+  return (
+    (e.armLx = e.armRx = t[0]),
+    (e.armLy = t[1]),
+    (e.armRy = -t[1]),
+    (e.armLz = t[2] + $e.rubLift * n),
+    (e.armRz = -t[2] + $e.rubLift * n),
+    (e.foreL = e.foreR = t[3]),
+    (e.lean = t[4]),
+    e
+  );
+}
+function ct(e, t = {}) {
+  return (
+    (t.w = 1),
+    (t.kneel = 0),
+    (t.flat = 1),
+    (t.clear = !1),
+    st(t, et, Math.sin(e * $e.rubRate))
+  );
+}
+function lt(e, t = 0, n = {}) {
+  let r = $e;
+  if (!(e >= 0 && e < r.T)) return null;
+  let i = ot(e, t),
+    a = e - r.discharge,
+    o = a >= 0 ? Math.exp(-a * 14) * Math.min(1, a * 40) : 0;
+  return (
+    (n.w = Qe(e / 0.05) * (1 - Qe((e - (r.T - 0.15)) / 0.15))),
+    (n.kneel = Qe(e / 0.12) * (1 - Qe((e - 0.5) / 0.3))),
+    (n.flat = i),
+    st(n, it, Math.sin(e * r.rubRate) * i),
+    (n.armLx += 0.25 * o),
+    (n.armRx += 0.25 * o),
+    (n.lean += 0.15 * o),
+    (n.clear = e < 0.55),
+    n
+  );
+}
+var ut = {
+    rubRate: 13,
+    rubSlide: 0.045,
+    rubScrub: 0.018,
+    rubRock: 0.12,
+    rubPump: 0.012,
+    rubAt: [0, -0.02, 0.03],
+    rubWide: 0.085,
+    pushOut: 0.16,
+    pushSpread: 0.06,
+    crouch: 0.45,
+  },
+  dt = {},
+  ft = {};
+function pt(e, t, n = {}) {
+  let r = $e,
+    i = e >= 0 && e < r.T,
+    a = i ? ot(e, 0) : 1,
+    o = 1 - a,
+    s = t * ut.rubRate,
+    c = Math.sin(s) * a,
+    l = Math.cos(s) * a,
+    u = i ? e - r.discharge : -1,
+    d = u >= 0 ? Math.exp(-u * 14) * Math.min(1, u * 40) : 0,
+    f = ut.rubAt[1] * a + ut.rubPump * Math.sin(2 * s) * a,
+    p = ut.rubAt[2] * a - ut.pushOut * o;
+  return (
+    Object.assign(dt, {
+      x: -ut.rubWide * a - ut.pushSpread * o,
+      y: f + ut.rubSlide * c,
+      z: p + ut.rubScrub * l,
+      pitch: ut.rubRock * c,
+      yaw: (-Math.PI / 2) * a,
+      roll: 0,
+    }),
+    Object.assign(ft, {
+      x: ut.rubWide * a + ut.pushSpread * o,
+      y: f - ut.rubSlide * c,
+      z: p - ut.rubScrub * l,
+      pitch: -ut.rubRock * c,
+      yaw: (Math.PI / 2) * a,
+      roll: 0,
+    }),
+    (n.L = dt),
+    (n.R = ft),
+    (n.action = i
+      ? {
+          x: 0,
+          y: -0.02 * o + 0.02 * d,
+          z: -0.04 * o + 0.035 * d,
+          pitch: 0.06 * d,
+          roll: 0,
+        }
+      : null),
+    (n.crouch = i ? ut.crouch * Qe(e / 0.12) * (1 - Qe((e - 0.5) / 0.3)) : 0),
+    (n.jolt = d),
+    n
+  );
+}
+var mt = 0.3,
+  ht = 0.72,
+  gt = mt + 0.1,
+  _t = (e) => ((e = e < 0 ? 0 : e > 1 ? 1 : e), e * e * (3 - 2 * e)),
+  vt = [
+    [0, 0.9, 0.2, 0.3, 0.6, -0.3, 1.2, 0],
+    [0.12, 0.7, 0.25, 0.5, 1, -0.1, 1.9, 0],
+    [mt, 1.55, 0.35, 0.1, 1.8, 1.7, 1.5, 0.1],
+    [gt, 0.35, 0.2, 0.6, 2.8, 0.2, 0.1, 0],
+    [0.55, 0.3, 0.15, 0.7, 1, -0.5, 0.3, 0],
+    [ht, 0.6, 0.2, 0.5, 0.5, -0.2, 1, 0],
+  ],
+  yt = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0.12, -0.1, 0.02, -0.05, 0, 0, 0, 0, 0, -0.15],
+    [mt, -0.55, 0.16, -0.25, -0.02, -0.05, -0.1, 0.12, -0.15, 0.12],
+    [gt, 0.45, -0.22, 0.25, -0.06, 0.38, -0.3, -0.28, -0.2, 0.05],
+    [0.55, 0.4, -0.3, 0.2, -0.05, 0.32, -0.25, -0.22, -0.3, 0.1],
+    [ht, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  ],
+  bt = {
+    wpnX: 0.1,
+    wpnY: 0.42,
+    wpnZ: -0.2,
+    wpnPitch: -0.75,
+    wpnYaw: 0.95,
+    wpnRoll: 0.45,
+  },
+  xt = [],
+  St = [];
+function Ct(e, t = {}) {
+  return e >= 0 && e < 0.72
+    ? (ie(vt, e, xt),
+      ie(yt, e, St),
+      ([t.armLx, t.armLz, t.foreL, t.armRx, t.armRz, t.foreR, t.armRy] = xt),
+      ([
+        t.torsoYaw,
+        t.torsoTilt,
+        t.hipYaw,
+        t.hipY,
+        t.legLx,
+        t.shinL,
+        t.legRx,
+        t.shinR,
+        t.headPitch,
+      ] = St),
+      (t.w = _t(e / 0.08) * (1 - _t((e - (ht - 0.14)) / 0.14))),
+      (t.grenade = e > 0.06 && e < gt),
+      t)
+    : null;
+}
+var wt = 0.9,
+  Tt = 2.2,
+  Et = (e) => ((e = e < 0 ? 0 : e > 1 ? 1 : e), e * e * (3 - 2 * e));
+function Dt(e, t, n, r) {
+  if (!r?.pos) return;
+  let i = Math.max(3, r.radius ?? 4 * (r.scale ?? 1)),
+    a = t[0] - r.pos[0],
+    o = t[1] + 1 - r.pos[1],
+    s = t[2] - r.pos[2],
+    c = Math.hypot(a, o, s),
+    l = Math.min(1, (r.strength ?? 1) * 0.6 + 0.4) * (1 - c / (i * Tt));
+  if (l <= 0.05 || (e.blastT >= 0 && e.blastT < 0.3 && l <= e.blastK)) return;
+  let u = Math.hypot(a, s) || 1,
+    d = a / u,
+    f = s / u;
+  ((e.blastT = 0),
+    (e.blastK = Math.min(1, l * 1.4)),
+    (e.blastF = d * -Math.sin(n) + f * -Math.cos(n)),
+    (e.blastR = d * Math.cos(n) + f * -Math.sin(n)));
+}
+function Ot(e) {
+  return e >= 0 && e < 0.9 ? Et(e / 0.07) * (1 - Et((e - 0.28) / 0.62)) : 0;
+}
+var kt = 0.12,
+  At = 1.8,
+  jt = 0.32,
+  Mt = 0.34,
+  Nt = 0.8,
+  Pt = 0.69,
+  Ft = 0.7,
+  It = 1,
+  Lt = Math.asin(Math.min(0.98, re / 0.73)),
+  Rt =
+    `hipY.hipPitch.hipYaw.torsoTilt.torsoYaw.torsoRoll.headPitch.headYaw.legLx.legLz.shinL.legRx.legRz.shinR.armLx.armLy.armLz.foreL.armRx.armRy.armRz.foreR.wpnX.wpnY.wpnZ.wpnPitch.wpnYaw.wpnRoll`.split(
+      `.`,
+    ),
+  zt = {},
+  Bt = {},
+  Vt = {},
+  Ht = {},
+  Ut = {},
+  Wt = {},
+  Gt = [
+    `hipY`,
+    `hipPitch`,
+    `hipYaw`,
+    `torsoTilt`,
+    `torsoYaw`,
+    `legLx`,
+    `legLz`,
+    `shinL`,
+    `legRx`,
+    `legRz`,
+    `shinR`,
+    `headPitch`,
+  ];
+function Kt(e) {
+  return (
+    Object.assign(Ut, e),
+    (Ut.h = 1.3),
+    (Ut.padsT = -1),
+    (Ut.defibOut = 0),
+    pn(Ut, Wt)
+  );
+}
+function qt() {
+  let e = {};
+  for (let t of Rt) e[t] = 0;
+  return e;
+}
+function Jt(e, t = !1, n = 0, r = 0) {
+  for (let t of Rt) e[t] = 0;
+  return (
+    (e.hipY = 0.12),
+    (e.torsoTilt = -0.05),
+    (e.headPitch = Math.max(-0.35, Math.min(0.35, n))),
+    (e.legLx = e.legRx = Math.PI / 2 + r),
+    (e.shinL = e.shinR = -Math.PI / 2 - r),
+    (e.legLz = 0.08),
+    (e.legRz = -0.08),
+    (e.armLx = e.armRx = t ? 1 : 0.35),
+    (e.foreL = e.foreR = t ? 0.35 : 0.75),
+    (e.armLz = 0.12),
+    (e.armRz = -0.12),
+    e
+  );
+}
+var Yt = {
+    stand: {
+      hipY: 0.75,
+      hipPitch: 0,
+      torsoTilt: -0.04,
+      legAngle: 0.1,
+      knee: -0.2,
+      legSpread: 0.05,
+      headPitch: 0.02,
+      legSplit: 0,
+      kneeSplit: 0,
+      yaw: 0,
+    },
+    crouch: {
+      hipY: 0.42,
+      hipPitch: 0,
+      torsoTilt: -0.3,
+      legAngle: 0.65,
+      knee: -1.395,
+      legSpread: 0.14,
+      headPitch: 0.02,
+      legSplit: 0.8,
+      kneeSplit: 0.105,
+      yaw: 0.3,
+    },
+    crouchMove: {
+      hipY: 0.58,
+      hipPitch: -0.3,
+      torsoTilt: -0.32,
+      legAngle: 1.02,
+      knee: -1.32,
+      legSpread: 0.08,
+      headPitch: 0.32,
+      legSplit: 0,
+      kneeSplit: 0,
+      yaw: 0,
+    },
+    prone: {
+      hipY: 0.24,
+      hipPitch: -1.42,
+      torsoTilt: 0.06,
+      legAngle: -0.06,
+      knee: -0.1,
+      legSpread: 0.2,
+      headPitch: 1.42,
+      legSplit: 0,
+      kneeSplit: 0,
+      yaw: 0,
+    },
+    swim: {
+      hipY: 1.15,
+      hipPitch: -1.25,
+      torsoTilt: 0.1,
+      legAngle: -0.12,
+      knee: -0.35,
+      legSpread: 0.16,
+      headPitch: 1.28,
+      legSplit: 0,
+      kneeSplit: 0,
+      yaw: 0,
+    },
+  },
+  Xt = {
+    hipY: 0.22,
+    hipPitch: 1.55,
+    hipYaw: 0.15,
+    torsoTilt: -0.45,
+    torsoYaw: -0.12,
+    torsoRoll: 0.08,
+    legLx: -0.05,
+    legLz: 0.05,
+    shinL: -0.2,
+    legRx: -0.15,
+    legRz: 0.9,
+    shinR: -2.2,
+  },
+  Zt = {
+    ready: {
+      armLx: 0.85,
+      armLy: 0,
+      armLz: 0.19,
+      foreL: 0.2,
+      armRx: 0.55,
+      armRy: 0,
+      armRz: -0.45,
+      foreR: 0.55,
+      wpnX: 0.05,
+      wpnY: 0.28,
+      wpnZ: -0.12,
+      wpnPitch: -0.55,
+      wpnYaw: 0.35,
+      wpnRoll: 0.1,
+    },
+    aim: {
+      armLx: 1.52,
+      armLy: 0,
+      armLz: 0.55,
+      foreL: 0.15,
+      armRx: 0.35,
+      armRy: 0,
+      armRz: -0.3,
+      foreR: 1.5,
+      wpnX: 0.13,
+      wpnY: 0.42,
+      wpnZ: 0.02,
+      wpnPitch: 0,
+      wpnYaw: 0.04,
+      wpnRoll: 0,
+    },
+    hip: {
+      armLx: 1.3,
+      armLy: 0,
+      armLz: 0.5,
+      foreL: 0.25,
+      armRx: 0.2,
+      armRy: 0,
+      armRz: -0.4,
+      foreR: 1.2,
+      wpnX: 0.15,
+      wpnY: 0.27,
+      wpnZ: 0.06,
+      wpnPitch: 0.04,
+      wpnYaw: 0.07,
+      wpnRoll: 0.16,
+    },
+    sprint: {
+      armLx: 0.7,
+      armLy: 0,
+      armLz: 0.25,
+      foreL: 1.2,
+      armRx: 0.5,
+      armRy: 0,
+      armRz: -0.25,
+      foreR: 1.2,
+      wpnX: 0.02,
+      wpnY: 0.22,
+      wpnZ: -0.14,
+      wpnPitch: -0.9,
+      wpnYaw: 0.5,
+      wpnRoll: 0.3,
+    },
+    prone: {
+      armLx: 2.35,
+      armLy: 0.3,
+      armLz: 0.3,
+      foreL: 0.55,
+      armRx: 2.2,
+      armRy: -0.1,
+      armRz: 0.28,
+      foreR: 0.75,
+      wpnX: 0.1,
+      wpnY: 0.78,
+      wpnZ: -0.22,
+      wpnPitch: 1.4,
+      wpnYaw: 0.02,
+      wpnRoll: 0,
+    },
+    dead: {
+      armLx: 0.9,
+      armLy: 0.2,
+      armLz: 0.9,
+      foreL: 0.3,
+      armRx: -0.3,
+      armRy: 0,
+      armRz: 1.1,
+      foreR: 0.5,
+      wpnX: 0.45,
+      wpnY: 0.05,
+      wpnZ: -0.3,
+      wpnPitch: -0.2,
+      wpnYaw: 0.9,
+      wpnRoll: 1.2,
+    },
+  },
+  Qt = (e, t, n) => (e < t ? t : e > n ? n : e),
+  B = (e, t, n) => e + (t - e) * n,
+  $t = (e, t) => (e < 0 || e > t ? 0 : Math.sin((Math.PI * e) / t)),
+  V = { ...Yt.stand },
+  en = { ...Yt.stand },
+  H = { ...Zt.ready },
+  tn = { ...Zt.aim };
+function nn(e, t, n, r) {
+  for (let i in e) e[i] = B(t[i], n[i], r);
+  return e;
+}
+function rn(e) {
+  return e >= 1.3 ? 0 : 1 - Math.max(0, (e - 0.55) / 0.75);
+}
+function an(e, t = 0) {
+  return Qt((e - 4.6) / 1.6, 0, 1) * (1 - t);
+}
+var on = [0, 0];
+function sn(e) {
+  e += cn * Math.sin(e);
+  let t = Math.sin(e),
+    n = Math.cos(e);
+  on[0] = 0.32 + 0.78 * t + 0.18 * Math.max(0, n);
+  let r = Math.max(0, Math.cos(e + 0.45));
+  return ((on[1] = -0.32 - 1.85 * r * r - 0.38 * Math.max(0, -n)), on);
+}
+var cn = 0.35,
+  ln = 0.69,
+  un = 0.06,
+  dn = 2.05;
+function fn(e, t, n = 0) {
+  let r = B(Math.min(0.8, 0.18 + 0.085 * e), Qt(0.12 + 0.13 * e, 0, 0.42), t),
+    i = Qt(e / B(3.2, 2.2, t), 0, 1);
+  return {
+    amp: r,
+    stride: B(
+      B(
+        Math.max(B(0.3, 0.15, t), 4 * Pt * Math.sin(r * i) * B(1.15, 0.9, t)),
+        dn,
+        an(e, t),
+      ),
+      Ft,
+      n,
+    ),
+  };
+}
+function pn(e, t) {
+  let n = e.slideW || 0,
+    r = n > 0 ? Math.max(e.h, B(e.h, 1.3, n)) : e.h,
+    i = r >= 1.3 ? 1 : Math.max(0, (r - 0.55) / 0.75) * 0.45,
+    a = r >= 1.3 ? 1 - Math.min(1, (r - 1.3) / 0.5) : 1,
+    o = rn(r);
+  if (
+    (nn(en, Yt.crouch, Yt.crouchMove, Qt(e.hspeed / 0.8, 0, 1)),
+    r >= 1.3
+      ? nn(V, en, Yt.stand, Math.min(1, (r - 1.3) / 0.5))
+      : nn(V, Yt.prone, en, Math.max(0, (r - 0.55) / 0.75)),
+    e.swim)
+  )
+    for (let e in V) V[e] = Yt.swim[e];
+  let s = Qt(e.hspeed / B(3.2, 2.2, a), 0, 1),
+    { amp: c } = fn(e.hspeed, a),
+    l = Math.abs(e.moveF) / (Math.abs(e.moveF) + Math.abs(e.moveR) + 0.001),
+    u = Math.sin(e.phase),
+    d = Math.cos(e.phase),
+    f = u * c * s * i * l,
+    p = u * c * s * i * (1 - l) * 0.45,
+    m = Math.max(0, d) * s * i,
+    h = Math.max(0, -d) * s * i,
+    g =
+      Qt(Math.atan2(e.moveR, Math.abs(e.moveF) + 0.4), -0.45, 0.45) *
+      s *
+      i *
+      (e.moveF < -0.5 ? 0.5 : 1),
+    _ = (1 - Math.cos(2 * e.phase)) * 0.5 * s * i * (0.02 + 0.02 * e.sprintW),
+    v = e.grounded || e.swim ? 0 : Qt(e.airT * 6, 0, 1) * 0.5,
+    y = e.sprintW * 0.32 * s,
+    b = Math.sin(e.breathe) * 0.012;
+  ((t.hipY = V.hipY - _ - v * 0.06),
+    (t.hipPitch = V.hipPitch),
+    (t.hipYaw = g + V.yaw),
+    (t.torsoTilt = V.torsoTilt - y * 0.5 + b),
+    (t.torsoYaw = -g * 0.75 - V.yaw),
+    (t.torsoRoll = -e.lean * Lt),
+    (t.legLx = V.legAngle + V.legSplit + f + v),
+    (t.legRx = V.legAngle - V.legSplit - f + v),
+    (t.legLz = V.legSpread * 0.55 + p),
+    (t.legRz = -V.legSpread * 0.55 + p),
+    (t.shinL =
+      V.knee +
+      V.kneeSplit -
+      m * (B(0.55, 0.38, a) + 0.35 * e.sprintW) -
+      v * 0.9),
+    (t.shinR =
+      V.knee -
+      V.kneeSplit -
+      h * (B(0.55, 0.38, a) + 0.35 * e.sprintW) -
+      v * 0.9));
+  let x = an(e.hspeed, a) * i * l * (1 - o) * !e.swim;
+  x > 0 &&
+    (sn(e.phase),
+    (t.legLx = B(t.legLx, on[0] + v, x)),
+    (t.shinL = B(t.shinL, on[1] - v * 0.9, x)),
+    sn(e.phase + Math.PI),
+    (t.legRx = B(t.legRx, on[0] + v, x)),
+    (t.shinR = B(t.shinR, on[1] - v * 0.9, x)),
+    (t.hipY = B(
+      t.hipY,
+      ln + un * (0.5 - 0.5 * Math.cos(2 * e.phase)) - v * 0.06,
+      x,
+    )),
+    (t.legLz = B(t.legLz, 0.02 + p, x)),
+    (t.legRz = B(t.legRz, -0.02 + p, x)));
+  let S = e.aimW;
+  (nn(tn, Zt.hip, Zt.aim, e.adsMix ?? 1), nn(H, Zt.ready, tn, S));
+  let C = e.sprintW * (1 - S);
+  (C > 0 && nn(H, H, Zt.sprint, C), o > 0 && nn(H, H, Zt.prone, o));
+  let w =
+      u *
+      s *
+      (0.3 + 0.45 * C) *
+      i *
+      (1 - S) *
+      (1 - o) *
+      (1 - 0.75 * a) *
+      (1 - n),
+    T = e.pitch,
+    E = T * (0.35 * S + 0.15) * (1 - o);
+  t.torsoTilt -= E * 0.5;
+  let D = o > 0.5 ? 0.25 : 0.9;
+  ((t.headPitch =
+    V.headPitch + T * D - V.torsoTilt - (t.torsoTilt - V.torsoTilt)),
+    (t.headYaw = 0));
+  let ee = (e.sightW ?? 0) * (1 - o),
+    te = (e.scopeW ?? 0) * (1 - o),
+    O = 0.3 * (e.readyW ?? 0) * (1 - (e.relW ?? 0)) * (1 - ee) * (1 - o);
+  if ((O > 0 && ((t.torsoYaw -= O), (t.headYaw += 0.6 * O)), ee > 0)) {
+    ((t.torsoTilt -= 0.07 * ee),
+      (t.headPitch -= 0.12 * (e.cheekW ?? ee) * (1 - o) + 0.18 * te),
+      (t.torsoYaw -= 0.5 * ee),
+      (t.headYaw += 0.3 * ee));
+    let r = ee * (1 - a) * (1 - Qt(e.hspeed / 1.2, 0, 1)) * !e.swim * (1 - n);
+    r > 0 &&
+      ((t.hipYaw += 0.32 * r),
+      (t.torsoYaw -= 0.32 * r),
+      (t.headYaw -= 0.128 * r),
+      (t.hipY -= 0.03 * r),
+      (t.legLx += 0.22 * r),
+      (t.legRx -= 0.12 * r),
+      (t.shinL -= 0.18 * r),
+      (t.shinR -= 0.1 * r),
+      (t.legLz += 0.04 * r),
+      (t.legRz -= 0.06 * r));
+  }
+  let k =
+    T * (0.85 * S + 0.25 * (1 - S)) * (1 - o) -
+    Math.min(0, V.torsoTilt + V.hipPitch - Yt.crouch.torsoTilt) * S * (1 - o);
+  if (
+    ((t.armLx = H.armLx - w - y + k),
+    (t.armLy = H.armLy),
+    (t.armLz = H.armLz),
+    (t.foreL = H.foreL),
+    (t.armRx = H.armRx + w - y + k),
+    (t.armRy = H.armRy),
+    (t.armRz = H.armRz),
+    (t.foreR = H.foreR),
+    (t.wpnX = H.wpnX),
+    (t.wpnY = H.wpnY + 0.05 * te),
+    (t.wpnZ = H.wpnZ),
+    (t.wpnPitch = H.wpnPitch + k * B(0.7, 1, S) + (o > 0 ? T * 0.4 * o : 0)),
+    (t.wpnYaw = H.wpnYaw),
+    (t.wpnRoll = H.wpnRoll),
+    n > 0)
+  ) {
+    for (let e in Xt) t[e] = B(t[e], Xt[e], n);
+    ((t.torsoTilt -= E * 0.5 * n),
+      (t.headPitch = B(
+        t.headPitch,
+        -(Xt.hipPitch + Xt.torsoTilt) + T * 0.85,
+        n,
+      )),
+      (t.wpnPitch -= (Xt.hipPitch + Xt.torsoTilt) * n));
+  }
+  let A = o * Qt(e.hspeed / It, 0, 1);
+  if (A > 0) {
+    let e = 0.5 + 0.5 * u,
+      n = 0.5 - 0.5 * u;
+    ((t.legLz += 0.75 * e * A),
+      (t.legRz -= 0.75 * n * A),
+      (t.shinL -= 0.6 * e * A),
+      (t.shinR -= 0.6 * n * A),
+      (t.torsoYaw -= 0.16 * u * A),
+      (t.wpnZ -= 0.05 * d * A),
+      (t.wpnYaw -= 0.08 * u * A),
+      (t.armLx += (0.18 * n - 0.06) * A),
+      (t.armRx += (0.18 * e - 0.06) * A),
+      (t.foreL -= 0.25 * n * A),
+      (t.foreR -= 0.25 * e * A));
+  }
+  let ne = $t(e.fireT, kt);
+  if (
+    (ne > 0 &&
+      ((t.wpnZ += 0.045 * ne),
+      (t.wpnPitch += 0.06 * ne),
+      (t.torsoTilt -= 0.03 * ne),
+      (t.armRx -= 0.06 * ne),
+      (t.armLx -= 0.05 * ne)),
+    e.reloadT >= 0 && e.reloadT < 1.8)
+  ) {
+    let n = $t(e.reloadT, At);
+    ((t.foreL -= 0.75 * n * (1 - o)),
+      (t.armLx -= 0.55 * n * (1 - o)),
+      (t.armLz -= 0.15 * n),
+      (t.headPitch -= 0.28 * n * (1 - o)),
+      (t.wpnPitch -= 0.22 * n * (1 - o)));
+  }
+  let j = Xe(e.gesture, e.gestureT, Vt);
+  if (j) {
+    let e = j.w;
+    ((t.armLx = B(t.armLx, j.armLx, e)),
+      (t.armLy = B(t.armLy, 0, e)),
+      (t.armLz = B(t.armLz, j.armLz, e)),
+      (t.foreL = B(t.foreL, j.foreL, e)),
+      (t.torsoYaw += j.yaw * (1 - o)),
+      (t.headPitch += j.look));
+  }
+  let M = $t(e.hitT, jt),
+    re = Ct(e.throwT, Bt);
+  if (re) {
+    let e = re.w,
+      n = i * (1 - o);
+    for (let n of [`armLx`, `armLz`, `foreL`, `armRx`, `armRz`, `foreR`])
+      t[n] = B(t[n], re[n], e);
+    ((t.armLy = B(t.armLy, 0, e)), (t.armRy = B(t.armRy, re.armRy, e)));
+    for (let n in bt) t[n] = B(t[n], bt[n], e);
+    ((t.torsoYaw += re.torsoYaw * e),
+      (t.torsoTilt += re.torsoTilt * e * (1 - o)),
+      (t.hipYaw += re.hipYaw * e * n),
+      (t.hipY += re.hipY * e * n),
+      (t.legLx += re.legLx * e * n),
+      (t.shinL += re.shinL * e * n),
+      (t.legRx += re.legRx * e * n),
+      (t.shinR += re.shinR * e * n),
+      (t.headPitch += re.headPitch * e));
+  }
+  let ie = ae(e.knifeT, zt);
+  if (ie) {
+    let e = ie.w;
+    ((t.wpnX = B(t.wpnX, -0.24, e)),
+      (t.wpnY -= 0.12 * e),
+      (t.wpnPitch -= 0.55 * e),
+      (t.wpnRoll -= 0.3 * e),
+      (t.armRx = B(t.armRx, 1.5, e)),
+      (t.armRz = B(t.armRz, -0.2, e)),
+      (t.foreR = B(t.foreR, 0.6, e)),
+      (t.torsoYaw += ie.yaw * (1 - o)),
+      (t.torsoTilt += 0.16 * ie.lunge * (1 - o)),
+      (t.headPitch -= 0.1 * ie.lunge),
+      (t.hipY -= 0.05 * ie.lunge * i),
+      (t.legLx += 0.32 * ie.lunge * i),
+      (t.shinL -= 0.28 * ie.lunge * i),
+      (t.legRx -= 0.18 * ie.lunge * i));
+  }
+  let oe = Ot(e.blastT ?? -1) * (e.blastK ?? 0);
+  if (oe > 0) {
+    let n = i * (1 - o),
+      r = e.blastF ?? 0,
+      a = e.blastR ?? 0;
+    ((t.hipY -= 0.14 * oe * n),
+      (t.legLx += 0.35 * oe * n),
+      (t.legRx += 0.3 * oe * n),
+      (t.shinL -= 0.6 * oe * n),
+      (t.shinR -= 0.55 * oe * n),
+      (t.torsoTilt -= (0.28 + 0.18 * r) * oe * (1 - o)),
+      (t.torsoRoll -= 0.3 * a * oe * (1 - o)),
+      (t.headPitch -= 0.4 * oe),
+      (t.headYaw -= 0.5 * a * oe));
+  }
+  M > 0 &&
+    ((t.torsoTilt += 0.22 * M),
+    (t.hipYaw += 0.12 * M * e.deadDir),
+    (t.headPitch -= 0.25 * M),
+    (t.armLx -= 0.25 * M),
+    (t.armRx -= 0.2 * M));
+  let se = $t(e.landT, Mt);
+  se > 0 &&
+    ((t.hipY -= 0.17 * se * i),
+    (t.legLx += 0.45 * se),
+    (t.legRx += 0.45 * se),
+    (t.shinL -= 0.85 * se),
+    (t.shinR -= 0.85 * se),
+    (t.torsoTilt -= 0.2 * se));
+  let N =
+    (e.padsT >= 0 ? lt(e.padsT, T, Ht) : null) ??
+    (e.defibOut ? ct(e.breathe, Ht) : null);
+  if (N) {
+    if (N.kneel > 0 && o === 0) {
+      let n = Kt(e);
+      for (let e of Gt) t[e] = B(t[e], n[e], N.kneel);
+    }
+    let n = e.defibOut ? 1 : N.w;
+    ((t.armLx = B(t.armLx, N.armLx, n)),
+      (t.armRx = B(t.armRx, N.armRx, n)),
+      (t.armLy = B(t.armLy, N.armLy, n)),
+      (t.armRy = B(t.armRy, N.armRy, n)),
+      (t.armLz = B(t.armLz, N.armLz, n)),
+      (t.armRz = B(t.armRz, N.armRz, n)),
+      (t.foreL = B(t.foreL, N.foreL, n)),
+      (t.foreR = B(t.foreR, N.foreR, n)),
+      (t.torsoTilt += N.lean * (1 - o)),
+      (t.headPitch -= N.lean * 0.6),
+      (t.wpnX = B(t.wpnX, -0.24, n)),
+      (t.wpnY -= 0.12 * n),
+      (t.wpnPitch -= 0.55 * n),
+      (t.wpnRoll -= 0.3 * n));
+  }
+  if (e.deadT >= 0) {
+    let n = Qt(e.deadT / Nt, 0, 1),
+      r = n * n * (3 - 2 * n),
+      i = e.deadDir,
+      a = i > 0 ? 1.48 : -1.5;
+    ((t.hipY = B(t.hipY, 0.2, r)),
+      (t.hipPitch = B(t.hipPitch, a, r)),
+      (t.hipYaw = B(t.hipYaw, 0.25 * i, r)),
+      (t.torsoTilt = B(t.torsoTilt, 0.08, r)),
+      (t.torsoYaw = B(t.torsoYaw, -0.2 * i, r)),
+      (t.torsoRoll = B(t.torsoRoll, 0.12, r)),
+      (t.headPitch = B(t.headPitch, i > 0 ? -0.35 : 0.9, r)),
+      (t.headYaw = B(t.headYaw, 0.45 * i, r)),
+      (t.legLx = B(t.legLx, i > 0 ? -0.15 : 0.05, r)),
+      (t.legRx = B(t.legRx, i > 0 ? 0.35 : -0.08, r)),
+      (t.legLz = B(t.legLz, 0.22, r)),
+      (t.legRz = B(t.legRz, -0.35, r)),
+      (t.shinL = B(t.shinL, i > 0 ? -0.6 : -0.15, r)),
+      (t.shinR = B(t.shinR, -0.1, r)));
+    for (let e of [
+      `armLx`,
+      `armLy`,
+      `armLz`,
+      `foreL`,
+      `armRx`,
+      `armRy`,
+      `armRz`,
+      `foreR`,
+      `wpnX`,
+      `wpnY`,
+      `wpnZ`,
+      `wpnPitch`,
+      `wpnYaw`,
+      `wpnRoll`,
+    ])
+      t[e] = B(t[e], Zt.dead[e], r);
+  }
+  return t;
+}
+var mn = { blade: 0.175, grip: 0.12, gripCentre: 0.065 },
+  hn = {
+    steel: 10134184,
+    edge: 14673128,
+    grip: 2828066,
+    ring: 3814445,
+    guard: 3421754,
+  },
+  gn = new p();
+function _n(e, t) {
+  let n = e.attributes.position.count,
+    r = new Float32Array(n * 3);
+  gn.setHex(t).convertSRGBToLinear();
+  for (let e = 0; e < n; e++)
+    ((r[e * 3] = gn.r), (r[e * 3 + 1] = gn.g), (r[e * 3 + 2] = gn.b));
+  return (
+    e.setAttribute(`color`, new s(r, 3)),
+    e.attributes.uv && e.deleteAttribute(`uv`),
+    e.index ? e.toNonIndexed() : e
+  );
+}
+var vn = (e, t, n, i, a, o, s) => _n(new r(e, t, n).translate(i, a, o), s);
+function yn(e, t, n, r, i = 0) {
+  let a = new k();
+  (a.moveTo(0, -t / 2 + i),
+    a.lineTo(0.6 * e, -t / 2 + i),
+    a.quadraticCurveTo(0.9 * e, -t / 2 + i, e - i, 0.08 * t),
+    a.lineTo(0.72 * e, 0.34 * t - i),
+    a.lineTo(0, t / 2 - i));
+  let o = new D(a, { depth: n, bevelEnabled: !1, curveSegments: 6 });
+  return (o.translate(0, 0, -n / 2).rotateY(Math.PI / 2), _n(o, r));
+}
+var bn = null;
+function xn() {
+  if (bn) return bn;
+  let e = mn.gripCentre,
+    t = [
+      yn(mn.blade, 0.032, 0.005, hn.steel).translate(0, 0, -e + 0.006),
+      yn(mn.blade, 0.032, 0.0062, hn.edge)
+        .scale(1, 0.3, 1)
+        .translate(0, -0.0112, -e + 0.006),
+      vn(0.016, 0.062, 0.011, 0, -0.004, -e + 0.009, hn.guard),
+      vn(0.024, 0.03, mn.grip, 0, -0.002, 0, hn.grip),
+      vn(0.0255, 0.0315, 0.006, 0, -0.002, 0.055, hn.guard),
+    ];
+  for (let e = 0; e < 6; e++)
+    t.push(vn(0.0262, 0.0322, 0.007, 0, -0.002, -0.045 + e * 0.017, hn.ring));
+  bn = te(t);
+  for (let e of t) e.dispose();
+  return (bn.computeVertexNormals(), bn);
+}
+var Sn = null;
+function Cn() {
+  return (Sn ??= new a({
+    vertexColors: !0,
+    roughness: 0.38,
+    metalness: 0.12,
+    flatShading: !0,
+  }));
+}
+function wn() {
+  let e = new t(xn(), Cn());
+  return ((e.name = `knife`), e);
+}
+var Tn = new p();
+new o();
+var En = new C(),
+  Dn = new M(),
+  On = { fixed: 0, team: 1, cloth: 2, gear: 3, skin: 4 };
+function kn(e, t, n, r) {
+  let i = (n[1] - t[1]) * (r[2] - t[2]) - (n[2] - t[2]) * (r[1] - t[1]),
+    a = (n[2] - t[2]) * (r[0] - t[0]) - (n[0] - t[0]) * (r[2] - t[2]),
+    o = (n[0] - t[0]) * (r[1] - t[1]) - (n[1] - t[1]) * (r[0] - t[0]),
+    s = t[0] + n[0] + r[0],
+    c = t[1] + n[1] + r[1],
+    l = t[2] + n[2] + r[2];
+  i * s + a * c + o * l < 0
+    ? e.push(...t, ...r, ...n)
+    : e.push(...t, ...n, ...r);
+}
+function An(e, t, n, r, i) {
+  (kn(e, t, n, r), kn(e, t, r, i));
+}
+function jn(e, t, n, r = 0.012) {
+  let i = e / 2,
+    a = t / 2,
+    o = n / 2,
+    s = Math.max(5e-4, Math.min(r, e / 3, t / 3, n / 3)),
+    c = i - s,
+    u = a - s,
+    d = o - s,
+    f = [];
+  for (let e of [-1, 1])
+    (An(f, [e * i, -u, -d], [e * i, u, -d], [e * i, u, d], [e * i, -u, d]),
+      An(f, [-c, e * a, -d], [c, e * a, -d], [c, e * a, d], [-c, e * a, d]),
+      An(f, [-c, -u, e * o], [c, -u, e * o], [c, u, e * o], [-c, u, e * o]));
+  for (let e of [-1, 1])
+    for (let t of [-1, 1])
+      (An(
+        f,
+        [e * i, t * u, -d],
+        [e * c, t * a, -d],
+        [e * c, t * a, d],
+        [e * i, t * u, d],
+      ),
+        An(
+          f,
+          [e * i, -u, t * d],
+          [e * c, -u, t * o],
+          [e * c, u, t * o],
+          [e * i, u, t * d],
+        ),
+        An(
+          f,
+          [-c, e * a, t * d],
+          [-c, e * u, t * o],
+          [c, e * u, t * o],
+          [c, e * a, t * d],
+        ));
+  for (let e of [-1, 1])
+    for (let t of [-1, 1])
+      for (let n of [-1, 1])
+        kn(
+          f,
+          [e * i, t * u, n * d],
+          [e * c, t * a, n * d],
+          [e * c, t * u, n * o],
+        );
+  let p = new l();
+  return (p.setAttribute(`position`, new g(f, 3)), p.computeVertexNormals(), p);
+}
+function Mn(e, t, n, r = 1) {
+  let i = e.attributes.position.count,
+    a = new Float32Array(i * 3),
+    o = new Float32Array(i);
+  Tn.set(t).multiplyScalar(r);
+  for (let e = 0; e < i; e++)
+    ((a[e * 3] = Tn.r),
+      (a[e * 3 + 1] = Tn.g),
+      (a[e * 3 + 2] = Tn.b),
+      (o[e] = n));
+  return (
+    e.setAttribute(`color`, new s(a, 3)),
+    e.setAttribute(`aTag`, new s(o, 1)),
+    e
+  );
+}
+function U(e, t, n, i, a, o, s, c = {}) {
+  let l =
+    c.bevel === 0
+      ? new r(e, t, n).toNonIndexed()
+      : jn(e, t, n, c.bevel ?? Math.min(e, t, n) * 0.14);
+  return (
+    l.deleteAttribute(`uv`),
+    c.rot &&
+      l.applyMatrix4(
+        Dn.makeRotationFromEuler(
+          En.set(c.rot[0] || 0, c.rot[1] || 0, c.rot[2] || 0),
+        ),
+      ),
+    l.translate(i, a, o),
+    Mn(l, s, c.tag ?? On.fixed, c.shade ?? 1)
+  );
+}
+function Nn(e) {
+  let t = e.flat().filter(Boolean),
+    n = te(
+      t.map((e) => (e.index ? e.toNonIndexed() : e)),
+      !1,
+    );
+  for (let e of t) e.dispose();
+  return (n.computeBoundingSphere(), n);
+}
+function Pn(e, t, n, r, i, a, o = 0) {
+  let s = new S(e, t),
+    c = s.attributes.uv;
+  for (let e = 0; e < c.count; e++)
+    c.setXY(e, c.getX(e) ? a[2] : a[0], c.getY(e) ? a[3] : a[1]);
+  return (o && s.rotateY(o), s.translate(n, r, i), s);
+}
+var Fn = (e) => (e.index ? e.index.count : e.attributes.position.count) / 3,
+  In = [`open`, `blink`, `squint`, `grimace`],
+  Ln = [4863270, 3099243, 4152118, 7035450, 3815994, 6060684],
+  Rn = [
+    [`Holt`, 9067068, 1775380, 3, 0, 1, { mouth: 2, scar: 1 }],
+    [`Lark`, 15254438, 12088366, 0, 0, 3, { freckles: 1, hair: 3 }],
+    [`Kestrel`, 7161393, 1381137, 0, 1, 0, { brow: 2 }],
+    [`Marsh`, 13079664, 3943456, 1, 0, 2, { mouth: 1 }],
+    [`Quill`, 15781298, 14207392, 0, 2, 4, { hair: 3, eye: 5 }],
+    [`Birch`, 11105882, 2958882, 2, 0, 1, { brow: 1, mouth: 3 }],
+    [`Onyx`, 4993316, 986637, 4, 0, 3, { hair: 2 }],
+    [`Heath`, 14199175, 6175266, 0, 3, 0, { freckles: 1, mouth: 1 }],
+    [`Talon`, 9659722, 2235673, 3, 1, 2, { scar: 2, brow: 2 }],
+    [`Ember`, 14463379, 10107676, 0, 0, 4, { hair: 3, freckles: 1 }],
+    [`Grove`, 8081979, 2761244, 1, 2, 1, { eye: 2 }],
+    [`Pebble`, 12884604, 7170660, 2, 0, 0, { mouth: 2, brow: 1 }],
+  ],
+  zn = [
+    ...N.map((e) => ({
+      ...e,
+      eye: Ln[e.index % Ln.length],
+      brow: e.index % 3,
+      mouth: e.index % 4,
+      scar: +(e.index % 7 == 3),
+      freckles: +(e.index % 9 == 5),
+      hairStyle: e.index % 4,
+    })),
+    ...Rn.map(([e, t, n, r, i, a, o], s) => ({
+      name: e,
+      skin: t,
+      hair: n,
+      beard: r,
+      paint: i,
+      headgear: a,
+      index: 20 + s,
+      eye: Ln[o.eye ?? (s * 5) % Ln.length],
+      brow: o.brow ?? 0,
+      mouth: o.mouth ?? 0,
+      scar: o.scar ?? 0,
+      freckles: o.freckles ?? 0,
+      hairStyle: o.hair ?? s % 3,
+    })),
+  ],
+  W = (e, t = 1) =>
+    `rgb(${Math.min(255, ((e >> 16) & 255) * t) | 0},${Math.min(255, ((e >> 8) & 255) * t) | 0},${Math.min(255, (e & 255) * t) | 0})`;
+function Bn(e, t, n, r, i) {
+  let a = (r, i, a) => {
+      r < 0 ||
+        i < 0 ||
+        r >= 24 ||
+        i >= 24 ||
+        ((e.fillStyle = a), e.fillRect(t + r, n + i, 1, 1));
+    },
+    o = (r, i, a, o, s) => {
+      ((e.fillStyle = s), e.fillRect(t + r, n + i, a, o));
+    },
+    s = W(r.skin),
+    c = W(r.skin, 0.84),
+    l = W(r.skin, 0.68),
+    u = W(r.skin, 1.07),
+    d = W(r.hair),
+    f = W(r.hair, 1.35),
+    p = W(r.skin, 0.62),
+    m = r.index * 7919,
+    h = (e) => (((Math.sin(m + e * 12.9898) * 43758.5453) % 1) + 1) % 1;
+  if (
+    (o(0, 0, 24, 24, s),
+    o(0, 0, 1, 24, c),
+    o(23, 0, 1, 24, c),
+    o(0, 22, 24, 2, c),
+    o(3, 4, 18, 3, u),
+    o(4, 13, 3, 2, u),
+    o(17, 13, 3, 2, u),
+    r.hairStyle === 1)
+  ) {
+    o(0, 0, 24, 3, d);
+    for (let e = 0; e < 24; e += 3) a(e + 1, 3, d);
+    for (let e = 2; e < 24; e += 5) a(e, 0, f);
+  } else if (r.hairStyle === 3) {
+    (o(0, 0, 24, 4, d), o(0, 4, 2, 8, d), o(22, 4, 2, 8, d));
+    for (let e = 3; e < 24; e += 4) a(e, 1, f);
+  } else if (r.hairStyle === 0) {
+    o(0, 0, 24, 2, W(r.hair, 0.9));
+    for (let e = 0; e < 24; e += 2) a(e, 2, W(r.hair, 0.8));
+  } else o(0, 0, 24, 1, c);
+  r.hairStyle !== 2 && (o(0, 5, 1, 6, d), o(23, 5, 1, 6, d));
+  let g = i === 2 || i === 3,
+    _ = 8 + +!!g,
+    v = r.brow === 2;
+  for (let [e, t] of [
+    [4, 1],
+    [14, -1],
+  ])
+    for (let n = 0; n < 6; n++) {
+      let o = t > 0 ? n : 5 - n,
+        s = _;
+      (r.brow === 1 && (n === 0 || n === 5) && (s += 1),
+        i === 3 && o >= 4 && (s += 1),
+        a(e + n, s, d),
+        v && a(e + n, s - 1, d));
+    }
+  for (let e of [5, 15]) {
+    if (i === 1) {
+      (o(e, 11, 4, 1, W(r.hair, 0.8)), a(e - 1, 11, c));
+      continue;
+    }
+    let t = g ? 2 : 3,
+      n = 10 + +!!g;
+    (o(e - 1, n - 1, 6, 1, c),
+      a(e - 1, n, c),
+      a(e + 4, n, c),
+      o(e, n, 4, t, `#efe9dc`),
+      o(e + 1, n, 2, t, W(r.eye)),
+      o(e + 1, n + t - 2, 2, 1, `#161616`),
+      a(e + 2, n, `#fbf8f0`),
+      o(e, n - 1, 4, 1, W(r.skin, 0.55)));
+  }
+  if (
+    (a(11, 11, u),
+    a(12, 11, u),
+    a(11, 12, u),
+    o(11, 13, 2, 2, c),
+    a(10, 15, l),
+    a(13, 15, l),
+    o(11, 15, 2, 1, c),
+    a(4, 15, W(r.skin, 0.95)),
+    a(19, 15, W(r.skin, 0.95)),
+    r.freckles)
+  )
+    for (let e = 0; e < 9; e++)
+      a(4 + ((h(e) * 5) | 0) + (e % 2 ? 11 : 0), 13 + ((h(e + 9) * 3) | 0), l);
+  (i === 3
+    ? (o(8, 17, 8, 3, `#2a1a16`),
+      o(9, 17, 6, 1, `#ece4d4`),
+      o(9, 19, 6, 1, `#d8cfbd`))
+    : r.mouth === 3
+      ? (o(8, 18, 8, 2, `#2a1a16`),
+        o(9, 18, 6, 1, `#ece4d4`),
+        a(7, 17, p),
+        a(16, 17, p))
+      : (o(9, 18, 6, 1, p),
+        r.mouth === 1 && (a(15, 17, p), a(8, 18, c)),
+        r.mouth === 2 && (a(8, 19, p), a(15, 19, p)),
+        o(10, 19, 4, 1, W(r.skin, 0.9))),
+    o(10, 21, 4, 1, c));
+  let y = W(r.hair, 0.95),
+    b = W(r.hair, 0.75);
+  if (
+    ((r.beard === 1 || r.beard === 3) &&
+      (o(8, 16, 8, 1, y), a(7, 17, y), a(16, 17, y)),
+    r.beard === 2 || r.beard === 3)
+  )
+    for (let e = 16; e < 24; e++)
+      for (let t = 1; t < 23; t++)
+        !(e >= 18 - (i === 3) && e <= 18 + +(i === 3) && t >= 8 && t <= 15) &&
+          !(e === 16 && (t < 5 || t > 18)) &&
+          (e > 16 || t < 6 || t > 17) &&
+          a(t, e, (t + e) % 3 ? y : b);
+  if (
+    (r.beard === 4 && (o(10, 20, 4, 3, y), a(11, 21, b)),
+    r.beard === 0 && r.index % 2)
+  )
+    for (let e = 0; e < 26; e++)
+      a(
+        5 + ((h(e + 40) * 14) | 0),
+        17 + ((h(e + 80) * 6) | 0),
+        W(r.skin, 0.78),
+      );
+  if (
+    (r.paint === 1 && (o(4, 14, 6, 2, `#2f3a2c`), o(14, 14, 6, 2, `#2f3a2c`)),
+    r.paint === 2)
+  )
+    for (let e = 0; e < 7; e++)
+      (a(3 + e, 7 + e, `#394232`),
+        a(4 + e, 7 + e, `#394232`),
+        a(20 - e, 7 + e, `#394232`));
+  if (r.paint === 3)
+    for (let [e, t, n] of [
+      [2, 14, `#3a4630`],
+      [3, 15, `#3a4630`],
+      [4, 14, `#5b5a3a`],
+      [19, 13, `#3a4630`],
+      [20, 14, `#5b5a3a`],
+      [18, 15, `#3a4630`],
+      [11, 5, `#3a4630`],
+      [12, 5, `#5b5a3a`],
+    ])
+      (a(e, t, n), a(e + 1, t, n));
+  if (r.scar === 1)
+    for (let e = 0; e < 5; e++) a(17 + +(e > 2), 12 + e, W(r.skin, 1.18));
+  if (r.scar === 2)
+    for (let e = 0; e < 6; e++) a(4 + e, 6 + (e >> 1), W(r.skin, 1.2));
+}
+var Vn = null;
+function Hn() {
+  if (Vn) return Vn;
+  let e = document.createElement(`canvas`);
+  ((e.width = 24 * In.length), (e.height = 24 * zn.length));
+  let t = e.getContext(`2d`);
+  zn.forEach((e, n) => In.forEach((r, i) => Bn(t, i * 24, n * 24, e, i)));
+  let n = new j(e);
+  return (
+    (n.magFilter = T),
+    (n.minFilter = T),
+    (n.generateMipmaps = !1),
+    (n.colorSpace = h),
+    (Vn = { texture: n, canvas: e }),
+    Vn
+  );
+}
+function Un(e, t = 0) {
+  let n = In.length,
+    r = zn.length,
+    i = 0.02 / 24,
+    a = t / n,
+    o = 1 - e / r;
+  return [a + i, o - 1 / r + i, a + 1 / n - i, o - i];
+}
+var G = { w: 0.34, h: 0.34, d: 0.32, y: 0.23, neck: 0.6 },
+  Wn = G.y + G.h / 2,
+  Gn = -G.d / 2,
+  Kn = (e) => Wn - (G.h * (e + 0.5)) / 24,
+  qn = { cols: 44, rows: 14, disc: 20, tube: [16, 6], curve: 5, bevel: 1 };
+function Jn(e) {
+  Object.assign(
+    qn,
+    e
+      ? { cols: 28, rows: 8, disc: 10, tube: [8, 4], curve: 2, bevel: 0.34 }
+      : { cols: 44, rows: 14, disc: 20, tube: [16, 6], curve: 5, bevel: 1 },
+  );
+}
+var Yn = [
+    `nods up`,
+    `nods down`,
+    `light up`,
+    `light down`,
+    `cover up`,
+    `cover down`,
+  ],
+  Xn = [
+    [0.065, Kn(11)],
+    [-0.065, Kn(11)],
+  ],
+  K = {
+    dark: 1908253,
+    rubber: 1316116,
+    lens: 923417,
+    lensGlint: 6256512,
+    lensRim: 1052946,
+    ir: 7311194,
+    seal: 1776410,
+    steel: 9409168,
+    nvg: 10521700,
+  },
+  Zn = new o(0, 1, 0),
+  Qn = new o(1, 0, 0),
+  $n = new M(),
+  er = new o(),
+  tr = new o(),
+  nr = new p(),
+  rr = (e, t) => new p(e).multiplyScalar(t).getHex(),
+  ir = (e, t) => Math.sign(e) * Math.abs(e) ** t,
+  ar = (e) => ((e.userData.smooth = !0), e),
+  or = 0.3,
+  sr = 0.18,
+  cr = 0.22,
+  lr = 0.215,
+  ur = 0.55,
+  dr = 0.55,
+  fr = 0.338;
+function pr(e, t) {
+  let n = ir(Math.sin(t), ur),
+    r = lr + (0.03 * (1 + Math.cos(e))) / 2;
+  return new o(
+    cr * n * ir(Math.sin(e), dr),
+    or + sr * ir(Math.cos(t), ur),
+    r * n * ir(Math.cos(e), dr),
+  );
+}
+var mr = (e) => Math.acos(Math.max(-1, Math.min(1, ir((e - or) / sr, 1 / ur))));
+function hr(e, t) {
+  if (t < 0.02) return new o(0, 1, 0);
+  let n = 0.003,
+    r = pr(e, t),
+    i = pr(e + n, t)
+      .sub(r)
+      .cross(pr(e, t + n).sub(r))
+      .normalize();
+  return (i.dot(new o(r.x, r.y - or + 0.1, r.z)) < 0 && i.negate(), i);
+}
+var gr = (e) => {
+    let t = ((e % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+    return Math.abs(t - Math.PI);
+  },
+  _r = (e, t, n) => {
+    let r = Math.max(0, Math.min(1, (e - t) / (n - t)));
+    return r * r * (3 - 2 * r);
+  };
+function vr(e) {
+  let t = (gr(e) * 180) / Math.PI,
+    n = 0.302 + 0.01 * _r(t, 20, 55);
+  return n + (fr - n) * _r(t, 58, 74) - 0.12600000000000003 * _r(t, 104, 116);
+}
+var yr = (e, t) => Math.PI - t * e;
+function br(e, t, n = 0) {
+  let r = mr(t);
+  return pr(e, r).addScaledVector(hr(e, r), n);
+}
+var xr = (e, t) => hr(e, mr(t));
+function Sr(e, t, n) {
+  let r = qn.cols,
+    i = qn.rows,
+    a = [],
+    s = [],
+    c = [],
+    u = [],
+    d = [],
+    f = [e, rr(e, 0.74), 7171143, 9141078, 5196599],
+    p = (r) => {
+      if (!t) return e;
+      let i =
+        Math.sin(r.x * 31 + n) * Math.sin(r.z * 27 - n * 0.7) +
+        Math.sin(r.y * 41 + r.x * 13 + n * 1.3) * 0.7;
+      return f[i > 0.9 ? 4 : i > 0.45 ? 2 : i > 0 ? 0 : i > -0.5 ? 3 : 1];
+    },
+    m = (e, t, n, r = 1, i = 0, o = 0) => (
+      d.push(i, o),
+      a.push(e.x, e.y, e.z),
+      s.push(t.x, t.y, t.z),
+      nr.set(n).multiplyScalar(r),
+      c.push(nr.r, nr.g, nr.b),
+      a.length / 3 - 1
+    ),
+    h = [],
+    _ = [];
+  for (let t = 0; t <= r; t++) {
+    let n = (t / r) * Math.PI * 2,
+      a = mr(vr(n)),
+      s = [];
+    for (let e = 0; e <= i; e++) {
+      let o = Math.max(0.001, a * (1 - e / i) ** 1.1),
+        c = pr(n, o);
+      s.push(m(c, hr(n, o), p(c), 1 - 0.05 * (1 - e / i), t / r, 1 - o / a));
+    }
+    h.push(s);
+    let c = pr(n, a),
+      l = hr(n, a),
+      u = new o(-c.x, 0, -c.z).normalize(),
+      d = c
+        .clone()
+        .addScaledVector(l, 0.004)
+        .add(new o(0, -0.008, 0)),
+      f = c
+        .clone()
+        .addScaledVector(u, 0.02)
+        .add(new o(0, -0.004, 0)),
+      g = l
+        .clone()
+        .multiplyScalar(0.4)
+        .add(new o(0, -1, 0))
+        .normalize();
+    _.push([
+      m(d, l, e, 0.72, t / r, 0),
+      m(d, g, e, 0.62, t / r, 0),
+      m(f, g, e, 0.5, t / r, 0),
+    ]);
+  }
+  for (let e = 0; e < r; e++) {
+    for (let t = 0; t < i; t++) {
+      let n = h[e][t],
+        r = h[e + 1][t],
+        i = h[e + 1][t + 1],
+        a = h[e][t + 1];
+      u.push(n, r, i, n, i, a);
+    }
+    let t = _[e],
+      n = _[e + 1];
+    u.push(
+      h[e][0],
+      t[0],
+      n[0],
+      h[e][0],
+      n[0],
+      h[e + 1][0],
+      t[1],
+      t[2],
+      n[2],
+      t[1],
+      n[2],
+      n[1],
+    );
+  }
+  let v = new l();
+  (v.setAttribute(`position`, new g(a, 3)),
+    v.setAttribute(`normal`, new g(s, 3)),
+    v.setAttribute(`color`, new g(c, 3)),
+    v.setAttribute(`uv`, new g(d, 2)),
+    v.setIndex(u));
+  let y = v.attributes.position,
+    b = v.attributes.normal,
+    x = v.index.array,
+    S = new o(),
+    C = new o(),
+    w = new o(),
+    T = new o();
+  for (let e = 0; e < x.length; e += 3)
+    if (
+      (S.fromBufferAttribute(y, x[e]),
+      C.fromBufferAttribute(y, x[e + 1]),
+      w.fromBufferAttribute(y, x[e + 2]),
+      T.fromBufferAttribute(b, x[e]),
+      C.sub(S).cross(w.sub(S)).dot(T) < 0)
+    ) {
+      let t = x[e + 1];
+      ((x[e + 1] = x[e + 2]), (x[e + 2] = t));
+    }
+  let E = v.toNonIndexed();
+  return (
+    v.dispose(),
+    E.setAttribute(
+      `aTag`,
+      new g(new Float32Array(E.attributes.position.count), 1),
+    ),
+    (E.userData.shell = !0),
+    ar(E)
+  );
+}
+var Cr = {},
+  wr = [38, 114],
+  Tr = (e) => {
+    let t = Math.max(vr(e), 0.3);
+    return [t + 0.004, t + 0.044];
+  };
+function Er(e) {
+  if (Cr[e]) return Cr[e];
+  let t = 1024,
+    n = document.createElement(`canvas`);
+  ((n.width = t), (n.height = 512));
+  let r = n.getContext(`2d`),
+    i = (e) => `rgb(${e},${e},${e})`,
+    a = e === `textured`,
+    o = (e, n) => [(e / (Math.PI * 2)) * t, (mr(n) / mr(vr(e))) * 512];
+  ((r.fillStyle = i(a ? 238 : 255)), r.fillRect(0, 0, t, 512));
+  let s = 7,
+    c = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  if (a) {
+    for (let e = 0; e < 26e3; e++)
+      ((r.fillStyle = i(c() < 0.5 ? 222 : 252)),
+        r.fillRect(c() * t, c() * 512, c() < 0.2 ? 2 : 1, 1));
+    for (let e = 0; e < t; e++) {
+      let [, n] = o((e / t) * Math.PI * 2, 0.47);
+      ((r.fillStyle = i(212)),
+        r.fillRect(e, n, 1, 2),
+        (r.fillStyle = i(250)),
+        r.fillRect(e, n + 2, 1, 1));
+    }
+  }
+  let l = r.createLinearGradient(0, 409.6, 0, 512);
+  (l.addColorStop(0, `rgba(0,0,0,0)`),
+    l.addColorStop(1, `rgba(0,0,0,${a ? 0.3 : 0.12})`),
+    (r.fillStyle = l),
+    r.fillRect(0, 409.6, t, 102.4));
+  for (let e of [-1, 1]) {
+    for (let n = 0; n < t; n++) {
+      let s = (n / t) * Math.PI * 2,
+        c = (gr(s) * 180) / Math.PI;
+      if (Math.sign(Math.sin(s)) !== e || c < wr[0] || c > wr[1]) continue;
+      let [l, u] = Tr(s),
+        [, d] = o(s, l),
+        [, f] = o(s, u),
+        p = Math.min(d, f),
+        m = Math.abs(d - f);
+      a
+        ? ((r.fillStyle = `rgba(0,0,0,0.28)`), r.fillRect(n, p - 3, 1, m + 8))
+        : ((r.fillStyle = i(168)),
+          r.fillRect(n, p, 1, m),
+          (r.fillStyle = i(128)),
+          r.fillRect(n, p, 1, 2),
+          r.fillRect(n, p + m - 2, 1, 2),
+          Math.round(c) % 6 < 3 &&
+            c > wr[0] + 3 &&
+            c < wr[1] - 3 &&
+            ((r.fillStyle = i(70)), r.fillRect(n, p + m * 0.3, 1, m * 0.4)));
+    }
+    for (let t of wr) {
+      let n = yr((t * Math.PI) / 180 + (t === wr[0] ? 0.05 : -0.05), e),
+        [s, c] = Tr(n),
+        [l, u] = o(n, (s + c) / 2);
+      ((r.fillStyle = i(a ? 90 : 60)),
+        r.beginPath(),
+        r.arc(l, u, 5, 0, Math.PI * 2),
+        r.fill());
+    }
+  }
+  if (a)
+    for (let [e, t] of [
+      [Math.PI - 0.35, 0.34],
+      [Math.PI + 0.35, 0.34],
+      [0.5, 0.36],
+      [2 * Math.PI - 0.5, 0.36],
+      [2.2, 0.33],
+      [2 * Math.PI - 2.2, 0.33],
+    ]) {
+      let [n, a] = o(e, t);
+      ((r.fillStyle = i(120)),
+        r.beginPath(),
+        r.arc(n, a, 6, 0, Math.PI * 2),
+        r.fill(),
+        (r.fillStyle = i(70)),
+        r.fillRect(n - 3, a - 1, 6, 2));
+    }
+  let u = new j(n);
+  return ((u.colorSpace = h), (u.anisotropy = 4), (Cr[e] = u));
+}
+function Dr(e, t, n, r, i, a, s = {}) {
+  let c = xr(r, i),
+    l = br(r, i).addScaledVector(c, n / 2 + (s.lift ?? 0.001)),
+    u = U(e, t, n, 0, 0, 0, a, {
+      bevel: s.bevel ?? Math.min(e, t, n) * 0.3,
+      tag: s.tag,
+    });
+  return (
+    $n
+      .lookAt(c, new o(), Math.abs(c.y) > 0.95 ? new o(0, 0, 1) : Zn)
+      .setPosition(l),
+    u.applyMatrix4($n)
+  );
+}
+function Or(e, t, n, r) {
+  (er.copy(e.isVector3 ? e : new o(...e)),
+    tr.copy(t.isVector3 ? t : new o(...t)));
+  let i = U(n, n, er.distanceTo(tr), 0, 0, 0, r, { bevel: 0 });
+  return (
+    $n.lookAt(
+      er,
+      tr,
+      Math.abs(tr.clone().sub(er).normalize().y) > 0.95 ? Qn : Zn,
+    ),
+    $n.setPosition(er.clone().add(tr).multiplyScalar(0.5)),
+    i.applyMatrix4($n)
+  );
+}
+var kr = (e, t) => {
+  for (let n of e) n.applyMatrix4(t);
+  return e;
+};
+function Ar(e, t) {
+  let n = [],
+    r = [];
+  for (let t = 38; t <= 114; t += 5) {
+    let n = yr((t * Math.PI) / 180, e),
+      i = Math.max(vr(n), 0.3) + 0.024;
+    r.push({ p: br(n, i, 0.0045), n: xr(n, i) });
+  }
+  for (let e = 0; e < r.length - 1; e++) {
+    let i = r[e],
+      a = r[e + 1],
+      o = a.p.clone().sub(i.p),
+      s = o.length();
+    o.normalize();
+    let c = i.n.clone().add(a.n).normalize(),
+      l = c.sub(o.clone().multiplyScalar(c.dot(o))).normalize();
+    ($n
+      .makeBasis(l, o.clone().cross(l).normalize(), o)
+      .setPosition(i.p.clone().add(a.p).multiplyScalar(0.5)),
+      n.push(
+        U(0.01, 0.038, s + 0.004, 0, 0, 0, t, { bevel: 0.004 }).applyMatrix4(
+          $n,
+        ),
+      ),
+      e % 2 &&
+        n.push(
+          U(0.004, 0.014, s * 0.55, 0.0045, 0, 0, K.dark, {
+            bevel: 0,
+          }).applyMatrix4($n),
+        ));
+  }
+  return { p: n, pts: r };
+}
+var jr = (e, t) => {
+  e.deleteAttribute(`uv`);
+  let n = e.index ? e.toNonIndexed() : e;
+  n !== e && e.dispose();
+  let r = n.attributes.position.count,
+    i = new Float32Array(r * 3);
+  nr.set(t);
+  for (let e = 0; e < r; e++) i.set([nr.r, nr.g, nr.b], e * 3);
+  return (
+    n.setAttribute(`color`, new s(i, 3)),
+    n.setAttribute(`aTag`, new s(new Float32Array(r), 1)),
+    ar(n)
+  );
+};
+function Mr(e, t, n, r, i) {
+  let a = new w(e, e, t, qn.disc);
+  return (
+    a.applyQuaternion(new _().setFromUnitVectors(Zn, i)),
+    a.translate(r.x, r.y, r.z),
+    jr(a, n)
+  );
+}
+function Nr(e, t, n) {
+  return jr(new c(new d(e), qn.tube[0], t, qn.tube[1], !1), n);
+}
+var Pr = 0.4;
+function Fr(e, t) {
+  let n = e.attributes.position;
+  for (let e = 0; e < n.count; e++) n.setX(e, t(n.getX(e), n.getY(e)));
+  e.deleteAttribute(`normal`);
+  let r = A(e, 1e-5);
+  (e.dispose(), r.computeVertexNormals());
+  let i = r.toNonIndexed();
+  return (r.dispose(), ar(i));
+}
+function Ir(e, t, n, r = 0, i = 0) {
+  let a = new k(),
+    o = r - e / 2,
+    s = i - t / 2;
+  return (
+    a.moveTo(o + n, s),
+    a.lineTo(o + e - n, s),
+    a.quadraticCurveTo(o + e, s, o + e, s + n),
+    a.lineTo(o + e, s + t - n),
+    a.quadraticCurveTo(o + e, s + t, o + e - n, s + t),
+    a.lineTo(o + n, s + t),
+    a.quadraticCurveTo(o, s + t, o, s + t - n),
+    a.lineTo(o, s + n),
+    a.quadraticCurveTo(o, s, o + n, s),
+    a
+  );
+}
+function Lr(e, t, n, r, i, a, o, s, c = 3) {
+  let l = new D(e, {
+    depth: t,
+    bevelEnabled: !0,
+    bevelThickness: n,
+    bevelSize: n * 0.85,
+    bevelSegments: Math.max(1, Math.round(c * qn.bevel)),
+    curveSegments: qn.curve,
+  });
+  return (
+    l.translate(0, 0, n),
+    l.rotateY((i * Math.PI) / 2),
+    l.translate(a, o, s),
+    jr(l, r)
+  );
+}
+function Rr(e, t) {
+  let n = rr(e, 0.86),
+    r = [],
+    i = 0.24000000000000002,
+    a = -0.004,
+    s = 0.134;
+  for (let c of [-1, 1]) {
+    let l = c * 0.25,
+      u = (e) => l + c * e,
+      d = [
+        Lr(
+          Ir(0.1, 0.12200000000000001, 0.036),
+          0.012,
+          0.011,
+          3815733,
+          c,
+          c * 0.152,
+          i,
+          a,
+        ),
+        Lr(
+          Ir(0.116, 0.138, 0.042),
+          0.004,
+          0.004,
+          rr(e, 0.62),
+          c,
+          c * 0.186,
+          i,
+          a,
+        ),
+        Lr(Ir(0.112, s, 0.042), 0.018, 0.014, n, c, c * 0.196, i, a, 4),
+        Lr(
+          Ir(0.078, 0.07, 0.022, 0.006, -0.02),
+          0.001,
+          0.002,
+          rr(e, 0.92),
+          c,
+          u(-0.002),
+          i,
+          a,
+        ),
+        Lr(
+          Ir(0.014, 0.026, 0.005),
+          0.003,
+          0.002,
+          K.dark,
+          c,
+          u(0.001),
+          0.21200000000000002,
+          -0.034,
+          2,
+        ),
+        Lr(
+          Ir(0.019, 0.019, 0.005),
+          0.003,
+          0.002,
+          rr(e, 1.02),
+          c,
+          u(0.001),
+          0.21800000000000003,
+          -0.01,
+          2,
+        ),
+        Mr(
+          0.0045,
+          0.004,
+          rr(e, 0.7),
+          new o(u(0.0065), 0.21800000000000003, -0.01),
+          new o(c, 0, 0),
+        ),
+        Lr(
+          Ir(0.02, 0.03, 0.009),
+          0.012,
+          0.006,
+          rr(e, 0.8),
+          c,
+          c * 0.214,
+          0.252,
+          -0.062,
+          3,
+        ),
+      ],
+      f = (e) => 1 - Pr * _r((e - i) / (s / 2), -0.15, 1),
+      p = (e, t) => c * (0.152 + (Math.abs(e) - 0.152) * f(t));
+    for (let e of d) r.push(Fr(e, p));
+    let m = new o(c, 0, 0),
+      h = new o(p(u(0.002), 0.278), 0.278, 0.028),
+      g = br(yr((124 * Math.PI) / 180, c), 0.28600000000000003, 0.008),
+      _ = g.distanceTo(h);
+    ($n.lookAt(h, g, Zn).setPosition(h.clone().add(g).multiplyScalar(0.5)),
+      r.push(
+        U(0.012, 0.028, _ + 0.02, 0, 0, 0, t, { bevel: 0.006 }).applyMatrix4(
+          $n,
+        ),
+        U(0.02, 0.044, 0.04, g.x, g.y, g.z, t, { bevel: 0.009 }),
+        ...[0.35, 0.62, 0.9].map((e) =>
+          Mr(0.0045, 0.016, K.dark, h.clone().lerp(g, e), m),
+        ),
+        Mr(0.02, 0.012, t, h, m),
+        Mr(0.013, 0.018, rr(t, 0.78), h, m),
+        Mr(0.006, 0.02, K.dark, h, m),
+        Nr(
+          [
+            g.clone().add(new o(0, -0.02, 0.01)),
+            new o(g.x + c * 0.012, g.y - 0.07, g.z + 0.006),
+            new o(c * 0.222, 0.18000000000000002, 0.066),
+            new o(c * 0.228, 0.20500000000000002, 0.054000000000000006),
+          ],
+          0.0042,
+          rr(e, 1.12),
+        ),
+      ));
+    let v = new o(c * 0.222, 0.16800000000000004, -0.036000000000000004),
+      y = new o(0, -1, -0.35).normalize();
+    r.push(
+      Mr(0.0095, 0.03, K.dark, v, y),
+      ...[-0.008, 0, 0.008].map((e) =>
+        Mr(0.0105, 0.003, 2894890, v.clone().addScaledVector(y, e), y),
+      ),
+      Nr(
+        [
+          v.clone().addScaledVector(y, 0.014),
+          new o(c * 0.215, 0.11000000000000001, -0.044),
+          new o(c * 0.13, 0.03, 0.03),
+        ],
+        0.0055,
+        2634298,
+      ),
+    );
+  }
+  let c = Kn(18);
+  return (
+    r.push(
+      Or(
+        [0.215, 0.21000000000000002, -0.064],
+        [G.w / 2 - 0.02, c, Gn - 0.045],
+        0.013,
+        K.dark,
+      ),
+      Or(
+        [G.w / 2 - 0.02, c, Gn - 0.045],
+        [0.065, c, Gn - 0.045],
+        0.013,
+        K.dark,
+      ),
+      U(0.04, 0.032, 0.036, 0.055, c, Gn - 0.045, K.dark, { bevel: 0.01 }),
+    ),
+    r
+  );
+}
+function zr() {
+  let e = K.nvg,
+    t = rr(e, 0.62),
+    n = [
+      U(0.075, 0.05, 0.045, 0, -0.012, -0.018, t, { bevel: 0.01 }),
+      U(0.05, 0.1, 0.036, 0, -0.07, -0.03, t, { bevel: 0.01 }),
+      U(0.036, 0.028, 0.05, 0, -0.03, -0.046, K.steel, { bevel: 0.006 }),
+      U(0.2, 0.055, 0.09, 0, -0.1, -0.05, e, { bevel: 0.016 }),
+      U(0.13, 0.014, 0.07, 0, -0.068, -0.05, rr(e, 1.12), { bevel: 0.005 }),
+      ...[-1, 1].map((e) =>
+        U(0.024, 0.04, 0.04, e * 0.112, -0.1, -0.05, t, { bevel: 0.008 }),
+      ),
+      U(0.03, 0.03, 0.03, -0.1, -0.085, 0, t, { bevel: 0.008 }),
+    ];
+  for (let [r, i, a, o, s] of [
+    [-0.108, -0.42, 0.13, 0.05, -0.006],
+    [-0.041, 0, 0.19, 0.062, 0],
+    [0.041, 0, 0.19, 0.062, 0],
+    [0.108, 0.42, 0.13, 0.05, -0.006],
+  ]) {
+    let c = o + 0.01,
+      l = [
+        U(o, o, a, 0, 0, -a / 2, e, { bevel: o * 0.32 }),
+        ...[0.18, 0.34, 0.5].map((e) =>
+          U(c, c, 0.014, 0, 0, -a * e, t, { bevel: 0.006 }),
+        ),
+        U(c, c, 0.03, 0, 0, -a + 0.01, t, { bevel: 0.01 }),
+        U(o * 0.82, o * 0.82, 0.008, 0, 0, -a - 0.006, K.lensRim, {
+          bevel: 0.004,
+        }),
+        U(o * 0.66, o * 0.66, 0.006, 0, 0, -a - 0.009, K.lens, {
+          bevel: 0.003,
+        }),
+        U(
+          o * 0.2,
+          o * 0.2,
+          0.003,
+          o * 0.15,
+          o * 0.15,
+          -a - 0.0125,
+          K.lensGlint,
+          { bevel: 0 },
+        ),
+        U(o * 0.9, o * 0.9, 0.04, 0, 0, 0.018, K.rubber, { bevel: 0.012 }),
+      ];
+    ($n
+      .makeRotationY(-i)
+      .setPosition(r, -0.145 + s, 0.02 - (a < 0.15 ? 0.03 : 0)),
+      n.push(...kr(l, $n)));
+  }
+  return n;
+}
+function Br(e, t, n = 0, r = `textured`) {
+  let i = e.helmet,
+    a = e.rim,
+    o = rr(i, 1.14),
+    s = Math.PI,
+    c = s,
+    l = [
+      Sr(i, t.startsWith(`cover`), n * 1.7),
+      ...Rr(i, a),
+      ...(r === `painted` ? [] : [...Ar(1, a).p, ...Ar(-1, a).p]),
+      U(0.19, 0.01, 0.17, 0, 0.481, 0.01, o, { bevel: 0.003 }),
+      ...[-1, 1].map((e) => Dr(0.15, 0.055, 0.01, (e * s) / 2, 0.42, o)),
+      Dr(0.17, 0.055, 0.01, 0, 0.4, o),
+      Dr(0.065, 0.038, 0.008, -s / 2, 0.42, 16777215, {
+        tag: On.team,
+        lift: 0.01,
+      }),
+      Dr(0.038, 0.038, 0.008, -0.35, 0.4, K.ir, { lift: 0.01 }),
+      Dr(0.1, 0.07, 0.018, c, 0.35, a),
+      ...[-0.035, 0, 0.035].map((e) =>
+        Dr(0.011, 0.011, 0.008, c - e * 4, 0.362, K.dark, {
+          lift: 0.018,
+          bevel: 0,
+        }),
+      ),
+      Dr(0.14, 0.08, 0.055, 0, 0.33, K.dark),
+      Dr(0.142, 0.014, 0.057, 0, 0.35, a, { lift: 0.002 }),
+      U(0.04, 0.028, 0.04, -0.05, 0.476, 0.1, K.dark, { bevel: 0.008 }),
+      U(0.022, 0.012, 0.022, -0.05, 0.495, 0.1, 10145914, { bevel: 0 }),
+    ];
+  for (let e of [-1, 1]) {
+    let t = [c - e * 0.25, c - e * 0.8, (e * s) / 2, e * 0.8, e * 0.3].map(
+      (e) => br(e, 0.44, 0.006),
+    );
+    for (let e = 0; e < t.length - 1; e++)
+      l.push(Or(t[e], t[e + 1], 0.008, K.dark));
+  }
+  if (t.startsWith(`light`)) {
+    let e = br(s / 2 + 0.35, 0.4, 0.03);
+    l.push(
+      U(0.042, 0.042, 0.13, e.x, e.y, e.z - 0.03, K.dark, { bevel: 0.01 }),
+      U(0.046, 0.046, 0.014, e.x, e.y, e.z - 0.1, 14341828, { bevel: 0.005 }),
+      Dr(0.1, 0.06, 0.055, c, 0.46, K.dark),
+      Dr(0.034, 0.034, 0.012, c, 0.46, 3954390, { lift: 0.056, bevel: 0.003 }),
+    );
+  }
+  let u = t.endsWith(`down`),
+    d = zr(),
+    f = br(c, 0.35, 0.028);
+  return (
+    $n.makeRotationX(u ? 0 : 2.2).setPosition(0, f.y + (u ? 0.012 : 0.02), f.z),
+    l.push(...kr(d, $n)),
+    l
+  );
+}
+var Vr = new Map(),
+  Hr = 0.76,
+  Ur = {
+    body: 7031342,
+    strap: 4140060,
+    grip: 3811352,
+    gripDark: 2759696,
+    gripRim: 8018490,
+  },
+  Wr = (e, t, n) => {
+    let r = (e * 374761393 + t * 668265263 + n * 2147483647) | 0;
+    return (
+      (r = Math.imul(r ^ (r >>> 13), 1274126177)),
+      ((r ^ (r >>> 16)) >>> 0) / 4294967296
+    );
+  },
+  Gr = (e, t, n, r, i, a) => e >= n && e <= r && t >= i && t <= a;
+function Kr(e, t, n, r) {
+  let { part: i, side: a, cls: o, pal: s } = n,
+    c = s.cloth,
+    l = Wr(
+      Math.floor(e.x / 0.07 + 50),
+      Math.floor(e.y / 0.045 + 50),
+      Math.floor(e.z / 0.07 + 50),
+    ),
+    u = c,
+    d = n.base * (l < 0.17 ? Hr : l < 0.3 ? 1.13 : 1),
+    f = t.z < -0.6,
+    p = t.x * a > 0.6;
+  if (
+    ((i === `waist` || i === `pants`) &&
+      (e.y > 0.112 &&
+        e.y < 0.162 &&
+        ((u = 1974046), (d = 1), (e.y > 0.155 || e.y < 0.119) && (d = 0.75)),
+      f &&
+        Math.abs(e.x) < 0.03 &&
+        e.y > 0.118 &&
+        e.y < 0.156 &&
+        ((u = 9144954),
+        (d = Math.abs(e.x) < 0.018 && e.y > 0.126 && e.y < 0.148 ? 0.55 : 1))),
+    (i === `leg` || i === `pants`) &&
+      p &&
+      (i !== `leg` || a !== 1) &&
+      Gr(e.z, e.y, -0.07, 0.055, -0.35, -0.16))
+  ) {
+    let t = e.z < -0.062 || e.z > 0.047 || e.y < -0.342;
+    ((u = o === `engineer` ? 9137997 : o === `assault` ? s.gear : c),
+      (d =
+        (o === `assault` ? 0.9 : o === `engineer` ? 1 : n.base * 0.8) *
+        (t ? 0.7 : e.y > -0.2 ? 0.82 : 1)),
+      e.y > -0.2 && e.y < -0.194 && (d *= 0.6));
+  }
+  if ((i === `leg` && a === 1) || i === `pants`) {
+    let n = t.x > 0.6 && e.x > 0,
+      r = e.x > 0,
+      i = Ur.strap,
+      a = e.y - 0.09;
+    n &&
+      e.y < 0.112 &&
+      a > -0.13 &&
+      e.z > 0.004 &&
+      e.z < 0.032 &&
+      ((u = i), (d = 1));
+    let o = r && ((a < -0.188 && a > -0.214) || (a < -0.29 && a > -0.316));
+    if (
+      (o && ((u = i), (d = t.x < -0.6 ? 0.8 : 1)),
+      n && Gr(e.z, a, -0.048, 0.056, -0.345, -0.13))
+    ) {
+      let t = e.z < -0.041 || e.z > 0.049 || a < -0.338;
+      ((u = Ur.body),
+        (d = t ? 0.6 : o ? 0.7 : 1),
+        a > -0.158 && ((d = 0.72), a > -0.152 && a < -0.148 && (d = 0.5)));
+    }
+    let s = e.z - (a + 0.13) * 0.4;
+    if (n && a >= -0.134 && a < -0.05 && s > -0.004 && s < 0.054) {
+      let e = s < 0.004 || s > 0.046 || a > -0.058;
+      ((u = e ? Ur.gripRim : Ur.grip),
+        (d = 1),
+        !e &&
+          Math.round((a + 0.134) / 0.012) % 2 == 0 &&
+          s > 0.012 &&
+          s < 0.04 &&
+          (u = Ur.gripDark));
+    }
+  }
+  if (
+    (i === `leg` &&
+      r.y < -0.64 &&
+      ((u = c), (d = n.base * Hr * (r.y < -0.742 ? 0.8 : 1))),
+    i === `leg` && r.y >= -0.64)
+  ) {
+    let e = Math.abs(r.x),
+      t = r.y + 0.37 - 0.06;
+    (f &&
+      e < 0.068 &&
+      t > -0.06 &&
+      t < 0.065 &&
+      ((u = s.gear), (d = e > 0.056 || t < -0.05 || t > 0.055 ? 0.6 : 0.82)),
+      o === `engineer` &&
+        f &&
+        e < 0.06 &&
+        t < -0.08 &&
+        t > -0.2 &&
+        ((u = 5327675), (d = 1)));
+  }
+  return (
+    i === `arm` &&
+      (p &&
+        Gr(r.z, r.y, -0.05, 0.05, -0.135, -0.02) &&
+        ((d = n.base * (Math.abs(r.z) > 0.043 || r.y < -0.128 ? 0.66 : 0.84)),
+        (u = c)),
+      o === `support` &&
+        r.y > -0.09 &&
+        t.y > -0.2 &&
+        ((u = s.gear), (d = 0.95)),
+      o === `medic` &&
+        r.y < -0.175 &&
+        r.y > -0.23 &&
+        ((u = 15658728),
+        (d = 1),
+        (p || f) &&
+          (Math.abs(p ? r.z : r.x) < 0.009 || Math.abs(r.y + 0.2025) < 0.009) &&
+          Math.abs(p ? r.z : r.x) < 0.024 &&
+          (u = 13115434))),
+    [u, d]
+  );
+}
+var q = new p(),
+  qr = new o(),
+  Jr = new o(),
+  Yr = new o();
+function Xr(e, t, n, r, a = 256) {
+  if (((e += `:` + a), Vr.has(e))) return Vr.get(e);
+  let s = document.createElement(`canvas`);
+  s.width = s.height = a;
+  let c = s.getContext(`2d`),
+    l = c.createImageData(a, a),
+    u = l.data;
+  q.set(n.pal.cloth).multiplyScalar(n.base).convertLinearToSRGB();
+  for (let e = 0; e < u.length; e += 4)
+    ((u[e] = q.r * 255),
+      (u[e + 1] = q.g * 255),
+      (u[e + 2] = q.b * 255),
+      (u[e + 3] = 255));
+  if (n.part === `leg`) {
+    q.set(n.pal.cloth)
+      .multiplyScalar(n.base * Hr * 0.8)
+      .convertLinearToSRGB();
+    for (let e = 0; e < a; e++)
+      for (let t = Math.floor(a * 0.8); t < a; t++) {
+        let n = (e * a + t) * 4;
+        ((u[n] = q.r * 255), (u[n + 1] = q.g * 255), (u[n + 2] = q.b * 255));
+      }
+  }
+  let d = t.attributes.position,
+    f = t.attributes.uv,
+    p = t.index.array,
+    m = (e) => new o(d.getX(e), d.getY(e), d.getZ(e)),
+    g = new o(),
+    _ = new o(),
+    v = new Map(),
+    y = new Uint8ClampedArray(3),
+    b = 0,
+    x = i.enabled,
+    S = i.workingColorSpace,
+    C = (e, t) => {
+      (x !== i.enabled || S !== i.workingColorSpace) &&
+        (v.clear(), (b = 0), (x = i.enabled), (S = i.workingColorSpace));
+      let n = Number.isFinite(e) && Number.isFinite(t),
+        r = n ? v.get(e) : null,
+        a = r?.get(t);
+      if (a) return ((q.r = a.r), (q.g = a.g), (q.b = a.b), a.bytes);
+      if (
+        (q.set(e).multiplyScalar(t).convertLinearToSRGB(),
+        (y[0] = Math.min(255, q.r * 255)),
+        (y[1] = Math.min(255, q.g * 255)),
+        (y[2] = Math.min(255, q.b * 255)),
+        n && b < 256)
+      ) {
+        let n = { r: q.r, g: q.g, b: q.b, bytes: y.slice() };
+        return (r ? r.set(t, n) : v.set(e, new Map([[t, n]])), b++, n.bytes);
+      }
+      return y;
+    };
+  for (let e = 0; e < p.length; e += 3) {
+    let t = [p[e], p[e + 1], p[e + 2]],
+      i = t.map((e) => [f.getX(e) * a, (1 - f.getY(e)) * a]),
+      o = t.map(m),
+      s =
+        (i[1][0] - i[0][0]) * (i[2][1] - i[0][1]) -
+        (i[2][0] - i[0][0]) * (i[1][1] - i[0][1]);
+    if (Math.abs(s) < 0.5) continue;
+    Yr.crossVectors(
+      qr.subVectors(o[1], o[0]),
+      Jr.subVectors(o[2], o[0]),
+    ).normalize();
+    let c = o.map((e) => r(e.clone())),
+      l = Math.max(0, Math.floor(Math.min(i[0][0], i[1][0], i[2][0]) - 1)),
+      d = Math.min(a - 1, Math.ceil(Math.max(i[0][0], i[1][0], i[2][0]) + 1)),
+      h = Math.max(0, Math.floor(Math.min(i[0][1], i[1][1], i[2][1]) - 1)),
+      v = Math.min(a - 1, Math.ceil(Math.max(i[0][1], i[1][1], i[2][1]) + 1));
+    for (let e = h; e <= v; e++)
+      for (let t = l; t <= d; t++) {
+        let r = t + 0.5,
+          l = e + 0.5,
+          d =
+            ((r - i[0][0]) * (i[2][1] - i[0][1]) -
+              (i[2][0] - i[0][0]) * (l - i[0][1])) /
+            s,
+          f =
+            ((i[1][0] - i[0][0]) * (l - i[0][1]) -
+              (r - i[0][0]) * (i[1][1] - i[0][1])) /
+            s,
+          p = 1 - d - f;
+        if (p < -0.08 || d < -0.08 || f < -0.08) continue;
+        (g
+          .set(0, 0, 0)
+          .addScaledVector(o[0], p)
+          .addScaledVector(o[1], d)
+          .addScaledVector(o[2], f),
+          _.set(0, 0, 0)
+            .addScaledVector(c[0], p)
+            .addScaledVector(c[1], d)
+            .addScaledVector(c[2], f));
+        let [m, h] = Kr(_, Yr, n, g),
+          v = C(m, h),
+          y = (e * a + t) * 4;
+        ((u[y] = v[0]), (u[y + 1] = v[1]), (u[y + 2] = v[2]));
+      }
+  }
+  c.putImageData(l, 0, 0);
+  let w = new j(s);
+  return ((w.colorSpace = h), (w.anisotropy = 4), Vr.set(e, w), w);
+}
+function Zr(e) {
+  let t = e.attributes.position.count;
+  (e.setAttribute(`color`, new s(new Float32Array(t * 3).fill(1), 3)),
+    e.setAttribute(`aTag`, new s(new Float32Array(t), 1)));
+}
+var Qr = {
+    veil0: {
+      fp: `7912eb04`,
+      n: 862,
+      p: `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`,
+    },
+    poncho0: {
+      fp: `c9417eb3`,
+      n: 1476,
+      p: `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`,
+    },
+  },
+  J = (e, t, n) => new o(e, t, n),
+  $r = 0.6,
+  ei = 0.01,
+  ti = 1 / 1.08,
+  ni = {
+    c: J(0, 0.8037037037037037, 0.01925925925925926),
+    r: J(0.21, 0.23, 0.21).multiplyScalar(ti),
+  },
+  ri = [
+    [J(0, 0.55, 0), J(0, 0.75, 0), 0.09],
+    [J(0.022, 0.662, 0.2), J(0.158, 0.058, 0.2), 0.06],
+    ...[-1, 1].flatMap((e) => [
+      [J(e * 0.275, 0.52, 0), J(e * 0.275, 0.52, 0), 0.085],
+      [J(e * 0.275, 0.5, 0), J(e * 0.275, 0.2, 0), 0.075],
+      [J(e * 0.28, 0.2, -0.02), J(e * 0.28, -0.08, -0.04), 0.07],
+      [J(e * 0.116, 0.02, 0), J(e * 0.116, -0.62, 0), 0.105],
+    ]),
+  ],
+  ii = [
+    { c: J(0, 0.41, 0.01), h: J(0.195, 0.14, 0.11), r: 0.04 },
+    { c: J(0, 0.08, 0), h: J(0.19, 0.16, 0.08), r: 0.03 },
+  ],
+  ai = new o(),
+  oi = new o(),
+  si = new o();
+function ci(e, t, n) {
+  let r = !1;
+  ai.subVectors(e, ni.c).divide(ni.r);
+  let i = ai.length(),
+    a = 1 + n / ni.r.y;
+  i < a &&
+    (e.copy(ni.c).add(ai.multiplyScalar(a / Math.max(i, 1e-6)).multiply(ni.r)),
+    (r = !0));
+  for (let [n, i, a] of ri) {
+    si.subVectors(i, n);
+    let o = si.lengthSq()
+      ? Math.max(0, Math.min(1, oi.subVectors(e, n).dot(si) / si.lengthSq()))
+      : 0;
+    (oi.copy(n).addScaledVector(si, o), ai.subVectors(e, oi));
+    let s = ai.length();
+    s < a + t &&
+      (e
+        .copy(oi)
+        .addScaledVector(
+          s > 1e-6 ? ai.divideScalar(s) : ai.set(0, 0, -1),
+          a + t,
+        ),
+      (r = !0));
+  }
+  for (let n of ii) {
+    (oi
+      .set(
+        Math.max(-n.h.x, Math.min(n.h.x, e.x - n.c.x)),
+        Math.max(-n.h.y, Math.min(n.h.y, e.y - n.c.y)),
+        Math.max(-n.h.z, Math.min(n.h.z, e.z - n.c.z)),
+      )
+      .add(n.c),
+      ai.subVectors(e, oi));
+    let i = ai.length();
+    i < n.r + t &&
+      (e
+        .copy(oi)
+        .addScaledVector(
+          i > 1e-6 ? ai.divideScalar(i) : ai.set(0, 1, 0),
+          n.r + t,
+        ),
+      (r = !0));
+  }
+  return r;
+}
+function li(e) {
+  let t = e >>> 0 || 1;
+  return () => (t = (t * 1664525 + 1013904223) >>> 0) / 4294967296;
+}
+var ui = new Map(),
+  di = 1;
+function fi(e) {
+  let { nx: t, nz: n, spacing: r, centre: i } = e,
+    a = [di, t, n, r, i.x, i.y, i.z, e.off, e.domeOff ?? e.off, e.steps ?? 260];
+  for (let i = 0; i < n; i++)
+    for (let o = 0; o < t; o++) {
+      let s = (o - (t - 1) / 2) * r,
+        c = (i - (n - 1) / 2) * r;
+      a.push(e.keep(s, c) ? (e.pin(s, c) ?? `k`) : `-`);
+    }
+  a.push(
+    ni.c.toArray(),
+    ni.r.toArray(),
+    ri.map(([e, t, n]) => [e.toArray(), t.toArray(), n]),
+    ii.map((e) => [e.c.toArray(), e.h.toArray(), e.r]),
+  );
+  let o = JSON.stringify(a),
+    s = 2166136261;
+  for (let e = 0; e < o.length; e++)
+    s = Math.imul(s ^ o.charCodeAt(e), 16777619);
+  return (s >>> 0).toString(16);
+}
+function pi(e, t) {
+  let n = Qr[e.key];
+  if (!n || n.n !== t.length || n.fp !== fi(e)) return !1;
+  let r = atob(n.p),
+    i = new Float32Array(
+      new Uint8Array([...r].map((e) => e.charCodeAt(0))).buffer,
+    );
+  return (t.forEach((e, t) => e.set(i[t * 3], i[t * 3 + 1], i[t * 3 + 2])), !0);
+}
+var mi = [];
+function hi(e) {
+  if (ui.has(e.key)) return ui.get(e.key);
+  mi.push(e);
+  let { nx: t, nz: n, spacing: r, centre: i } = e,
+    a = new Int32Array(t * n).fill(-1),
+    o = [],
+    s = [],
+    c = [],
+    l = [];
+  for (let u = 0; u < n; u++)
+    for (let d = 0; d < t; d++) {
+      let f = (d - (t - 1) / 2) * r,
+        p = (u - (n - 1) / 2) * r;
+      if (!e.keep(f, p)) continue;
+      let m = e.pin(f, p);
+      ((a[u * t + d] = o.length), c.push(d, u), l.push(m !== null));
+      let h = J(i.x + f, m ?? i.y, i.z + p);
+      (o.push(h), s.push(h.clone()));
+    }
+  let u = [],
+    d = (e, r, i, s, c) => {
+      if (i >= t || s >= n || i < 0) return;
+      let l = a[r * t + e],
+        d = a[s * t + i];
+      l >= 0 && d >= 0 && u.push([l, d, o[l].distanceTo(o[d]), c]);
+    };
+  for (let e = 0; e < n; e++)
+    for (let n = 0; n < t; n++)
+      (d(n, e, n + 1, e, 1),
+        d(n, e, n, e + 1, 1),
+        d(n, e, n + 1, e + 1, 0.6),
+        d(n, e, n - 1, e + 1, 0.6),
+        d(n, e, n + 2, e, 0.08),
+        d(n, e, n, e + 2, 0.08));
+  let f = J(0, 0, 0),
+    p = J(0, 0, 0),
+    m = !e.fresh && pi(e, o) ? 0 : (e.steps ?? 260);
+  for (let t = 0; t < m; t++) {
+    for (let e = 0; e < o.length; e++) {
+      if (l[e]) continue;
+      let t = o[e],
+        n = s[e];
+      (p.subVectors(t, n).multiplyScalar(0.98),
+        n.copy(t),
+        t.add(p),
+        (t.y += -0.0012098765432098767));
+    }
+    for (let t = 0; t < 6; t++) {
+      for (let [e, t, n, r] of u) {
+        f.subVectors(o[t], o[e]);
+        let i = f.length();
+        if (i < 1e-9) continue;
+        let a = ((i - n) / i) * r,
+          s = l[e],
+          c = l[t];
+        if (s && c) continue;
+        let u = s ? 0 : c ? 1 : 0.5;
+        (o[e].addScaledVector(f, a * u), o[t].addScaledVector(f, -a * (1 - u)));
+      }
+      for (let t = 0; t < o.length; t++)
+        !l[t] && ci(o[t], e.off, e.domeOff ?? e.off) && s[t].lerp(o[t], 0.7);
+    }
+  }
+  let h = {
+    P: o.map((e) => e.clone()),
+    keep: a,
+    ij: c,
+    nx: t,
+    nz: n,
+    spacing: r,
+  };
+  return (ui.set(e.key, h), h);
+}
+function gi(e, t) {
+  let { P: n, keep: r, ij: i, nx: a, nz: o, spacing: c } = e,
+    u = n.length,
+    d = new Float32Array(u * 3),
+    f = new Float32Array(u * 2),
+    p = [];
+  n.forEach((e, n) => {
+    (d.set([e.x, e.y, e.z], n * 3),
+      f.set([(i[n * 2] * c) / t, (i[n * 2 + 1] * c) / t], n * 2));
+  });
+  for (let e = 0; e < o - 1; e++)
+    for (let t = 0; t < a - 1; t++) {
+      let n = r[e * a + t],
+        i = r[e * a + t + 1],
+        o = r[(e + 1) * a + t + 1],
+        s = r[(e + 1) * a + t];
+      n >= 0 && i >= 0 && o >= 0 && s >= 0 && p.push(n, s, o, n, o, i);
+    }
+  let m = new l();
+  return (
+    m.setAttribute(`position`, new s(d, 3)),
+    m.setAttribute(`uv`, new s(f, 2)),
+    m.setIndex(p),
+    m.computeVertexNormals(),
+    m
+  );
+}
+var _i = 0.019,
+  vi = 0.034,
+  yi = 42,
+  bi = 0.215,
+  xi = {},
+  Si = null,
+  Ci = null;
+function wi() {
+  if (Si) return Si;
+  let e = document.createElement(`canvas`);
+  e.width = e.height = 32;
+  let t = e.getContext(`2d`);
+  return (
+    (t.fillStyle = `#000`),
+    t.fillRect(0, 0, 32, 32),
+    (t.fillStyle = `#fff`),
+    t.fillRect(0, 0, 32, 11),
+    t.fillRect(0, 0, 11, 32),
+    (Si = new j(e)),
+    (Si.wrapS = Si.wrapT = b),
+    (Si.anisotropy = 4),
+    Si
+  );
+}
+var Ti = [
+  [3883824, 9411218],
+  [3809828, 9073782],
+];
+function Ei(e, t = 0) {
+  let n = +(t === 1),
+    r = (e ? `w` : `s`) + n;
+  if (xi[r]) return xi[r];
+  let i = new a({ color: e ? 2896430 : 1316623, side: 2, roughness: 1 });
+  return (
+    (i.onBeforeCompile = (e) => {
+      e.vertexShader = e.vertexShader.replace(
+        `#include <begin_vertex>`,
+        `#include <begin_vertex>
+transformed -= objectNormal * 0.009;`,
+      );
+    }),
+    (i.customProgramCacheKey = () => `veil-inner`),
+    (xi[r] = {
+      inner: i,
+      net: new a({
+        color: Ti[n][+!!e],
+        alphaMap: wi(),
+        alphaTest: 0.5,
+        alphaToCoverage: !0,
+        side: 2,
+        roughness: 1,
+      }),
+    })
+  );
+}
+function Di(e) {
+  let t = li(e * 7919 + 13),
+    n = [t() * 6, t() * 6, t() * 6],
+    r = (e, t) => {
+      let r = Math.atan2(e, t);
+      return (
+        0.56 +
+        0.05 * Math.sin(3 * r + n[0]) +
+        0.03 * Math.sin(7 * r + n[1]) +
+        0.02 * Math.sin(13 * r + n[2]) +
+        0.05 * Math.cos(r)
+      );
+    };
+  return hi({
+    key: `veil` + e,
+    nx: yi,
+    nz: yi,
+    spacing: vi,
+    centre: J(0, ni.c.y + ni.r.y + 0.03, ni.c.z),
+    off: 0.05,
+    domeOff: 0.012,
+    keep: (e, t) => Math.hypot(e, t) <= r(e, t),
+    pin: (e, t) =>
+      Math.hypot(e, t) < 0.14
+        ? ni.c.y +
+          ni.r.y * Math.sqrt(1 - (e / ni.r.x) ** 2 - (t / ni.r.z) ** 2) +
+          0.012
+        : null,
+  });
+}
+function Oi(e = 0) {
+  let t = Di(e % 4),
+    n = t.P,
+    r = gi(t, _i),
+    i = new Float32Array(n.length);
+  return (
+    n.forEach((e, t) => {
+      let n = Math.max(0, Math.min(1, (e.y - 0.64) / 0.12));
+      i[t] = n * n * (3 - 2 * n);
+    }),
+    {
+      geometry: r,
+      weights: i,
+      eyes: [-1, 1].map((e) => {
+        let t = e * 0.052 * ti,
+          r = $r + bi * ti,
+          i = 0;
+        for (let e of n)
+          Math.abs(e.x - t) < 0.03 &&
+            Math.abs(e.y - r) < 0.03 &&
+            (i = Math.min(i, e.z));
+        return {
+          x: e * 0.052,
+          y: bi,
+          z: (i + 0.005 - ei) / ti,
+          rotZ: e * 0.28,
+        };
+      }),
+    }
+  );
+}
+function ki(n = !1, r = 1, i = 0) {
+  let a = Di(r % 4),
+    o = a.P,
+    s = o.length,
+    c = gi(a, _i),
+    l = c.attributes.position.array,
+    u = new Float32Array(s);
+  o.forEach((e, t) => {
+    let n = Math.max(0, Math.min(1, (e.y - 0.64) / 0.12));
+    u[t] = n * n * (3 - 2 * n);
+  });
+  let d = Float32Array.from(l),
+    p = Ei(n, i),
+    m = [new t(c, p.inner), new t(c, p.net)];
+  if (!Ci) {
+    let e = document.createElement(`canvas`);
+    e.width = e.height = 64;
+    let t = e.getContext(`2d`),
+      n = t.createRadialGradient(32, 32, 0, 32, 32, 32);
+    (n.addColorStop(0, `rgba(255,255,255,0.9)`),
+      n.addColorStop(1, `rgba(255,255,255,0)`),
+      (t.fillStyle = n),
+      t.fillRect(0, 0, 64, 64),
+      (Ci = new j(e)));
+  }
+  let h = [];
+  for (let n of [-1, 1]) {
+    let r = n * 0.052 * ti,
+      i = $r + bi * ti,
+      a = 0;
+    for (let e of o)
+      Math.abs(e.x - r) < 0.03 &&
+        Math.abs(e.y - i) < 0.03 &&
+        (a = Math.min(a, e.z));
+    let s = (a + 0.005 - ei) / ti,
+      c = new t(
+        new S(0.044, 0.009),
+        new f({ color: 15331810, toneMapped: !1, side: 2 }),
+      );
+    (c.position.set(n * 0.052, bi, s), (c.rotation.z = n * 0.28));
+    let l = new x(
+      new e({
+        map: Ci,
+        color: 13625544,
+        blending: 2,
+        depthWrite: !1,
+        transparent: !0,
+        opacity: 0.35,
+        toneMapped: !1,
+      }),
+    );
+    (l.position.set(n * 0.052, bi, s - 0.03),
+      l.scale.set(0.065, 0.032, 1),
+      h.push(c, l));
+  }
+  let g = new M().compose(J(0, $r, ei), new _(), J(ti, ti, ti)).invert(),
+    v = new M(),
+    y = J(0, 0, 0),
+    b = c.attributes.position.array;
+  return {
+    meshes: m,
+    eyes: h,
+    update: (e) => {
+      (e.updateMatrix(), v.multiplyMatrices(e.matrix, g));
+      for (let e = 0; e < s; e++) {
+        let t = u[e],
+          n = e * 3;
+        if (t === 0) {
+          ((b[n] = d[n]), (b[n + 1] = d[n + 1]), (b[n + 2] = d[n + 2]));
+          continue;
+        }
+        (y.set(d[n], d[n + 1], d[n + 2]).applyMatrix4(v),
+          (b[n] = d[n] + (y.x - d[n]) * t),
+          (b[n + 1] = d[n + 1] + (y.y - d[n + 1]) * t),
+          (b[n + 2] = d[n + 2] + (y.z - d[n + 2]) * t));
+      }
+      ((c.attributes.position.needsUpdate = !0), c.computeVertexNormals());
+    },
+  };
+}
+var Ai = [
+    [
+      `#9d927e`,
+      `#857b69`,
+      `#b3a791`,
+      `#6f6757`,
+      `#a89c86`,
+      `#c1b59d`,
+      `#8f8573`,
+      `#a1967f`,
+    ],
+    [
+      `#4a4749`,
+      `#6e3a35`,
+      `#3b393c`,
+      `#5c3533`,
+      `#55524f`,
+      `#2f2e31`,
+      `#7a4038`,
+      `#434044`,
+    ],
+  ],
+  ji = [`#6c6353`, `#2c2b2e`],
+  Mi = [],
+  Ni = [],
+  Pi = [];
+function Fi(e, t, n, r, i, a = 0) {
+  (e.save(), e.translate(t, n), e.rotate(a), e.beginPath());
+  for (let t = 0; t <= 64; t++) {
+    let n = (t / 64) * Math.PI * 2,
+      a = 0.78 + 0.22 * Math.cos(9 * n) * Math.sin(n / 2) ** 0.5,
+      o = (Math.sin(n) * a * r) / 2,
+      s = i * 0.12 + ((1 - Math.cos(n)) / 2) * i * 0.88 * (0.9 + 0.1 * a);
+    t ? e.lineTo(o, s) : e.moveTo(o, s);
+  }
+  (e.closePath(), e.restore());
+}
+function Ii(e) {
+  if (Mi[e]) return Mi[e];
+  let t = document.createElement(`canvas`);
+  t.width = t.height = 256;
+  let n = t.getContext(`2d`);
+  for (let t = 0; t < 16; t++) {
+    let r = (t % 4) * 64 + 32,
+      i = Math.floor(t / 4) * 64 + 2;
+    (Fi(n, r, i, 50, 60),
+      (n.fillStyle = Ai[e][t % 8]),
+      n.fill(),
+      (n.strokeStyle = `rgba(30,26,20,0.45)`),
+      (n.lineWidth = 1.5),
+      n.beginPath(),
+      n.moveTo(r, i + 2),
+      n.lineTo(r, i + 52),
+      n.stroke(),
+      (n.fillStyle = `rgba(255,255,255,0.08)`),
+      Fi(n, r - 4, i + 6, 22, 40),
+      n.fill());
+  }
+  let r = (Mi[e] = new j(t));
+  return ((r.colorSpace = h), (r.anisotropy = 4), r);
+}
+function Li(e) {
+  if (Ni[e]) return Ni[e];
+  let t = document.createElement(`canvas`);
+  t.width = t.height = 256;
+  let n = t.getContext(`2d`),
+    r = li(5);
+  ((n.fillStyle = ji[e]), n.fillRect(0, 0, 256, 256));
+  for (let t = 0; t < 90; t++) {
+    let i = r() * 256,
+      a = r() * 256,
+      o = 22 + r() * 22,
+      s = (r() - 0.5) * 0.8;
+    for (let [r, c] of [
+      [0, 0],
+      [256, 0],
+      [-256, 0],
+      [0, 256],
+      [0, -256],
+    ])
+      (Fi(n, i + r, a + c, o * 0.8, o, s),
+        (n.fillStyle = Ai[e][t % 8]),
+        n.fill());
+  }
+  let i = (Ni[e] = new j(t));
+  return ((i.colorSpace = h), (i.wrapS = i.wrapT = b), (i.anisotropy = 4), i);
+}
+function Ri(e = 0) {
+  let t = +(e === 1);
+  return (Pi[t] ??= {
+    cloth: new a({ map: Li(t), side: 2, roughness: 1 }),
+    leaves: new a({
+      map: Ii(t),
+      alphaTest: 0.5,
+      alphaToCoverage: !0,
+      side: 2,
+      roughness: 1,
+    }),
+  });
+}
+var zi = new o(),
+  Bi = new o(),
+  Vi = new o(),
+  Hi = new o(),
+  Ui = new o();
+function Wi(e, t, n, r, i = 1) {
+  let a = (0.05 + r() * 0.035) * i,
+    o = a * (1.2 + r() * 0.25),
+    s = 0.15 + r() * 0.4;
+  (Vi.set(0, -1, 0).addScaledVector(n, n.y),
+    Vi.lengthSq() < 0.02
+      ? Vi.set(t.x, 0, t.z - 0.03).normalize()
+      : Vi.normalize(),
+    zi
+      .copy(Vi)
+      .multiplyScalar(Math.cos(s))
+      .addScaledVector(n, Math.sin(s))
+      .applyAxisAngle(n, (r() - 0.5) * 0.7)
+      .normalize(),
+    Bi.crossVectors(zi, n).normalize(),
+    Hi.copy(t).addScaledVector(n, 0.005));
+  let c = Hi.clone().addScaledVector(Bi, -a / 2),
+    l = Hi.clone().addScaledVector(Bi, a / 2),
+    u = c.clone().addScaledVector(zi, o),
+    d = l.clone().addScaledVector(zi, o),
+    f = (r() * 16) | 0,
+    p = (f % 4) / 4,
+    m = p + 0.25,
+    h = 1 - Math.floor(f / 4) / 4,
+    g = h - 0.25;
+  (Ui.crossVectors(Bi, zi).normalize(), Ui.dot(n) < 0 && Ui.negate());
+  for (let [t, n, r] of [
+    [c, p, h],
+    [u, p, g],
+    [d, m, g],
+    [c, p, h],
+    [d, m, g],
+    [l, m, h],
+  ])
+    (e.pos.push(t.x, t.y, t.z), e.uv.push(n, r), e.nor.push(Ui.x, Ui.y, Ui.z));
+}
+function Gi(e) {
+  let t = new l();
+  return (
+    t.setAttribute(`position`, new g(e.pos, 3)),
+    t.setAttribute(`normal`, new g(e.nor, 3)),
+    t.setAttribute(`uv`, new g(e.uv, 2)),
+    t
+  );
+}
+function Ki(e) {
+  let t = li(e * 104729 + 7),
+    n = [t() * 9, t() * 9, t() * 9, t() * 9],
+    r = (e, t) =>
+      0.05 * Math.abs(Math.sin(e * 23 + n[t])) +
+      0.04 * Math.abs(Math.sin(e * 57 + n[t + 1])) +
+      0.03 * Math.sin(e * 9 + n[t]);
+  return hi({
+    key: `poncho` + e,
+    nx: 33,
+    nz: 56,
+    spacing: 0.04,
+    centre: J(0, 0.72, 0.02),
+    off: 0.018,
+    steps: 300,
+    keep: (e, t) =>
+      Math.hypot(e, t) > 0.11 &&
+      Math.abs(t) <= 1.08 - r(e, 0) &&
+      Math.abs(e) <= 0.64 - r(t, 2),
+    pin: (e, t) => (Math.hypot(e, t) < 0.17 ? 0.655 : null),
+  });
+}
+function qi(e = 0, n = 0) {
+  let { cloth: r, leaves: i } = Ji(e),
+    a = Ri(n);
+  return [new t(r, a.cloth), new t(i, a.leaves)];
+}
+function Ji(e = 0) {
+  let t = gi(Ki(e % 2), 0.25),
+    n = t.attributes.position,
+    r = t.attributes.normal,
+    i = t.index.array,
+    a = li(e * 31 + 3),
+    o = [],
+    s = J(0, 0, 0),
+    c = J(0, 0, 0),
+    l = J(0, 0, 0),
+    u = 0;
+  for (let e = 0; e < i.length; e += 3)
+    (s.fromBufferAttribute(n, i[e]),
+      c.fromBufferAttribute(n, i[e + 1]),
+      l.fromBufferAttribute(n, i[e + 2]),
+      (u += c.sub(s).cross(l.sub(s)).length() / 2),
+      o.push(u));
+  let d = { pos: [], uv: [], nor: [] },
+    f = J(0, 0, 0),
+    p = J(0, 0, 0),
+    m = J(0, 0, 0);
+  for (let e = 0; e < 1150; e++) {
+    let e = a() * u,
+      t = 0,
+      h = o.length - 1;
+    for (; t < h;) {
+      let n = (t + h) >> 1;
+      o[n] < e ? (t = n + 1) : (h = n);
+    }
+    let g = a(),
+      _ = a();
+    g + _ > 1 && ((g = 1 - g), (_ = 1 - _));
+    let [v, y, b] = [i[t * 3], i[t * 3 + 1], i[t * 3 + 2]],
+      x = 1 - g - _;
+    (f
+      .set(0, 0, 0)
+      .addScaledVector(s.fromBufferAttribute(n, v), x)
+      .addScaledVector(c.fromBufferAttribute(n, y), g)
+      .addScaledVector(l.fromBufferAttribute(n, b), _),
+      p
+        .set(0, 0, 0)
+        .addScaledVector(s.fromBufferAttribute(r, v), x)
+        .addScaledVector(c.fromBufferAttribute(r, y), g)
+        .addScaledVector(l.fromBufferAttribute(r, b), _)
+        .normalize(),
+      m.set(f.x, +(f.y > 0.6), f.z - 0.03),
+      p.dot(m) < 0 && p.negate(),
+      Wi(d, f, p, a));
+  }
+  return { cloth: t, leaves: Gi(d) };
+}
+function Yi(e, n, r, i = 1, a = 70, o = 0) {
+  return new t(Xi(e, n, r, i, a), Ri(o).leaves);
+}
+function Xi(e, t, n, r = 1, i = 70) {
+  let a = li(r * 613 + 1),
+    o = { pos: [], uv: [], nor: [] },
+    s = J(0, 0, 0),
+    c = J(0, 0, 0),
+    l = [
+      [0, 0, -1],
+      [1, 0, 0],
+      [0, 0, 1],
+      [-1, 0, 0],
+    ];
+  for (let r = 0; r < i; r++) {
+    let [r, , i] = l[(a() * 4) | 0],
+      u = (a() - 0.5) * 2 * n;
+    (c.set(r, 0, i),
+      s.set(r * n + (i ? u : 0), e + (t - e) * a(), i * n + (r ? u : 0)),
+      Wi(o, s, c, a, 0.8));
+  }
+  return Gi(o);
+}
+var Y = (e, t, n, r, i, a, o, s = {}) =>
+    U(e, t, n, r, i, a, o, { ...s, bevel: 0 }),
+  Zi = [`assault`, `sniper`, `support`, `engineer`, `medic`],
+  Qi = [Yn, Yn],
+  $i = [
+    `none`,
+    `scarf`,
+    `radio`,
+    `bandolier`,
+    `bedroll`,
+    `knife`,
+    `admin`,
+    `heavy`,
+    `grenades`,
+    `holster`,
+    `canteen`,
+  ],
+  ea = [
+    {
+      name: `Amber`,
+      team: 14850092,
+      cloth: 12035452,
+      gear: 4936516,
+      helmet: 10259046,
+      rim: 7299401,
+    },
+    {
+      name: `Crimson`,
+      team: 13777458,
+      cloth: 3552827,
+      gear: 8137258,
+      helmet: 2894896,
+      rim: 1579034,
+    },
+  ],
+  ta = [4012851, 2368551],
+  na = Object.freeze({
+    kepler: Object.freeze([
+      { cloth: 11843772, gear: 13136938, helmet: 14080212, rim: 7106676 },
+      { cloth: 3094084, gear: 8137258, helmet: 2896186, rim: 1579809 },
+    ]),
+    hangar: Object.freeze([
+      { cloth: 8357480, gear: 4409913, helmet: 7041115, rim: 4935489 },
+      { cloth: 3883600, gear: 8137258, helmet: 3159358, rim: 1842981 },
+    ]),
+    mesa: Object.freeze([
+      { cloth: 12087356, gear: 2060139, helmet: 2785146, rim: 6962466 },
+      { cloth: 2240597, gear: 9053734, helmet: 1845063, rim: 1054244 },
+    ]),
+  }),
+  ra = [
+    { cloth: 13226708, gear: 5596767, helmet: 13950173, rim: 8030860 },
+    { cloth: 11843258, gear: 7220268, helmet: 12632773, rim: 3815998 },
+  ],
+  X = {
+    boot: 2236187,
+    sole: 1315602,
+    glove: 8022607,
+    metal: 2960683,
+    dark: 1974046,
+    wood: 5916210,
+    white: 15658728,
+    red: 13115434,
+    lens: 1845806,
+  },
+  ia = (e) => ({ tag: On.cloth, shade: e }),
+  Z = (e = 1) => ({ tag: On.gear, shade: e }),
+  aa = { tag: On.team },
+  Q = 16777215;
+function oa(e, t) {
+  let n = e.hair,
+    r = [];
+  if (e.hairStyle === 2) return r;
+  let i = [0.014, 0.034, 0, 0.04][e.hairStyle];
+  (t ||
+    r.push(
+      Y(G.w + 0.012, i, G.d + 0.012, 0, Wn + i / 2 - 0.004, 0, n, {
+        bevel: 0.006,
+      }),
+    ),
+    r.push(
+      Y(
+        G.w + 0.008,
+        t ? 0.1 : 0.2,
+        0.02,
+        0,
+        t ? Wn - 0.2 : Wn - 0.1,
+        G.d / 2 + 0.006,
+        n,
+        { bevel: 0.005 },
+      ),
+    ));
+  for (let e of [-1, 1])
+    r.push(
+      Y(
+        0.016,
+        t ? 0.06 : 0.1,
+        G.d * 0.55,
+        e * (G.w / 2 + 0.004),
+        Wn - (t ? 0.13 : 0.06),
+        0.05,
+        n,
+        { bevel: 0.004 },
+      ),
+    );
+  return (
+    e.hairStyle === 3 &&
+      r.push(
+        Y(0.07, 0.12, 0.06, 0, Wn - 0.16, G.d / 2 + 0.035, n),
+        Y(0.075, 0.025, 0.065, 0, Wn - 0.1, G.d / 2 + 0.035, X.dark),
+      ),
+    r
+  );
+}
+function sa(e, t, n, r, i) {
+  let a = e.skin,
+    o = [
+      Y(G.w, G.h, G.d, 0, G.y, 0, a, { bevel: 0.022 }),
+      Y(0.13, 0.08, 0.12, 0, 0.03, 0.01, a, { shade: 0.86 }),
+      ...[-1, 1].map((e) =>
+        Y(0.03, 0.075, 0.06, e * (G.w / 2 + 0.01), Kn(12), 0.02, a, {
+          shade: 0.93,
+          bevel: 0.008,
+        }),
+      ),
+    ];
+  if (r === `sniper`) return { hard: Nn(o), soft: null, shell: null };
+  o.push(...oa(e, !0), ...Br(t, n, e.index, i));
+  let s = o.find((e) => e.userData.shell),
+    c = o.filter((e) => e.userData.smooth && !e.userData.shell);
+  return {
+    hard: Nn(o.filter((e) => !e.userData.smooth)),
+    soft: c.length ? Nn(c) : null,
+    shell: s,
+  };
+}
+function ca(e) {
+  let t = e
+    ? []
+    : [
+        Y(0.36, 0.2, 0.225, 0, 0.02, 0, Q, ia(0.8)),
+        Y(0.38, 0.055, 0.245, 0, 0.12, 0, X.dark, { bevel: 0.01 }),
+        Y(0.05, 0.04, 0.012, 0, 0.12, -0.127, 9144954, { bevel: 0.004 }),
+        Y(0.37, 0.14, 0.225, 0, 0.21, 0, Q, ia(0.95)),
+      ];
+  if (
+    (e || t.push(Y(0.42, 0.32, 0.25, 0, 0.42, 0, Q, ia(1))),
+    t.push(
+      Y(0.22, 0.05, 0.17, 0, 0.6, 0, Q, ia(0.75)),
+      Y(0.012, 0.3, 0.008, 0.03, 0.4, -0.127, Q, ia(0.7)),
+    ),
+    !e)
+  )
+    for (let e of [-1, 1])
+      for (let n = 0; n < 9; n++) {
+        let r = ((n * 7) % 13) / 13 - 0.5,
+          i = ((n * 5) % 11) / 11 - 0.5;
+        t.push(
+          Y(0.07, 0.035, 0.004, r * 0.36, 0.38 + i * 0.36, e * 0.126, Q, {
+            ...ia(n % 2 ? 0.72 : 1.16),
+            bevel: 0,
+          }),
+        );
+      }
+  return t;
+}
+function la(e = 0.42, t = 0.32, n = 0.25, r = 0.42, i = 0.07) {
+  let a = e / 2,
+    o = r - t / 2,
+    c = r + t / 2,
+    u = [[-a, o]];
+  for (let e = 0; e <= 8; e++) {
+    let t = Math.PI - ((e / 8) * Math.PI) / 2;
+    u.push([-a + i + i * Math.cos(t), c - i + i * Math.sin(t)]);
+  }
+  for (let e = 0; e <= 8; e++) {
+    let t = Math.PI / 2 - ((e / 8) * Math.PI) / 2;
+    u.push([a - i + i * Math.cos(t), c - i + i * Math.sin(t)]);
+  }
+  u.push([a, o]);
+  let d = [],
+    f = [],
+    p = [],
+    m = (e) => 0.02 + (0.96 * (e - o)) / t;
+  u.forEach(([e, t], r) => {
+    let i = 0.68 + (0.31 * r) / (u.length - 1);
+    (d.push(e, t, -n / 2, e, t, n / 2), p.push(i, 0.02, i, 0.98));
+  });
+  for (let e = 0; e < u.length - 1; e++) {
+    let t = e * 2,
+      n = t + 1,
+      r = t + 3,
+      i = t + 2;
+    f.push(t, r, i, t, n, r);
+  }
+  for (let [t, r] of [
+    [-1, -n / 2],
+    [1, n / 2],
+  ]) {
+    let n = d.length / 3;
+    for (let [n, i] of u)
+      (d.push(n, i, r),
+        p.push(
+          t < 0 ? 0.005 + (0.32 * (n + a)) / e : 0.345 + (0.31 * (a - n)) / e,
+          m(i),
+        ));
+    for (let e = 1; e < u.length - 1; e++)
+      t < 0 ? f.push(n, n + e, n + e + 1) : f.push(n, n + e + 1, n + e);
+  }
+  let h = d.length / 3,
+    _ = new Float32Array(h * 3),
+    v = new Float32Array(h).fill(On.cloth);
+  for (let e = 0; e < h; e++) _.set([1, 1, 1], e * 3);
+  let y = new l();
+  return (
+    y.setAttribute(`position`, new g(d, 3)),
+    y.setAttribute(`color`, new s(_, 3)),
+    y.setAttribute(`aTag`, new s(v, 1)),
+    y.setAttribute(`uv`, new g(p, 2)),
+    y.setIndex(f),
+    y.computeVertexNormals(),
+    (y.userData.smoothLimb = !0),
+    y
+  );
+}
+var ua = (e) => [
+  Y(0.065, 0.045, 0.012, 0.11, 0.5, -e, Q, aa),
+  Y(0.15, 0.03, 0.012, 0, 0.5, e, Q, aa),
+];
+function da(e, t, n, r = 1) {
+  return Y(e, t, n, 0, 0.41, 0, Q, { ...Z(r), bevel: 0.025 });
+}
+function fa() {
+  return [
+    Y(0.32, 0.36, 0.15, 0, 0.36, 0.23, Q, Z(1.08)),
+    Y(0.3, 0.07, 0.16, 0, 0.56, 0.235, Q, Z(0.9)),
+    ...[-1, 1].map((e) => Y(0.07, 0.18, 0.1, e * 0.19, 0.3, 0.22, Q, Z(0.95))),
+    ...[0.28, 0.44].map((e) =>
+      Y(0.33, 0.022, 0.155, 0, e, 0.232, X.dark, { bevel: 0 }),
+    ),
+    Y(0.018, 0.018, 0.3, 0.12, 0.6, 0.02, X.dark, {
+      rot: [0.3, 0, 0],
+      bevel: 0,
+    }),
+    Y(0.022, 0.2, 0.02, 0.13, 0.48, -0.14, X.dark, { bevel: 0 }),
+    Y(0.009, 0.62, 0.009, -0.12, 0.86, 0.26, X.dark, {
+      rot: [-0.08, 0, 0.12],
+      bevel: 0,
+    }),
+  ];
+}
+var pa = () => [
+  Y(0.05, 0.06, 0.03, -0.14, 0.55, -0.17, X.dark, { bevel: 0.01 }),
+  Y(0.012, 0.16, 0.012, -0.15, 0.62, -0.08, X.dark, {
+    rot: [0.9, 0, 0],
+    bevel: 0,
+  }),
+];
+function ma(e, t) {
+  let n = [];
+  return (
+    e === `assault` &&
+      n.push(
+        da(0.45, 0.3, 0.3),
+        ...[-0.12, 0, 0.12].map((e) =>
+          Y(0.09, 0.11, 0.05, e, 0.33, -0.17, Q, Z(0.85)),
+        ),
+        ...[-0.12, 0, 0.12].map((e) =>
+          Y(0.07, 0.02, 0.052, e, 0.39, -0.17, Q, Z(0.65)),
+        ),
+        Y(0.1, 0.16, 0.1, 0.24, 0.2, 0.02, Q, Z(0.9)),
+        ...fa(),
+        ...[-0.13, 0.13].map((e) =>
+          Y(0.04, 0.24, 0.03, e, 0.52, -0.155, Q, Z(0.7)),
+        ),
+        ...ua(0.155),
+      ),
+    e === `support` &&
+      n.push(
+        da(0.47, 0.34, 0.32, 0.95),
+        Y(0.4, 0.4, 0.22, 0, 0.36, 0.26, Q, Z(1.1)),
+        Y(0.34, 0.06, 0.24, 0, 0.58, 0.26, Q, Z(0.8)),
+        ...[-0.17, 0.17].map((e) =>
+          Y(0.1, 0.22, 0.12, e, 0.3, 0.36, Q, Z(0.95)),
+        ),
+        Y(0.3, 0.14, 0.06, 0, 0.12, -0.16, Q, Z(0.8)),
+        ...Array.from({ length: 9 }, (e, t) =>
+          Y(
+            0.05,
+            0.028,
+            0.03,
+            -0.17 + t * 0.042,
+            0.52 - t * 0.034,
+            -0.18,
+            11574366,
+            { rot: [0, 0, 0.4], bevel: 0.006 },
+          ),
+        ),
+        ...ua(0.18),
+      ),
+    e === `engineer` &&
+      n.push(
+        da(0.44, 0.3, 0.29, 0.9),
+        ...[-1, 1].map((e) =>
+          Y(0.06, 0.44, 0.03, e * 0.11, 0.36, -0.155, 9992535, {
+            rot: [0, 0, e * 0.25],
+            bevel: 0.01,
+          }),
+        ),
+        Y(0.38, 0.09, 0.3, 0, 0.1, 0, 6902075, { bevel: 0.015 }),
+        Y(0.26, 0.3, 0.14, 0, 0.36, 0.2, 7691846),
+        ...[-0.15, 0, 0.15].map((e) =>
+          Y(0.1, 0.1, 0.08, e, 0.07, -0.17, 8875084),
+        ),
+        Y(0.025, 0.4, 0.03, -0.1, 0.62, 0.24, X.metal, { bevel: 0.006 }),
+        Y(0.12, 0.03, 0.05, -0.1, 0.82, 0.24, 9210485),
+        ...ua(0.16),
+      ),
+    e === `medic` &&
+      n.push(
+        da(0.43, 0.28, 0.28, 1.05),
+        Y(0.32, 0.3, 0.16, 0, 0.36, 0.22, Q, Z(1.15)),
+        Y(0.18, 0.18, 0.01, 0, 0.37, 0.305, X.white, { bevel: 0.004 }),
+        Y(0.13, 0.04, 0.012, 0, 0.37, 0.31, X.red, { bevel: 0 }),
+        Y(0.04, 0.13, 0.012, 0, 0.37, 0.31, X.red, { bevel: 0 }),
+        ...[-0.1, 0.1].map((e) =>
+          Y(0.1, 0.12, 0.07, e, 0.22, -0.18, Q, Z(0.9)),
+        ),
+        ...ua(0.15),
+      ),
+    e !== `sniper` && n.push(...pa()),
+    n
+  );
+}
+function ha(e) {
+  let t = [];
+  if (e === `scarf`)
+    for (let e = 0; e < 8; e++) {
+      let n = (e / 8) * Math.PI * 2;
+      t.push(
+        Y(
+          0.11,
+          0.08,
+          0.07,
+          Math.sin(n) * 0.16,
+          0.6,
+          Math.cos(n) * 0.13,
+          e % 2 ? 13220239 : 9075288,
+          { rot: [0, n, 0] },
+        ),
+      );
+    }
+  if (
+    (e === `scarf` && t.push(Y(0.12, 0.2, 0.03, 0.05, 0.47, 0.17, 13220239)),
+    e === `radio` &&
+      t.push(
+        Y(0.14, 0.2, 0.08, -0.13, 0.42, 0.2, X.dark),
+        Y(0.01, 0.62, 0.01, -0.16, 0.84, 0.2, X.dark, {
+          rot: [0, 0, 0.1],
+          bevel: 0,
+        }),
+        Y(0.04, 0.08, 0.035, -0.16, 0.5, -0.19, X.dark),
+      ),
+    e === `bandolier`)
+  ) {
+    t.push(
+      Y(0.055, 0.66, 0.016, -0.01, 0.34, -0.2, 3947056, {
+        rot: [0, 0, -0.57],
+        bevel: 0,
+      }),
+    );
+    for (let e = 0; e < 9; e++) {
+      let n = e / 8 - 0.5;
+      t.push(
+        Y(
+          0.032,
+          0.045,
+          0.024,
+          -0.01 + n * 0.33,
+          0.34 + n * 0.52,
+          -0.212,
+          e % 2 ? X.wood : 10717772,
+          { rot: [0, 0, -0.57], bevel: 0.005 },
+        ),
+      );
+    }
+  }
+  if (
+    (e === `bedroll` &&
+      t.push(
+        Y(0.4, 0.12, 0.12, 0, 0.66, 0.18, 6120520, { bevel: 0.04 }),
+        ...[-0.12, 0.12].map((e) =>
+          Y(0.02, 0.13, 0.13, e, 0.66, 0.18, X.dark, { bevel: 0.004 }),
+        ),
+      ),
+    e === `knife` &&
+      t.push(
+        Y(0.035, 0.17, 0.02, -0.15, 0.36, -0.2, X.boot, { rot: [0, 0, 0.15] }),
+        Y(0.028, 0.07, 0.025, -0.162, 0.47, -0.2, X.wood, {
+          rot: [0, 0, 0.15],
+        }),
+        Y(0.15, 0.13, 0.09, 0.13, 0.07, 0.16, Q, Z(0.8)),
+      ),
+    e === `admin` &&
+      t.push(
+        Y(0.19, 0.14, 0.03, 0, 0.43, -0.2, Q, Z(0.8)),
+        Y(0.15, 0.09, 0.006, 0, 0.43, -0.217, 14209200, { bevel: 0 }),
+        Y(0.08, 0.025, 0.008, 0.1, 0.56, -0.2, Q, aa),
+      ),
+    e === `heavy` &&
+      t.push(
+        Y(0.3, 0.07, 0.28, 0, 0.59, 0, Q, Z(0.8)),
+        ...[-1, 1].map((e) =>
+          Y(0.05, 0.22, 0.2, e * 0.23, 0.32, 0, Q, Z(0.85)),
+        ),
+        Y(0.2, 0.15, 0.045, 0, -0.03, -0.14, Q, Z(0.8)),
+      ),
+    e === `grenades`)
+  )
+    for (let e = 0; e < 3; e++)
+      t.push(
+        Y(0.05, 0.06, 0.05, -0.18 + e * 0.06, 0.22, -0.19, 4870710, {
+          bevel: 0.015,
+        }),
+        Y(0.02, 0.02, 0.02, -0.18 + e * 0.06, 0.26, -0.19, X.metal, {
+          bevel: 0,
+        }),
+      );
+  return (
+    e === `holster` &&
+      t.push(
+        Y(0.06, 0.14, 0.08, 0.22, 0.02, -0.02, Q, Z(0.75)),
+        Y(0.04, 0.06, 0.07, 0.22, 0.1, -0.02, X.metal),
+        Y(0.06, 0.02, 0.1, 0.22, 0.12, 0.03, X.dark),
+      ),
+    e === `canteen` &&
+      t.push(
+        Y(0.1, 0.13, 0.07, -0.2, 0.05, 0.1, 5595199, { bevel: 0.02 }),
+        Y(0.03, 0.025, 0.03, -0.2, 0.13, 0.1, X.dark, { bevel: 0.005 }),
+      ),
+    t
+  );
+}
+function ga({
+  top: e,
+  bottom: t,
+  a: n,
+  b: r,
+  joints: i,
+  colour: a,
+  round: c = 0,
+  shift: u = 0,
+}) {
+  for (let e of i) e.c ??= e.y;
+  let d = [];
+  for (let n = e; n > t; n -= 0.06) d.push(n);
+  for (let e of i)
+    for (let t = 0; t <= 12; t++) d.push(e.c + e.band - (2 * e.band * t) / 12);
+  for (let t = 1; t <= 8; t++)
+    d.push(e - c + c * Math.sin(((t / 8) * Math.PI) / 2));
+  (d.push(t), d.sort((e, t) => t - e));
+  let f = d.filter(
+      (n, r) => n <= e && n >= t && (r === 0 || d[r - 1] - n > 0.004),
+    ),
+    m = f.map((i) => {
+      let a = (e - i) / (e - t),
+        o = c ? Math.max(0, i - (e - c)) : 0,
+        s = c - Math.sqrt(Math.max(0, c * c - o * o)),
+        l = n[0] + (r[0] - n[0]) * a - s,
+        d = n[1] + (r[1] - n[1]) * a - s,
+        f = u * (1 - a);
+      return [
+        [f - l, i, -d],
+        [f + l, i, -d],
+        [f + l, i, d],
+        [f - l, i, d],
+      ];
+    }),
+    h = [],
+    _ = [],
+    v = [],
+    y = new o(),
+    b = new o(),
+    x = new o(),
+    S = new o(),
+    C = [],
+    w = (n) => 0.02 + (0.96 * (f[n] - t)) / (e - t),
+    T = (e, t, n = 0.9, r = 0.5) => (
+      h.push(...e),
+      _.push(t),
+      C.push(n, r),
+      _.length - 1
+    ),
+    E = m.length;
+  for (let e = 0; e < 4; e++) {
+    let t = _.length;
+    for (let t = 0; t < E; t++)
+      (T(m[t][e], t, 0.2 * e + 0.005, w(t)),
+        T(m[t][(e + 1) % 4], t, 0.2 * e + 0.195, w(t)));
+    let n = m[0][e],
+      r = m[0][(e + 1) % 4],
+      i = m[1][(e + 1) % 4];
+    (x.set(r[0] - n[0], r[1] - n[1], r[2] - n[2]),
+      S.set(i[0] - n[0], i[1] - n[1], i[2] - n[2]),
+      b.crossVectors(x, S),
+      y.set((n[0] + r[0]) / 2, 0, (n[2] + r[2]) / 2));
+    let a = b.dot(y) < 0;
+    for (let e = 0; e < E - 1; e++) {
+      let n = t + e * 2,
+        r = n + 1,
+        i = n + 3,
+        o = n + 2;
+      a ? v.push(n, i, r, n, o, i) : v.push(n, r, i, n, i, o);
+    }
+  }
+  for (let [e, t] of [
+    [0, 1],
+    [E - 1, -1],
+  ]) {
+    let n = m[e].map((t) => T(t, e));
+    (x.set(m[e][1][0] - m[e][0][0], 0, m[e][1][2] - m[e][0][2]),
+      S.set(m[e][2][0] - m[e][0][0], 0, m[e][2][2] - m[e][0][2]),
+      b.crossVectors(x, S).y * t > 0
+        ? v.push(n[0], n[1], n[2], n[0], n[2], n[3])
+        : v.push(n[0], n[2], n[1], n[0], n[3], n[2]));
+  }
+  let D = _.length,
+    ee = new Float32Array(D * 3),
+    te = new Float32Array(D),
+    O = new p();
+  for (let e = 0; e < D; e++) {
+    let [t, n, r = 1] = a(f[_[e]]);
+    (O.set(t).multiplyScalar(r), ee.set([O.r, O.g, O.b], e * 3), (te[e] = n));
+  }
+  let k = new l();
+  return (
+    k.setAttribute(`position`, new g(h, 3)),
+    k.setAttribute(`normal`, new g(new Float32Array(D * 3), 3)),
+    k.setAttribute(`color`, new s(ee, 3)),
+    k.setAttribute(`aTag`, new s(te, 1)),
+    k.setAttribute(`uv`, new g(C, 2)),
+    k.setIndex(v),
+    k.computeVertexNormals(),
+    (k.userData.bend = {
+      rest: Float32Array.from(h),
+      ring: Uint16Array.from(_),
+      ys: f,
+      joints: i.map((e) => ({ ...e })),
+      mats: f.map(() => new M()),
+    }),
+    (k.userData.smoothLimb = !0),
+    k
+  );
+}
+var _a = new p(),
+  va = new _(),
+  ya = new o(),
+  ba = new M(),
+  xa = new M(),
+  Sa = new _(),
+  Ca = new _(),
+  wa = new _(),
+  Ta = new _(),
+  Ea = new o(),
+  Da = new o(),
+  Oa = new o();
+new o();
+var ka = new o(),
+  Aa = new o(),
+  ja = new o(),
+  Ma = new o();
+function Na(e, t) {
+  let n = e.userData.bend,
+    r = e.attributes.position.array;
+  for (let e = 0; e < n.joints.length; e++) {
+    let r = n.joints[e],
+      i = t[e];
+    (Ca.set(0, i.y, 0, i.w),
+      Ca.lengthSq() < 1e-9 ? Ca.identity() : Ca.normalize(),
+      Sa.copy(i).multiply(wa.copy(Ca).invert()));
+    let a = 2 * Math.acos(Math.min(1, Math.abs(Sa.w))),
+      s = Sa.w < 0 ? -1 : 1,
+      c = Math.sqrt(Math.max(0, 1 - Sa.w * Sa.w));
+    (c > 1e-6
+      ? Ea.set((Sa.x * s) / c, (Sa.y * s) / c, (Sa.z * s) / c)
+      : Ea.set(1, 0, 0),
+      (r._ang = a),
+      (r._ax = (r._ax ?? new o()).copy(Ea)),
+      (r._sw = (r._sw ?? new _()).copy(Sa)),
+      (r._tw = (r._tw ?? new _()).copy(Ca)),
+      (r._q = (r._q ?? new _()).copy(i)),
+      Da.set(0, r.below ? -1 : 1, 0),
+      Oa.copy(Ea).cross(Da),
+      (r._start = (r._start ?? new o()).set(
+        0,
+        r.c + (r.below ? r.band : -r.band),
+        0,
+      )));
+    let l = 2 * r.band,
+      u = (e, t) => {
+        let n = a * e;
+        if (a < 1e-4) return t.copy(Da).multiplyScalar(l * e);
+        let r = l / a;
+        return t
+          .copy(Da)
+          .multiplyScalar(r * Math.sin(n))
+          .addScaledVector(Oa, r * (1 - Math.cos(n)));
+      };
+    ((r._arc = u),
+      ka.set(0, r.y, 0),
+      ja
+        .copy(r._start)
+        .addScaledVector(Da, l)
+        .sub(ka)
+        .applyQuaternion(i)
+        .add(ka),
+      Aa.copy(r._start).add(u(1, Ma)),
+      (r._delta = (r._delta ?? new o()).copy(ja).sub(Aa)));
+  }
+  for (let e = 0; e < n.mats.length; e++) {
+    let t = n.mats[e].identity(),
+      r = n.ys[e];
+    for (let e = 0; e < n.joints.length; e++) {
+      let i = n.joints[e],
+        a = Math.min(
+          1,
+          Math.max(
+            0,
+            (i.below ? i.c + i.band - r : r - (i.c - i.band)) / (2 * i.band),
+          ),
+        );
+      if (!(a <= 0)) {
+        if (a >= 1) {
+          t.multiply(xa.makeTranslation(0, i.y, 0))
+            .multiply(ba.makeRotationFromQuaternion(i._q))
+            .multiply(xa.makeTranslation(0, -i.y, 0));
+          continue;
+        }
+        (wa.slerpQuaternions(va, i._sw, a),
+          Ta.slerpQuaternions(va, i._tw, a),
+          wa.multiply(Ta),
+          i._arc(a, Ma).add(i._start).addScaledVector(i._delta, a),
+          t
+            .multiply(xa.makeTranslation(Ma.x, Ma.y, Ma.z))
+            .multiply(ba.makeRotationFromQuaternion(wa))
+            .multiply(xa.makeTranslation(0, -r, 0)));
+      }
+    }
+  }
+  for (let e = 0; e < n.ring.length; e++)
+    (ya
+      .set(n.rest[e * 3], n.rest[e * 3 + 1], n.rest[e * 3 + 2])
+      .applyMatrix4(n.mats[n.ring[e]]),
+      (r[e * 3] = ya.x),
+      (r[e * 3 + 1] = ya.y),
+      (r[e * 3 + 2] = ya.z));
+  ((e.attributes.position.needsUpdate = !0), e.computeVertexNormals());
+}
+var Pa = { half: 0.109, shift: 0.013 },
+  Fa = {
+    top: 0.12,
+    bottom: -0.14,
+    crotch: -0.08,
+    X: ge + 0.096,
+    g: ge - Pa.shift - Pa.half,
+    D: 0.106,
+    blend: [0.1, -0.1],
+  };
+function Ia() {
+  let { top: e, bottom: t, crotch: n, X: r, g: i, D: a } = Fa,
+    c = Math.round((e - t) / 0.01),
+    u = Math.round((e - n) / 0.01),
+    d = Array.from({ length: c + 1 }, (t, n) => e - n * 0.01),
+    f = [],
+    p = [],
+    m = new o(),
+    h = new o(),
+    _ = new o(),
+    v = [],
+    y = (n) => 0.02 + (0.96 * (n - t)) / (e - t),
+    b = (e) => (e + r) / (2 * r),
+    x = (e) => (e + a) / (2 * a),
+    S = `grid`,
+    C = (e, t, n) =>
+      S === `cap`
+        ? [0.85, 0.99]
+        : S === `inner`
+          ? [(e < 0 ? 0.805 : 0.905) + 0.09 * x(n), y(t)]
+          : S === `side`
+            ? e < 0
+              ? [0.605 + 0.19 * (1 - x(n)), y(t)]
+              : [0.205 + 0.19 * x(n), y(t)]
+            : n < 0
+              ? [0.005 + 0.19 * b(e), y(t)]
+              : [0.405 + 0.19 * (1 - b(e)), y(t)],
+    w = (e, t, n) => (f.push(e, t, n), v.push(...C(e, t, n)), f.length / 3 - 1),
+    T = (e, t, n, r, i) => {
+      let a = (e) => new o(f[e * 3], f[e * 3 + 1], f[e * 3 + 2]);
+      (m.subVectors(a(t), a(e)),
+        h.subVectors(a(n), a(e)),
+        _.crossVectors(m, h),
+        _.dot(i) < 0 ? p.push(e, n, t, e, r, n) : p.push(e, t, n, e, n, r));
+    },
+    E = [-r, -0.06, -0.03, -i, 0, i, 0.03, 0.06, r];
+  for (let e of [-1, 1]) {
+    let t = d.map((t) => E.map((n) => w(n, t, e * a))),
+      n = new o(0, 0, e);
+    for (let e = 0; e < c; e++)
+      for (let r = 0; r < E.length - 1; r++)
+        (e >= u && E[r] >= -i - 1e-6 && E[r + 1] <= i + 1e-6) ||
+          T(t[e][r], t[e][r + 1], t[e + 1][r + 1], t[e + 1][r], n);
+  }
+  let D = (e, t, n) => {
+    let r = d.slice(t).map((t) => [w(e, t, -a), w(e, t, a)]);
+    for (let e = 0; e < r.length - 1; e++)
+      T(r[e][0], r[e][1], r[e + 1][1], r[e + 1][0], n);
+  };
+  ((S = `side`),
+    D(-r, 0, new o(-1, 0, 0)),
+    D(r, 0, new o(1, 0, 0)),
+    (S = `inner`),
+    D(-i, u, new o(1, 0, 0)),
+    D(i, u, new o(-1, 0, 0)),
+    (S = `cap`));
+  let ee = [-i, 0, i].map((e) => [w(e, n, -a), w(e, n, a)]);
+  for (let e = 0; e < 2; e++)
+    T(ee[e][0], ee[e + 1][0], ee[e + 1][1], ee[e][1], new o(0, -1, 0));
+  let te = f.length / 3,
+    O = new Float32Array(te * 3),
+    k = new Float32Array(te).fill(On.cloth),
+    A = new Float32Array(te),
+    ne = new Float32Array(te);
+  _a.set(Q).multiplyScalar(0.82);
+  for (let e = 0; e < te; e++) {
+    O.set([_a.r, _a.g, _a.b], e * 3);
+    let t = f[e * 3],
+      r = f[e * 3 + 1],
+      a = $((Fa.blend[0] - r) / (Fa.blend[0] - Fa.blend[1]), 0, 1),
+      o = a * a * (3 - 2 * a),
+      s = $(0.5 - t / (2 * (i + (0.035 - i) * $((r - n) / 0.06, 0, 1))), 0, 1);
+    ((A[e] = s * o), (ne[e] = (1 - s) * o));
+  }
+  let j = new l();
+  return (
+    j.setAttribute(`position`, new g(f, 3)),
+    j.setAttribute(`normal`, new g(new Float32Array(te * 3), 3)),
+    j.setAttribute(`color`, new s(O, 3)),
+    j.setAttribute(`aTag`, new s(k, 1)),
+    j.setAttribute(`uv`, new g(v, 2)),
+    j.setIndex(p),
+    j.computeVertexNormals(),
+    (j.userData.pants = { rest: Float32Array.from(f), wL: A, wR: ne }),
+    (j.userData.smoothLimb = !0),
+    j
+  );
+}
+var La = new M(),
+  Ra = new M(),
+  za = new o(),
+  Ba = new o();
+function Va(e, t, n) {
+  let r = e.userData.pants,
+    i = e.attributes.position.array;
+  (t.updateMatrix(),
+    n.updateMatrix(),
+    La.copy(t.matrix).multiply(xa.makeTranslation(ge, 0, 0)),
+    Ra.copy(n.matrix).multiply(xa.makeTranslation(-ge, 0, 0)));
+  for (let e = 0; e < r.wL.length; e++)
+    (ya.set(r.rest[e * 3], r.rest[e * 3 + 1], r.rest[e * 3 + 2]),
+      za.copy(ya).applyMatrix4(La).sub(ya).multiplyScalar(r.wL[e]),
+      Ba.copy(ya).applyMatrix4(Ra).sub(ya).multiplyScalar(r.wR[e]),
+      (i[e * 3] = ya.x + za.x + Ba.x),
+      (i[e * 3 + 1] = ya.y + za.y + Ba.y),
+      (i[e * 3 + 2] = ya.z + za.z + Ba.z));
+  ((e.attributes.position.needsUpdate = !0), e.computeVertexNormals());
+}
+function Ha(e, t, n = `assault`, r = !1, i = 0.78) {
+  let a = ea[e],
+    s = r ? { ...a, ...ra[e] } : a,
+    c = n === `sniper` ? { ...s, cloth: ta[e] } : s,
+    l = ga({
+      top: 0.05,
+      bottom: -0.52,
+      a: [0.066 * i, 0.066 * i],
+      b: [0.058 * i, 0.058 * i],
+      round: 0.05 * i,
+      joints: [{ y: -ve, band: 0.1, below: !0 }],
+      colour: () => [Q, On.cloth, 0.9],
+    }),
+    u = null;
+  try {
+    u = Xr(
+      [`fparm`, t, n, e, r, i].join(`:`),
+      l,
+      { part: `arm`, side: t, cls: n, pal: c, base: 0.9 },
+      (e) => e.add(new o(t * he, me, 0)).multiplyScalar(be),
+    );
+  } catch {
+    u = null;
+  }
+  Zr(l);
+  let d = Ya(a, r, !0, u);
+  return (
+    (d.roughness = 0.86),
+    {
+      geometry: l,
+      material: d,
+      cuff: Y(0.122 * i, 0.04, 0.122 * i, 0, -0.235, 0, X.glove),
+      bend: (e) => Na(l, [e]),
+    }
+  );
+}
+var Ua = [
+    [14254635, 15722194, 2829099],
+    [13116458, 1842206, 13116458],
+  ],
+  Wa = {
+    assault: 0.3,
+    sniper: 0.34,
+    support: 0.32,
+    engineer: 0.29,
+    medic: 0.28,
+  };
+function Ga(e, t, n, r, i, a, o = `z`, s = -1) {
+  return e.map((e, c) =>
+    o === `z`
+      ? Y(t, n / 3, 0.006, r, i + n / 3 - (c * n) / 3, a + s * 0.003, e)
+      : Y(0.006, n / 3, t, r + s * 0.003, i + n / 3 - (c * n) / 3, a, e),
+  );
+}
+function Ka(e, t) {
+  let n = -(Wa[e] ?? 0.3) / 2 - 0.004,
+    r = Ua[t];
+  return [
+    Y(0.075, 0.052, 0.006, -0.1, 0.5, n, 2763559),
+    ...Ga(r, 0.066, 0.042, -0.1, 0.5, n - 0.003),
+    Y(0.13, 0.024, 0.006, -0.09, 0.448, n, 7170645),
+    ...[0, 1, 2, 3, 4].map((e) =>
+      Y(0.012, 0.008, 0.004, -0.135 + e * 0.022, 0.448, n - 0.005, 2302751),
+    ),
+  ];
+}
+function qa(e) {
+  let t = [
+      Y(0.13, 0.27, 0.13, 0, -0.14, 0, Q, ia(0.92)),
+      Y(0.145, 0.085, 0.145, 0, -0.01, 0, Q, ia(0.84)),
+      Y(0.138, 0.035, 0.138, 0, -0.16, 0, Q, ia(0.68)),
+    ],
+    n = [
+      Y(0.125, 0.09, 0.125, 0, -0.02, 0, Q, ia(0.78)),
+      Y(0.115, 0.17, 0.115, 0, -0.14, 0, Q, ia(0.9)),
+      Y(0.122, 0.04, 0.122, 0, -0.235, 0, X.glove),
+      Y(0.105, 0.1, 0.11, 0, -0.3, -0.005, X.glove, { bevel: 0.018 }),
+    ],
+    r = [
+      Y(0.19, 0.35, 0.21, 0, -fe / 2 + 0.005, 0, Q, ia(0.82)),
+      Y(0.04, 0.12, 0.13, 0.108, -0.2, 0, Q, ia(0.66)),
+    ],
+    i = [
+      Y(0.17, 0.27, 0.19, 0, -0.14, 0, Q, ia(0.8)),
+      Y(0.13, 0.13, 0.05, 0, -0.03, -0.1, Q, Z(0.8)),
+      Y(0.176, 0.05, 0.196, 0, -0.26, 0, X.boot),
+    ],
+    a = [
+      Y(0.18, 0.1, 0.29, 0, -0.01, -0.05, X.boot, { bevel: 0.02 }),
+      Y(0.185, 0.03, 0.3, 0, -0.06, -0.05, X.sole, { bevel: 0.008 }),
+      Y(0.12, 0.012, 0.1, 0, 0.042, -0.11, 3814702, { bevel: 0 }),
+    ];
+  return (
+    e === `medic` &&
+      t.push(
+        Y(0.14, 0.055, 0.14, 0, -0.2, 0, X.white, { bevel: 0.006 }),
+        Y(0.144, 0.035, 0.012, 0, -0.2, 0, X.red, { bevel: 0 }),
+      ),
+    e === `support` && t.push(Y(0.17, 0.13, 0.17, 0, -0.03, 0, Q, Z(0.95))),
+    e === `engineer` &&
+      (r.push(Y(0.12, 0.14, 0.08, 0.1, -0.2, -0.04, 9137997)),
+      i.push(Y(0.15, 0.1, 0.06, 0, -0.02, -0.11, 5327675))),
+    e === `assault` &&
+      r.push(Y(0.09, 0.12, 0.07, 0.11, -0.12, -0.03, Q, Z(0.9))),
+    { upper: t, fore: n, thigh: r, shin: i, foot: a }
+  );
+}
+function Ja() {
+  return Nn([
+    Y(0.05, 0.1, 0.2, 0, -0.02, -0.1, X.wood),
+    Y(0.04, 0.05, 0.1, 0, 0.02, -0.24, X.metal),
+    Y(0.06, 0.1, 0.32, 0, 0, -0.44, X.metal, { bevel: 0.01 }),
+    Y(0.035, 0.035, 0.28, 0, 0.02, -0.74, X.dark, { bevel: 0.006 }),
+    Y(0.058, 0.07, 0.22, 0, 0, -0.66, X.wood, { bevel: 0.012 }),
+    Y(0.04, 0.15, 0.07, 0, -0.11, -0.46, X.dark, { rot: [0.25, 0, 0] }),
+    Y(0.036, 0.1, 0.05, 0, -0.09, -0.3, X.wood, { rot: [-0.3, 0, 0] }),
+    Y(0.04, 0.02, 0.2, 0, 0.06, -0.42, X.dark, { bevel: 0.005 }),
+    ...[-1, 1].map((e) =>
+      Y(0.012, 0.03, 0.016, e * 0.013, 0.083, -0.34, X.dark, { bevel: 0.003 }),
+    ),
+    Y(0.034, 0.012, 0.016, 0, 0.074, -0.34, X.dark, { bevel: 0 }),
+    Y(0.008, 0.05, 0.01, 0, 0.065, -0.82, X.dark, { bevel: 0 }),
+    Y(0.03, 0.02, 0.03, 0, 0.042, -0.82, X.dark, { bevel: 0.004 }),
+    Y(0.045, 0.03, 0.03, 0, 0.02, -0.89, X.dark, { bevel: 0.004 }),
+  ]);
+}
+function Ya(e, t, n = !1, r = null) {
+  let i = t ? { ...e, ...ra[ea.indexOf(e)] } : e,
+    o = {
+      uTeam: { value: new p(i.team) },
+      uCloth: { value: new p(i.cloth) },
+      uGear: { value: new p(i.gear) },
+    },
+    s = new a({
+      vertexColors: !0,
+      flatShading: !n,
+      roughness: n ? 0.66 : 0.86,
+      metalness: 0,
+      map: r,
+    });
+  return (
+    (s.onBeforeCompile = (e) => {
+      (Object.assign(e.uniforms, o),
+        (e.vertexShader = e.vertexShader
+          .replace(
+            `#include <common>`,
+            `#include <common>
+attribute float aTag;
+uniform vec3 uTeam, uCloth, uGear;`,
+          )
+          .replace(
+            `#include <color_vertex>`,
+            `#include <color_vertex>
+float lum = color.r;
+if (aTag > 2.5) vColor.rgb = uGear * lum; else if (aTag > 1.5) vColor.rgb = uCloth * lum; else if (aTag > 0.5) vColor.rgb = uTeam * lum;`,
+          )),
+        (e.fragmentShader = e.fragmentShader.replace(
+          `#include <opaque_fragment>`,
+          `outgoingLight = max(outgoingLight, diffuseColor.rgb * 0.12);
+#include <opaque_fragment>`,
+        )));
+    }),
+    (s.customProgramCacheKey = () => `cubie-soldier-tags`),
+    (s.userData.uniforms = o),
+    s
+  );
+}
+var Xa = null;
+function Za() {
+  if (!Xa) {
+    let e = document.createElement(`canvas`);
+    e.width = e.height = 64;
+    let t = e.getContext(`2d`),
+      n = t.createRadialGradient(32, 32, 0, 32, 32, 32);
+    (n.addColorStop(0, `rgba(255,255,255,1)`),
+      n.addColorStop(0.25, `rgba(255,255,255,0.55)`),
+      n.addColorStop(1, `rgba(255,255,255,0)`),
+      (t.fillStyle = n),
+      t.fillRect(0, 0, 64, 64),
+      (Xa = new j(e)));
+  }
+  return Xa;
+}
+function Qa(n) {
+  Za();
+  let r = [];
+  for (let [i, a] of Xn) {
+    let o = new t(
+      new S(0.05, 0.03),
+      new f({ color: new p(10354612), toneMapped: !1 }),
+    );
+    ((o.rotation.y = Math.PI), o.position.set(i, a + 0.004, Gn - 0.003));
+    let s = new x(
+      new e({
+        map: Xa,
+        color: 4063096,
+        blending: 2,
+        depthWrite: !1,
+        transparent: !0,
+        opacity: 0.85,
+        toneMapped: !1,
+      }),
+    );
+    (s.position.set(i, a, Gn - 0.022),
+      s.scale.setScalar(0.17),
+      n.add(o, s),
+      r.push(o, s));
+  }
+  return r;
+}
+var $a = null;
+function eo() {
+  return ($a ??= new a({
+    map: Hn().texture,
+    roughness: 0.9,
+    metalness: 0,
+    polygonOffset: !0,
+    polygonOffsetFactor: -2,
+  }));
+}
+function to() {
+  let e = (e, t, n = 0, r = 0, i = 0, a = `XYZ`) => {
+      let o = new m();
+      return (
+        (o.name = e),
+        o.position.set(n, r, i),
+        (o.rotation.order = a),
+        t?.add(o),
+        o
+      );
+    },
+    t = e(`root`, null, 0, 0, 0, `YXZ`),
+    n = e(`hips`, t, 0, ye, 0, `YXZ`),
+    r = e(`torso`, n, 0, 0, 0, `YXZ`);
+  r.scale.setScalar(be);
+  let i = e(`head`, r, 0, G.neck, 0.01, `YXZ`);
+  i.scale.setScalar(1 / be);
+  let a = e(`armL`, r, -he, me, 0),
+    o = e(`armR`, r, he, me, 0),
+    s = e(`foreL`, a, 0, -ve, 0),
+    c = e(`foreR`, o, 0, -ve, 0),
+    l = e(`legL`, n, -ge, 0, 0),
+    u = e(`legR`, n, ge, 0, 0),
+    d = e(`shinL`, l, 0, -fe, 0),
+    f = e(`shinR`, u, 0, -fe, 0),
+    p = e(`footL`, d, 0, -pe, 0),
+    h = e(`footR`, f, 0, -pe, 0),
+    g = e(`weapon`, r, 0, 0, 0, `YXZ`);
+  return (
+    g.scale.setScalar(Ce),
+    {
+      root: t,
+      hips: n,
+      torso: r,
+      head: i,
+      armL: a,
+      armR: o,
+      foreL: s,
+      foreR: c,
+      legL: l,
+      legR: u,
+      shinL: d,
+      shinR: f,
+      footL: p,
+      footR: h,
+      weapon: g,
+    }
+  );
+}
+var no = new o(0, -0.1, -0.3),
+  ro = new o(0, -0.04, -0.62),
+  io = new o(-0.02, -0.14, -0.46),
+  ao = new o(-0.14, -0.4, -0.3),
+  oo = new o(),
+  so = new o(),
+  co = new o(),
+  lo = new o(),
+  uo = new _(),
+  fo = new _(),
+  po = {
+    wpnX: 0.05,
+    wpnY: 0.28,
+    wpnZ: -0.12,
+    wpnPitch: -0.55,
+    wpnYaw: 0.35,
+    wpnRoll: 0.1,
+  },
+  mo = {
+    wpnX: 0.02,
+    wpnY: 0.22,
+    wpnZ: -0.14,
+    wpnPitch: -0.9,
+    wpnYaw: 0.5,
+    wpnRoll: 0.3,
+  },
+  ho = {
+    wpnX: 0.24,
+    wpnY: 0.6,
+    wpnZ: -0.19,
+    wpnPitch: -0.7,
+    wpnYaw: 0.95,
+    wpnRoll: 0.2,
+  },
+  go = 0.3,
+  _o = new o(0, -1, 0),
+  vo = {
+    t: new o(),
+    ax: new o(),
+    pole: new o(),
+    el: new o(),
+    lo: new o(),
+    q: new _(),
+  },
+  yo = new _().setFromEuler(new C(0.12, 0.12, -0.35, `YXZ`)),
+  bo = new o(),
+  xo = new m(),
+  So = new _(),
+  Co = new _(),
+  wo = new _();
+function To(e, t) {
+  t.w < 0.001 ||
+    (Co.copy(e.armR.quaternion),
+    wo.copy(e.foreR.quaternion),
+    Oo(e.armR, e.foreR, bo.set(t.x, t.y, t.z), xo),
+    e.armR.quaternion.slerpQuaternions(Co, e.armR.quaternion.clone(), t.w),
+    e.foreR.quaternion.slerpQuaternions(wo, e.foreR.quaternion.clone(), t.w));
+}
+function Eo(e, t) {
+  return t
+    .multiplyQuaternions(e.armR.quaternion, e.foreR.quaternion)
+    .invert()
+    .multiply(yo);
+}
+var Do = { pos: new o(0, -0.3, -0.01), scale: 1.5 / be };
+function Oo(e, t, n, r, i = 0) {
+  let { t: a, ax: o, pole: s, el: c, lo: l, q: u } = vo,
+    d = e.position.x < 0 ? -1 : 1;
+  (a.copy(n).applyMatrix4(r.matrix), o.subVectors(a, e.position));
+  let f = Math.max(0.001, Math.min(go * 2 - 0.001, o.length()));
+  (o.normalize(),
+    s
+      .set(d * (0.35 + 0.55 * i), -1 + 0.45 * i, 0.15)
+      .addScaledVector(o, -s.dot(o))
+      .normalize(),
+    c
+      .copy(o)
+      .multiplyScalar(f / 2)
+      .addScaledVector(s, Math.sqrt(go * go - (f * f) / 4)),
+    e.quaternion.setFromUnitVectors(_o, l.copy(c).normalize()),
+    l
+      .copy(o)
+      .multiplyScalar(f)
+      .sub(c)
+      .normalize()
+      .applyQuaternion(u.copy(e.quaternion).invert()),
+    t.quaternion.setFromUnitVectors(_o, l));
+}
+var $ = (e, t, n) => (e < t ? t : e > n ? n : e),
+  ko = (e, t, n) => e + (t - e) * n,
+  Ao = class {
+    constructor(e = {}) {
+      ((this.sk = to()),
+        (this.root = this.sk.root),
+        (this.pose = qt()),
+        (this.target = qt()),
+        (this.vel = qt()),
+        (this.springs = {
+          h: [1.8, 0],
+          aimW: [0, 0],
+          sprintW: [0, 0],
+          hspeed: [0, 0],
+        }),
+        (this.blink = 2 + Math.random() * 3),
+        (this.glance = { t: 1, yaw: 0, cur: 0 }),
+        (this.time = Math.random() * 10),
+        (this.meshes = []),
+        (this.first = !0),
+        (this.carry = { ...ho }),
+        this.build(e));
+    }
+    build({
+      faction: e = 0,
+      cls: n = `assault`,
+      face: r = 0,
+      headgear: i = 0,
+      kit: a = 0,
+      winter: s = !1,
+      finish: c = `textured`,
+      body: l = `seamless`,
+    } = {}) {
+      for (let e of this.meshes) (e.parent.remove(e), e.geometry.dispose());
+      for (let e of this.glow ?? []) e.parent.remove(e);
+      (this.material?.dispose(),
+        this.smoothMaterial?.dispose(),
+        this.limbMaterial?.dispose(),
+        this.shellMaterial?.dispose());
+      for (let e of this.paintMats ?? []) e.dispose();
+      ((this.meshes = []),
+        (this.paintMats = []),
+        (this.opts = {
+          faction: e,
+          cls: n,
+          face: r,
+          headgear: i,
+          kit: a,
+          winter: s,
+          finish: c,
+          body: l,
+        }));
+      let u = l === `seamless`;
+      ((this.limbs = []), (this.pants = null), (this.veil = null));
+      let d = ea[e],
+        f = zn[r % zn.length],
+        p = Qi[e][i % Qi[e].length],
+        m = s ? { ...d, ...ra[e] } : d;
+      ((this.material = Ya(d, s)),
+        (this.smoothMaterial = Ya(d, s, !0)),
+        (this.limbMaterial = Ya(d, s, !0)),
+        (this.limbMaterial.roughness = 0.86),
+        (this.shellMaterial = Ya(d, s, !0, Er(c))));
+      let h = (
+          e,
+          n,
+          r = n.userData.smoothLimb ? this.limbMaterial : this.material,
+        ) => {
+          let i = new t(n, r);
+          return (
+            (i.castShadow = i.receiveShadow = !0),
+            e.add(i),
+            this.meshes.push(i),
+            i
+          );
+        },
+        g = qa(n),
+        _ = this.sk,
+        v = (t, r, i, a, o, c) => {
+          let l = {
+              part: i,
+              side: a,
+              cls: n,
+              pal: n === `sniper` && i !== `chest` ? { ...m, cloth: ta[e] } : m,
+              base: c,
+            },
+            u = Xr([i, a, n, e, s].join(`:`), r, l, o);
+          Zr(r);
+          let f = Ya(d, s, !0, u);
+          return ((f.roughness = 0.86), this.paintMats.push(f), h(t, r, f));
+        },
+        y = (e) => e;
+      if (u) {
+        let e = v(
+          _.hips,
+          ga({
+            top: 0.3,
+            bottom: Fa.top,
+            a: [0.22, 0.12],
+            b: [Fa.X, Fa.D],
+            joints: [{ y: 0, c: 0.19, band: 0.07, below: !1 }],
+            colour: () => [Q, On.cloth, 0.82],
+          }),
+          `waist`,
+          0,
+          y,
+          0.82,
+        );
+        (this.limbs.push({ g: e.geometry, bones: [_.torso] }),
+          (this.pants = v(_.hips, Ia(), `pants`, 0, y, 0.82).geometry),
+          v(_.torso, la(), `chest`, 0, (e) => e.multiplyScalar(be), 1));
+      }
+      h(
+        _.torso,
+        Nn([
+          ...ca(u),
+          ...ma(n, m),
+          ...(u && n !== `sniper` ? Ka(n, e) : []),
+          ...(n === `sniper` && [`scarf`, `bedroll`, `heavy`].includes($i[a])
+            ? []
+            : ha($i[a])),
+        ]),
+      );
+      let b = sa(f, m, p, n, c);
+      (b.shell && h(_.head, b.shell, this.shellMaterial),
+        n !== `sniper` && h(_.head, b.hard),
+        b.soft && h(_.head, b.soft, this.smoothMaterial),
+        (this.glow = n !== `sniper` && p.endsWith(`down`) ? Qa(_.head) : []),
+        (this.faceGeo = Pn(
+          G.w - 0.03,
+          G.h - 0.03,
+          0,
+          G.y,
+          Gn - 0.0015,
+          Un(r, 0),
+          Math.PI,
+        )),
+        (this.faceIndex = r % zn.length),
+        (this.expr = -1));
+      let x = h(_.head, this.faceGeo, eo());
+      if (((x.castShadow = !1), n === `sniper`)) {
+        x.visible = !1;
+        let t = ki(s, f.index, e);
+        for (let e of t.meshes)
+          ((e.castShadow = e.receiveShadow = !0),
+            _.torso.add(e),
+            this.meshes.push(e));
+        for (let e of t.eyes) (_.head.add(e), this.glow.push(e));
+        this.veil = t;
+      }
+      if (n === `sniper`)
+        for (let [t, n] of qi(f.index, e).entries())
+          ((n.castShadow = !0),
+            (n.receiveShadow = t === 0),
+            _.torso.add(n),
+            this.meshes.push(n));
+      for (let t of [`L`, `R`]) {
+        if (u) {
+          let r = t === `L` ? -1 : 1,
+            i = v(
+              _[`arm` + t],
+              ga({
+                top: 0.05,
+                bottom: -0.52,
+                a: [0.066, 0.066],
+                b: [0.058, 0.058],
+                round: 0.05,
+                joints: [{ y: -ve, band: 0.1, below: !0 }],
+                colour: () => [Q, On.cloth, 0.9],
+              }),
+              `arm`,
+              r,
+              (e) => e.add(new o(r * he, me, 0)).multiplyScalar(be),
+              0.9,
+            );
+          if (
+            (this.limbs.push({ g: i.geometry, bones: [_[`fore` + t]] }),
+            n === `sniper`)
+          )
+            for (let [n, r, i, a, o] of [
+              [`arm`, 0.02, -0.22, 0.066, 1],
+              [`fore`, -0.07, -0.21, 0.06, 2],
+            ]) {
+              let s = Yi(r, i, a, o + (t === `L` ? 0 : 5), 70, e);
+              ((s.castShadow = !0), _[n + t].add(s), this.meshes.push(s));
+            }
+          h(_[`fore` + t], Nn(g.fore.slice(2).map((e) => e.clone())));
+        } else
+          (h(_[`arm` + t], Nn(g.upper.map((e) => e.clone()))),
+            h(_[`fore` + t], Nn(g.fore.map((e) => e.clone()))));
+        if (u) {
+          let r = v(
+            _[`leg` + t],
+            ga({
+              top: Fa.bottom,
+              bottom: -(fe + pe) - 0.06,
+              a: [Pa.half, 0.106],
+              b: [0.07, 0.076],
+              shift: (t === `L` ? 1 : -1) * Pa.shift,
+              joints: [{ y: -fe, band: 0.11, below: !0 }],
+              colour: () => [Q, On.cloth, 0.82],
+            }),
+            `leg`,
+            t === `L` ? -1 : 1,
+            (e) => e.add(new o((t === `L` ? -1 : 1) * ge, 0, 0)),
+            0.82,
+          );
+          this.limbs.push({ g: r.geometry, bones: [_[`shin` + t]] });
+          let [i, a] =
+            n === `sniper` ? [ta[e], { shade: 0.6232 }] : [Q, ia(0.6232)];
+          h(
+            _[`shin` + t],
+            Y(0.14, 0.1, 0.271, 0, -pe - 0.01, -0.0595, i, {
+              ...a,
+              bevel: 0.01,
+            }),
+          );
+          let s = t === `L` ? -1 : 1;
+          h(
+            _[`arm` + t],
+            Nn([
+              Y(0.006, 0.05, 0.062, s * 0.066, -0.075, 0, 2763559),
+              ...Ga(Ua[e], 0.054, 0.04, s * 0.066, -0.075, 0, `x`, s),
+            ]),
+          );
+        } else
+          (h(_[`leg` + t], Nn(g.thigh.map((e) => e.clone()))),
+            h(_[`shin` + t], Nn(g.shin.map((e) => e.clone()))));
+        u || h(_[`foot` + t], Nn(g.foot.map((e) => e.clone())));
+      }
+      for (let e of Object.values(g)) for (let t of e) t.dispose();
+      ((this.weaponMesh = h(_.weapon, Ja())),
+        (this.knife = wn()),
+        (this.knife.visible = !1),
+        (this.knife.castShadow = !0),
+        this.knife.position.copy(Do.pos),
+        this.knife.scale.setScalar(Do.scale),
+        _.foreR.add(this.knife),
+        (this.tris = this.meshes.reduce((e, t) => e + Fn(t.geometry), 0)));
+    }
+    setExpression(e) {
+      if (e === this.expr) return;
+      this.expr = e;
+      let t = Un(this.faceIndex, e),
+        n = this.faceGeo.attributes.uv;
+      (n.setXY(0, t[0], t[3]),
+        n.setXY(1, t[2], t[3]),
+        n.setXY(2, t[0], t[1]),
+        n.setXY(3, t[2], t[1]),
+        (n.needsUpdate = !0));
+    }
+    animate(e, t) {
+      ((e = Math.min(e, 0.05)), (this.time += e));
+      let n = this.springs,
+        r = this.first,
+        i = (t, i, a, o) => {
+          let s = n[t];
+          if (r) return ((s[0] = i), (s[1] = 0), s[0]);
+          let c = 2 * Math.sqrt(a) * o;
+          return (
+            (s[1] += (a * (i - s[0]) - c * s[1]) * e),
+            (s[0] += s[1] * e),
+            s[0]
+          );
+        },
+        a = {
+          ...t,
+          h: i(`h`, t.h, 70, 0.62),
+          aimW: $(i(`aimW`, t.aimW, 160, 0.7), 0, 1.08),
+          sprintW: $(i(`sprintW`, t.sprintW, 60, 0.9), 0, 1),
+          hspeed: Math.max(0, i(`hspeed`, t.hspeed, 40, 1)),
+        },
+        o = pn(a, this.target),
+        s = $(a.hspeed / 3.2, 0, 1),
+        c = a.h >= 1.3 ? 1 : 0.3,
+        l = +(t.deadT < 0),
+        u = (1 - $(a.aimW, 0, 1)) * $((a.h - 0.7) / 0.5, 0, 1) * l,
+        d = this.carry,
+        f = po;
+      if (u > 0)
+        for (let e in d)
+          o[e] += (d[e] - ko(f[e], mo[e], $(a.sprintW, 0, 1))) * u;
+      this.carryW = u;
+      let p = 1 - $(a.slideW || 0, 0, 1),
+        m = s * c * l * p,
+        h = $(a.sprintW, 0, 1),
+        g = 1 - $(a.aimW, 0, 1) * 0.85,
+        _ = Math.sin(a.phase),
+        v = Math.cos(2 * a.phase),
+        y = -_ * (0.1 + 0.08 * h) * m,
+        b = _ * (0.16 + 0.14 * h) * m * g,
+        x = -((0.08 + 0.12 * h) * m + 0.035 * (0.5 - 0.5 * v) * m);
+      ((o.hipYaw += y),
+        (o.torsoYaw += b - y),
+        (o.torsoTilt += x),
+        (o.hipY -= 0.012 * (0.5 - 0.5 * v) * m),
+        (o.headYaw -= b * 0.6),
+        (o.headPitch -= x * 0.8),
+        (o.wpnY += 0.018 * m * g * Math.cos(2 * a.phase + 0.8)),
+        (o.wpnPitch += 0.035 * m * g * Math.sin(2 * a.phase + 0.8)),
+        (o.wpnYaw += 0.07 * _ * m * g),
+        (o.wpnRoll += 0.06 * _ * m * g),
+        (this.pump = h * m),
+        this.pump > 0 &&
+          ((o.armLx = ko(o.armLx, 0.35 - _ * 0.85, this.pump)),
+          (o.armLy = ko(o.armLy, 0, this.pump)),
+          (o.armLz = ko(o.armLz, 0.14, this.pump)),
+          (o.foreL = ko(o.foreL, 1.35 + 0.2 * _, this.pump))));
+      let S = a.aimW * (a.h >= 1.3 ? 1 : 0.4) * l;
+      if (
+        ((o.wpnY += 0.13 * S),
+        (o.wpnX -= 0.035 * S),
+        (o.headPitch += 0.08 * S),
+        t.deadT >= 0)
+      ) {
+        let e = $(t.deadT / 0.8, 0, 1),
+          n = e * e * (3 - 2 * e),
+          r = {
+            armLx: 0.25,
+            armLy: 0,
+            armLz: 1.15,
+            foreL: 0.35,
+            armRx: 0.1,
+            armRy: 0,
+            armRz: -1.3,
+            foreR: 0.5,
+            wpnX: 0.5,
+            wpnY: 0.2,
+            wpnZ: 0.16 * (t.deadDir > 0 ? 1 : -1),
+            wpnPitch: Math.PI / 2,
+            wpnYaw: 0.3,
+            wpnRoll: 1.5,
+          };
+        for (let e in r) o[e] = ko(o[e], r[e], n);
+      }
+      let C = (1 - s) * l * (a.h > 1.2 ? 1 : 0.4) * (1 - a.aimW);
+      ((this.glance.t -= e),
+        this.glance.t < 0 &&
+          ((this.glance.t = 2 + Math.random() * 4),
+          (this.glance.yaw =
+            Math.random() < 0.5 ? 0 : (Math.random() - 0.5) * 1.1)),
+        (this.glance.cur = ko(
+          this.glance.cur,
+          this.glance.yaw * C,
+          1 - Math.exp(-e * 3),
+        )),
+        (o.headYaw += this.glance.cur),
+        (o.torsoYaw += this.glance.cur * 0.15));
+      let w = Math.sin(this.time * 0.7) * C;
+      ((o.torsoRoll += w * 0.035),
+        (o.headPitch += Math.sin(this.time * 0.43) * 0.03 * C),
+        (o.foreL += 0.05 * C),
+        (o.foreR += 0.04 * C));
+      let T = Math.sin(a.phase),
+        E = Math.cos(a.phase);
+      ((this.hipRoll = (E * 0.075 * s * c * p + w * 0.03) * l),
+        (this.hipShift = (E * 0.03 * s * c + w * 0.02) * l),
+        (o.torsoRoll -= this.hipRoll * 0.8),
+        (o.headYaw -= o.torsoYaw * 0.4));
+      let D = o.hipPitch + o.legLx + o.shinL,
+        ee = o.hipPitch + o.legRx + o.shinR,
+        te = $(1 - Math.abs(o.hipPitch) / 1.1, 0, 1) * l;
+      if (
+        ((this.target.footL = ko(
+          0.45,
+          $(-D, -0.9, 0.9) + Math.max(0, -T) * 0.35 * s,
+          te,
+        )),
+        (this.target.footR = ko(
+          0.45,
+          $(-ee, -0.9, 0.9) + Math.max(0, T) * 0.35 * s,
+          te,
+        )),
+        t.fireT >= 0 && t.fireT < 0.2)
+      ) {
+        let e = Math.sin(Math.PI * $(t.fireT / 0.2, 0, 1));
+        ((o.torsoTilt -= 0.05 * e),
+          (o.headPitch += 0.03 * e),
+          (o.torsoYaw += 0.03 * e));
+      }
+      let O = this.pose,
+        k = this.vel,
+        A = t.deadT >= 0 ? 260 : 700,
+        ne = t.deadT >= 0 ? 0.42 : 0.62,
+        j = 2 * Math.sqrt(A) * ne;
+      for (let t of [...Rt, `footL`, `footR`]) {
+        let n = o[t] ?? 0;
+        if (r || O[t] === void 0) {
+          ((O[t] = n), (k[t] = 0));
+          continue;
+        }
+        ((k[t] += (A * (n - O[t]) - j * k[t]) * e), (O[t] += k[t] * e));
+      }
+      this.first = !1;
+      let M = +(t.deadT < 0),
+        re = +(t.throwT >= 0 && t.throwT < 0.72),
+        ie = (this.knifeState = ae(t.knifeT, (this._kn ??= {}))),
+        oe = 1 - Math.exp(-e * 12);
+      ((this.contactR = r
+        ? M * (1 - re)
+        : ko(this.contactR, M * (1 - re) * (ie ? 1 - ie.w : 1), oe)),
+        (this.contactL = r
+          ? M
+          : ko(
+              this.contactL,
+              M *
+                (1 - (this.pump ?? 0)) *
+                (1 - (Xe(t.gesture, t.gestureT, (this._gs ??= {}))?.w ?? 0)),
+              oe,
+            )),
+        (this.reloadP =
+          t.reloadT >= 0 && t.reloadT < 1.8 ? t.reloadT / At : -1),
+        this.apply(O),
+        (this.blink -= e),
+        this.blink < -0.12 && (this.blink = 2.5 + Math.random() * 3.5));
+      let se =
+        t.deadT >= 0.3
+          ? 1
+          : (t.hitT >= 0 && t.hitT < 0.5) || t.deadT >= 0
+            ? 3
+            : this.blink < 0
+              ? 1
+              : a.aimW > 0.6
+                ? 2
+                : 0;
+      this.setExpression(se);
+      for (let [e, t] of this.glow.entries())
+        t.isSprite
+          ? (t.material.opacity =
+              se === 1
+                ? 0.35
+                : 0.78 +
+                  Math.sin(this.time * 23 + e) * 0.04 +
+                  Math.sin(this.time * 7.3) * 0.05)
+          : (t.visible = se !== 1);
+    }
+    apply(e) {
+      let t = this.sk;
+      (t.hips.position.set(this.hipShift || 0, e.hipY, 0),
+        t.hips.rotation.set(e.hipPitch, e.hipYaw, this.hipRoll || 0),
+        t.torso.rotation.set(e.torsoTilt, e.torsoYaw, e.torsoRoll),
+        t.head.rotation.set(e.headPitch, e.headYaw, -(this.hipRoll || 0) * 0.3),
+        t.legL.rotation.set(e.legLx, 0, e.legLz),
+        t.legR.rotation.set(e.legRx, 0, e.legRz),
+        t.shinL.rotation.set(e.shinL, 0, 0),
+        t.shinR.rotation.set(e.shinR, 0, 0),
+        t.footL.rotation.set(e.footL || 0, 0, 0),
+        t.footR.rotation.set(e.footR || 0, 0, 0),
+        t.armL.rotation.set(e.armLx, e.armLy, e.armLz),
+        t.armR.rotation.set(e.armRx, e.armRy, e.armRz),
+        t.foreL.rotation.set(e.foreL, 0, 0),
+        t.foreR.rotation.set(e.foreR, 0, 0),
+        t.weapon.position.set(e.wpnX, e.wpnY, e.wpnZ),
+        t.weapon.rotation.set(e.wpnPitch, e.wpnYaw, e.wpnRoll),
+        this.handContact());
+      let n = this.knifeState;
+      ((this.knife.visible = !!n?.knife),
+        n && (To(t, n), this.knife.quaternion.copy(Eo(t, So))),
+        this.pants && Va(this.pants, t.legL, t.legR),
+        this.veil?.update(t.head));
+      for (let e of this.limbs)
+        Na(
+          e.g,
+          e.bones.map((t, n) =>
+            e.invertFirst && n === 0
+              ? t.quaternion.clone().invert()
+              : t.quaternion,
+          ),
+        );
+    }
+    handContact() {
+      let e = this.sk,
+        t = this.contactR ?? 1,
+        n = this.contactL ?? 1;
+      if (t < 0.001 && n < 0.001) return;
+      let r = this.reloadP ?? -1;
+      if ((oo.copy(ro), r >= 0)) {
+        let e = (e, t) => $((r - e) / (t - e), 0, 1),
+          t = (e) => e * e * (3 - 2 * e);
+        (oo.lerp(io, t(e(0.05, 0.25))),
+          oo.lerp(ao, t(e(0.3, 0.5)) * (1 - t(e(0.55, 0.72)))),
+          oo.lerp(ro, t(e(0.82, 0.98))));
+      }
+      (e.weapon.updateMatrix(), so.set(0, 0, 0));
+      let i = (t, n) => {
+        (co.copy(n).applyMatrix4(e.weapon.matrix).add(so),
+          lo.subVectors(co, t.position));
+        let r = lo.length();
+        r > 0.585 && so.addScaledVector(lo, (0.585 - r) / r);
+      };
+      for (let t = 0; t < 6; t++) (i(e.armR, no), i(e.armL, oo));
+      (e.weapon.position.addScaledVector(so, Math.max(t, n)),
+        e.weapon.updateMatrix());
+      for (let [r, i, a, o] of [
+        [e.armR, e.foreR, no, t],
+        [e.armL, e.foreL, oo, n],
+      ])
+        o < 0.001 ||
+          (uo.copy(r.quaternion),
+          fo.copy(i.quaternion),
+          Oo(r, i, a, e.weapon, r === e.armR ? (this.carryW ?? 0) : 0),
+          o < 0.999 &&
+            (r.quaternion.slerpQuaternions(uo, r.quaternion.clone(), o),
+            i.quaternion.slerpQuaternions(fo, i.quaternion.clone(), o)));
+    }
+    static hitboxes() {
+      return {
+        head: `${G.w.toFixed(2)} x ${G.h.toFixed(2)} x ${G.d.toFixed(2)} m cube (was 0.14 m radius capsule)`,
+        torso: `${(0.42 * be).toFixed(2)} x ${(0.62 * be).toFixed(2)} x ${(0.25 * be).toFixed(2)} m`,
+        top: (ye + G.neck * be + Wn).toFixed(2),
+      };
+    }
+    dispose() {
+      for (let e of this.meshes) e.geometry.dispose();
+      for (let e of this.glow)
+        (e.isSprite || e.geometry.dispose(), e.material.dispose());
+      (this.material.dispose(),
+        this.smoothMaterial.dispose(),
+        this.limbMaterial.dispose(),
+        this.shellMaterial.dispose());
+      for (let e of this.paintMats) e.dispose();
+    }
+  };
+export {
+  jn as $,
+  Ia as A,
+  We as At,
+  Xr as B,
+  Ha as C,
+  ge as Ct,
+  To as D,
+  fe as Dt,
+  ha as E,
+  me as Et,
+  Ri as F,
+  oe as Ft,
+  Yn as G,
+  Xn as H,
+  Ji as I,
+  Er as J,
+  Br as K,
+  Xi as L,
+  ga as M,
+  He as Mt,
+  Ya as N,
+  Ue as Nt,
+  Eo as O,
+  ve as Ot,
+  ca as P,
+  we as Pt,
+  On as Q,
+  Ei as R,
+  Ga as S,
+  Xe as St,
+  oa as T,
+  he as Tt,
+  Gn as U,
+  Zr as V,
+  G as W,
+  Hn as X,
+  zn as Y,
+  Un as Z,
+  Oo as _,
+  pt as _t,
+  Ua as a,
+  At as at,
+  ma as b,
+  qe as bt,
+  Do as c,
+  qt as ct,
+  po as d,
+  wt as dt,
+  U as et,
+  ta as f,
+  Dt as ft,
+  ra as g,
+  $e as gt,
+  Q as h,
+  ht,
+  ea as i,
+  Rt as it,
+  la as j,
+  ze as jt,
+  qa as k,
+  be as kt,
+  Pa as l,
+  rn as lt,
+  na as m,
+  mt,
+  Zi as n,
+  Nn as nt,
+  X as o,
+  pn as ot,
+  mo as p,
+  Ct as pt,
+  Jn as q,
+  Ao as r,
+  wn as rt,
+  $i as s,
+  Jt as st,
+  ho as t,
+  Pn as tt,
+  Fa as u,
+  fn as ut,
+  Ka as v,
+  lt as vt,
+  Za as w,
+  pe as wt,
+  Y as x,
+  Ze as xt,
+  ia as y,
+  ct as yt,
+  Oi as z,
+};
+//# sourceMappingURL=cube-soldier-DMHrHkZL.js.map

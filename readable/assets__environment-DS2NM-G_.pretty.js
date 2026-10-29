@@ -1,0 +1,3532 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import {
+  $ as e,
+  At as t,
+  Bn as n,
+  Bt as r,
+  C as i,
+  F as a,
+  Gn as o,
+  Gt as s,
+  Hn as c,
+  I as l,
+  K as u,
+  L as d,
+  Q as f,
+  T as p,
+  Un as m,
+  Vn as h,
+  Vt as g,
+  W as _,
+  X as v,
+  Z as y,
+  Zt as b,
+  _t as x,
+  bn as S,
+  ct as C,
+  dn as w,
+  dt as T,
+  gt as E,
+  in as D,
+  mn as O,
+  mt as k,
+  nn as A,
+  ot as j,
+  p as M,
+  pt as ee,
+  q as N,
+  qt as P,
+  tt as te,
+  v as ne,
+  vt as re,
+  w as ie,
+  yn as ae,
+  zn as oe,
+} from "./graphics-quality-CrL3qbU3.js";
+import { t as se } from "./sky-C0uS1FxP.js";
+var ce = new Float32Array([0, 0]),
+  le = new Float32Array([0, 0]),
+  ue = new Float32Array([0.6, 0.7, 0.85]),
+  de = new Float32Array([0.1, 0.24, 0.55]),
+  fe = new Float32Array([0, 0, 0]),
+  pe = new Float32Array([0.08, 0.08, 0.09]),
+  me = new Float32Array([0, 1, 0]),
+  he = new Float32Array([1, 1, 1]),
+  ge = new Float32Array([0, 0]),
+  _e = [`fog_pars_vertex`, `fog_vertex`, `fog_pars_fragment`, `fog_fragment`],
+  ve = {
+    fogHorizon: ue,
+    fogZenith: de,
+    fogHaze: fe,
+    fogGroundDeep: pe,
+    fogSunDir: me,
+    fogSunColor: he,
+    fogSunGlow: ge,
+    fogHeightParams: ce,
+    fogNearParams: le,
+  },
+  ye = null,
+  be = null;
+function xe() {
+  if (ye) return;
+  let e = i;
+  ye = {};
+  for (let t of _e) ye[t] = e[t];
+  ((e.fog_pars_vertex = `
+#ifdef USE_FOG
+	varying float vFogDepth;
+	varying vec3 vFogWorldOfs;
+#endif`),
+    (e.fog_vertex = `
+#ifdef USE_FOG
+	vFogDepth = - mvPosition.z;
+	vFogWorldOfs = vec3(
+		dot( mvPosition.xyz, viewMatrix[ 0 ].xyz ),
+		dot( mvPosition.xyz, viewMatrix[ 1 ].xyz ),
+		dot( mvPosition.xyz, viewMatrix[ 2 ].xyz ) );
+#endif`),
+    (e.fog_pars_fragment = `
+#ifdef USE_FOG
+	uniform vec3 fogColor;          // three's own (output-space) fog colour; unused, kept so three can bind it
+	uniform vec3 fogHorizon;        // the sky dome's horizon colour, LINEAR
+	uniform vec3 fogZenith;
+	uniform vec3 fogHaze;
+	uniform vec3 fogGroundDeep;
+	uniform vec3 fogSunDir;
+	uniform vec3 fogSunColor;
+	uniform vec2 fogSunGlow;
+	varying float vFogDepth;
+	varying vec3 vFogWorldOfs;
+	#ifdef FOG_EXP2
+		uniform float fogDensity;
+		uniform vec2 fogHeightParams;
+		uniform vec2 fogNearParams;
+	#else
+		uniform float fogNear;
+		uniform float fogFar;
+	#endif
+#endif`),
+    (e.fog_fragment = `
+#ifdef USE_FOG
+	#ifdef FOG_EXP2
+		float fogK = fogHeightParams.x;
+		float fogKd = fogK * vFogWorldOfs.y;
+		float fogHeightTerm = exp( - fogK * ( cameraPosition.y - fogHeightParams.y ) );
+		fogHeightTerm *= ( abs( fogKd ) > 1e-3 ) ? ( 1.0 - exp( - fogKd ) ) / fogKd : 1.0;
+		fogHeightTerm = min( fogHeightTerm, 8.0 );
+		float fogOD = fogDensity * vFogDepth * fogHeightTerm;
+		float fogFactor = 1.0 - exp( - fogOD * fogOD );
+		// A local whiteout is not a second distance fog: it saturates after the first
+		// few dozen metres, preserving long lanes while softening nearby contrast.
+		float nearHaze = fogNearParams.x * ( 1.0 - exp( - vFogDepth * fogNearParams.y ) );
+		fogFactor = 1.0 - ( 1.0 - fogFactor ) * ( 1.0 - nearHaze );
+	#else
+		float fogFactor = smoothstep( fogNear, fogFar, vFogDepth );
+	#endif
+	// ---- aerial perspective: evaluate the sky dome's own gradient along this fragment's view ray, in LINEAR
+	// space, then tone map and encode it exactly as the dome does. A fully-fogged fragment and the dome pixel
+	// above it are then bit-for-bit the same colour and the horizon cannot show a step.
+	vec3 fogDir = normalize( vFogWorldOfs );
+	float fogSd = dot( fogDir, fogSunDir );
+	float fogMie = pow( max( fogSd, 0.0 ), 6.0 ) * 0.5 + pow( max( fogSd, 0.0 ), 40.0 ) * 0.5;
+	float fogDn = smoothstep( 0.0, 0.42, - fogDir.y );
+	vec3 fogAtm = mix( fogHorizon, fogZenith, 1.0 - exp( - max( fogDir.y, 0.0 ) * 6.0 ) );
+	fogAtm = mix( fogAtm, fogGroundDeep, fogDn );
+	fogAtm += fogHaze * fogMie * ( 0.25 + 0.75 * exp( - abs( fogDir.y ) * 8.0 ) ) * ( 1.0 - 0.72 * fogDn );
+	float fogAng = acos( clamp( fogSd, - 1.0, 1.0 ) );
+	fogAtm += fogSunColor * ( exp( - fogAng * 7.0 ) * 0.3 + exp( - fogAng * 30.0 ) * 0.9 )
+		* fogSunGlow.x * fogSunGlow.y * smoothstep( - 0.015, 0.005, fogDir.y );
+	#if defined( TONE_MAPPING )
+		fogAtm = toneMapping( fogAtm );
+	#endif
+	gl_FragColor.rgb = mix( gl_FragColor.rgb, linearToOutputTexel( vec4( fogAtm, 1.0 ) ).rgb, fogFactor );
+#endif`),
+    (be = []));
+  let t = (e) => {
+    for (let t in ve) e[t] || ((e[t] = { value: ve[t] }), be.push([e, t]));
+  };
+  t(p.fog);
+  for (let e of Object.keys(ie)) {
+    let n = ie[e]?.uniforms;
+    n && n.fogDensity && t(n);
+  }
+}
+function Se() {
+  if (ye) {
+    for (let e of _e) i[e] = ye[e];
+    for (let [e, t] of be) delete e[t];
+    ((ye = null),
+      (be = null),
+      (ce[0] = 0),
+      (ce[1] = 0),
+      (le[0] = 0),
+      (le[1] = 0));
+  }
+}
+function Ce(e, t = 0) {
+  ((ce[0] = e), (ce[1] = t));
+}
+function we(e = 0, t = 0) {
+  ((le[0] = Math.max(0, Math.min(1, e))), (le[1] = Math.max(0, t)));
+}
+function Te(e) {
+  ((ue[0] = e.horizon[0]),
+    (ue[1] = e.horizon[1]),
+    (ue[2] = e.horizon[2]),
+    (de[0] = e.zenith[0]),
+    (de[1] = e.zenith[1]),
+    (de[2] = e.zenith[2]),
+    (fe[0] = e.haze[0]),
+    (fe[1] = e.haze[1]),
+    (fe[2] = e.haze[2]),
+    (pe[0] = e.belowColor[0]),
+    (pe[1] = e.belowColor[1]),
+    (pe[2] = e.belowColor[2]),
+    (me[0] = e.sunDir[0]),
+    (me[1] = e.sunDir[1]),
+    (me[2] = e.sunDir[2]),
+    (he[0] = e.sunColor[0]),
+    (he[1] = e.sunColor[1]),
+    (he[2] = e.sunColor[2]),
+    (ge[0] = e.sunGlow),
+    (ge[1] = 0.3 + 0.7 * e.sunDisc));
+}
+var Ee = `shadowmap_pars_fragment`,
+  De =
+    /shadow = \(\r?\n(?:[^\n]*texture\( shadowMap, vec3\( shadowCoord\.xy \+ vogelDiskSample\( \d+, 5, phi \)[^\n]*\r?\n)+[\t ]*\) \* 0\.2;/,
+  Oe = null,
+  ke = null;
+function Ae(e = 14) {
+  if (Oe) return Oe;
+  let t = i[Ee];
+  if (typeof t != `string` || !De.test(t))
+    return ((Oe = { patched: !1, taps: 5 }), Oe);
+  let n = `shadow = 0.0;
+`;
+  for (let t = 0; t < e; t++)
+    n += `\t\t\t\tshadow += texture( shadowMap, vec3( shadowCoord.xy + vogelDiskSample( ${t}, ${e}, phi ) * radius, shadowCoord.z ) );\n`;
+  return (
+    (n += `\t\t\t\tshadow *= ${(1 / e).toFixed(9)};`),
+    (ke = t),
+    (i[Ee] = t.replace(De, n)),
+    (Oe = { patched: !0, taps: e }),
+    Oe
+  );
+}
+function je() {
+  (ke != null && (i[Ee] = ke), (ke = null), (Oe = null));
+}
+function Me() {
+  return Oe ?? { patched: !1, taps: 5 };
+}
+var Ne = Math.PI / 180,
+  Pe = 5.5,
+  Fe = 18.5,
+  Ie = new _();
+function F(e, t = 1) {
+  return (Ie.set(e), [Ie.r * t, Ie.g * t, Ie.b * t]);
+}
+var Le = (e, t, n) => e + (t - e) * n,
+  Re = (e) => (e < 0 ? 0 : e > 1 ? 1 : e),
+  I = (e, t, n) => {
+    let r = Re((n - e) / (t - e));
+    return r * r * (3 - 2 * r);
+  };
+function L(e, t) {
+  if (t <= e[0][0]) return e[0][1];
+  for (let n = 1; n < e.length; n++)
+    if (t <= e[n][0]) {
+      let [r, i] = e[n - 1],
+        [a, o] = e[n],
+        s = I(r, a, t);
+      return Array.isArray(i)
+        ? [Le(i[0], o[0], s), Le(i[1], o[1], s), Le(i[2], o[2], s)]
+        : Le(i, o, s);
+    }
+  return e[e.length - 1][1];
+}
+var R = {
+    zenith: [
+      [-90, F(395798, 0.45)],
+      [-18, F(461852, 0.7)],
+      [-10, F(792115)],
+      [-5, F(1319501)],
+      [0, F(2244986)],
+      [6, F(3103902)],
+      [15, F(3830198)],
+      [26, F(3372233)],
+      [40, F(2979023)],
+      [90, F(2914002)],
+    ],
+    horizon: [
+      [-90, F(725024, 0.55)],
+      [-18, F(1120814, 0.8)],
+      [-10, F(2503248)],
+      [-5, F(5982819)],
+      [0, F(13665882)],
+      [6, F(14590579)],
+      [15, F(15123354)],
+      [25, F(13880776)],
+      [40, F(12899558)],
+      [90, F(12768230)],
+    ],
+    haze: [
+      [-90, [0, 0, 0]],
+      [-12, [0, 0, 0]],
+      [-6, F(9059626, 0.4)],
+      [0, F(16747580, 1)],
+      [6, F(16752725, 0.92)],
+      [15, F(16757876, 0.84)],
+      [20, F(16763024, 0.72)],
+      [30, F(16769732, 0.44)],
+      [45, F(16777215, 0.3)],
+      [90, F(16777215, 0.26)],
+    ],
+    sunColor: [
+      [-5, F(16738852)],
+      [0, F(16745523)],
+      [6, F(16752716)],
+      [12, F(16756832)],
+      [20, F(16765072)],
+      [32, F(16772304)],
+      [50, F(16774632)],
+      [90, F(16775666)],
+    ],
+    sunIntensity: [
+      [-13, 0],
+      [-8, 0.22],
+      [-4, 0.46],
+      [-1, 0.62],
+      [0, 0.72],
+      [4, 1.78],
+      [10, 2.12],
+      [20, 2.5],
+      [35, 2.9],
+      [90, 3.05],
+    ],
+    sunGlow: [
+      [-6, 0.3],
+      [0, 1.5],
+      [8, 1],
+      [18, 0.75],
+      [30, 0.6],
+      [90, 0.5],
+    ],
+    hemiSky: [
+      [-90, F(4870770, 2.6)],
+      [-14, F(6055048, 2.6)],
+      [-6, F(9079460, 2.6)],
+      [0, F(11119295, 1.9)],
+      [6, F(11057886, 1.3)],
+      [15, F(11519722, 1.18)],
+      [90, F(11980011, 1.1)],
+    ],
+    hemiGround: [
+      [-90, F(2763836, 1.75)],
+      [-8, F(3814978, 1.7)],
+      [0, F(7623999, 1.4)],
+      [8, F(9074272, 1.25)],
+      [90, F(9799024, 1.2)],
+    ],
+    hemiIntensity: [
+      [-90, 1.7],
+      [-14, 2],
+      [-6, 2.35],
+      [0, 2.2],
+      [6, 1.82],
+      [14, 1.72],
+      [30, 1.62],
+      [90, 1.6],
+    ],
+    exposure: [
+      [-90, 3.1],
+      [-14, 3],
+      [-9, 2.5],
+      [-6, 2.05],
+      [-3, 1.6],
+      [0, 1.3],
+      [8, 1.13],
+      [20, 1.06],
+      [40, 1],
+      [90, 0.98],
+    ],
+    fogDensity: [
+      [-90, 0.0016],
+      [-8, 0.0019],
+      [0, 0.003],
+      [10, 0.0027],
+      [22, 0.0023],
+      [90, 0.002],
+    ],
+    cloudAmbientGain: [
+      [-90, 1.4],
+      [-10, 1.3],
+      [0, 0.95],
+      [10, 0.72],
+      [90, 0.65],
+    ],
+  },
+  ze = F(12110079),
+  Be = 0.32;
+function Ve(e, t = [0, 0, 0]) {
+  let n = (Math.PI * (e - Pe)) / 14,
+    r = 35 * Ne;
+  return (
+    (t[0] = Math.cos(n)),
+    (t[1] = Math.sin(n) * Math.cos(r)),
+    (t[2] = Math.sin(n) * Math.sin(r)),
+    t
+  );
+}
+function He(e, t = [0, 0, 0]) {
+  let n = e >= Fe ? e - Fe : e + 24 - Fe,
+    r = (Math.PI * n) / 11,
+    i = 32 * Ne;
+  return (
+    (t[0] = Math.cos(r)),
+    (t[1] = Math.sin(r) * Math.cos(i)),
+    (t[2] = -Math.sin(r) * Math.sin(i)),
+    t
+  );
+}
+var z = (e, t, n) => [Le(e[0], t[0], n), Le(e[1], t[1], n), Le(e[2], t[2], n)],
+  B = (e, t) => [e[0] * t, e[1] * t, e[2] * t],
+  Ue = (e) => e[0] * 0.2126 + e[1] * 0.7152 + e[2] * 0.0722;
+function We(e) {
+  let t = Math.hypot(e[0], e[1], e[2]) || 1;
+  return [e[0] / t, e[1] / t, e[2] / t];
+}
+function Ge(e, t = { overcast: 0, fog: 0, rain: 0 }) {
+  let n = Ve(e),
+    r = He(e),
+    i = Math.asin(Math.max(-1, Math.min(1, n[1]))) / Ne,
+    a = L(R.zenith, i),
+    o = L(R.horizon, i),
+    s = L(R.haze, i),
+    c = L(R.sunColor, i),
+    l = L(R.sunIntensity, i),
+    u = L(R.sunGlow, i),
+    d = I(-1.5, 0.5, i),
+    f = L(R.hemiGround, i),
+    p = L(R.hemiIntensity, i),
+    m = L(R.exposure, i),
+    h = L(R.fogDensity, i),
+    g = 0,
+    _ = 0,
+    v = I(11, 15.5, e) * (1 - I(21, 23.5, e)) * (1 - I(8, 30, i));
+  v > 0.001 &&
+    ((h *= 1 + 0.52 * v),
+    (s = B(s, 1 + 0.42 * v)),
+    (o = z(o, [o[0] * 1.16, o[1], o[2] * 0.84], v)),
+    (c = z(c, [c[0], c[1] * 0.86, c[2] * 0.6], 0.9 * v)),
+    (l *= 1 - 0.16 * v),
+    (m *= 1 + 0.05 * v));
+  let y = I(-2, -9, i),
+    b = y * I(0, 0.08, r[1]),
+    x = I(-5, -13, i),
+    S = I(6, -3, i),
+    C = L(R.hemiSky, i),
+    w = B(z(o, a, 0.35), L(R.cloudAmbientGain, i)),
+    T = 0.42,
+    E = [1, 1, 1],
+    D = 0,
+    O = Math.max(t.overcast, t.rain);
+  if (O > 0) {
+    let e = Ue(o),
+      t = [e, e, e * 1.04];
+    ((a = z(a, B(t, 0.22), O)),
+      (o = z(o, B(t, 0.55), O)),
+      (s = B(s, 1 - 0.85 * O)),
+      (d *= 1 - O),
+      (u *= 1 - 0.9 * O),
+      (l *= 1 - 0.78 * O),
+      (g = Math.max(g, O)),
+      (_ = Math.max(_, 0.62 * O)),
+      (C = z(C, B(t, 1.6), O)),
+      (f = z(f, B(t, 0.26), O)),
+      (p *= 1 + 0.9 * O),
+      (h *= 1 + 0.7 * O),
+      (m *= 1 + 0.1 * O),
+      (T = Math.max(T, 0.6 + 0.4 * O)),
+      (E = z(E, [0.66, 0.67, 0.71], O)),
+      (w[0] *= 1 - 0.62 * O),
+      (w[1] *= 1 - 0.62 * O),
+      (w[2] *= 1 - 0.62 * O));
+  }
+  if (t.rain > 0) {
+    let e = t.rain;
+    ((a = B(a, 1 - 0.34 * e)),
+      (o = B(o, 1 - 0.28 * e)),
+      (C = B(C, 1 - 0.22 * e)),
+      (p *= 1 - 0.24 * e),
+      (l *= 1 - 0.4 * e),
+      (h *= 1 + 1.4 * e),
+      (m *= 1 - 0.1 * e),
+      (E = z(E, [0.6, 0.62, 0.68], e)),
+      (T = Math.max(T, 0.97 * e)),
+      (D = e));
+  }
+  if (t.fog > 0) {
+    let e = t.fog,
+      n = Ue(o),
+      r = [n, n, n * 1.02];
+    ((h *= 1 + 4.5 * e),
+      (a = z(a, B(r, 0.8), 0.6 * e)),
+      (o = z(o, B(r, 0.95), 0.7 * e)),
+      (s = B(s, 1 - 0.6 * e)),
+      (d *= 1 - 0.75 * e),
+      (u *= 1 - 0.5 * e),
+      (l *= 1 - 0.68 * e),
+      (g = Math.max(g, 0.9 * e)),
+      (_ = Math.max(_, 0.35 * e)),
+      (C = z(C, B(r, 1.2), 0.6 * e)),
+      (f = z(f, B(r, 0.42), 0.6 * e)),
+      (p *= 1 + 0.45 * e));
+  }
+  let k = o,
+    A = B(z(k, f, 0.5), 0.7),
+    j = Be * b,
+    M = i < -3 && j > l,
+    ee = I(0, -6, i),
+    N = M ? r : n;
+  !M && n[1] < 0.21 && (N = We([n[0], 0.21, n[2]]));
+  let P = M ? ze : c,
+    te = M ? j : l;
+  return (
+    M || (g = Math.max(g, 0.7 * ee)),
+    _ > 0 && (N = We(z(N, [0, 1, 0], _))),
+    {
+      tod: e,
+      elevation: i,
+      sunDir: n,
+      moonDir: r,
+      isMoon: M,
+      keyDir: N,
+      keyColor: P,
+      keyIntensity: te,
+      keySoft: g,
+      keyVertical: _,
+      sunColor: c,
+      sunIntensity: l,
+      sunDisc: d,
+      sunGlow: u,
+      moonAmount: b,
+      stars: x,
+      nightAmount: y,
+      practicals: S,
+      dusty: v,
+      zenith: a,
+      horizon: o,
+      haze: s,
+      fogColor: k,
+      belowColor: A,
+      fogDensity: h,
+      hemiSky: C,
+      hemiGround: f,
+      hemiIntensity: p,
+      exposure: m,
+      cloudCover: T,
+      cloudTint: E,
+      cloudAmbient: w,
+      rain: D,
+      overcast: O,
+      fogWeather: t.fog ?? 0,
+      wetness: D,
+    }
+  );
+}
+var Ke = new Float32Array([1, 0]),
+  qe = `2.5`,
+  Je = `#if ( NUM_DIR_LIGHTS > 0 ) && defined( RE_Direct )`,
+  Ye = null,
+  Xe = null;
+function Ze(e) {
+  ((Ke[0] = e.isMoon ? 0.35 : 0.12 + 0.88 * e.sunDisc),
+    (Ke[1] = 0.3 * (e.keySoft || 0)));
+}
+function Qe() {
+  if (Ye) return;
+  let e = i;
+  ((Ye = {
+    lights_pars_begin: e.lights_pars_begin,
+    lights_fragment_begin: e.lights_fragment_begin,
+    roughnessmap_fragment: e.roughnessmap_fragment,
+  }),
+    (e.lights_pars_begin =
+      `uniform vec2 glintParams;
+` + Ye.lights_pars_begin),
+    (e.lights_fragment_begin =
+      Ye.lights_fragment_begin.replace(
+        Je,
+        `vec3 glintBefore = reflectedLight.directSpecular;\n${Je}`,
+      ) +
+      `\nreflectedLight.directSpecular = glintBefore + min( ( reflectedLight.directSpecular - glintBefore ) * glintParams.x, vec3( ${qe} ) );\n`),
+    (e.roughnessmap_fragment =
+      Ye.roughnessmap_fragment +
+      `
+roughnessFactor = max( roughnessFactor, glintParams.y );
+`),
+    (Xe = []));
+  let t = (e) => {
+    e &&
+      e.directionalLights &&
+      !e.glintParams &&
+      ((e.glintParams = { value: Ke }), Xe.push(e));
+  };
+  t(p.lights);
+  for (let e of Object.keys(ie)) t(ie[e]?.uniforms);
+}
+function $e() {
+  if (Ye) {
+    Object.assign(i, Ye);
+    for (let e of Xe) delete e.glintParams;
+    ((Ye = Xe = null), (Ke[0] = 1), (Ke[1] = 0));
+  }
+}
+var et = null;
+function tt(e) {
+  for (let t of [`point`, `spot`]) {
+    let n = RegExp(
+      `(\\t\\t${t}Light = ${t}Lights\\[ i \\];)([\\s\\S]*?RE_Direct\\( directLight,[^\\n]*\\);)`,
+    );
+    if (!n.test(e)) throw Error(`Missing ${t}-light shader loop`);
+    e = e.replace(
+      n,
+      (e, n, r) =>
+        `${n}\n\t\tif ( any( notEqual( ${t}Light.color, vec3( 0.0 ) ) ) ) {${r}\n\t\t}`,
+    );
+  }
+  return e;
+}
+function nt() {
+  if (et !== null) return;
+  let e = i.lights_fragment_begin,
+    t = tt(e);
+  ((et = e), (i.lights_fragment_begin = t));
+}
+function rt() {
+  et !== null && ((i.lights_fragment_begin = et), (et = null));
+}
+function it(e) {
+  let t = new Uint8Array(256);
+  for (let e = 0; e < 256; e++) t[e] = e;
+  for (let n = 255; n > 0; n--) {
+    let r = e.int(0, n),
+      i = t[n];
+    ((t[n] = t[r]), (t[r] = i));
+  }
+  let n = new Float32Array(256);
+  for (let t = 0; t < 256; t++) n[t] = e.next();
+  let r = (e, r, i) =>
+      n[(t[e & 255] ^ t[(r + 71) & 255] ^ t[(i + 157) & 255]) & 255],
+    i = (e) => e * e * (3 - 2 * e),
+    a = (e, t, n) => e + (t - e) * n;
+  function o(e, t, n = 0) {
+    let o = Math.floor(e),
+      s = Math.floor(t),
+      c = Math.floor(n),
+      l = i(e - o),
+      u = i(t - s),
+      d = i(n - c),
+      f = r(o, s, c),
+      p = r(o + 1, s, c),
+      m = r(o, s + 1, c),
+      h = r(o + 1, s + 1, c),
+      g = r(o, s, c + 1),
+      _ = r(o + 1, s, c + 1),
+      v = r(o, s + 1, c + 1),
+      y = r(o + 1, s + 1, c + 1);
+    return a(a(a(f, p, l), a(m, h, l), u), a(a(g, _, l), a(v, y, l), u), d);
+  }
+  return (
+    (o.fbm = function (e, t, n, r = 3, i = 2.07, a = 0.5) {
+      let s = 1,
+        c = 1,
+        l = 0,
+        u = 0;
+      for (let d = 0; d < r; d++)
+        ((l += s * o(e * c, t * c, n * c)), (u += s), (s *= a), (c *= i));
+      return l / u;
+    }),
+    o
+  );
+}
+var at = 3,
+  ot = 38,
+  st = 3,
+  ct = 26,
+  lt = 6400,
+  ut = 780,
+  dt = 1420,
+  ft = 1900,
+  pt = 3500,
+  mt = 520,
+  ht = 1020,
+  gt = 1;
+function _t(e, t, n, r, i, a) {
+  let o = new k(1, gt),
+    s = o.attributes.position,
+    l = new c();
+  for (let o = 0; o < s.count; o++) {
+    l.fromBufferAttribute(s, o);
+    let c = e(l.x * 1.25 + t, l.y * 1.25 + t * 0.61, l.z * 1.25 - t) - 0.5,
+      u = e(l.x * 2.7 - t, l.y * 2.7 + t * 1.7, l.z * 2.7 + t) - 0.5;
+    (l.setLength(Math.max(0.6, 1 + a * (c * 1.2 + u * 0.45))),
+      s.setXYZ(o, l.x * n, l.y * r, l.z * i));
+  }
+  return o.index ? o.toNonIndexed() : o;
+}
+function vt(e, t, n = 0) {
+  let r = e.range(0.14, 0.22),
+    i = [],
+    a = e.int(3, 4),
+    o = e.range(1, 1.5) * (1 + n * 0.9),
+    s = e.range(0.55, 0.95) * (1 + n * 0.9),
+    c = e.range(0, Math.PI * 2);
+  for (let t = 0; t < a; t++) {
+    let n = c + ((t + e.range(-0.16, 0.16)) / a) * Math.PI * 2;
+    i.push({
+      x: Math.cos(n) * o,
+      y: e.range(-0.05, 0.08),
+      z: Math.sin(n) * s,
+      r: e.range(0.7, 1),
+    });
+  }
+  i.push({
+    x: e.range(-0.25, 0.25),
+    y: e.range(0.06, 0.22),
+    z: e.range(-0.15, 0.15),
+    r: e.range(1, 1.28),
+  });
+  let u = n > 0.5 ? e.int(0, 1) : e.int(1, 3),
+    d = e.range(0.4, 0.6),
+    f = e.range(0.9, 1.05);
+  for (let t = 0; t < u; t++)
+    ((f *= e.range(0.6, 0.8)),
+      (d += f * e.range(0.8, 1.15)),
+      i.push({
+        x: e.range(-0.55, 0.55) * f,
+        y: d,
+        z: e.range(-0.45, 0.45) * f,
+        r: f,
+      }));
+  let p = [];
+  for (let a of i) {
+    let i = a.r * e.range(0.92, 1.14),
+      o = a.r * e.range(0.86, 1.12),
+      s = a.r * e.range(0.62, 0.86) * (1 - 0.28 * n),
+      c = _t(t, e.range(0, 64), i, s, o, r);
+    (c.translate(a.x, a.y + s * 0.35, a.z), p.push(c));
+  }
+  let m = ne(p, !1);
+  for (let e of p) e.dispose();
+  m.computeBoundingBox();
+  let h = m.boundingBox,
+    g = h.min.y + (h.max.y - h.min.y) * 0.17,
+    _ = m.attributes.position;
+  for (let e = 0; e < _.count; e++) {
+    let t = _.getY(e);
+    t < g && _.setY(e, g - (g - t) * 0.16);
+  }
+  (m.center(), m.computeBoundingBox(), (h = m.boundingBox));
+  let v = new Float32Array(_.count * 3),
+    y = Math.max(0.001, h.max.y - h.min.y);
+  for (let e = 0; e < _.count; e++) {
+    let t = ((_.getY(e) - h.min.y) / y) ** 0.75;
+    ((v[e * 3] = 0.8 + 0.2 * t),
+      (v[e * 3 + 1] = 0.83 + 0.17 * t),
+      (v[e * 3 + 2] = 0.9 + 0.1 * t));
+  }
+  return (m.setAttribute(`color`, new l(v, 3)), m.computeVertexNormals(), m);
+}
+function yt(e) {
+  let t = new T();
+  t.name = `clouds`;
+  let n = it(e.fork(`cloudnoise`)),
+    r = new s({
+      color: 16777215,
+      vertexColors: !0,
+      flatShading: !0,
+      roughness: 1,
+      metalness: 0,
+    }),
+    i = { uFlash: { value: 0 }, uFlashDir: { value: new c(1, 0, 0) } };
+  ((r.onBeforeCompile = (e) => {
+    r.userData.front &&
+      (Object.assign(e.uniforms, i),
+      (e.vertexShader =
+        `varying vec3 vFlashW;
+` +
+        e.vertexShader.replace(
+          `#include <project_vertex>`,
+          `#include <project_vertex>
+#ifdef USE_INSTANCING
+vFlashW = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;
+#else
+vFlashW = (modelMatrix * vec4(transformed, 1.0)).xyz;
+#endif`,
+        )),
+      (e.fragmentShader =
+        `varying vec3 vFlashW;
+uniform float uFlash;
+uniform vec3 uFlashDir;
+` +
+        e.fragmentShader.replace(
+          `vec3 totalEmissiveRadiance = emissive;`,
+          `vec3 totalEmissiveRadiance = emissive * vColor.rgb;
+if (uFlash > 0.001) { vec3 fd = normalize(vec3(vFlashW.x - cameraPosition.x, 0.0, vFlashW.z - cameraPosition.z) + 1e-5); totalEmissiveRadiance += vec3(0.82, 0.86, 1.0) * uFlash * pow(max(dot(fd, uFlashDir), 0.0), 14.0); }`,
+        )));
+  }),
+    (r.customProgramCacheKey = () =>
+      r.userData.front ? `clouds-front` : `clouds`));
+  let a = [],
+    o = [],
+    l = [],
+    u = new b(),
+    d = (e, n, i) => {
+      let o = new re(e, r, n);
+      return (
+        o.instanceMatrix.setUsage(te),
+        (o.castShadow = !1),
+        (o.receiveShadow = !1),
+        (o.frustumCulled = !1),
+        (o.name = i),
+        a.push(o),
+        t.add(o),
+        o
+      );
+    };
+  for (let t = 0; t < at; t++) {
+    let r = d(vt(e, n, 0), ot, `cloudField${t}`);
+    for (let n = 0; n < ot; n++)
+      o.push({
+        mesh: r,
+        i: n,
+        bx: e.range(-3200, lt / 2),
+        bz: e.range(-3200, lt / 2),
+        alt: e.range(ut, dt),
+        scale: e.range(85, 215),
+        rotY: e.range(0, Math.PI * 2),
+        squash: e.range(0.6, 0.9),
+        thin: (n * 0.618034 + t * 0.381966) % 1,
+      });
+  }
+  for (let t = 0; t < st; t++) {
+    let r = d(vt(e, n, t === 2 ? 0.6 : 0.25), ct, `cloudRing${t}`);
+    for (let n = 0; n < ct; n++) {
+      let i = (n / ct) * Math.PI * 2 + e.range(-0.11, 0.11) + t * 0.81;
+      l.push({
+        mesh: r,
+        i: n,
+        ang: i,
+        rad: e.range(ft, pt),
+        alt: e.range(mt, ht),
+        scale: e.range(150, 330),
+        rotY: e.range(0, Math.PI * 2),
+        squash: e.range(0.45, 0.75),
+        thin: (n * 0.618034 + t * 0.381966) % 1,
+      });
+    }
+  }
+  let f = new h(1.5, 0.45),
+    p = new h(),
+    m = 0,
+    g = 0.42,
+    v = 1,
+    y = 1,
+    x = 1,
+    S = null,
+    C = new _(),
+    w = new _(1, 1, 1),
+    E = (e, t, n) => {
+      let r = Math.min(1, Math.max(0, (n - e) / (t - e)));
+      return r * r * (3 - 2 * r);
+    },
+    D = (e, t) => {
+      let n = (e - t + lt / 2) % lt;
+      return (n < 0 && (n += lt), t + n - lt / 2);
+    };
+  function O(e, t, n, r, i, a = 1) {
+    (u.position.set(t, n, r),
+      u.rotation.set(0, e.rotY + m, 0),
+      u.scale.set(i, i * e.squash * x * a, i),
+      u.updateMatrix(),
+      e.mesh.setMatrixAt(e.i, u.matrix));
+  }
+  function k(e, t, n, r, i, a) {
+    let o = E(0, 0.3, a + 0.5 * e.thin - 0.3);
+    (O(
+      e,
+      t,
+      n * (1 - S.lower * a),
+      r,
+      o < 0.02 ? 0.001 : i * (0.5 + 0.5 * o) * (1 + S.grow * a),
+      1 - 0.3 * a,
+    ),
+      e.mesh.setColorAt(e.i, C.copy(w).lerp(S.tint, a)));
+  }
+  function A(e, t) {
+    (p.addScaledVector(f, e), (m += e * 0.0015));
+    let n = S ? ot : Math.round(8 + 30 * g),
+      r = S ? ct : Math.round(10 + 16 * Math.min(1, g * 1.25)),
+      i = 0.82 + 0.55 * g;
+    for (let e of o) {
+      if (e.i >= n) continue;
+      let r = D(e.bx + p.x, t.x),
+        a = D(e.bz + p.y, t.z);
+      S
+        ? k(
+            e,
+            r,
+            e.alt * v,
+            a,
+            e.scale * i * y,
+            S.k *
+              E(-S.soft, S.soft, (r - t.x) * S.x + (a - t.z) * S.z - S.edge),
+          )
+        : O(e, r, e.alt * v, a, e.scale * i * y);
+    }
+    for (let e of l) {
+      if (e.i >= r) continue;
+      let n = e.ang + m * 0.6,
+        a = Math.cos(n),
+        o = Math.sin(n);
+      S
+        ? k(
+            e,
+            t.x + a * e.rad,
+            e.alt * v,
+            t.z + o * e.rad,
+            e.scale * i * y,
+            S.k * E(-0.15, 0.75, a * S.x + o * S.z),
+          )
+        : O(e, t.x + a * e.rad, e.alt * v, t.z + o * e.rad, e.scale * i * y);
+    }
+    for (let e of a)
+      ((e.count = e.name.startsWith(`cloudRing`) ? r : n),
+        (e.instanceMatrix.needsUpdate = !0),
+        e.instanceColor && (e.instanceColor.needsUpdate = !0));
+  }
+  return {
+    group: t,
+    material: r,
+    meshes: a,
+    get instances() {
+      return o.length + l.length;
+    },
+    setWind(e, t) {
+      f.set(e, t);
+    },
+    setCover(e) {
+      g = Math.max(0, Math.min(1, e));
+    },
+    setDeck(e, t, n = 1) {
+      ((v = e), (y = t), (x = n));
+    },
+    setTint(e, t, n) {
+      r.color.setRGB(e, t, n);
+    },
+    setAmbient(e, t, n) {
+      r.emissive.setRGB(e, t, n);
+    },
+    setFlash(e, t, n) {
+      ((i.uFlash.value = e), i.uFlashDir.value.set(t, 0, n));
+    },
+    setFront(e) {
+      if (!e) {
+        ((S = null), (r.userData.front = !1));
+        for (let e of a) e.instanceColor = null;
+        r.needsUpdate = !0;
+        return;
+      }
+      let t = Math.hypot(e.dir[0], e.dir[1]) || 1;
+      ((S = {
+        x: e.dir[0] / t,
+        z: e.dir[1] / t,
+        edge: e.edge ?? 900,
+        soft: e.soft ?? 1400,
+        k: Math.min(1, Math.max(0, e.strength ?? 1)),
+        tint: new _(e.tint ?? 4870743),
+        lower: e.lower ?? 0.35,
+        grow: e.grow ?? 0.6,
+      }),
+        (r.userData.front = !0),
+        (r.needsUpdate = !0));
+      for (let e of a) for (let t = 0; t < e.count; t++) e.setColorAt(t, w);
+    },
+    update: A,
+    dispose() {
+      for (let e of a) e.geometry.dispose();
+      r.dispose();
+    },
+  };
+}
+var bt = 16e3,
+  xt = 900,
+  St = `
+uniform sampler2D uCover;
+uniform vec4 uCoverBox; // x0, z0, 1 / size x, 1 / size z; z = 0: no cover map
+// height of the roof over (x, z) in metres, or -1e4 in the open (a map's shelters, rasterised by setCover)
+float coverAt( vec2 xz ) {
+	if ( uCoverBox.z == 0.0 ) return -1e4;
+	vec2 uv = ( xz - uCoverBox.xy ) * uCoverBox.zw;
+	if ( any( lessThan( uv, vec2( 0.0 ) ) ) || any( greaterThan( uv, vec2( 1.0 ) ) ) ) return -1e4;
+	vec4 c = texture2D( uCover, uv );
+	return c.r > 0.0 ? c.g : -1e4;   // r: covered, g: the roof height (top of the sheltered volume)
+}
+attribute vec3 aOffset;
+attribute float aSeed;
+uniform float uTime;
+uniform vec3 uCenter, uBox;
+uniform vec2 uWind;
+uniform float uLen, uWidth;
+varying float vFade;
+void main() {
+	float speed = 9.0 + aSeed * 5.0;
+	vec3 vel = vec3( uWind.x, - speed, uWind.y );
+	vec3 w = aOffset * uBox + vel * uTime;
+	// wrap in X, Y and Z: the column of air around the eye is always full, top to bottom
+	vec3 rel = mod( w - uCenter + 0.5 * uBox, uBox ) - 0.5 * uBox;
+	vec3 wp = uCenter + rel;
+	vec3 axis = normalize( vel );
+	vec3 toCam = cameraPosition - wp;
+	float dist = length( toCam );
+	vec3 side = normalize( cross( axis, toCam / max( dist, 0.001 ) ) );
+	// width grows with distance => constant apparent width on screen
+	float halfW = position.x * uWidth * max( dist, 1.2 );
+	vec3 p = wp + axis * ( position.y * uLen * ( 0.7 + 0.7 * aSeed ) ) + side * halfW;
+	vFade = ( 1.0 - abs( position.y ) * 2.0 )
+		* smoothstep( 0.3, 1.3, dist )
+		* ( 1.0 - 0.55 * smoothstep( 14.0, 30.0, dist ) );
+	if ( wp.y < coverAt( wp.xz ) ) vFade = 0.0;   // under a roof: dry
+	gl_Position = projectionMatrix * viewMatrix * vec4( p, 1.0 );
+}`,
+  Ct = `
+#include <common>
+uniform vec3 uColor;
+uniform float uAlpha;
+varying float vFade;
+void main() {
+	gl_FragColor = vec4( uColor, uAlpha * vFade );
+	#include <tonemapping_fragment>
+	#include <colorspace_fragment>
+}`,
+  wt = `
+uniform sampler2D uCover;
+uniform vec4 uCoverBox; // x0, z0, 1 / size x, 1 / size z; z = 0: no cover map
+// height of the roof over (x, z) in metres, or -1e4 in the open (a map's shelters, rasterised by setCover)
+float coverAt( vec2 xz ) {
+	if ( uCoverBox.z == 0.0 ) return -1e4;
+	vec2 uv = ( xz - uCoverBox.xy ) * uCoverBox.zw;
+	if ( any( lessThan( uv, vec2( 0.0 ) ) ) || any( greaterThan( uv, vec2( 1.0 ) ) ) ) return -1e4;
+	vec4 c = texture2D( uCover, uv );
+	return c.r > 0.0 ? c.g : -1e4;   // r: covered, g: the roof height (top of the sheltered volume)
+}
+attribute vec2 aCell;
+attribute float aSeed;
+uniform float uTime, uArea, uMaxR, uGroundY;
+uniform vec3 uCenter;
+varying vec2 vP;
+varying float vFade;
+void main() {
+	float life = fract( uTime * ( 0.85 + aSeed * 0.7 ) + aSeed * 7.31 );
+	float r = uMaxR * ( 0.12 + 0.88 * life );
+	vec2 home = aCell * uArea;
+	vec2 base = mod( home - uCenter.xz + 0.5 * uArea, uArea ) - 0.5 * uArea + uCenter.xz;
+	vec3 p = vec3( base.x + position.x * r, uGroundY, base.y + position.z * r );
+	vP = vec2( position.x, position.z ) * 2.0;
+	float d = length( p.xz - uCenter.xz );
+	vFade = ( 1.0 - life ) * ( 1.0 - life ) * smoothstep( 0.6, 1.6, d ) * ( 1.0 - smoothstep( 0.35, 0.5, d / uArea ) );
+	if ( p.y < coverAt( p.xz ) ) vFade = 0.0;
+	gl_Position = projectionMatrix * viewMatrix * vec4( p, 1.0 );
+}`,
+  Tt = `
+#include <common>
+uniform vec3 uColor;
+uniform float uAlpha;
+varying vec2 vP;
+varying float vFade;
+void main() {
+	float d = length( vP );
+	float ring = smoothstep( 0.52, 0.82, d ) * ( 1.0 - smoothstep( 0.9, 1.0, d ) );
+	gl_FragColor = vec4( uColor, uAlpha * vFade * ring );
+	#include <tonemapping_fragment>
+	#include <colorspace_fragment>
+}`;
+function Et(e) {
+  let t = {
+    tex: { value: new v(new Float32Array(4), 1, 1, w, j) },
+    box: { value: new m(0, 0, 0, 0) },
+    key: null,
+  };
+  t.tex.value.needsUpdate = !0;
+  let n = new T();
+  n.name = `rain`;
+  let i = new A(1, 1, 1, 2),
+    a = new x();
+  ((a.index = i.index),
+    a.setAttribute(`position`, i.attributes.position),
+    a.setAttribute(`uv`, i.attributes.uv));
+  let o = new Float32Array(bt * 3),
+    s = new Float32Array(bt);
+  for (let t = 0; t < bt; t++)
+    ((o[t * 3] = e.next()),
+      (o[t * 3 + 1] = e.next()),
+      (o[t * 3 + 2] = e.next()),
+      (s[t] = e.next()));
+  (a.setAttribute(`aOffset`, new E(o, 3)),
+    a.setAttribute(`aSeed`, new E(s, 1)),
+    (a.instanceCount = bt));
+  let l = {
+      uTime: { value: 0 },
+      uCenter: { value: new c() },
+      uBox: { value: new c(24, 24, 24) },
+      uWind: { value: new h(4.4, 1.6) },
+      uLen: { value: 0.62 },
+      uWidth: { value: 0.0022 },
+      uColor: { value: new _(0.72, 0.76, 0.84) },
+      uAlpha: { value: 0 },
+      uCover: t.tex,
+      uCoverBox: t.box,
+    },
+    u = new S({
+      uniforms: l,
+      vertexShader: St,
+      fragmentShader: Ct,
+      transparent: !0,
+      depthWrite: !1,
+      side: 2,
+      fog: !1,
+    }),
+    d = new r(a, u);
+  ((d.name = `rainStreaks`),
+    (d.frustumCulled = !1),
+    (d.renderOrder = 500),
+    (d.visible = !1),
+    (d.castShadow = !1),
+    (d.receiveShadow = !1),
+    n.add(d));
+  let f = new A(1, 1, 1, 1).rotateX(-Math.PI / 2),
+    p = new x();
+  ((p.index = f.index), p.setAttribute(`position`, f.attributes.position));
+  let g = new Float32Array(xt * 2),
+    y = new Float32Array(xt);
+  for (let t = 0; t < xt; t++)
+    ((g[t * 2] = e.next()), (g[t * 2 + 1] = e.next()), (y[t] = e.next()));
+  (p.setAttribute(`aCell`, new E(g, 2)),
+    p.setAttribute(`aSeed`, new E(y, 1)),
+    (p.instanceCount = xt));
+  let b = {
+      uTime: { value: 0 },
+      uCenter: { value: new c() },
+      uArea: { value: 30 },
+      uMaxR: { value: 0.3 },
+      uGroundY: { value: 0.02 },
+      uColor: { value: new _(0.85, 0.89, 0.95) },
+      uAlpha: { value: 0 },
+      uCover: t.tex,
+      uCoverBox: t.box,
+    },
+    C = new S({
+      uniforms: b,
+      vertexShader: wt,
+      fragmentShader: Tt,
+      transparent: !0,
+      depthWrite: !1,
+      side: 2,
+      fog: !1,
+    }),
+    D = new r(p, C);
+  ((D.name = `rainSplashes`),
+    (D.frustumCulled = !1),
+    (D.renderOrder = 499),
+    (D.visible = !1),
+    (D.castShadow = !1),
+    (D.receiveShadow = !1),
+    n.add(D));
+  let O = 0,
+    k = 0,
+    M = new _();
+  return {
+    group: n,
+    mesh: d,
+    splashes: D,
+    uniforms: l,
+    setGroundY(e) {
+      k = e;
+    },
+    setCover(e) {
+      if (e === t.key) return;
+      if (((t.key = e), !e?.length)) {
+        t.box.value.set(0, 0, 0, 0);
+        return;
+      }
+      let n = Math.min(...e.map((e) => e[0])) - 1,
+        r = Math.min(...e.map((e) => e[2])) - 1,
+        i = Math.max(...e.map((e) => e[3])) + 1,
+        a = Math.max(...e.map((e) => e[5])) + 1,
+        o = Math.max(0.5, Math.max(i - n, a - r) / 2048),
+        s = Math.ceil((i - n) / o),
+        c = Math.ceil((a - r) / o),
+        l = new Float32Array(s * c * 4);
+      for (let t of e)
+        for (
+          let e = Math.max(0, Math.floor((t[2] - r) / o));
+          e < Math.min(c, Math.ceil((t[5] - r) / o));
+          e++
+        )
+          for (
+            let r = Math.max(0, Math.floor((t[0] - n) / o));
+            r < Math.min(s, Math.ceil((t[3] - n) / o));
+            r++
+          ) {
+            let n = (e * s + r) * 4;
+            ((l[n] = 1), (l[n + 1] = Math.max(l[n + 1] || -1e4, t[4])));
+          }
+      (t.tex.value.dispose(),
+        (t.tex.value = new v(l, s, c, w, j)),
+        (t.tex.value.magFilter = t.tex.value.minFilter = P),
+        (t.tex.value.needsUpdate = !0),
+        t.box.value.set(n, r, 1 / (s * o), 1 / (c * o)));
+    },
+    update(e, t, n, r = 1, i = null) {
+      if (
+        ((O = (O + e) % 3600),
+        (l.uTime.value = O),
+        l.uCenter.value.set(t.x, t.y + 4, t.z),
+        (b.uTime.value = O),
+        b.uCenter.value.copy(t),
+        (b.uGroundY.value = k + 0.015),
+        i)
+      ) {
+        M.setRGB(i[0], i[1], i[2]);
+        let e = Math.max(0.05, M.r * 0.2126 + M.g * 0.7152 + M.b * 0.0722),
+          t = Math.min(1.7, 0.55 / e + 0.55);
+        (l.uColor.value.setRGB(
+          Math.min(1.4, M.r * t),
+          Math.min(1.4, M.g * t),
+          Math.min(1.5, M.b * t + 0.04),
+        ),
+          b.uColor.value.copy(l.uColor.value));
+      }
+      let o = Math.max(0.6, r);
+      ((l.uAlpha.value = (0.25 * n) / o),
+        (b.uAlpha.value = (0.55 * n) / o),
+        (a.instanceCount = Math.round(bt * Math.min(1, n * 1.2))),
+        (p.instanceCount = Math.round(xt * Math.min(1, n * 1.2))),
+        (d.visible = n > 0.01),
+        (D.visible = n > 0.01 && t.y - k < 60));
+    },
+    dispose() {
+      (a.dispose(),
+        u.dispose(),
+        i.dispose(),
+        p.dispose(),
+        C.dispose(),
+        f.dispose(),
+        t.tex.value.dispose());
+    },
+  };
+}
+var Dt = 9e3,
+  Ot = `
+attribute vec3 aOffset;
+attribute float aSeed;
+uniform float uTime, uSize, uScale, uStorm;
+uniform vec3 uCenter, uBox;
+uniform vec2 uWind;
+varying float vFade;
+void main() {
+	float fall = 1.1 + 1.2 * aSeed;
+	vec3 w = aOffset * uBox + vec3( uWind.x, - fall, uWind.y ) * uTime;
+	w.x += 0.55 * sin( uTime * ( 0.6 + aSeed ) + aSeed * 40.0 );
+	w.z += 0.55 * cos( uTime * ( 0.5 + 0.7 * aSeed ) + aSeed * 23.0 );
+	// Integrated gust displacement stays continuous as the wind rises and falls.
+	w.x += uStorm * ( 7.0 * sin( uTime * 0.8 ) + 1.5 * sin( uTime * 2.1 + aSeed * 40.0 ) );
+	w.z += uStorm * ( 4.0 * sin( uTime * 0.65 ) + 1.2 * cos( uTime * 1.7 + aSeed * 23.0 ) );
+	w.y += uStorm * 0.8 * sin( uTime * 1.8 + aSeed * 31.0 );
+	vec3 rel = mod( w - uCenter + 0.5 * uBox, uBox ) - 0.5 * uBox;
+	vec4 mv = viewMatrix * vec4( uCenter + rel, 1.0 );
+	float dist = - mv.z;
+	vFade = smoothstep( 0.25, 1.2, dist ) * ( 1.0 - smoothstep( 0.30, 0.5, length( rel / uBox ) ) );
+	gl_PointSize = clamp( uSize * uScale * ( 0.6 + 0.8 * aSeed ) / max( dist, 0.4 ), 1.0, 22.0 );
+	gl_Position = projectionMatrix * mv;
+}`,
+  kt = `
+#include <common>
+uniform vec3 uColor;
+uniform float uAlpha;
+varying float vFade;
+void main() {
+	float r = length( gl_PointCoord - 0.5 ) * 2.0;
+	float a = ( 1.0 - smoothstep( 0.35, 1.0, r ) ) * uAlpha * vFade;
+	if ( a < 0.004 ) discard;
+	gl_FragColor = vec4( uColor, a );
+	#include <tonemapping_fragment>
+	#include <colorspace_fragment>
+}`;
+function At(e, t = 0) {
+  let n = Math.max(0, Math.min(1, t)),
+    r = new d(),
+    i = new Float32Array(Dt * 3),
+    a = new Float32Array(Dt);
+  for (let t = 0; t < Dt; t++)
+    ((i[t * 3] = e.next()),
+      (i[t * 3 + 1] = e.next()),
+      (i[t * 3 + 2] = e.next()),
+      (a[t] = e.next()));
+  (r.setAttribute(`position`, new l(new Float32Array(Dt * 3), 3)),
+    r.setAttribute(`aOffset`, new l(i, 3)),
+    r.setAttribute(`aSeed`, new l(a, 1)));
+  let o = {
+      uTime: { value: 0 },
+      uStorm: { value: n },
+      uCenter: { value: new c() },
+      uBox: { value: new c(44 - 12 * n, 30 - 4 * n, 44 - 12 * n) },
+      uWind: { value: new h(1.5 + 6 * n, 0.6 + 2 * n) },
+      uSize: { value: 0.085 + 0.025 * n },
+      uScale: { value: 1e3 },
+      uColor: { value: new _(0.95, 0.97, 1) },
+      uAlpha: { value: 0 },
+    },
+    s = new S({
+      uniforms: o,
+      vertexShader: Ot,
+      fragmentShader: kt,
+      transparent: !0,
+      depthWrite: !1,
+      fog: !1,
+    }),
+    u = new D(r, s);
+  ((u.name = `snowfall`),
+    (u.frustumCulled = !1),
+    (u.renderOrder = 500),
+    (u.visible = !1));
+  let f = 0;
+  return {
+    mesh: u,
+    update(e, t, n, i = 1, a = 1080, s = 75) {
+      ((f = (f + e) % 3600),
+        (o.uTime.value = f),
+        o.uCenter.value.set(t.x, t.y + 3, t.z),
+        (o.uScale.value = a / (2 * Math.tan((s * Math.PI) / 360))),
+        (o.uAlpha.value = (0.8 * n) / Math.max(0.6, i)),
+        r.setDrawRange(0, Math.round(Dt * Math.min(1, n))),
+        (u.visible = n > 0.01));
+    },
+    dispose() {
+      (r.dispose(), s.dispose());
+    },
+  };
+}
+function jt(e, { reversedDepth: r = !1, name: i = `sunLight.shadowMap` } = {}) {
+  let a = new f(e, e, n);
+  return (
+    (a.name = i),
+    (a.format = y),
+    (a.compareFunction = r ? 518 : 515),
+    (a.minFilter = a.magFilter = t),
+    new o(e, e, {
+      format: O,
+      type: oe,
+      depthTexture: a,
+      depthBuffer: !0,
+      stencilBuffer: !1,
+      minFilter: P,
+      magFilter: P,
+      generateMipmaps: !1,
+    })
+  );
+}
+function Mt(
+  e,
+  t,
+  n,
+  {
+    reversedDepth: i = !1,
+    proxyRange: a = () => 0,
+    dynamic: o = () => !0,
+  } = {},
+) {
+  let s = e.shadowMap,
+    l = s.render,
+    u = jt(n, { reversedDepth: i, name: `sunLight.staticShadow` });
+  (e.initRenderTarget(u), t.shadow.map && e.initRenderTarget(t.shadow.map));
+  let f = [],
+    p = new T(),
+    m = [],
+    h = [],
+    _ = !1,
+    v = ``,
+    y = -1,
+    b = 0,
+    x = -1,
+    S = 0,
+    C = [t];
+  function w() {
+    ((m = []), (h = []));
+    let e = (t) => {
+      if (t.userData.dynamicShadow) {
+        h.push(t);
+        return;
+      }
+      t.castShadow && (t.isMesh || t.isLine || t.isPoints) && m.push(t);
+      for (let n of t.children) e(n);
+    };
+    for (let t of f) e(t);
+  }
+  function E(n, r) {
+    w();
+    for (let e of h)
+      ((e.userData.shadowCacheVisible = e.visible), (e.visible = !1));
+    p.children = f;
+    try {
+      l.call(s, n, p, r);
+    } finally {
+      p.children = [];
+      for (let e of h) e.visible = e.userData.shadowCacheVisible;
+    }
+    (e.copyTextureToTexture(t.shadow.map.depthTexture, u.depthTexture),
+      (_ = !0),
+      (y = -1),
+      S++);
+  }
+  let D = new ae(),
+    O = new Map(),
+    k = new ae(),
+    A = new c();
+  function j(e) {
+    let t = a() || 0;
+    for (let [n, r] of O) {
+      let i = n;
+      for (; i.parent;) i = i.parent;
+      if (
+        !i.isScene ||
+        (t > 0 &&
+          e &&
+          A.setFromMatrixPosition(n.matrixWorld).distanceToSquared(e.position) >
+            t * t)
+      ) {
+        for (let e of r) e.proxy.visible = !1;
+        continue;
+      }
+      for (let e of r) {
+        let t = !0;
+        for (let n = e.node; n; n = n.parent)
+          if (!n.visible) {
+            t = !1;
+            break;
+          }
+        ((e.proxy.visible = t),
+          t && e.proxy.matrixWorld.copy(e.node.matrixWorld));
+      }
+    }
+  }
+  let M = (t) => {
+    let n = e.clear;
+    e.clear = () => {};
+    try {
+      t();
+    } finally {
+      e.clear = n;
+    }
+  };
+  return (
+    (s.render = function (n, r, i) {
+      if (!n.includes(t) || !t.shadow.map) return l.call(s, n, r, i);
+      if (!f.length) {
+        (l.call(s, n, r, i), O.size && (j(i), M(() => l.call(s, n, D, i))));
+        return;
+      }
+      if (x === b) return;
+      if (
+        ((x = b),
+        (!_ || (y >= 0 && performance.now() - y > 250)) && E(C, i),
+        e.copyTextureToTexture(u.depthTexture, t.shadow.map.depthTexture),
+        !o())
+      ) {
+        M(() => l.call(s, n, k, i));
+        return;
+      }
+      let a = m.map((e) => e.castShadow);
+      for (let e of m) e.castShadow = !1;
+      try {
+        M(() => l.call(s, n, r, i));
+      } finally {
+        m.forEach((e, t) => {
+          e.castShadow = a[t];
+        });
+      }
+      O.size && (j(i), M(() => l.call(s, n, D, i)));
+    }),
+    {
+      addRoot(e) {
+        (f.includes(e) || f.push(e), (_ = !1));
+      },
+      setKey(e) {
+        e !== v && ((v = e), (_ = !1));
+      },
+      invalidate(e = !1) {
+        e ? (_ = !1) : y < 0 && (y = performance.now());
+      },
+      nextFrame() {
+        b++;
+      },
+      addProxy(e) {
+        if (O.has(e)) return;
+        e.updateMatrixWorld(!0);
+        let t = new Map();
+        e.traverse((e) => {
+          let n = e.material;
+          if (
+            !e.isMesh ||
+            !e.castShadow ||
+            e.isInstancedMesh ||
+            e.isSkinnedMesh ||
+            e.customDepthMaterial ||
+            Array.isArray(n) ||
+            !n ||
+            n.alphaTest > 0 ||
+            n.transparent ||
+            Object.keys(e.geometry.morphAttributes ?? {}).length
+          )
+            return;
+          let r = n.shadowSide ?? null,
+            i = e.parent.uuid + `|` + n.side + `|` + r,
+            a = t.get(i);
+          (a ||
+            t.set(
+              i,
+              (a = { node: e.parent, side: n.side, shadowSide: r, list: [] }),
+            ),
+            a.list.push(e));
+        });
+        let n = [];
+        for (let e of t.values()) {
+          if (e.list.length < 2) continue;
+          let t = e.list.map((e) => {
+              let t = new d();
+              if (
+                (t.setAttribute(
+                  `position`,
+                  e.geometry.attributes.position.clone(),
+                ),
+                t.setIndex(
+                  e.geometry.index
+                    ? [...e.geometry.index.array]
+                    : [...Array(t.attributes.position.count).keys()],
+                ),
+                t.applyMatrix4(e.matrix),
+                e.matrix.determinant() < 0)
+              ) {
+                let e = t.index.array;
+                for (let t = 0; t < e.length; t += 3) {
+                  let n = e[t + 1];
+                  ((e[t + 1] = e[t + 2]), (e[t + 2] = n));
+                }
+              }
+              return t;
+            }),
+            i = ne(t, !1);
+          if ((t.forEach((e) => e.dispose()), !i)) continue;
+          i.computeBoundingSphere();
+          let a = new g({ side: e.side });
+          a.shadowSide = e.shadowSide;
+          let o = new r(i, a);
+          ((o.castShadow = !0),
+            (o.matrixAutoUpdate = !1),
+            (o.matrixWorldAutoUpdate = !1),
+            (o.name = `shadow-proxy`));
+          for (let t of e.list) t.castShadow = !1;
+          (D.add(o), n.push({ node: e.node, proxy: o, sources: e.list }));
+        }
+        O.set(e, n);
+      },
+      removeProxy(e) {
+        let t = O.get(e);
+        if (t) {
+          for (let e of t)
+            (e.proxy.removeFromParent(),
+              e.proxy.geometry.dispose(),
+              e.proxy.material.dispose());
+          O.delete(e);
+        }
+      },
+      get active() {
+        return f.length > 0;
+      },
+      stats: () => ({
+        roots: f.length,
+        statics: m.length,
+        dynamics: h.length,
+        builds: S,
+        valid: _,
+      }),
+      dispose() {
+        for (let e of [...O.keys()]) this.removeProxy(e);
+        ((s.render = l),
+          u.depthTexture?.dispose(),
+          u.dispose(),
+          (f.length = 0));
+      },
+    }
+  );
+}
+var V = 46,
+  Nt = 34,
+  Pt = 13,
+  Ft = 6,
+  It = 35.5,
+  Lt = It / 2,
+  Rt = 0.18,
+  zt = 0.06,
+  Bt = 293.75,
+  Vt = [2.05, 0, 5.64],
+  Ht = [
+    [0.9806, 0.1961],
+    [-0.9806, 0.1961],
+  ],
+  Ut = 0.281;
+function Wt(e, t, n, r) {
+  let i = 1 / 0,
+    a = Math.max(n, r);
+  for (let [n, r] of Ht) {
+    let o = e - Vt[0],
+      s = t - Vt[2],
+      c = o * n + s * r;
+    c < 8 ||
+      Math.abs(-o * r + s * n) > 7 + a ||
+      (i = Math.min(i, Math.max(3, (c - a) * Ut - 1.5)));
+  }
+  return i;
+}
+var Gt = [
+    {
+      walls: [13218954, 12098412, 14206882, 11046502, 14734004],
+      roofs: [10120010, 8215110, 11304024, 7164744],
+    },
+    {
+      walls: [9279910, 7306636, 10990527, 6122362, 12174542],
+      roofs: [5596015, 4543327, 6253944, 4938084],
+    },
+    {
+      walls: [10838090, 9195325, 12155740, 7620154, 12881006],
+      roofs: [6248786, 11051156, 5393480, 7563874],
+    },
+    {
+      walls: [5925694, 7043653, 5069878, 7635021, 4148270],
+      roofs: [4016683, 5595450, 3095074, 6713674],
+    },
+  ],
+  Kt = new _(),
+  qt = new _(),
+  H = [1, 1],
+  U = [0, 1],
+  W = [1, 0.74],
+  Jt = [0, 0.74],
+  G = [1, 1.2],
+  Yt = [0, 1.16],
+  K = [1, 0.56];
+function Xt(e, t, n, r = 0.5) {
+  let i = e.attributes.position.count,
+    a = new Float32Array(i * 3),
+    o = e.attributes.normal;
+  for (let e = 0; e < i; e++) {
+    let i = Math.abs(o.getY(e)) > r ? n : t;
+    ((a[e * 3] = i[0]), (a[e * 3 + 1] = i[1]), (a[e * 3 + 2] = 1));
+  }
+  return (e.setAttribute(`color`, new l(a, 3)), e);
+}
+function q(e, t, n, r, i, o, s, c, l = 0) {
+  let u = new a(e, t, n).toNonIndexed();
+  return (
+    u.translate(0, t / 2, 0),
+    l && u.rotateY(l),
+    u.translate(r, i, o),
+    Xt(u, s, c)
+  );
+}
+function J(e, t, n, r, i, a, o, s, c, l = 0) {
+  let u = new N(e, t, n, r, 1, !1).toNonIndexed();
+  return (
+    u.translate(0, n / 2, 0),
+    l && u.rotateY(l),
+    u.translate(i, a, o),
+    Xt(u, s, c, 0.7)
+  );
+}
+function Zt(e, t, n, r, i, a) {
+  let o = e + 0.02,
+    s = t + 0.02;
+  (a.push(q(o, i, r, 0, n, -s / 2 + r / 2, H, G)),
+    a.push(q(o, i, r, 0, n, s / 2 - r / 2, H, G)),
+    a.push(q(r, i, s - 2 * r, -o / 2 + r / 2, n, 0, H, G)),
+    a.push(q(r, i, s - 2 * r, o / 2 - r / 2, n, 0, H, G)));
+}
+function Qt(e, t, n) {
+  n.push(q(e + 0.05, 0.34, e + 0.05, 0, t - 0.34, 0, W, W));
+}
+function $t(e, t, n, r, i) {
+  i.push(q(e, t, n, 0, r, 0, H, U));
+}
+function en(e, t, n, r = e.int(1, 3)) {
+  for (let i = 0; i < r; i++) {
+    let r = e.range(0, Math.PI * 2),
+      i = Math.cos(r),
+      a = Math.sin(r),
+      o = e.range(-0.26, 0.26),
+      s = e.range(-0.26, 0.26),
+      c = (e, t) => [o + e * i + t * a, s - e * a + t * i];
+    switch (e.int(0, 5)) {
+      case 0: {
+        n.push(
+          q(
+            e.range(0.18, 0.3),
+            e.range(1.6, 2.6),
+            e.range(0.16, 0.26),
+            o,
+            t,
+            s,
+            W,
+            Jt,
+            r,
+          ),
+        );
+        let [i, a] = c(0, 0);
+        n.push(q(0.34, 0.1, 0.3, i, t + 2.2, a, Yt, Yt, r));
+        break;
+      }
+      case 1:
+        for (let i = -1; i <= 1; i++) {
+          let [a, o] = c(i * 0.15, 0);
+          n.push(q(0.1, e.range(0.4, 0.8), 0.1, a, t, o, W, Jt, r));
+        }
+        break;
+      case 2: {
+        let [e, i] = c(0, 0);
+        for (let [e, i] of [
+          [-0.09, -0.09],
+          [0.09, -0.09],
+          [-0.09, 0.09],
+          [0.09, 0.09],
+        ]) {
+          let [a, o] = c(e, i);
+          n.push(q(0.035, 1.1, 0.035, a, t, o, K, K, r));
+        }
+        n.push(J(0.15, 0.15, 0.75, 8, e, t + 1.1, i, W, Jt, r));
+        break;
+      }
+      case 3:
+        n.push(q(e.range(0.3, 0.5), 0.12, 0.12, o, t, s, Yt, G, r));
+        break;
+      case 4:
+        for (let e = 0; e < 2; e++) {
+          let [i, a] = c(e * 0.2 - 0.1, 0);
+          n.push(q(0.17, 0.24, 0.13, i, t, a, W, G, r));
+        }
+        break;
+      default: {
+        let [i, a] = c(0, 0);
+        (n.push(q(0.1, 0.3, 0.1, i, t, a, W, Jt, r)),
+          n.push(J(0.018, 0.03, e.range(2.2, 4.2), 5, i, t + 0.3, a, K, K, r)));
+        break;
+      }
+    }
+  }
+}
+function tn(e, t, n = {}) {
+  let r = [],
+    i = [{ s: 1, y0: 0.9, y1: e }];
+  return (
+    $t(1, e, 1, 0, r),
+    Qt(1, e, r),
+    Zt(1, 1, e, 0.035, 0.62, r),
+    en(t, e, r, n.kits ?? t.int(1, 3)),
+    n.crown &&
+      (r.push(q(0.94, n.crown, 0.94, 0, e, 0, W, U)),
+      Zt(0.94, 0.94, e + n.crown, 0.03, 0.5, r),
+      en(t, e + n.crown, r, 1)),
+    r.push(q(1.03, 0.9, 1.03, 0, 0, 0, W, W)),
+    hn(r, e + (n.crown ?? 0), i)
+  );
+}
+function nn(e, t) {
+  let n = [],
+    r = [],
+    i = 0;
+  for (let t of e)
+    ($t(t.s, t.h - i, t.s, i, n),
+      Qt(t.s, t.h, n),
+      Zt(t.s, t.s, t.h, 0.03 * t.s + 0.01, 0.55, n),
+      r.push({ s: t.s, y0: Math.max(i + 0.9, 1.2), y1: t.h - 0.6 }),
+      (i = t.h));
+  let a = e[e.length - 1];
+  return (
+    en(t, a.h, n, 2),
+    n.push(q(e[0].s * 1.03, 0.9, e[0].s * 1.03, 0, 0, 0, W, W)),
+    hn(n, a.h, r)
+  );
+}
+function rn(e, t, n) {
+  let r = [];
+  return (
+    r.push(J(0.5, 0.5, e, t, 0, 0, 0, H, U)),
+    r.push(J(0.53, 0.53, 0.55, t, 0, e, 0, H, G)),
+    r.push(J(0.3, 0.3, 1.6, t, 0, e + 0.55, 0, W, Jt)),
+    n.chance(0.5) && r.push(J(0.03, 0.045, 4, 5, 0, e + 2.15, 0, K, K)),
+    r.push(J(0.53, 0.53, 0.9, t, 0, 0, 0, W, W)),
+    hn(r, e + 2.15, [{ s: 0.94, y0: 1.2, y1: e - 0.5, round: !0 }])
+  );
+}
+function an(e, t, n) {
+  let r = [];
+  for (let n = 0; n < e; n++) {
+    let i = 1 - (0.75 / e) * n;
+    ($t(i, t, i, n * t, r), Zt(i, i, (n + 1) * t, 0.028, 0.34, r));
+  }
+  return (
+    n && r.push(q(0.18, n, 0.18, 0, e * t, 0, W, Jt)),
+    hn(r, e * t + (n ?? 0), [])
+  );
+}
+function on(e, t, n) {
+  let r = [];
+  $t(1, e, 1, 0, r);
+  let i = new a(1.07, t, 1.07).toNonIndexed(),
+    o = i.attributes.position;
+  for (let e = 0; e < o.count; e++)
+    o.getY(e) > 0 && o.setX(e, o.getX(e) * 0.02);
+  (i.translate(0, e + t / 2, 0), i.computeVertexNormals());
+  let s = o.count,
+    c = new Float32Array(s * 3),
+    u = i.attributes.normal;
+  for (let e = 0; e < s; e++) {
+    let t = Math.abs(u.getZ(e)) > 0.8 ? H : U;
+    ((c[e * 3] = t[0]), (c[e * 3 + 1] = t[1]), (c[e * 3 + 2] = 1));
+  }
+  return (
+    i.setAttribute(`color`, new l(c, 3)),
+    r.push(i),
+    n.chance(0.7) &&
+      r.push(
+        q(
+          0.11,
+          t * 0.9,
+          0.11,
+          n.range(-0.3, 0.3),
+          e + t * 0.5,
+          n.range(-0.32, 0.32),
+          W,
+          Jt,
+        ),
+      ),
+    r.push(q(1.02, 0.55, 1.02, 0, 0, 0, W, W)),
+    hn(r, e + t, [{ s: 1, y0: 0.7, y1: e - 0.3 }])
+  );
+}
+function sn(e) {
+  let t = [];
+  return (
+    t.push(J(0.5, 0.5, e, 10, 0, 0, 0, H, G)),
+    t.push(J(0.06, 0.5, e * 0.32, 10, 0, e, 0, U, U)),
+    t.push(q(0.07, e + 0.5, 0.07, 0.54, 0, 0, K, K)),
+    t.push(J(0.54, 0.54, 0.5, 10, 0, 0, 0, W, W)),
+    hn(t, e * 1.32, [])
+  );
+}
+function cn() {
+  let e = [],
+    t = [
+      [5.4, 0.4],
+      [4.2, 0.4],
+      [3, 0.4],
+    ],
+    n = 0;
+  for (let [r, i] of t) (e.push(q(r, i, r, 0, n, 0, G, H)), (n += i));
+  (e.push(q(1.5, 1.3, 1.5, 0, n, 0, H, W)),
+    (n += 1.3),
+    e.push(q(1.72, 0.16, 1.72, 0, n, 0, G, G)),
+    (n += 0.16));
+  let r = new N(0.28, 0.6, 4.6, 4, 1).toNonIndexed();
+  (r.rotateY(Math.PI / 4),
+    r.translate(0, n + 2.3, 0),
+    Xt(r, H, U, 0.7),
+    e.push(r),
+    (n += 4.6));
+  let i = new u(0.28, 0.45, 4).toNonIndexed();
+  return (
+    i.rotateY(Math.PI / 4),
+    i.translate(0, n + 0.225, 0),
+    Xt(i, U, U, 0.9),
+    e.push(i),
+    hn(e, n + 0.45, [])
+  );
+}
+var ln = 20,
+  un = 0.45,
+  dn = [
+    [0.66, 2.6],
+    [0.86, 2.1],
+  ];
+function fn() {
+  let e = [];
+  e.push(q(1.6, un, 1.6, 0, 0, 0, W, G));
+  let t = new N(0.15, 0.36, ln, 6, 1).toNonIndexed();
+  (t.translate(0, 10.45, 0), Xt(t, H, H, 0.9), e.push(t));
+  for (let [t, n] of dn) {
+    let r = un + ln * t;
+    (e.push(q(n, 0.22, 0.22, 0, r, 0, W, W)),
+      e.push(q(0.22, 0.22, n, 0, r, 0, W, W)));
+    for (let t of [-1, 1])
+      (e.push(q(0.52, 0.15, 0.34, t * n * 0.5, r + 0.22, 0, G, G)),
+        e.push(q(0.34, 0.15, 0.52, 0, r + 0.22, t * n * 0.5, G, G)));
+  }
+  return (
+    e.push(J(0.09, 0.16, 0.8, 6, 0, 20.45, 0, W, W)),
+    e.push(q(0.3, 0.3, 0.3, 0, 21.25, 0, G, G)),
+    hn(e, 21.6, [])
+  );
+}
+function pn() {
+  return Xt(new a(1, 1, 1).toNonIndexed().translate(0, 0.5, 0), H, U);
+}
+function mn() {
+  return Xt(new a(1, 1, 1).toNonIndexed().translate(0, 0.5, 0), H, H);
+}
+function hn(e, t, n = []) {
+  let r = ne(e, !1);
+  for (let t of e) t.dispose();
+  let i = r.attributes.position,
+    a = r.attributes.color;
+  for (let e = 0; e < i.count; e++) {
+    let t = i.getY(e),
+      n = 0.74 + 0.26 * I(0, 6, t) + 0.06 * I(14, 55, t);
+    a.setZ(e, n);
+  }
+  return (
+    r.computeVertexNormals(),
+    (r.userData.height = t),
+    (r.userData.masses = n),
+    r
+  );
+}
+function gn() {
+  let e = new s({
+    color: 16777215,
+    vertexColors: !0,
+    flatShading: !0,
+    roughness: 0.92,
+    metalness: 0,
+  });
+  return (
+    (e.shadowSide = 1),
+    (e.onBeforeCompile = (e) => {
+      e.vertexShader = e.vertexShader
+        .replace(
+          `#include <color_pars_vertex>`,
+          `#include <color_pars_vertex>
+attribute vec3 aRoofColor;`,
+        )
+        .replace(
+          `#include <color_vertex>`,
+          `
+	vColor = vec4( 1.0 );
+	#ifdef USE_INSTANCING_COLOR
+		vColor.rgb = mix( aRoofColor, instanceColor.rgb, color.r ) * color.g * color.b;
+	#else
+		vColor.rgb = color;
+	#endif`,
+        );
+    }),
+    (e.customProgramCacheKey = () => `env-building-v3`),
+    e
+  );
+}
+function _n(e, t, n) {
+  let r = Math.abs(e - n[0]) - n[2],
+    i = Math.abs(t - n[1]) - n[3],
+    a = r > 0 ? r : 0,
+    o = i > 0 ? i : 0;
+  return a === 0 && o === 0 ? Math.max(r, i) : Math.hypot(a, o);
+}
+function vn(e, t = 6) {
+  let n = new Map(),
+    r = (e, t) => e * 4096 + t;
+  for (let i of e) {
+    let e = Math.floor((i[0] - i[2] - t) / 24),
+      a = Math.floor((i[0] + i[2] + t) / 24),
+      o = Math.floor((i[1] - i[3] - t) / 24),
+      s = Math.floor((i[1] + i[3] + t) / 24);
+    for (let t = e; t <= a; t++)
+      for (let e = o; e <= s; e++) {
+        let a = r(t, e),
+          o = n.get(a);
+        (o || ((o = []), n.set(a, o)), o.push(i));
+      }
+  }
+  return function (e, i, a, o) {
+    let s = n.get(r(Math.floor(e / 24), Math.floor(i / 24)));
+    if (!s) return 1;
+    let c = 1 / 0;
+    for (let t = 0; t < s.length; t++) {
+      let n = _n(e, i, s[t]);
+      n < c && (c = n);
+    }
+    return c >= t ? 1 : 1 - a * Math.exp(-(c > 0 ? c : 0) / o);
+  };
+}
+function yn(e, t) {
+  let n = it(e.fork(`ground`)),
+    i = new Set(),
+    a = (e) => i.add(Math.round(e * 100) / 100);
+  for (let e = -6; e <= Ft; e++) {
+    let t = e * V;
+    for (let e of [-18.55, -17.15, 0, 17.15, 18.55]) a(t + e);
+    if (e < Ft) {
+      let e = t + V / 2;
+      for (let t of [
+        -4.4, -3.5, -2.7, -2, -1.3, -0.6, 0, 0.6, 1.3, 2, 2.7, 3.5, 4.4,
+      ])
+        a(e + t);
+    }
+  }
+  for (let e of [
+    305, 318, 334, 356, 384, 418, 458, 505, 560, 625, 700, 790, 895, 1020, 1170,
+    1350, 1570, 1850, 2400,
+  ])
+    (a(-e), a(e));
+  let o = Array.from(i).sort((e, t) => e - t),
+    c = o.length,
+    u = (e, t) => {
+      let r = I(400, 950, Math.max(Math.abs(e), Math.abs(t)));
+      return r <= 0.001
+        ? 0
+        : ((n.fbm(e * 85e-5, t * 85e-5, 0.5, 3) - 0.5) * 96 +
+            (n(e * 0.0036 + 5, t * 0.0036 - 3, 1.5) - 0.5) * 15) *
+            r;
+    },
+    f = [7897424, 6056e3, 9080663, 7174724, 9736798, 6978636],
+    p = new _(),
+    m = new _(),
+    h = new _(),
+    g = (e, t, n) => Math.exp(-((e - t) * (e - t)) / n),
+    v = new Float32Array(c * c * 3),
+    y = new Float32Array(c * c * 3);
+  for (let e = 0; e < c; e++)
+    for (let r = 0; r < c; r++) {
+      let i = o[r],
+        a = o[e],
+        s = e * c + r,
+        l = u(i, a);
+      ((v[s * 3] = i), (v[s * 3 + 1] = l + zt), (v[s * 3 + 2] = a));
+      let d = Math.max(Math.abs(i), Math.abs(a)),
+        _ = 1 - I(292, 322, d),
+        b = 1 - I(330, 560, d),
+        x = d < 294.75,
+        S = n(i * 0.048 + 3, a * 0.048 - 7, 0.25),
+        C = n(i * 0.21 + 21, a * 0.21 + 9, 1.75),
+        w = n.fbm(i * 0.0028, a * 0.0028, 3.5, 2),
+        T = n(i * 0.0042 + 31, a * 0.0042 - 17, 5.5),
+        E = n(i * 0.0021 + 7, a * 0.0021 + 13, 8.5),
+        D = Math.abs(i - Math.round(i / V) * V),
+        O = Math.abs(a - Math.round(a / V) * V),
+        k = Math.max(D, O) - Lt,
+        A = Math.abs(D - V / 2),
+        j = Math.abs(O - V / 2),
+        M = x && D > Lt,
+        ee = x && O > Lt,
+        N = M && ee ? 1 : 0,
+        P = 0;
+      (M && (P = Math.max(P, g(A, 1.15, 0.3) + g(A, 2.85, 0.34) * 0.8)),
+        ee && (P = Math.max(P, g(j, 1.15, 0.3) + g(j, 2.85, 0.34) * 0.8)),
+        (P *= 1 - 0.75 * N));
+      let te = x ? 1 - I(0, 1.1, k) : 0,
+        ne = x ? (0.6 + 0.4 * I(0, 4.2, k)) * t(i, a, 0.42, 1.9) : 1;
+      p.setHex(6250332)
+        .lerp(h.setHex(6973797), C)
+        .multiplyScalar(
+          (0.95 + 0.1 * S) *
+            (1 - 0.12 * P) *
+            (1 - 0.15 * te) *
+            (1 + 0.06 * N) *
+            ne,
+        );
+      let re = Math.min(f.length - 2, Math.floor(T * (f.length - 1)));
+      (m.setHex(f[re]).lerp(h.setHex(f[re + 1]), w),
+        m.lerp(h.setHex(8353384), I(16, 46, Math.abs(l))),
+        m.lerp(h.setHex(9142114), b * 0.6),
+        m.multiplyScalar(0.9 + 0.2 * E),
+        h.copy(m).lerp(p, _),
+        (y[s * 3] = h.r),
+        (y[s * 3 + 1] = h.g),
+        (y[s * 3 + 2] = h.b));
+    }
+  let b = new Uint32Array((c - 1) * (c - 1) * 6),
+    x = 0;
+  for (let e = 0; e < c - 1; e++)
+    for (let t = 0; t < c - 1; t++) {
+      let n = e * c + t,
+        r = n + 1,
+        i = n + c,
+        a = i + 1;
+      ((b[x++] = n),
+        (b[x++] = i),
+        (b[x++] = r),
+        (b[x++] = r),
+        (b[x++] = i),
+        (b[x++] = a));
+    }
+  let S = new d();
+  (S.setAttribute(`position`, new l(v, 3)),
+    S.setAttribute(`color`, new l(y, 3)),
+    S.setIndex(new l(b, 1)),
+    S.computeVertexNormals());
+  let C = new s({
+      color: 16777215,
+      vertexColors: !0,
+      flatShading: !0,
+      roughness: 1,
+      metalness: 0,
+      polygonOffset: !0,
+      polygonOffsetFactor: -4,
+      polygonOffsetUnits: -4,
+    }),
+    w = new r(S, C);
+  return (
+    (w.name = `envGround`),
+    (w.receiveShadow = !0),
+    (w.castShadow = !1),
+    { mesh: w, material: C, hAt: u, verts: c * c }
+  );
+}
+function bn(e, t, n) {
+  let i = it(e.fork(`pave`)),
+    a = (e, t) => {
+      let n = Math.sin(e * 127.1 + t * 311.7) * 43758.5453;
+      return n - Math.floor(n);
+    },
+    o = [],
+    c = [],
+    u = [],
+    f = [],
+    p = 0,
+    m = new _(),
+    h = (e, t, r, a, o) => {
+      let s = i(e * 0.11 + 5, t * 0.11 - 2, 0.5) - 0.5,
+        c = n(e, t, 0.46, 2.1);
+      return (
+        m.setHex(r).multiplyScalar((1 + 0.09 * s) * a * c * (o ? 1.06 : 1)),
+        m
+      );
+    },
+    g = (e, t, n, r, i, s, l = null) => {
+      for (let d = 0; d < r.length - 1; d++)
+        for (let m = 0; m < n.length - 1; m++) {
+          let g = e + n[m],
+            _ = e + n[m + 1],
+            v = t + r[d],
+            y = t + r[d + 1],
+            b = 0.9 + 0.2 * a(m + s, d - s),
+            x = m === 0 || d === 0 || m === n.length - 2 || d === r.length - 2,
+            S = l ? l(m, d, n.length - 1, r.length - 1) : i,
+            C = [
+              [g, v],
+              [_, v],
+              [_, y],
+              [g, y],
+            ];
+          for (let [e, t] of C) {
+            let n = h(e, t, S, b, x);
+            (o.push(e, Rt, t), c.push(n.r, n.g, n.b), f.push(0, 1, 0));
+          }
+          (u.push(p, p + 2, p + 1, p, p + 3, p + 2), (p += 4));
+        }
+    },
+    v = (e, t, n) => {
+      let r = -0.08000000000000002;
+      o.push(
+        e - n,
+        r,
+        t - n,
+        e + n,
+        r,
+        t - n,
+        e + n,
+        r,
+        t + n,
+        e - n,
+        r,
+        t + n,
+      );
+      for (let e = 0; e < 4; e++) (c.push(0.2, 0.2, 0.2), f.push(0, -1, 0));
+      (u.push(p, p + 1, p + 2, p, p + 2, p + 3), (p += 4));
+      let i = [
+        [
+          [e - n, t - n],
+          [e + n, t - n],
+          [0, 0, -1],
+        ],
+        [
+          [e + n, t + n],
+          [e - n, t + n],
+          [0, 0, 1],
+        ],
+        [
+          [e + n, t - n],
+          [e + n, t + n],
+          [1, 0, 0],
+        ],
+        [
+          [e - n, t + n],
+          [e - n, t - n],
+          [-1, 0, 0],
+        ],
+      ];
+      for (let [[e, t], [n, a], s] of i) {
+        let i = h(e, t, 10986131, 1, !1).clone(),
+          l = h(n, a, 10986131, 1, !1).clone();
+        (o.push(e, Rt, t, n, Rt, a, n, r, a, e, r, t),
+          c.push(
+            i.r,
+            i.g,
+            i.b,
+            l.r,
+            l.g,
+            l.b,
+            l.r * 0.7,
+            l.g * 0.7,
+            l.b * 0.7,
+            i.r * 0.7,
+            i.g * 0.7,
+            i.b * 0.7,
+          ));
+        for (let e = 0; e < 4; e++) f.push(s[0], s[1], s[2]);
+        (u.push(p, p + 2, p + 1, p, p + 3, p + 2), (p += 4));
+      }
+    },
+    y = [-17.75, -16.9, -15.2, -11.4, -5.7, 0, 5.7, 11.4, 15.2, 16.9, Lt],
+    b = [];
+  for (let e = 0; e <= 16; e++) b.push(-17.75 + (It / 16) * e);
+  let x = (e, t, n, r) =>
+      e === 0 || t === 0 || e === n - 1 || t === r - 1 ? 11248783 : 9670275,
+    S = (e, t, n) => {
+      let r = Math.max(Math.abs(e - (n - 1) / 2), Math.abs(t - (n - 1) / 2));
+      return r > n / 2 - 1.2
+        ? 11972508
+        : Math.abs(r - 5.5) < 0.6
+          ? 7301984
+          : Math.abs(r - 2.5) < 0.6
+            ? 8157032
+            : Math.floor(r) & 1
+              ? 11578006
+              : 9538427;
+    };
+  t.forEach((e, t) => {
+    (e.plaza
+      ? g(e.cx, e.cz, b, b, 11117718, t * 3 + 11, (e, t, n) => S(e, t, n))
+      : g(e.cx, e.cz, y, y, 10130826, t * 3 + 11, x),
+      v(e.cx, e.cz, Lt));
+  });
+  let C = new d();
+  (C.setAttribute(`position`, new l(new Float32Array(o), 3)),
+    C.setAttribute(`color`, new l(new Float32Array(c), 3)),
+    C.setAttribute(`normal`, new l(new Float32Array(f), 3)),
+    C.setIndex(
+      o.length / 3 > 65535
+        ? new l(new Uint32Array(u), 1)
+        : new l(new Uint16Array(u), 1),
+    ));
+  let w = new s({
+    color: 16777215,
+    vertexColors: !0,
+    flatShading: !0,
+    roughness: 0.95,
+    metalness: 0,
+  });
+  w.shadowSide = 1;
+  let T = new r(C, w);
+  return (
+    (T.name = `envPavement`),
+    (T.receiveShadow = !0),
+    (T.castShadow = !0),
+    { mesh: T, material: w, verts: o.length / 3 }
+  );
+}
+function xn(e, t, n) {
+  let r = [],
+    i = [],
+    a = [16767392, 16764812, 16770236, 16176552, 13623551];
+  for (let n of t) {
+    if (!n.masses || !n.masses.length || !e.chance(0.5)) continue;
+    let t = Math.cos(n.rot),
+      i = Math.sin(n.rot);
+    for (let o of n.masses) {
+      if (o.round) continue;
+      let s = n.sx * o.s * 0.5,
+        c = n.sz * o.s * 0.5,
+        l = n.y + o.y0 * n.sy,
+        u = n.y + o.y1 * n.sy;
+      if (u - l < 3.4) continue;
+      let d = Math.min(18, Math.floor((u - l) / 3.4));
+      for (let o = 0; o < d; o++) {
+        let u = l + 1.55 + o * 3.4;
+        for (let o = 0; o < 4; o++) {
+          let l = o < 2 ? s : c,
+            d = Math.max(1, Math.floor((l * 2) / 3.6));
+          for (let f = 0; f < d; f++) {
+            if (!e.chance(0.16)) continue;
+            let p = ((f + 0.5) / d) * 2 * l - l,
+              m,
+              h,
+              g;
+            if (
+              (o === 0
+                ? ((m = p), (h = c + 0.05), (g = n.rot))
+                : o === 1
+                  ? ((m = p), (h = -c - 0.05), (g = n.rot + Math.PI))
+                  : o === 2
+                    ? ((m = s + 0.05), (h = p), (g = n.rot + Math.PI / 2))
+                    : ((m = -s - 0.05), (h = p), (g = n.rot - Math.PI / 2)),
+              r.push({
+                x: n.x + m * t + h * i,
+                y: u,
+                z: n.z - m * i + h * t,
+                ry: g,
+                rx: 0,
+                w: e.range(1, 1.5),
+                h: e.range(1.2, 1.7),
+                col: e.pick(a),
+              }),
+              r.length > 2600)
+            )
+              break;
+          }
+        }
+      }
+    }
+  }
+  for (let [e, t] of n) {
+    for (let [n, i] of dn) {
+      let a = un + ln * n + 0.22 - 0.085;
+      for (let n of [-1, 1])
+        (r.push({
+          x: e + n * i * 0.5,
+          y: a,
+          z: t,
+          ry: 0,
+          rx: Math.PI / 2,
+          w: 0.5,
+          h: 0.32,
+          col: 16773327,
+        }),
+          r.push({
+            x: e,
+            y: a,
+            z: t + n * i * 0.5,
+            ry: 0,
+            rx: Math.PI / 2,
+            w: 0.32,
+            h: 0.5,
+            col: 16773327,
+          }),
+          r.push({
+            x: e + n * i * 0.5,
+            y: a + 0.02,
+            z: t,
+            ry: 0,
+            rx: 0,
+            w: 0.55,
+            h: 0.3,
+            col: 16769451,
+          }),
+          r.push({
+            x: e,
+            y: a + 0.02,
+            z: t + n * i * 0.5,
+            ry: Math.PI / 2,
+            rx: 0,
+            w: 0.55,
+            h: 0.3,
+            col: 16769451,
+          }));
+    }
+    let n = 21.4;
+    (r.push({ x: e, y: n, z: t, ry: 0, rx: 0, w: 0.5, h: 0.5, col: 16734792 }),
+      r.push({
+        x: e,
+        y: n,
+        z: t,
+        ry: Math.PI / 2,
+        rx: 0,
+        w: 0.5,
+        h: 0.5,
+        col: 16734792,
+      }),
+      i.push({ x: e, y: 0.205, z: t, r: 26, col: 16766106 }));
+  }
+  let o = (e, t, n, r) => {
+      let i = new re(e, r, Math.max(1, t.length)),
+        a = new b();
+      return (
+        t.forEach((e, t) => {
+          (a.position.set(e.x, e.y, e.z),
+            a.rotation.set(e.rx ?? 0, e.ry ?? 0, 0),
+            e.flat ? a.scale.set(e.r, 1, e.r) : a.scale.set(e.w, e.h, 1),
+            a.updateMatrix(),
+            i.setMatrixAt(t, a.matrix),
+            i.setColorAt(t, Kt.setHex(e.col)));
+        }),
+        (i.count = t.length),
+        (i.castShadow = !1),
+        (i.receiveShadow = !1),
+        (i.name = n),
+        i.computeBoundingSphere(),
+        (i.visible = !1),
+        i
+      );
+    },
+    s = new g({
+      color: 0,
+      vertexColors: !0,
+      toneMapped: !0,
+      fog: !0,
+      side: 2,
+      transparent: !0,
+      depthWrite: !1,
+      blending: 2,
+    }),
+    c = new A(1, 1);
+  {
+    let e = c.attributes.position.count;
+    c.setAttribute(`color`, new l(new Float32Array(e * 3).fill(1), 3));
+  }
+  let u = o(c, r, `envWindows`, s),
+    d = new A(1, 1, 12, 12).rotateX(-Math.PI / 2);
+  {
+    let e = d.attributes.position,
+      t = new Float32Array(e.count * 4);
+    for (let n = 0; n < e.count; n++) {
+      let r = (1 - Math.min(1, Math.hypot(e.getX(n), e.getZ(n)) * 2)) ** 2.1;
+      ((t[n * 4] = 1),
+        (t[n * 4 + 1] = 1),
+        (t[n * 4 + 2] = 1),
+        (t[n * 4 + 3] = r));
+    }
+    d.setAttribute(`color`, new l(t, 4));
+  }
+  let f = new g({
+      color: 0,
+      vertexColors: !0,
+      transparent: !0,
+      depthWrite: !1,
+      side: 2,
+      blending: 2,
+      toneMapped: !0,
+      fog: !0,
+      polygonOffset: !0,
+      polygonOffsetFactor: -16,
+      polygonOffsetUnits: -16,
+    }),
+    p = o(
+      d,
+      i.map((e) => ({ ...e, ry: 0, rx: 0, flat: !0 })),
+      `envLightPools`,
+      f,
+    );
+  return (
+    (p.renderOrder = 6),
+    {
+      windows: u,
+      poolMesh: p,
+      winMat: s,
+      poolMat: f,
+      count: r.length,
+      dispose() {
+        (c.dispose(), d.dispose(), s.dispose(), f.dispose());
+      },
+      set(e, t) {
+        let n = e > 0.02;
+        if (((u.visible = n), (p.visible = n), !n)) return;
+        let r = (2.4 * e * e) / Math.max(0.8, t);
+        (s.color.setScalar(Math.min(1.3, r)),
+          f.color.setScalar(Math.min(0.6, r * 0.45)));
+      },
+    }
+  );
+}
+function Sn(e, t) {
+  let n = new T();
+  n.name = `envShowcaseCity`;
+  let r = gn(),
+    i = {},
+    a = {},
+    o = (e, t, n) => {
+      a[e] = t;
+      for (let r = 0; r < t; r++) i[`${e}_${r}`] = n(r);
+    };
+  (o(`low5`, 2, () => tn(t.range(4.6, 6.4), t)),
+    o(`low8`, 2, () => tn(t.range(8, 10), t)),
+    o(`mid14`, 2, () => tn(t.range(13, 16), t)),
+    o(`mid20`, 1, () => tn(20, t, { crown: 2.4 })),
+    o(`set24`, 1, () =>
+      nn(
+        [
+          { s: 1, h: 10 },
+          { s: 0.72, h: 24 },
+        ],
+        t,
+      ),
+    ),
+    o(`tall34`, 2, () => tn(t.range(32, 37), t, { crown: 3 })),
+    o(`set50`, 1, () =>
+      nn(
+        [
+          { s: 1, h: 12 },
+          { s: 0.8, h: 32 },
+          { s: 0.58, h: 50 },
+        ],
+        t,
+      ),
+    ),
+    o(`tower72`, 1, () =>
+      nn(
+        [
+          { s: 0.82, h: 40 },
+          { s: 0.62, h: 72 },
+        ],
+        t,
+      ),
+    ),
+    o(`cyl26`, 1, () => rn(26, 12, t)),
+    o(`cyl44`, 1, () => rn(44, 10, t)),
+    o(`zig12`, 1, () => an(3, 4, 1.2)),
+    o(`gable9`, 2, () => on(t.range(5, 6.5), t.range(3, 4.2), t)),
+    o(`tank6`, 1, () => sn(6)),
+    o(`monument`, 1, () => cn()),
+    o(`mast`, 1, () => fn()),
+    o(`prop`, 1, () => pn()),
+    o(`mark`, 1, () => mn()),
+    o(`slab`, 1, () => mn()));
+  let s = {};
+  for (let e in i) s[e] = [];
+  let c = [],
+    l = [],
+    u = (e) => `${e}_${t.int(0, a[e] - 1)}`,
+    d = (e, t, n, r, i, a, o, c, l, u, d, f = 1) => (
+      s[e].push({
+        x: t,
+        y: n,
+        z: r,
+        sx: i,
+        sy: a,
+        sz: o,
+        rot: c,
+        palette: l,
+        wallIdx: u,
+        roofIdx: d,
+        tint: f,
+      }),
+      s[e][s[e].length - 1]
+    ),
+    f = (e, t, n, r, a, o, s, u, f, p, m, h = 1) => {
+      d(e, t, n, r, a, o, s, u, f, p, m, h);
+      let g = i[e].userData.masses;
+      c.push({ x: t, y: n, z: r, sx: a, sy: o, sz: s, rot: u, masses: g });
+      let _ = Math.abs(Math.cos(u)),
+        v = Math.abs(Math.sin(u));
+      l.push([t, r, (a * _ + s * v) * 0.5, (a * v + s * _) * 0.5]);
+    },
+    p = () => t.int(0, 3) * (Math.PI / 2),
+    m = (e, n) => {
+      let r = Math.abs(
+        Math.sin(
+          (Math.floor(e / 2) + 3) * 12.9898 +
+            (Math.floor(n / 2) + 7) * 78.233 +
+            t.seed * 0.001,
+        ) * 43758.5453,
+      );
+      return Math.floor((r % 1) * 3);
+    },
+    h = (e, t) => {
+      let n = Math.hypot(e, t);
+      return (
+        0.55 +
+        2.7 * Math.exp(-((n - 130) * (n - 130)) / 4900) +
+        0.35 * Math.exp(-(n * n) / 9e4)
+      );
+    },
+    g = [],
+    _ = 0;
+  for (let e = 0; e < Pt; e++)
+    for (let n = 0; n < Pt; n++) {
+      let r = (e - Ft) * V,
+        a = (n - Ft) * V,
+        o = e === Ft && n === Ft;
+      if ((g.push({ cx: r, cz: a, plaza: o }), o)) continue;
+      let s = m(e, n),
+        c = h(r, a),
+        l = Math.hypot(r, a) < 52,
+        d = l ? 4 : c > 2.6 ? t.pick([1, 1, 2]) : t.pick([1, 2, 2, 4, 4]),
+        v = [];
+      if (d === 1) v.push([r, a, 31, 31]);
+      else if (d === 2) {
+        let e = t.chance(0.5),
+          n = (Nt - 4.5) / 2;
+        for (let t = 0; t < 2; t++) {
+          let i = (t - 0.5) * 16.25;
+          v.push(e ? [r + i, a, n, 31] : [r, a + i, 31, n]);
+        }
+      } else {
+        let e = (Nt - 4.5) / 2;
+        for (let t = 0; t < 2; t++)
+          for (let n = 0; n < 2; n++)
+            v.push([r + (t - 0.5) * 16.25, a + (n - 0.5) * 16.25, e, e]);
+      }
+      for (let [e, n, r, a] of v) {
+        let o = l ? t.range(4, 9) : c * t.range(5, 13) * (r > 20 ? 1.35 : 1),
+          d,
+          m = t.next();
+        d = l
+          ? m < 0.45
+            ? `gable9`
+            : m < 0.85
+              ? `low5`
+              : `tank6`
+          : o < 7
+            ? m < 0.55
+              ? `low5`
+              : m < 0.8
+                ? `gable9`
+                : m < 0.9
+                  ? `tank6`
+                  : `zig12`
+            : o < 11
+              ? m < 0.6
+                ? `low8`
+                : m < 0.85
+                  ? `gable9`
+                  : `zig12`
+              : o < 17
+                ? m < 0.75
+                  ? `mid14`
+                  : `cyl26`
+                : o < 24
+                  ? m < 0.5
+                    ? `mid20`
+                    : m < 0.85
+                      ? `set24`
+                      : `cyl26`
+                  : o < 34
+                    ? m < 0.6
+                      ? `tall34`
+                      : m < 0.85
+                        ? `set24`
+                        : `cyl44`
+                    : o < 50
+                      ? m < 0.6
+                        ? `set50`
+                        : m < 0.85
+                          ? `tall34`
+                          : `cyl44`
+                      : m < 0.7
+                        ? `tower72`
+                        : `set50`;
+        let h =
+            d.startsWith(`cyl`) || d === `tank6`
+              ? 0.9
+              : d === `zig12`
+                ? 0.85
+                : 1,
+          g = r * h * t.range(0.86, 1),
+          v = a * h * t.range(0.86, 1),
+          y = t.range(0.86, 1.16),
+          b = u(d),
+          x = i[b].userData.height * y,
+          S = Math.min(l ? 6.5 : 1 / 0, Wt(e, n, g / 2, v / 2));
+        x > S && (y *= S / x);
+        let C = Gt[s];
+        (f(
+          b,
+          e + t.range(-0.5, 0.5),
+          0,
+          n + t.range(-0.5, 0.5),
+          g,
+          y,
+          v,
+          p(),
+          s,
+          t.int(0, C.walls.length - 1),
+          t.int(0, C.roofs.length - 1),
+          t.range(0.9, 1.08),
+        ),
+          _++);
+      }
+    }
+  let v = [];
+  for (let e = 0; e < 110; e++) {
+    let e = t.range(0, Math.PI * 2),
+      n = t.range(330, 545),
+      r = Math.cos(e) * n * t.range(0.85, 1.25),
+      i = Math.sin(e) * n * t.range(0.85, 1.25);
+    if (Math.max(Math.abs(r), Math.abs(i)) < 320) continue;
+    let a = t.pick([`low5`, `gable9`, `gable9`, `tank6`, `low8`, `zig12`]),
+      o = t.int(0, 2),
+      s = Gt[o],
+      c = t.range(9, 19);
+    (v.push([
+      u(a),
+      r,
+      i,
+      c,
+      t.range(0.7, 1.05),
+      c * t.range(0.7, 1.2),
+      p(),
+      o,
+      t.int(0, s.walls.length - 1),
+      t.int(0, s.roofs.length - 1),
+      t.range(0.86, 1.04),
+    ]),
+      _++);
+  }
+  let y = [];
+  for (let e = 0; e < 46; e++) {
+    let e = t.range(0, Math.PI * 2),
+      n = t.range(360, 1250),
+      r = Math.cos(e) * n,
+      i = Math.sin(e) * n;
+    if (!(Math.max(Math.abs(r), Math.abs(i)) < 330))
+      for (let e = 0, n = t.int(2, 5); e < n; e++) {
+        let e = r + t.range(-26, 26),
+          n = i + t.range(-26, 26),
+          a = t.range(5, 14);
+        y.push([
+          e,
+          n,
+          a,
+          t.range(2.6, 6.5),
+          a * t.range(0.6, 1.3),
+          t.range(0, Math.PI),
+          t.int(0, 4),
+          t.int(0, 3),
+          t.range(0.85, 1.12),
+        ]);
+      }
+  }
+  (f(`gable9_0`, 0, 0, -19.5, 7.5, 0.62, 24, Math.PI / 2, 0, 2, 0, 1),
+    f(`low8_0`, -15, 0, -4.5, 6, 0.62, 13, 0, 1, 2, 3, 1),
+    f(`low5_0`, 15.2, 0, -4, 5.5, 1.05, 16, 0, 2, 1, 2, 1));
+  let x = (e, t, n, r, i, a, o, s, c, l, u = 1) =>
+    d(e, t, -0.08000000000000002, n, r, i + 0.26, a, o, s, c, l, u);
+  (d(`slab_0`, 0, -0.3, 0, 11, 0.84, 11, 0, 0, 2, 0, 0.97),
+    d(`slab_0`, 0, 0.3, 0, 8, 0.58, 8, 0, 0, 4, 0, 1),
+    d(`monument_0`, 0, 0.6, 0, 1.15, 1.15, 1.15, 0, 0, 0, 2, 1),
+    l.push([0, 0, 3.6, 3.6], [0, 0, 5.5, 5.5], [0, 0, 4, 4]));
+  for (let e = 0; e < 4; e++) {
+    let t = 1.4 + e * 2.7,
+      n = 7.6;
+    (x(`prop_0`, t, n, 0.26, 0.88, 0.26, 0, 1, 3, 1, 0.85),
+      l.push([t, n, 0.18, 0.18]));
+  }
+  (x(`prop_0`, -0.6, 7, 2.8, 0.46, 0.62, -0.38, 0, 3, 0, 1),
+    d(`prop_0`, -0.6, 0.62, 7, 2.8, 0.12, 0.46, -0.38, 0, 1, 0, 1),
+    x(`prop_0`, 4.9, 6.7, 1.3, 0.85, 1.3, 0.28, 1, 0, 3, 1),
+    x(`prop_0`, -6.4, 8.8, 1.4, 0.78, 1.4, 0.28, 1, 0, 3, 1),
+    l.push([-0.6, 7, 1.5, 0.6], [4.9, 6.7, 0.8, 0.8], [-6.4, 8.8, 0.85, 0.85]));
+  for (let e = 0; e < 6; e++) {
+    let t = (Math.PI / 3) * e + 1.05,
+      n = Math.cos(t) * 8.4,
+      r = Math.sin(t) * 8.4;
+    Math.hypot(n - (Vt[0] + 1.71), r - (Vt[2] + 4.7)) < 4.2 ||
+      (x(`prop_0`, n, r, 2.4, 0.5, 0.7, -t, 0, 3, 0, 1),
+      l.push([n, r, 1.3, 0.5]));
+  }
+  for (let e = 0; e < 5; e++)
+    (x(`prop_0`, -11.4, -6 + e * 3.6, 0.55, 0.94, 3.2, 0, 0, 1, 0, 1),
+      l.push([-11.4, -6 + e * 3.6, 0.35, 1.7]));
+  for (let [e, t] of [
+    [-1.6, 14.5],
+    [1.4, 15.2],
+    [4.4, 14.2],
+  ])
+    (x(`prop_0`, e, t, 0.22, 10, 0.22, 0, 1, 3, 0, 1),
+      x(`prop_0`, e, t, 0.7, 0.42, 0.7, 0, 0, 2, 0, 1),
+      d(`prop_0`, e, 7.4, t - 0.06, 0.1, 2.2, 1.3, 0, 2, 0, 1, 1),
+      l.push([e, t, 0.4, 0.4]));
+  let S = [
+    [-6.5, 17],
+    [-130, 104],
+    [144, -98],
+  ];
+  for (let [e, t] of S)
+    (d(`mast_0`, e, -0.08000000000000002, t, 1, 1, 1, 0, 1, 3, 0, 1),
+      l.push([e, t, 0.9, 0.9]));
+  for (let e = 0; e < 9; e++)
+    d(`mark_0`, -8 + e * 2.6, 0.02, 25.5, 0.6, 0.06, 3.4, 0, 0, 4, 0, 1.2);
+  for (let e = -5; e <= 5; e++)
+    e !== 0 &&
+      (x(`prop_0`, e * V + 16, 16, 1.1, 0.7, 1.1, 0, 2, 4, 1, 1),
+      x(`prop_0`, 16, e * V + 16, 1.1, 0.7, 1.1, 0, 0, 2, 1, 1));
+  let C = vn(l),
+    w = yn(t, C);
+  n.add(w.mesh);
+  let D = bn(t, g, C);
+  n.add(D.mesh);
+  for (let [e, t, n, r, i, a, o, s, c, l, u] of v)
+    f(e, t, w.hAt(t, n), n, r, i, a, o, s, c, l, u);
+  for (let [e, t, n, r, i, a, o, s, c] of y)
+    d(`prop_0`, e, w.hAt(e, t), t, n, r, i, a, 3, o, s, c);
+  let O = new b(),
+    k = 0,
+    A = 0;
+  for (let e in i) {
+    let t = s[e];
+    if (!t.length) {
+      i[e].dispose();
+      continue;
+    }
+    let a = i[e],
+      o = new re(a, r, t.length),
+      c = new Float32Array(t.length * 3);
+    (t.forEach((e, t) => {
+      (O.position.set(e.x, e.y, e.z),
+        O.rotation.set(0, e.rot, 0),
+        O.scale.set(e.sx, e.sy, e.sz),
+        O.updateMatrix(),
+        o.setMatrixAt(t, O.matrix));
+      let n = Gt[e.palette];
+      (Kt.set(n.walls[e.wallIdx % n.walls.length]).multiplyScalar(e.tint),
+        o.setColorAt(t, Kt),
+        qt.set(n.roofs[e.roofIdx % n.roofs.length]),
+        (c[t * 3] = qt.r),
+        (c[t * 3 + 1] = qt.g),
+        (c[t * 3 + 2] = qt.b));
+    }),
+      a.setAttribute(`aRoofColor`, new E(c, 3)),
+      (o.castShadow = !e.startsWith(`mark`)),
+      (o.receiveShadow = !0),
+      (o.name = `bld_${e}`),
+      o.computeBoundingSphere(),
+      n.add(o),
+      A++,
+      (k += (a.attributes.position.count / 3) * t.length));
+  }
+  let j = xn(t.fork(`practicals`), c, S);
+  (n.add(j.windows),
+    n.add(j.poolMesh),
+    e.log(
+      `showcase: ${_} buildings, ${A + 4} meshes, ~${Math.round(k / 1e3)}k instanced tris, ground ${w.verts} verts, paving ${D.verts} verts, ${j.count} practicals`,
+    ));
+  let M = { v: -1 },
+    ee = (e, t) => Math.abs(e) < Bt && Math.abs(t) < Bt;
+  return {
+    group: n,
+    material: r,
+    buildings: _,
+    focus: Vt.slice(),
+    groundYAt(e, t) {
+      if (!ee(e, t)) return zt + w.hAt(e, t);
+      let n = Math.abs(e - Math.round(e / V) * V),
+        r = Math.abs(t - Math.round(t / V) * V);
+      return Math.max(n, r) <= Lt ? Rt : zt;
+    },
+    setPracticals(e, t) {
+      j.set(e, t);
+    },
+    setWetness(e) {
+      let t = Math.max(0, Math.min(1, e || 0));
+      Math.abs(t - M.v) < 0.01 ||
+        ((M.v = t),
+        (r.roughness = 0.92 - 0.34 * t),
+        r.color.setRGB(1 - 0.17 * t, 1 - 0.16 * t, 1 - 0.13 * t),
+        (w.material.roughness = 1 - 0.42 * t),
+        w.material.color.setRGB(1 - 0.24 * t, 1 - 0.23 * t, 1 - 0.19 * t),
+        (D.material.roughness = 0.95 - 0.4 * t),
+        D.material.color.setRGB(1 - 0.22 * t, 1 - 0.21 * t, 1 - 0.17 * t));
+    },
+    dispose() {
+      for (let e of n.children)
+        (e.geometry?.dispose(), e.material !== r && e.material?.dispose());
+      (r.dispose(), j.dispose());
+    },
+  };
+}
+var Cn = [`clear`, `overcast`, `fog`, `rain`],
+  wn = {
+    clear: { overcast: 0, fog: 0, rain: 0 },
+    overcast: { overcast: 1, fog: 0, rain: 0 },
+    fog: { overcast: 0.35, fog: 1, rain: 0 },
+    rain: { overcast: 1, fog: 0, rain: 1 },
+  },
+  Tn = 0.0072,
+  En = 1100,
+  Dn = 112,
+  On = 1e3,
+  kn = 1400,
+  An = 85,
+  jn = [128, 192, 256, 384, 512, 640, 768, 896, 1024],
+  Mn = 0.0872,
+  Nn = Math.cos((0.5 * Math.PI) / 180),
+  Y = {
+    ctx: null,
+    scene: null,
+    tod: 14,
+    timeScale: 0,
+    weather: `clear`,
+    w: { overcast: 0, fog: 0, rain: 0 },
+    wTarget: { overcast: 0, fog: 0, rain: 0 },
+    wFade: 0,
+    key: null,
+    hemi: null,
+    fog: null,
+    sky: null,
+    clouds: null,
+    rain: null,
+    snow: null,
+    climate: {
+      fog: 1,
+      nearHaze: 0,
+      nearHazeFalloff: 0,
+      heightFalloff: Tn,
+      overcast: 0,
+      snow: 0,
+    },
+    fogSightMultiplier: 1,
+    atmo: null,
+    atmoW: [-1, -1, -1],
+    clock: 0,
+    city: null,
+    savedBackground: void 0,
+    savedFog: void 0,
+    savedShadowType: null,
+    shadowMapSize: 4096,
+    shadowExtent: 0,
+    shadowReach: 0,
+    patched: !1,
+  },
+  Pn = new c(),
+  Fn = new c(),
+  X = new c(),
+  Z = new c(),
+  In = new c(),
+  Ln = new c(),
+  Rn = new c(0, 1, 0),
+  zn = new c(),
+  Q = [];
+for (let e = 0; e < 10; e++) Q.push(new c());
+function Bn(e, t = !0) {
+  let n = Number(e);
+  if (!Number.isFinite(n)) return !1;
+  n = ((n % 24) + 24) % 24;
+  let r = Math.abs(n - Y.tod) > 1e-9;
+  return (
+    (Y.tod = n),
+    Y.ctx && (Y.ctx.world.time.tod = n),
+    r && t && Y.ctx && Y.ctx.events.emit(`env:timeOfDay`, { tod: n }),
+    !0
+  );
+}
+function Vn(e) {
+  Ze(e);
+  let { key: t, hemi: n, fog: r, sky: i, scene: a } = Y;
+  (t.color.setRGB(e.keyColor[0], e.keyColor[1], e.keyColor[2]),
+    (t.intensity = e.keyIntensity),
+    n.color.setRGB(e.hemiSky[0], e.hemiSky[1], e.hemiSky[2]),
+    n.groundColor.setRGB(e.hemiGround[0], e.hemiGround[1], e.hemiGround[2]),
+    (n.intensity = e.hemiIntensity),
+    r.color.setRGB(e.fogColor[0], e.fogColor[1], e.fogColor[2]),
+    (r.density = e.fogDensity * Y.climate.fog * Y.fogSightMultiplier));
+  let o = M();
+  (o && (r.density = Math.max(r.density, o.fog)),
+    Te(e),
+    (Y.ctx.renderer.toneMappingExposure =
+      e.exposure * (Y.ctx.config.climate?.exposure ?? 1)));
+  let s = Y.deploy ? Y.ctx.config.climate?.deployLook : null;
+  s
+    ? ((Y.ctx.renderer.toneMappingExposure = e.exposure * (s.exposure ?? 1)),
+      (Y.sky.uniforms.uStorm.value = 0))
+    : Y.ctx.config.climate?.front &&
+      (Y.sky.uniforms.uStorm.value =
+        Y.ctx.config.climate.front.skyStrength ?? 0.7);
+  let c = s ? null : Y.ctx.config.climate?.grade;
+  c &&
+    (c.key && (t.color.set(c.key.color), (t.intensity = c.key.intensity)),
+    c.hemi &&
+      (n.color.set(c.hemi.sky),
+      n.groundColor.set(c.hemi.ground),
+      (n.intensity = c.hemi.intensity)),
+    Number.isFinite(c.exposure) &&
+      (Y.ctx.renderer.toneMappingExposure = c.exposure));
+  let l = i.uniforms;
+  (l.uZenith.value.setRGB(e.zenith[0], e.zenith[1], e.zenith[2]),
+    l.uHorizon.value.setRGB(e.horizon[0], e.horizon[1], e.horizon[2]),
+    l.uHaze.value.setRGB(e.haze[0], e.haze[1], e.haze[2]),
+    l.uGroundDeep.value.setRGB(
+      e.belowColor[0],
+      e.belowColor[1],
+      e.belowColor[2],
+    ),
+    l.uSunDir.value.set(e.sunDir[0], e.sunDir[1], e.sunDir[2]),
+    l.uMoonDir.value.set(e.moonDir[0], e.moonDir[1], e.moonDir[2]),
+    l.uSunColor.value.setRGB(e.sunColor[0], e.sunColor[1], e.sunColor[2]),
+    (l.uSunDisc.value = e.sunDisc),
+    (l.uSunGlow.value = e.sunGlow),
+    (l.uMoonAmount.value = e.moonAmount),
+    (l.uStars.value = e.stars * (Y.ctx.config.climate?.stars ?? 1)),
+    Y.clouds.setCover(
+      Number.isFinite(Y.climate.clouds) ? Y.climate.clouds : e.cloudCover,
+    ),
+    (Y.clouds.group.visible = Y.climate.clouds !== 0 && !M()),
+    Y.clouds.setDeck(
+      1 - 0.3 * e.overcast,
+      1 + 0.35 * e.overcast,
+      1 - 0.32 * e.overcast,
+    ),
+    Y.clouds.setTint(e.cloudTint[0], e.cloudTint[1], e.cloudTint[2]),
+    Y.clouds.setAmbient(
+      e.cloudAmbient[0] * e.cloudTint[0],
+      e.cloudAmbient[1] * e.cloudTint[1],
+      e.cloudAmbient[2] * e.cloudTint[2],
+    ),
+    a.background && a.background.isColor && a.background.copy(r.color),
+    Y.city?.setWetness?.(e.wetness),
+    Y.city?.setPracticals?.(e.practicals, e.exposure),
+    Y.ctx.events.emit(`env:weather`, {
+      id: Y.weather,
+      rain: e.rain,
+      overcast: e.overcast,
+      fog: Y.w.fog,
+      wetness: e.wetness,
+    }));
+}
+function Hn(e) {
+  let t = Y.key,
+    n = t.shadow,
+    r = n.camera,
+    i = Y.atmo;
+  if (!i) return;
+  let a = Y.ctx?.config.climate?.keyDir ?? i.keyDir;
+  (Z.set(a[0], a[1], a[2]),
+    Z.y < Mn && (Z.y = Mn),
+    Z.normalize(),
+    Y.shadowCache?.active &&
+      (!Y.keyStep || Y.keyStep.dot(Z) < Nn
+        ? (Y.keyStep ??= new c()).copy(Z)
+        : Z.copy(Y.keyStep)),
+    In.crossVectors(Rn, Z),
+    In.lengthSq() < 1e-8 && In.set(1, 0, 0),
+    In.normalize(),
+    Ln.crossVectors(Z, In).normalize(),
+    Pn.set(0, 0, -1).applyQuaternion(e.quaternion));
+  let o = Math.max(e.position.y, 0.4),
+    s = Pn.y < -0.035,
+    l = s ? Math.min(kn, o / -Pn.y) : 0,
+    u = Math.tan((e.fov * 0.5 * Math.PI) / 180),
+    d = u * (e.aspect || 1.777),
+    f = Math.min(On, Math.max(150, s ? l * 1.5 : 340)),
+    p = 0;
+  Q[p++].set(e.position.x, 0, e.position.z);
+  for (let t = 0; t < 4; t++) {
+    let n = t & 1 ? 1 : -1,
+      r = t & 2 ? 1 : -1;
+    zn.set(n * d, r * u, -1)
+      .normalize()
+      .applyQuaternion(e.quaternion);
+    let i = zn.y < -0.001 ? Math.min(f, o / -zn.y) : f;
+    (Q[p].copy(e.position).addScaledVector(zn, i), (Q[p].y = 0), p++);
+  }
+  let m = p;
+  for (let e = 0; e < m; e++) (Q[p].copy(Q[e]), (Q[p].y = An), p++);
+  let h = 1 / 0,
+    g = -1 / 0,
+    _ = 1 / 0,
+    v = -1 / 0,
+    y = 1 / 0,
+    b = -1 / 0;
+  for (let e = 0; e < p; e++) {
+    let t = Q[e].dot(In),
+      n = Q[e].dot(Ln),
+      r = Q[e].dot(Z);
+    (t < h && (h = t),
+      t > g && (g = t),
+      n < _ && (_ = n),
+      n > v && (v = n),
+      r < y && (y = r),
+      r > b && (b = r));
+  }
+  let x = Math.max(g - h, v - _) + 24;
+  x = Math.min(En, Math.max(Dn, Math.ceil(x / 16) * 16));
+  let S = !!Y.shadowCache?.active;
+  if (S) {
+    let e = Math.min(En, x * 1.15),
+      t = Y.qExtent;
+    ((t && e <= t && e >= t * 0.45) ||
+      (Y.qExtent = jn.find((t) => t >= e) ?? En),
+      (x = Y.qExtent));
+  }
+  let C = x / 2;
+  if (s && l > 6) {
+    let t = Math.min(l, Math.max(C * 0.85 + 30, o * 1.6));
+    (X.copy(e.position).addScaledVector(Pn, t), (X.y = 0));
+  } else
+    (Fn.set(Pn.x, 0, Pn.z),
+      Fn.lengthSq() < 1e-4 ? Fn.set(0, 0, -1) : Fn.normalize(),
+      X.set(e.position.x, 0, e.position.z).addScaledVector(Fn, C * 0.62));
+  let w = An / Z.y;
+  ((b += w), (y -= 12));
+  let T = x / Y.shadowMapSize,
+    E = S ? x / 8 : T,
+    D = S ? Math.round(((y + b) * 0.5) / E) * E : (y + b) * 0.5;
+  X.addScaledVector(Z, D - X.dot(Z));
+  let O = X.dot(In),
+    k = X.dot(Ln),
+    A = Math.round(O / E) * E,
+    j = Math.round(k / E) * E;
+  X.addScaledVector(In, A - O).addScaledVector(Ln, j - k);
+  let M = (b - y) * 0.5;
+  if (S) {
+    let e = M + E / 2,
+      t = Y.qHalfL;
+    ((t && e <= t && e >= t * 0.5) || (Y.qHalfL = Math.ceil(e / 64) * 64),
+      (M = Y.qHalfL),
+      Y.shadowCache.setKey(
+        `${A},${j},${D},${x},${M},${Z.x.toFixed(4)},${Z.y.toFixed(4)},${Z.z.toFixed(4)}`,
+      ));
+  }
+  let ee = M + 40;
+  (t.position.copy(X).addScaledVector(Z, ee), t.target.position.copy(X));
+  let N = ee + M,
+    P = i.keySoft || 0;
+  ((n.radius = Math.min(
+    7,
+    Math.max(1.8, Math.min(5, 0.3 / T)) * (1 + 2.4 * P),
+  )),
+    (n.normalBias = Math.min(0.42, Math.max(0.02, T * 0.85 + 0.012))),
+    (n.bias = -12e-5),
+    (Y.shadowExtent !== x || Math.abs(r.far - N) > 1) &&
+      ((Y.shadowExtent = x),
+      (r.left = -C),
+      (r.right = C),
+      (r.top = C),
+      (r.bottom = -C),
+      (r.near = 40),
+      (r.far = N),
+      r.updateProjectionMatrix()),
+    (Y.shadowReach = w));
+}
+var $ = {
+  name: `environment`,
+  deps: [],
+  async init(t) {
+    ((Y.ctx = t),
+      (Y.scene = t.scene),
+      (Y.tod = Number.isFinite(t.config.tod)
+        ? ((t.config.tod % 24) + 24) % 24
+        : 14),
+      (t.world.time.tod = Y.tod),
+      (Y.shadowMapSize = t.config.quality === `high` ? 4096 : 2048),
+      xe(),
+      Qe(),
+      t.config.lite && nt(),
+      Ae(14),
+      (Y.patched = !0),
+      (Y.savedShadowType = t.renderer.shadowMap.type),
+      t.renderer.shadowMap.type === 2 && (t.renderer.shadowMap.type = 1),
+      (t.renderer.shadowMap.enabled = !M()));
+    let n = new e(16777215, 3);
+    ((n.name = `sunLight`),
+      (n.castShadow = !M()),
+      n.shadow.mapSize.set(Y.shadowMapSize, Y.shadowMapSize),
+      t.renderer.shadowMap.type === 1 &&
+        (n.shadow.map = jt(Y.shadowMapSize, {
+          reversedDepth: t.renderer.capabilities.reversedDepthBuffer,
+        })),
+      (n.shadow.radius = 3.2),
+      (n.shadow.bias = -12e-5),
+      (n.shadow.normalBias = 0.03),
+      (n.shadow.camera.near = 1),
+      (n.shadow.camera.far = 1e3),
+      n.position.set(100, 200, 100),
+      t.scene.add(n),
+      t.scene.add(n.target),
+      (Y.key = n),
+      n.castShadow &&
+        n.shadow.map &&
+        (Y.shadowCache = Mt(t.renderer, n, Y.shadowMapSize, {
+          reversedDepth: t.renderer.capabilities.reversedDepthBuffer,
+          proxyRange: () =>
+            t.modules.get(`demo`)?.getDefinition?.()?.vehicleShadowRange ?? 0,
+          dynamic: () =>
+            t.modules.get(`demo`)?.getDefinition?.()?.dynamicShadows !== !1,
+        })),
+      (Y.hemi = new ee(11061503, 5596740, 0.9)),
+      (Y.hemi.name = `skyLight`),
+      t.scene.add(Y.hemi),
+      (Y.savedFog = t.scene.fog),
+      (Y.savedBackground = t.scene.background),
+      (Y.fog = new C(13162730, 0.002)),
+      (t.scene.fog = Y.fog),
+      (t.scene.background = null),
+      (Y.sky = se(3e3)),
+      t.scene.add(Y.sky.mesh));
+    let r = t.rng.fork(`environment`);
+    ((Y.clouds = yt(r.fork(`clouds`))),
+      t.scene.add(Y.clouds.group),
+      (Y.rain = Et(r.fork(`rain`))),
+      t.scene.add(Y.rain.group));
+    let i = t.config.climate ?? {};
+    ((Y.climate = {
+      fog: i.fog > 0 ? i.fog : 1,
+      nearHaze: Math.min(1, Math.max(0, i.nearHaze ?? 0)),
+      nearHazeFalloff: Math.max(0, i.nearHazeFalloff ?? 0),
+      heightFalloff: Math.max(0, i.heightFalloff ?? Tn),
+      overcast: Math.min(1, Math.max(0, i.overcast ?? 0)),
+      snow: Math.min(1, Math.max(0, i.snow ?? 0)),
+      rain: Math.min(1, Math.max(0, i.rain ?? 0)),
+      ...(Number.isFinite(i.clouds)
+        ? { clouds: Math.min(1, Math.max(0, i.clouds)) }
+        : {}),
+    }),
+      (Y.fogSightMultiplier = 1),
+      Array.isArray(i.wind) && i.wind.length === 2
+        ? Y.clouds.setWind(+i.wind[0] || 0, +i.wind[1] || 0)
+        : Y.clouds.setWind(1.5, 0.45),
+      Y.clouds.setFront(i.front ?? null));
+    {
+      let e = i.front,
+        t = Y.sky.uniforms;
+      if (((t.uStorm.value = e ? (e.skyStrength ?? 0.7) : 0), e)) {
+        let n = Math.hypot(e.dir[0], e.dir[1]) || 1;
+        (t.uStormDir.value.set(e.dir[0] / n, 0, e.dir[1] / n),
+          t.uStormColor.value.set(e.sky ?? 3883591));
+      }
+    }
+    (Ce(Y.climate.heightFalloff, 0),
+      we(Y.climate.nearHaze, Y.climate.nearHazeFalloff),
+      Y.climate.snow > 0 &&
+        ((Y.snow = At(r.fork(`snow`), i.blizzard ?? 0)),
+        t.scene.add(Y.snow.mesh)),
+      (Y.w.overcast = Y.wTarget.overcast =
+        Math.max(Y.w.overcast, Y.climate.overcast)),
+      (Y.w.rain = Y.wTarget.rain = Math.max(Y.w.rain, Y.climate.rain)),
+      t.events.on(`env:timeOfDay`, (e) => {
+        e &&
+          Number.isFinite(e.tod) &&
+          Math.abs(e.tod - Y.tod) > 1e-9 &&
+          Bn(e.tod, !1);
+      }),
+      ($.api.sunLight = n),
+      ($.api.hemiLight = Y.hemi),
+      ($.api.fog = Y.fog),
+      ($.api.setFogSightMultiplier = (e = 1) => {
+        ((Y.fogSightMultiplier = Math.max(
+          0.75,
+          Math.min(1, Number.isFinite(e) ? e : 1),
+        )),
+          Y.atmo &&
+            (Y.fog.density = Math.max(
+              Y.atmo.fogDensity * Y.climate.fog * Y.fogSightMultiplier,
+              M()?.fog ?? 0,
+            )));
+      }),
+      ($.api.addStaticShadowRoot = (e) => Y.shadowCache?.addRoot(e)),
+      ($.api.invalidateStaticShadows = (e = !1) =>
+        Y.shadowCache?.invalidate(e)));
+    let a = new URLSearchParams(location.search).get(`shadowproxy`) === `0`;
+    (($.api.addShadowProxy = (e) => (a ? void 0 : Y.shadowCache?.addProxy(e))),
+      ($.api.removeShadowProxy = (e) => Y.shadowCache?.removeProxy(e)),
+      ($.api.staticShadowStats = () => Y.shadowCache?.stats() ?? null),
+      t.events.on(`destruction:state`, () => Y.shadowCache?.invalidate()),
+      ($.api.skyDome = Y.sky.mesh),
+      ($.api.clouds = Y.clouds.group),
+      ($.api.setCloudFront = (e) => Y.clouds.setFront(e)),
+      ($.api.setDeployLook = (e) => {
+        !!e != !!Y.deploy && ((Y.deploy = !!e), (Y.atmo = null));
+      }),
+      (Y.atmo = Ge(Y.tod, Y.w)),
+      Vn(Y.atmo),
+      Y.sky.mesh.position.copy(t.camera.position),
+      Hn(t.camera),
+      Y.clouds.update(0, t.camera.position),
+      t.log(
+        `init tod=${Y.tod} shadow=${Y.shadowMapSize} softTaps=${Me().taps} clouds=${Y.clouds.instances}`,
+      ));
+  },
+  tick() {},
+  update(e, t) {
+    if (!Y.key) return;
+    let n = Math.min(t || 0, 0.1);
+    ((Y.clock += n), Y.timeScale !== 0 && Bn(Y.tod + Y.timeScale * n, !0));
+    let r = !1;
+    for (let e of [`overcast`, `fog`, `rain`]) {
+      let t = Y.wTarget[e],
+        i = Y.w[e];
+      if (i !== t) {
+        if (((r = !0), Y.wFade <= 0)) Y.w[e] = t;
+        else {
+          let r = n / Y.wFade;
+          Y.w[e] = i < t ? Math.min(t, i + r) : Math.max(t, i - r);
+        }
+      }
+    }
+    let i = Y.deploy ? e.config.climate?.deployLook : null,
+      a = Y.atmo,
+      o = i ? i.tod : Y.tod,
+      s = i ? { overcast: i.overcast, fog: Y.w.fog, rain: 0 } : Y.w;
+    (!a ||
+      r ||
+      a.tod !== o ||
+      Y.atmoW[0] !== s.overcast ||
+      Y.atmoW[1] !== s.fog ||
+      Y.atmoW[2] !== s.rain) &&
+      ((Y.atmo = Ge(o, s)),
+      (Y.atmoW[0] = s.overcast),
+      (Y.atmoW[1] = s.fog),
+      (Y.atmoW[2] = s.rain),
+      Vn(Y.atmo));
+    let c = e.camera;
+    if (Y.shadowCache) {
+      Y.shadowCache.nextFrame();
+      let t = e.postfx?.warming?.() ?? 0;
+      (Y.warming > 0 && t === 0 && Y.shadowCache.invalidate(), (Y.warming = t));
+    }
+    (Y.sky.mesh.position.copy(c.position),
+      (Y.sky.uniforms.uTime.value = Y.clock),
+      Hn(c),
+      Y.clouds.update(n, c.position));
+    {
+      let t = e.config.climate?.front;
+      if (t?.lightning) {
+        let e = (Y.lightning ??= {
+          next: Y.clock + 4,
+          pulses: [],
+          dir: [1, 0],
+        });
+        if (Y.clock >= e.next) {
+          let n = Math.hypot(t.dir[0], t.dir[1]) || 1,
+            r =
+              Math.atan2(t.dir[1] / n, t.dir[0] / n) +
+              (Math.random() - 0.5) * 0.9;
+          ((e.dir = [Math.cos(r), Math.sin(r)]), (e.pulses = []));
+          let i = Y.clock;
+          for (let t = 0, n = 1 + Math.floor(Math.random() * 3); t < n; t++)
+            (e.pulses.push([
+              i,
+              0.06 + Math.random() * 0.08,
+              0.55 + Math.random() * 0.45,
+            ]),
+              (i += 0.09 + Math.random() * 0.18));
+          e.next = Y.clock + 5 + Math.random() * 13;
+        }
+        let n = 0;
+        for (let [t, r, i] of e.pulses)
+          Y.clock >= t &&
+            Y.clock < t + r &&
+            (n = Math.max(n, i * (1 - (Y.clock - t) / r)));
+        let r = t.lightning === !0 ? 1 : +t.lightning || 0;
+        ((Y.sky.uniforms.uFlash.value = n * 1.4 * r),
+          Y.sky.uniforms.uFlashDir.value.set(e.dir[0], 0, e.dir[1]),
+          Y.clouds.setFlash?.(n * 0.9 * r, e.dir[0], e.dir[1]));
+      }
+    }
+    (Y.rain.setGroundY(
+      Y.city
+        ? Y.city.groundYAt(c.position.x, c.position.z)
+        : e.world.map.getHeight(c.position.x, c.position.z),
+    ),
+      Y.rain.setCover(e.world.map.shelters),
+      Y.rain.update(
+        n,
+        c.position,
+        Y.atmo.rain,
+        Y.atmo.exposure,
+        Y.atmo.fogColor,
+      ),
+      Y.snow &&
+        Y.snow.update(
+          n,
+          c.position,
+          Y.climate.snow,
+          Y.atmo.exposure,
+          e.renderer.domElement.height,
+          c.fov,
+        ));
+  },
+  dispose(e) {
+    let t = e.scene;
+    (Y.shadowCache?.dispose(),
+      (Y.shadowCache = null),
+      (Y.qExtent = Y.qHalfL = 0),
+      (Y.keyStep = null),
+      Y.key &&
+        (t.remove(Y.key), t.remove(Y.key.target), Y.key.shadow.dispose()),
+      Y.hemi && t.remove(Y.hemi),
+      Y.sky &&
+        (t.remove(Y.sky.mesh),
+        Y.sky.mesh.geometry.dispose(),
+        Y.sky.material.dispose()),
+      Y.clouds && (t.remove(Y.clouds.group), Y.clouds.dispose()),
+      Y.rain && (t.remove(Y.rain.group), Y.rain.dispose()),
+      Y.snow && (t.remove(Y.snow.mesh), Y.snow.dispose()),
+      Y.city && (t.remove(Y.city.group), Y.city.dispose()),
+      Y.savedFog !== void 0 && (t.fog = Y.savedFog),
+      Y.savedBackground !== void 0 && (t.background = Y.savedBackground),
+      Y.savedShadowType != null &&
+        (e.renderer.shadowMap.type = Y.savedShadowType),
+      (Y.patched &&= (rt(), Se(), $e(), je(), !1)),
+      (Y.key = Y.hemi = Y.sky = Y.clouds = Y.rain = Y.snow = Y.city = null),
+      (Y.climate = {
+        fog: 1,
+        nearHaze: 0,
+        nearHazeFalloff: 0,
+        heightFalloff: Tn,
+        overcast: 0,
+        snow: 0,
+        rain: 0,
+      }),
+      (Y.fogSightMultiplier = 1),
+      (Y.atmo = null),
+      (Y.ctx = Y.scene = Y.fog = null),
+      (Y.savedFog = Y.savedBackground = void 0),
+      (Y.savedShadowType = null));
+    for (let e of [
+      `sunLight`,
+      `hemiLight`,
+      `fog`,
+      `skyDome`,
+      `clouds`,
+      `setFogSightMultiplier`,
+    ])
+      $.api[e] = null;
+  },
+  showcase(e, t = {}) {
+    let n = e.debugGround(600);
+    n && (n.visible = !1);
+    for (let t of e.scene.children)
+      (t.type === `GridHelper` || (t.isLineSegments && !t.name)) &&
+        (t.visible = !1);
+    ((Y.city = Sn(e, e.rng.fork(`environment-showcase`))),
+      e.scene.add(Y.city.group),
+      e.setCameraFocus(Y.city.focus),
+      e.registerCameraPreset(`sunset`, (e) => {
+        let t = Y.atmo ?? Ge(Y.tod, Y.w),
+          n = Math.atan2(t.sunDir[0], t.sunDir[2]) + Math.PI + 0.62;
+        (e.position.set(Math.sin(n) * 300, 26, Math.cos(n) * 300),
+          e.lookAt(zn.set(0, 15, 0)),
+          (e.fov = 50),
+          e.updateProjectionMatrix());
+      }),
+      e.registerCameraPreset(`skyline`, (e) => {
+        (e.position.set(210, 38, 260),
+          e.lookAt(zn.set(-20, 30, -40)),
+          (e.fov = 55),
+          e.updateProjectionMatrix());
+      }),
+      e.registerCameraPreset(`hero`, (e) => {
+        let t = Y.city.focus;
+        (e.position.set(t[0] + 1.71, 1.62, t[2] + 4.7),
+          e.lookAt(zn.set(t[0], t[1] + 1, t[2])),
+          (e.fov = 60),
+          e.updateProjectionMatrix());
+      }));
+    try {
+      let e = new URLSearchParams(location.search).get(`weather`);
+      e && $.api.setWeather(e);
+    } catch {}
+    t.tod != null && Bn(t.tod, !1);
+  },
+  api: {
+    setTimeOfDay(e) {
+      return Bn(e, !0);
+    },
+    getTimeOfDay() {
+      return Y.tod;
+    },
+    getSun() {
+      let e = Y.atmo ?? Ge(Y.tod, Y.w);
+      return {
+        dir: e.keyDir.slice(),
+        color: e.keyColor.slice(),
+        intensity: e.keyIntensity,
+        elevation: e.elevation,
+        isMoon: e.isMoon,
+        sunDir: e.sunDir.slice(),
+        moonDir: e.moonDir.slice(),
+      };
+    },
+    getMoon() {
+      let e = Y.atmo ?? Ge(Y.tod, Y.w);
+      return { dir: e.moonDir.slice(), amount: e.moonAmount };
+    },
+    setWeather(e, t = {}) {
+      return Cn.includes(e)
+        ? ((Y.weather = e),
+          Object.assign(Y.wTarget, wn[e]),
+          (Y.wFade = Math.max(0, t.fade ?? 0)),
+          Y.wFade === 0 && Object.assign(Y.w, Y.wTarget),
+          !0)
+        : (Y.ctx?.warn?.(`unknown weather '${e}'`), !1);
+    },
+    setWeatherLevels(e = {}, t = 6) {
+      for (let t of [`overcast`, `fog`, `rain`])
+        Number.isFinite(e[t]) &&
+          (Y.wTarget[t] = Math.max(
+            t === `overcast`
+              ? Y.climate.overcast
+              : t === `rain`
+                ? Y.climate.rain
+                : 0,
+            Math.round(Math.min(1, Math.max(0, e[t])) * 20) / 20,
+          ));
+      return ((Y.wFade = Math.max(0.01, t)), !0);
+    },
+    getWeather() {
+      return Y.weather;
+    },
+    weathers: Cn,
+    setTimeScale(e) {
+      Y.timeScale = Number(e) || 0;
+    },
+    getAtmosphere() {
+      return Y.atmo;
+    },
+    getWetness() {
+      return Y.atmo?.wetness ?? 0;
+    },
+    getPracticals() {
+      return Y.atmo?.practicals ?? 0;
+    },
+    configureCaster(e) {
+      if (!e) return !1;
+      let t = Array.isArray(e) ? e : [e];
+      for (let e of t) e && ((e.shadowSide = 1), (e.needsUpdate = !0));
+      return !0;
+    },
+    getShadowBox() {
+      let e = Y.key?.shadow?.camera;
+      return e
+        ? {
+            center: Y.key.target.position.toArray(),
+            extent: e.right - e.left,
+            near: e.near,
+            far: e.far,
+            depth: e.far - e.near,
+            reach: Y.shadowReach,
+            radius: Y.key.shadow.radius,
+            normalBias: Y.key.shadow.normalBias,
+            mapSize: Y.shadowMapSize,
+            softTaps: Me().taps,
+          }
+        : null;
+    },
+    sunDirection: Ve,
+    moonDirection: He,
+    smoothstep: I,
+    sunLight: null,
+    hemiLight: null,
+    fog: null,
+    skyDome: null,
+    clouds: null,
+  },
+};
+export { $ as default };
+//# sourceMappingURL=environment-DS2NM-G_.js.map

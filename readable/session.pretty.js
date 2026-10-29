@@ -19,12 +19,20 @@
     window.__joinGate = new Promise((r) => {
       joinResolve = r;
     });
+  window.__hostedSession = true; // main.js: freeze reports go to the host (the merged screen has no __joinGate)
+  // ?fresh=1 (owner 2026-10-28): test as a brand-new player. No saved or owner callsign is filled in and nothing is
+  // saved; the owner cookie still keeps the visit out of every player metric. src/ui/onboarding-store.js does the rest.
+  const fresh = url.searchParams.get("fresh") === "1";
   let savedName = "";
-  try {
-    savedName = localStorage.getItem("salient.callsign") || "";
-  } catch {}
+  if (!fresh)
+    try {
+      savedName = localStorage.getItem("salient.callsign") || "";
+    } catch {}
   if (merged)
-    url.searchParams.set("name", lobbyData.owner || savedName || "Recruit");
+    url.searchParams.set(
+      "name",
+      (fresh ? "" : lobbyData.owner) || savedName || "Recruit",
+    );
   const socketQuery = [
     ruleset && "ruleset=" + encodeURIComponent(ruleset),
     merged && "reserve=1",
@@ -36,7 +44,9 @@
     `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/socket${socketQuery ? "?" + socketQuery : ""}`,
   );
   // No WebGL 2, or software graphics: a plain page says so before anything heavy loads (main.js waits on __bootHold).
-  let gpuProblem = "";
+  // gpuName also goes into the join funnel report (2026-10-28), so players who never spawn still show their hardware.
+  let gpuProblem = "",
+    gpuName = "";
   if (merged)
     try {
       const c = document.createElement("canvas"),
@@ -44,6 +54,7 @@
       if (gl) {
         const e = gl.getExtension("WEBGL_debug_renderer_info"),
           n = String(e ? gl.getParameter(e.UNMASKED_RENDERER_WEBGL) : "");
+        gpuName = n;
         if (/SwiftShader|Basic Render|llvmpipe|Software/i.test(n))
           gpuProblem = "slow";
         gl.getExtension("WEBGL_lose_context")?.loseContext();
@@ -77,7 +88,7 @@
     hangar: "r15-hangar-v1",
     kepler: "r16-kepler-v1",
     observatory: "r19-observatory-v1",
-    bascule: "r17-bascule-v1",
+    bascule: "r17-bascule-v2",
   };
   const modern = [
     "r2-urban-v1",
@@ -125,6 +136,13 @@
   // A tab the browser kills (an iPhone out of memory: "can't open this page") never reports. Each stage is also
   // written to localStorage; a marker still there on the next load is reported as a crash at that stage.
   const crashKey = "salient-boot-pending";
+  // Hardware (2026-10-28): GPU name, logical cores and RAM class (Chrome/Edge only, capped at 8). The GPU comes from the
+  // deploy-screen check above, else from the game's freeze recorder once the battlefield has a renderer.
+  const hardware = () => ({
+    gpu: String(gpuName || window.__stalls?.gpu || "").slice(0, 160),
+    cores: navigator.hardwareConcurrency ?? null,
+    mem: navigator.deviceMemory ?? null,
+  });
   const mark = () => {
     try {
       localStorage.setItem(
@@ -147,7 +165,7 @@
         end: "crashed",
         ua: navigator.userAgent,
         size: [innerWidth, innerHeight, devicePixelRatio],
-        mem: navigator.deviceMemory ?? null,
+        ...hardware(),
         ms: Date.now() - prev.t,
       });
       if (
@@ -161,12 +179,130 @@
         );
     }
   } catch {}
+  // Hidden-tab time (2026-10-28): most players who never spawn sat minutes on a ready deploy screen, likely in another
+  // tab. hiddenMs is the total time the tab spent hidden, hiddenAtDeploy whether it was hidden when the deploy screen came up.
+  let hiddenSince = document.hidden ? started : 0;
+  funnel.hiddenMs = 0;
+  const hiddenNow = () =>
+    funnel.hiddenMs + (hiddenSince ? Date.now() - hiddenSince : 0);
+  document.addEventListener?.("visibilitychange", () => {
+    if (document.hidden) hiddenSince ||= Date.now();
+    else if (hiddenSince) {
+      funnel.hiddenMs += Date.now() - hiddenSince;
+      hiddenSince = 0;
+    }
+  });
+  // Ready alert: the deploy screen came up while the tab was hidden. The tab title and icon say so (the title blinks)
+  // and a soft two-note ping plays if the browser allows sound, until the player looks at the tab again.
+  let alertTimer = 0,
+    plainTitle = "",
+    plainIcon = null;
+  const readyIcon =
+    "data:image/svg+xml," +
+    encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8" fill="#3fd18b"/><path d="M6 4.5v7l5.5-3.5z" fill="#0b1a12"/></svg>',
+    );
+  const setIcon = (href) => {
+    let l = document.querySelector?.('link[rel~="icon"]');
+    if (!l) {
+      l = document.createElement("link");
+      l.rel = "icon";
+      document.head.append(l);
+    }
+    l.href = href;
+  };
+  const endReadyAlert = () => {
+    if (!alertTimer) return;
+    clearInterval(alertTimer);
+    alertTimer = 0;
+    document.title = plainTitle;
+    setIcon(plainIcon ?? "data:,");
+  };
+  const readyAlert = () => {
+    if (!document.hidden || alertTimer) return;
+    plainTitle = document.title;
+    plainIcon = document.querySelector?.('link[rel~="icon"]')?.href ?? null;
+    setIcon(readyIcon);
+    let on = false;
+    const blink = () => {
+      on = !on;
+      document.title = on ? "▶ Ready: click Deploy" : plainTitle;
+    };
+    blink();
+    alertTimer = setInterval(blink, 1000);
+    try {
+      const ac = new (window.AudioContext ?? window.webkitAudioContext)(),
+        t = ac.currentTime;
+      for (const [f, at] of [
+        [660, 0],
+        [880, 0.16],
+      ]) {
+        const o = ac.createOscillator(),
+          g = ac.createGain();
+        o.frequency.value = f;
+        g.gain.setValueAtTime(0, t + at);
+        g.gain.linearRampToValueAtTime(0.12, t + at + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.001, t + at + 0.35);
+        o.connect(g).connect(ac.destination);
+        o.start(t + at);
+        o.stop(t + at + 0.4);
+      }
+      setTimeout(() => ac.close?.().catch(() => {}), 1500);
+    } catch {}
+  };
+  document.addEventListener?.("visibilitychange", () => {
+    if (!document.hidden) endReadyAlert();
+  });
   const reach = (stage) => {
     if (funnel.at[stage] == null) {
       funnel.at[stage] = Date.now() - started;
       funnel.stage = stage;
+      if (stage === "deploy") {
+        funnel.hiddenAtDeploy = !!document.hidden;
+        readyAlert();
+      }
+      if (stage === "spawned") endReadyAlert();
       mark();
     }
+  };
+  // Auto-redeploy (2026-10-28): most deploy-screen leavers since the 10-09 merge had spawned minutes earlier, so a map
+  // change (or rejoin) reload dropped them on the deploy screen and they never pressed Deploy again. An automatic reload
+  // of a page that spawned, with keyboard or mouse use in the last 3 min, presses Deploy on the next page by itself. The
+  // input rule keeps an AFK player from being redeployed every map change and holding a slot forever.
+  const redeployKey = "salient.redeploy";
+  let lastInputAt = 0,
+    spawnedHere = false,
+    autoRedeploy = false,
+    redeployTries = 0;
+  for (const ev of [
+    "keydown",
+    "mousedown",
+    "pointerdown",
+    "wheel",
+    "touchstart",
+  ])
+    window.addEventListener?.(
+      ev,
+      () => {
+        lastInputAt = Date.now();
+      },
+      true,
+    );
+  try {
+    const t = +sessionStorage.getItem(redeployKey);
+    sessionStorage.removeItem(redeployKey);
+    autoRedeploy = t > 0 && Date.now() - t < 5 * 60000;
+  } catch {}
+  if (autoRedeploy) funnel.autoRedeploy = true;
+  const rejoinReload = () => {
+    try {
+      if (
+        (spawnedHere && Date.now() - lastInputAt < 3 * 60000) ||
+        (autoRedeploy && redeployTries < 6 && !funnel.at.spawned)
+      )
+        sessionStorage.setItem(redeployKey, String(Date.now()));
+    } catch {}
+    location.reload();
   };
   mark();
   let reported = false;
@@ -179,8 +315,11 @@
     try {
       const body = JSON.stringify({
         ...funnel,
+        hiddenMs: hiddenNow(),
+        hiddenAtEnd: !!document.hidden,
         ua: navigator.userAgent,
         size: [innerWidth, innerHeight, devicePixelRatio],
+        ...hardware(),
         end,
         ms: Date.now() - started,
         ...extra,
@@ -535,7 +674,7 @@ ${lobbyData.code === "1" ? '<label>Session code<input name="code" type="password
       nameEl = box.querySelector(".cs-name");
     const admin = form.elements.admin,
       adminPw = form.elements.adminPassword;
-    input.value = lobbyData.owner || savedName;
+    input.value = (fresh ? "" : lobbyData.owner) || savedName;
     box.querySelector(".cs-more").onclick = () => {
       opts.hidden = !opts.hidden;
     };
@@ -616,9 +755,10 @@ ${lobbyData.code === "1" ? '<label>Session code<input name="code" type="password
             show(true, "The server did not answer. Press Deploy to try again.");
             return false;
           }
-          try {
-            localStorage.setItem("salient.callsign", name);
-          } catch {}
+          if (!fresh)
+            try {
+              localStorage.setItem("salient.callsign", name);
+            } catch {}
           claimed = true;
           claim.claimed = true;
           reach("signin");
@@ -652,6 +792,21 @@ ${lobbyData.code === "1" ? '<label>Session code<input name="code" type="password
     };
     claim.claimed = false;
     window.__cubieClaim = claim;
+    // Welcome screen (src/ui/welcome.js) has its own callsign box: it fills this one, which the claim reads.
+    claim.getName = () => input.value.trim();
+    claim.setName = (n) => {
+      const v = String(n ?? "")
+        .trim()
+        .slice(0, 24);
+      if (v && v !== input.value.trim()) {
+        input.value = v;
+        if (claimed && v !== nameEl.textContent) {
+          claimed = false;
+          claim.claimed = false;
+        }
+      }
+      box.classList.remove("need");
+    };
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       if (claimed && input.value.trim() === nameEl.textContent) {
@@ -782,7 +937,7 @@ ${lobbyData.code === "1" ? '<label>Session code<input name="code" type="password
       "Stuttering? Settings → Graphics → Low. Auto picks it for most laptops.",
       "This game is a work in progress. The Feedback button (top right, Esc to free the mouse) goes straight to the developer.",
       "Capture the lettered flags. Holding more flags drains the enemy\u2019s tickets.",
-      "F enters vehicles. Engineers repair them with the class tool (3).",
+      "F enters vehicles. Support repairs them with the torch (5).",
     ];
     let stageSince = Date.now(),
       lastStage = "";
@@ -834,7 +989,7 @@ ${lobbyData.code === "1" ? '<label>Session code<input name="code" type="password
         panel.style.display = "grid";
         hideStages();
         text.textContent = "Welcome back. Rejoining…";
-        location.reload();
+        rejoinReload();
       }
       hiddenAt = 0;
       lostSince = 0;
@@ -877,7 +1032,7 @@ ${lobbyData.code === "1" ? '<label>Session code<input name="code" type="password
                 try {
                   sessionStorage.setItem(retryKey, JSON.stringify(retries));
                 } catch {}
-                location.reload();
+                rejoinReload();
                 return;
               }
             } catch {}
@@ -908,8 +1063,26 @@ ${lobbyData.code === "1" ? '<label>Session code<input name="code" type="password
           if (spawnEl && !spawnEl.hidden) reach("deploy");
           const e = g.ctx.modules.get("player")?.getLocalEntity?.();
           if (e) {
+            spawnedHere = true;
             reach("spawned");
             report("spawned");
+          }
+          // one press per check (1.5 s) until the soldier is in, at most 6: the deploy list can still be filling in
+          else if (
+            autoRedeploy &&
+            funnel.at.deploy != null &&
+            redeployTries < 6 &&
+            spawnEl &&
+            !spawnEl.hidden &&
+            typeof window.__cubieDeploy === "function"
+          ) {
+            if (!redeployTries++)
+              g.ctx.events?.emit?.("ui:message", {
+                kind: "hint",
+                text: "New map: deploying you straight back in. Click to take control.",
+                ttl: 6,
+              });
+            window.__cubieDeploy();
           }
           if (Date.now() - healthySince > 15000) {
             retries = { since: Date.now(), count: 0 };
@@ -958,7 +1131,7 @@ ${lobbyData.code === "1" ? '<label>Session code<input name="code" type="password
                   "Automatic rejoin unavailable because browser storage is disabled. Return to the lobby to join again.";
                 return;
               }
-              location.reload();
+              rejoinReload();
             } else {
               text.textContent = "Server is preparing the next round. Waiting…";
             }

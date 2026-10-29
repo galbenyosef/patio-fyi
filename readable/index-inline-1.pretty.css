@@ -55,10 +55,12 @@ body {
   width: 100%;
   height: 100%;
 }
+/* The game keeps its own colours under Windows contrast themes: colour and shape carry meaning (team, squad, enemy), and a theme turned every HUD glyph into a white dot on a solid box. */
 #ui-root {
   position: fixed;
   inset: 0;
   pointer-events: none;
+  forced-color-adjust: none;
 }
 #ui-root > * {
   pointer-events: auto;

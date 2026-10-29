@@ -1,7 +1,7 @@
 // derive.mjs — rebuild the derived layers (readable/ + src/ + split-spec.json)
 // from the patio-fyi capture (PLAN §3/§5). PATIO (https://play.patio.fyi/) is
 // capture-class: a Vite production build of a session-based 8v8 three.js
-// shooter ("Friends session", ruleset r17-bascule-v1, map Bascule), served at
+// shooter ("Friends session", ruleset r15-hangar-v1, map Hangar Nine), served at
 // the origin root by Cloudflare. §0.4 fork-over-mirror was checked on
 // 2026-10-12 — the page and its JS reference no public source repo, so the
 // mirror stands. The capture is untouched; every source file is re-hashed
@@ -18,7 +18,7 @@
 //                        (stylesheet rule: stylesheets are never sliced).
 //   vendor bundle      -> readable/ + wholeFile section (vendor rule): the
 //                        bundled three.js r185 graphics engine chunk
-//                        (assets/graphics-quality-BsjABS0s.js) is indexed
+//                        (assets/graphics-quality-CrL3qbU3.js) is indexed
 //                        whole, never sliced. The wholeFile record's `file`
 //                        IS the readable pretty (the derived text) and its
 //                        `origin` the captured chunk (the pristine): the
@@ -346,9 +346,9 @@ function scanBlocks(buf) {
 
 // ── curated content-anchored classification (guards fail loudly) ────────
 const WHOLE_FILE = {
-  "assets__graphics-quality-BsjABS0s": {
+  "assets__graphics-quality-CrL3qbU3": {
     title:
-      "assets__graphics-quality-BsjABS0s — bundled three.js r185 graphics engine (vendor, whole-file, never sliced)",
+      "assets__graphics-quality-CrL3qbU3 — bundled three.js r185 graphics engine (vendor, whole-file, never sliced)",
     desc:
       "the bundled three.js r185 graphics engine — the vendored `__THREE__` revision registration, WebGLRenderer, math/geometry/material/texture/renderer machinery and the app's graphics-quality kit layered on top — third-party engine code, not app logic. Vendor rule — indexed whole-file in readable/, never sliced or rewritten.",
     guard: (t) => t.includes("WebGLRenderer") && t.includes("__THREE__") && /REVISION\s*:\s*\(\)\s*=>\s*[`"']185[`"']/.test(t),
@@ -795,7 +795,7 @@ async function main() {
     defaultFile: `src/${sections.find((s) => !s.wholeFile && !s.skipped).file}`,
     note:
       "PATIO (https://play.patio.fyi/) is capture-class: a Vite production build of a session-based 8v8 " +
-      "three.js shooter ('Friends session', ruleset r17-bascule-v1, map Bascule) served at the origin root " +
+      "three.js shooter ('Friends session', ruleset r15-hangar-v1, map Hangar Nine) served at the origin root " +
       "by Cloudflare. §0.4 fork-over-mirror was checked on 2026-10-12 — the page and its JS reference no " +
       "public source repo (see README), so the mirror stands. Derived pipeline: capture → pinned prettier " +
       "3.9.6 (module API, default options, formatted to a layout fixed point, 1-2 passes — never the CLI: it respects " +
@@ -805,10 +805,10 @@ async function main() {
       "declaration boundaries only, ~250-350 line windows; oversized single declarations stay whole) with an " +
       "exact 2-line provenance header. Every slice parses standalone under `node --input-type=module " +
       "--check -` and round-trips byte-exact to its recorded readable line range. Vendor rule — wholeFile " +
-      "section, never sliced: assets/graphics-quality-BsjABS0s.js is the bundled three.js r185 graphics " +
+      "section, never sliced: assets/graphics-quality-CrL3qbU3.js is the bundled three.js r185 graphics " +
       "engine (the vendored WebGLRenderer + __THREE__ revision registration + renderer machinery with the " +
       "app's graphics-quality kit on top), content-anchored and guarded. Stylesheet rule — " +
-      "assets/ui-B08v0AKp.css is wholeFile. Non-standalone parts are skipped sections, indexed but never " +
+      "assets/ui-DCgfuisD.css is wholeFile. Non-standalone parts are skipped sections, indexed but never " +
       "sliced: every app chunk's final export {…} table (the bindings live in the earlier slices). Each such " +
       "tail records the SERVED chunk's own export statement as its text — the capture's minified export{…}, " +
       "matched by public names — so the public-export gate compares two genuinely different files (the " +

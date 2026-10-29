@@ -1,0 +1,314 @@
+// assets__perf-report-BkPTOfAw 01 — math
+// Lines 1-312 of readable/assets__perf-report-BkPTOfAw.pretty.js (statement-aligned).
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import { Jn as e, Zn as t } from "./graphics-quality-CrL3qbU3.js";
+import { o as n, w as r } from "./sim-CCeMdhLh.js";
+import { t as i } from "./sim-aWA3uwbl.js";
+import { r as a, t as o } from "./hostility-BAA0I7XB.js";
+import { n as s } from "./smoke-sriNWeMQ.js";
+var c = Math.PI / 60,
+  l = 1.6,
+  u = 0.6,
+  d = (t) => !!t && t.hp > 0 && !(t.state & e.DEAD),
+  f = (e) => (e?.pen ?? e?.surface) === `glass`;
+function p(e) {
+  if (e.type === `vehicle`) {
+    let t = i[e.weapon]?.h ?? 2;
+    return [0.55, 0.9, 0.3].map((n) => [e.pos[0], e.pos[1] + t * n, e.pos[2]]);
+  }
+  let t = n[e.stance | 0] ?? n[0];
+  return [0.7, 0.92, 0.45].map((n) => [e.pos[0], e.pos[1] + t * n, e.pos[2]]);
+}
+function m(e) {
+  if (e.type !== `vehicle`) return 0.65;
+  let t = i[e.weapon];
+  return Math.max(t?.w ?? 2, t?.h ?? 2) * 0.55;
+}
+function h(e, t, n, r, i = null, a = null) {
+  let o = 0,
+    s = t;
+  for (let t = 0; t < 6 && o < r; t++) {
+    let t = e.map.raycast(s, n, r - o, null, i, !0);
+    if (!t) return null;
+    if (!f(t) && (a == null || t.entityId !== a)) return o + t.dist;
+    let c = t.dist + 0.05;
+    ((o += c), (s = [s[0] + n[0] * c, s[1] + n[1] * c, s[2] + n[2] * c]));
+  }
+  return null;
+}
+function g(e, t, n, r = null, i = null) {
+  if (s(e, t, n)) return !1;
+  let a = [n[0] - t[0], n[1] - t[1], n[2] - t[2]],
+    o = Math.hypot(...a);
+  if (o < 0.2) return !0;
+  let c = h(
+    e,
+    t,
+    a.map((e) => e / o),
+    o,
+    r,
+    i,
+  );
+  return c == null || c >= o - 0.2;
+}
+var _ = (e, t) =>
+  Math.acos(Math.max(-1, Math.min(1, e[0] * t[0] + e[1] * t[1] + e[2] * t[2])));
+function v(e, n, i) {
+  let a = {
+      origin: Array.isArray(n?.origin) ? n.origin : r(e, [0, 0, 0]),
+      yaw: Number.isFinite(n?.yaw) ? n.yaw : e.yaw,
+      pitch: Number.isFinite(n?.pitch) ? n.pitch : e.pitch,
+    },
+    o = i?.origin;
+  return !Array.isArray(o) ||
+    o.length < 3 ||
+    !o.slice(0, 3).every(Number.isFinite) ||
+    !Number.isFinite(i.yaw) ||
+    !Number.isFinite(i.pitch) ||
+    Math.hypot(o[0] - a.origin[0], o[1] - a.origin[1], o[2] - a.origin[2]) >
+      l ||
+    _(t(i.yaw, i.pitch), t(a.yaw, a.pitch)) > u
+    ? a
+    : { origin: o.slice(0, 3), yaw: i.yaw, pitch: i.pitch };
+}
+function y(n, i, a, s = null) {
+  if (
+    !d(i) ||
+    !d(a) ||
+    i.type !== `soldier` ||
+    (a.type !== `soldier` && a.type !== `vehicle`) ||
+    a.id === i.id ||
+    a.team < 0 ||
+    !o(n, i, a) ||
+    (a.type === `soldier` && a.state & e.IN_VEHICLE)
+  )
+    return `invalid`;
+  let l = Array.isArray(s?.origin) ? s.origin : r(i, [0, 0, 0]),
+    u = t(
+      Number.isFinite(s?.yaw) ? s.yaw : i.yaw,
+      Number.isFinite(s?.pitch) ? s.pitch : i.pitch,
+    ),
+    f = p(a),
+    h = f[0],
+    v = Math.hypot(h[0] - l[0], h[1] - l[1], h[2] - l[2]);
+  if (v > 800) return `range`;
+  let y = Math.hypot(a.vel?.[0] ?? 0, a.vel?.[2] ?? 0),
+    b = Math.atan((m(a) + Math.min(1.5, y * 0.2)) / Math.max(0.5, v)) + c;
+  if (
+    !f.some((e) => {
+      let t = [e[0] - l[0], e[1] - l[1], e[2] - l[2]],
+        n = Math.hypot(...t);
+      return (
+        n < 0.2 ||
+        _(
+          t.map((e) => e / n),
+          u,
+        ) <= b
+      );
+    })
+  )
+    return `aim`;
+  let x = i.state & e.IN_VEHICLE ? `vehicle-${i.seat}` : null;
+  return f.some((e) => g(n, l, e, x, a.id)) ? `` : `blocked`;
+}
+function b(t) {
+  let n = new Map(),
+    r = new Map(),
+    i = () => t.modules.get(`netcode`);
+  function o(e, n, r) {
+    if (a(t.world)) {
+      for (let e of t.clients?.values?.() ?? [])
+        e.playerId === n && i()?.sendEvent?.(e.id, `spot:target`, r);
+      return;
+    }
+    t.events.emit(`spot:target`, r);
+    for (let n of t.clients?.values?.() ?? [])
+      t.world.players.get(n.playerId)?.team === e &&
+        i()?.sendEvent?.(n.id, `spot:target`, r);
+  }
+  function s(e, n, i, a, s = !1) {
+    let c = t.world.time.tick;
+    (r.set(`${e}:${i}`, { team: e, targetId: i, spotterId: n, expiresTick: a }),
+      o(e, n, {
+        targetId: i,
+        spotterId: n,
+        team: e,
+        expiresTick: a,
+        durationTicks: a - c,
+        ...(s ? { carried: !0 } : {}),
+      }));
+  }
+  function c(e, n) {
+    let i = t.world.time.tick,
+      o = t.world.get(n);
+    if (Number.isInteger(e) && Number.isInteger(n) && d(o))
+      for (let c of [...r.values()]) {
+        if (c.expiresTick <= i) {
+          r.delete(`${c.team}:${c.targetId}`);
+          continue;
+        }
+        if (
+          c.targetId !== e ||
+          o.team < 0 ||
+          (o.team === c.team && !a(t.world))
+        )
+          continue;
+        let l = r.get(`${c.team}:${n}`);
+        (l && l.expiresTick >= c.expiresTick) ||
+          s(c.team, c.spotterId, n, c.expiresTick, !0);
+      }
+  }
+  let l = [
+      t.events.on?.(`vehicle:enter`, (e) => c(e?.entityId, e?.vehicleId)),
+      t.events.on?.(`vehicle:exit`, (e) => c(e?.vehicleId, e?.entityId)),
+    ],
+    u = new Map();
+  function f(e, t, n) {
+    return (
+      i()?.sendEvent?.(e.id, `spot:fail`, { targetId: t, reason: n }),
+      !1
+    );
+  }
+  function p(r, i) {
+    if (!r || !Number.isInteger(i?.targetId)) return !1;
+    let a = t.world.time.tick,
+      o = n.get(r.playerId) ?? 0,
+      c = u.get(r.playerId);
+    if (a < o || (c?.targetId === i.targetId && a < c.tick + 75))
+      return f(r, i.targetId, `cooldown`);
+    n.set(r.playerId, a + 24);
+    let l = r.entityId > 0 ? t.world.get(r.entityId) : null,
+      d = t.world.get(i.targetId),
+      p = !!(l?.state & e.IN_VEHICLE),
+      m = p ? t.modules.get(`vehicles`)?.getSpotView?.(l.id) : null;
+    if (!l || (p && !m)) return f(r, i.targetId, `invalid`);
+    let h = y(t.world, l, d, v(l, m, i.view));
+    return h
+      ? f(r, i.targetId, h)
+      : (u.set(r.playerId, { targetId: d.id, tick: a }),
+        s(l.team, r.playerId, d.id, a + 900),
+        !0);
+  }
+  return {
+    request: p,
+    forget(e) {
+      (n.delete(e), u.delete(e));
+    },
+    dispose() {
+      for (let e of l) e?.();
+      (n.clear(), u.clear(), r.clear());
+    },
+  };
+}
+var x = new Set([`high`, `low`, `verylow`, `maxlow`]),
+  S = (e, t) =>
+    Number.isFinite(+e) ? Math.max(0, Math.min(t, Math.round(+e))) : 0,
+  C = 300,
+  w = 1e4;
+function T(e, t, n) {
+  if (!e || e.isBot || !t || typeof t != `object`) return !1;
+  let r = S(t.fps, 1e3);
+  return r
+    ? ((e.fps = r),
+      (e.lowFps = Math.min(r, S(t.low, 1e3))),
+      (e.quality = x.has(t.q) ? t.q : ``),
+      (e.autoQuality = t.auto === !0),
+      (e.hitDelay =
+        t.hn > 0
+          ? { med: S(t.hd, w), max: S(t.hx, w), n: S(t.hn, 1e3) }
+          : null),
+      (e.stallMs = S(t.st, 6e4)),
+      typeof t.gpu == `string` &&
+        t.gpu &&
+        (e.gpu = t.gpu.replace(/[\u0000-\u001f]/g, ``).slice(0, 160)),
+      t.cores != null && (e.cores = S(t.cores, 1024) || null),
+      (e.perfTick = n),
+      !0)
+    : !1;
+}
+function E(
+  e,
+  t = () => performance.now(),
+  n = () =>
+    typeof document < `u` && (document.hidden || !document.hasFocus?.()),
+) {
+  let r = !1,
+    i = !1,
+    a = 0,
+    o = 0,
+    s = -1,
+    c = -1e9,
+    l = null,
+    u = 0,
+    d = 0,
+    f = [],
+    p = [],
+    m = (t, n) => {
+      (e.events?.on?.(t, n), p.push(() => e.events?.off?.(t, n)));
+    },
+    h = () => {
+      ((a = 0), (o = 0), (f.length = 0), (d = 0));
+    };
+  return (
+    m(`net:connected`, (e) => {
+      ((r = !0), (i = !1), h(), e?.entityId != null && (s = e.entityId));
+    }),
+    m(`player:local`, (e) => {
+      e?.entityId != null && (s = e.entityId);
+    }),
+    m(`weapon:fire`, (e) => {
+      if (!e?.fp || e.replay) return;
+      let n = t();
+      (n - c > C && (l = n), (c = n));
+    }),
+    m(`player:damage`, (e) => {
+      if (
+        l == null ||
+        e?.attackerId == null ||
+        e.attackerId !== s ||
+        e.targetId === s
+      )
+        return;
+      let n = t() - l;
+      ((l = null), n >= 0 && n <= w && f.length < 200 && f.push(n));
+    }),
+    {
+      update(s) {
+        let c = t();
+        if (
+          (n() ? (u = 0) : (u && c - u > d && (d = c - u), (u = c)),
+          l != null && c - l > w && (l = null),
+          !r || !(s > 0) || (a++, (o += s), o + 1e-6 < 5))
+        )
+          return;
+        let p = e.config?.graphics,
+          m = f.slice().sort((e, t) => e - t),
+          g = {
+            fps: a / o,
+            low: e.stats?.lowFps ?? 0,
+            q: e.config?.quality,
+            auto: !!p?.auto,
+            st: d,
+          };
+        (i ||
+          ((i = !0),
+          Object.assign(g, {
+            gpu: p?.gpu ?? ``,
+            cores: globalThis.navigator?.hardwareConcurrency ?? 0,
+          })),
+          m.length &&
+            Object.assign(g, {
+              hd: m[m.length >> 1],
+              hx: m[m.length - 1],
+              hn: m.length,
+            }),
+          e.modules?.get?.(`netcode`)?.sendRpc?.(`perf`, g),
+          h());
+      },
+      dispose() {
+        for (let e of p) e();
+        p.length = 0;
+      },
+    }
+  );
+}

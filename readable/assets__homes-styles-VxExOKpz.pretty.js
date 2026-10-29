@@ -1,0 +1,7004 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import {
+  Dn as e,
+  F as t,
+  Fn as n,
+  H as r,
+  Hn as i,
+  K as a,
+  L as o,
+  U as s,
+  Vn as c,
+  _n as l,
+  at as u,
+  cn as d,
+  hn as f,
+  q as p,
+  rt as m,
+  xn as h,
+  z as g,
+  zt as _,
+} from "./graphics-quality-CrL3qbU3.js";
+import { s as v, t as y } from "./facade-kit-DPPNwSDt.js";
+import { t as b } from "./tower-styles-CJw6ppEa.js";
+var x = Math.PI / 180,
+  S = `ironDark`;
+Object.assign(y, {
+  sidingWhite: {
+    pat: `lap`,
+    p: { base: 14999764, seed: 30 },
+    scale: 1.44,
+    rough: 0.7,
+    bump: 2.5,
+    grime: 0.14,
+  },
+  sidingMustard: {
+    pat: `lap`,
+    p: { base: 13215050, seed: 31 },
+    scale: 1.44,
+    rough: 0.72,
+    bump: 2.5,
+    grime: 0.18,
+  },
+  stuccoCream: {
+    pat: `stucco`,
+    p: { base: 15128238, seed: 32 },
+    scale: 2.2,
+    rough: 0.92,
+    bump: 0.8,
+    grime: 0.3,
+  },
+  stuccoWhite: {
+    pat: `stucco`,
+    p: { base: 15328470, seed: 33, blotch: 18 },
+    scale: 2.2,
+    rough: 0.95,
+    bump: 0.8,
+    grime: 0.28,
+  },
+  brickBuff: {
+    pat: `brick`,
+    p: { base: 13215863, mortar: 11050120, vary: 0.2, burnt: 0.05, seed: 34 },
+    scale: 1.2,
+    rough: 0.92,
+    bump: 1.6,
+    grime: 0.34,
+  },
+  cmu: {
+    pat: `brick`,
+    p: { base: 11578531, mortar: 10328723, vary: 0.08, burnt: 0, seed: 35 },
+    scale: 3.2,
+    rough: 0.95,
+    bump: 1.2,
+    grime: 0.36,
+  },
+  corrugatedTeal: {
+    pat: `corrugated`,
+    p: { base: 5207152, seed: 36 },
+    scale: 0.9,
+    rough: 0.55,
+    metal: 0.45,
+    bump: 2.5,
+    grime: 0.3,
+  },
+  timber: {
+    pat: `planks`,
+    p: { base: 3811870, n: 3, seed: 37 },
+    scale: 1,
+    rough: 0.8,
+    bump: 1,
+  },
+  woodDark: {
+    pat: `planks`,
+    p: { base: 3877405, n: 6, seed: 38 },
+    scale: 1.2,
+    rough: 0.7,
+    bump: 1,
+  },
+  shingleRed: {
+    pat: `shingle`,
+    p: { base: 7223854, seed: 39 },
+    scale: 1.5,
+    rough: 0.95,
+    bump: 3,
+  },
+  trimBrown: {
+    pat: `paint`,
+    p: { base: 4862240 },
+    size: 128,
+    scale: 1,
+    rough: 0.6,
+  },
+  redPaint: {
+    pat: `paint`,
+    p: { base: 10365474 },
+    size: 128,
+    scale: 1,
+    rough: 0.5,
+  },
+  enamelRed: {
+    pat: `paint`,
+    p: { base: 11740702 },
+    size: 128,
+    scale: 1,
+    rough: 0.3,
+    metal: 0.1,
+  },
+  awningBlue: {
+    pat: `stripes`,
+    p: { base: 2835558, alt: 14866102 },
+    size: 256,
+    scale: 1,
+    rough: 0.95,
+  },
+  bulb: {
+    pat: `paint`,
+    p: { base: 16773568 },
+    size: 64,
+    scale: 1,
+    rough: 0.4,
+    emissive: 16762976,
+  },
+});
+var C = (e, t) => (t < e.top ? e.ys[t + 1] : e.H) - e.ys[t],
+  w = (e, t) => Math.min(e.nb - 1, Math.max(0, Math.floor(t / e.bw))),
+  T =
+    (...e) =>
+    (t, n, r) =>
+      e.forEach((e) => e(t, n, r)),
+  ee = (e) => {
+    let t = e.toNonIndexed();
+    return (t.computeVertexNormals(), t);
+  };
+function E(e, t, n, r, i) {
+  for (let a = 0; a < e.nb; a++) {
+    let o = Math.max(n, a * e.bw),
+      s = Math.min(r, (a + 1) * e.bw);
+    s - o > 0.001 && i(e.grid[t][a], o, s, a);
+  }
+}
+var D = new i(),
+  te = new d(),
+  ne = new i(0, 0, 1);
+function O(e, n, r, i, a, o, s = 0.1) {
+  D.set(o[0] - a[0], o[1] - a[1], o[2] - a[2]);
+  let c = D.length();
+  (te.setFromUnitVectors(ne, D.normalize()),
+    e.add(
+      n,
+      new t(s, s, c)
+        .applyQuaternion(te)
+        .translate((a[0] + o[0]) / 2, (a[1] + o[1]) / 2, (a[2] + o[2]) / 2),
+      r,
+      i,
+    ));
+}
+function k(e, n, r, i, a, o, s, c, l, u, d) {
+  e.add(
+    n,
+    new t(Math.hypot(s - a, c - o), l, d - u)
+      .rotateZ(Math.atan2(c - o, s - a))
+      .translate((a + s) / 2, (o + c) / 2, (u + d) / 2),
+    r,
+    i,
+  );
+}
+function A(e, t, n, r, i, a, o, s, c, l, u = {}) {
+  let d = 0.34,
+    f = 0.1,
+    p = c - s - 2 * f,
+    m = o - a - 2 * f;
+  (e.box(l, t, n, i - d / 2 + 0.03, i + d / 2 - 0.03, a, o, s, c),
+    e.box(
+      r,
+      t,
+      n,
+      i + d / 2 - 0.03,
+      i + d / 2 - 0.01,
+      a + f,
+      o - f,
+      s + f,
+      c - f,
+      { planar: (e, t, n) => [(c - f - n) / p, (t - a - f) / m] },
+    ),
+    e.box(
+      r,
+      t,
+      n,
+      i - d / 2 + 0.01,
+      i - d / 2 + 0.03,
+      a + f,
+      o - f,
+      s + f,
+      c - f,
+      { planar: (e, t, n) => [(n - s - f) / p, (t - a - f) / m] },
+    ));
+  for (let r of [i + d / 2 - 0.03, i - d / 2 - 0.01])
+    (e.box(l, t, n, r, r + 0.04, a, a + f, s, c),
+      e.box(l, t, n, r, r + 0.04, o - f, o, s, c),
+      e.box(l, t, n, r, r + 0.04, a, o, c - f, c),
+      e.box(l, t, n, r, r + 0.04, a, o, s, s + f));
+  if (u.bulbs)
+    for (let r = a + 0.2; r < o - 0.1; r += 0.32)
+      e.box(`bulb`, t, n, i - 0.06, i + 0.06, r - 0.06, r + 0.06, c, c + 0.1);
+  if (!u.hang)
+    for (let r of [a + 0.3, o - 0.3])
+      e.box(S, t, n, i - 0.05, i + 0.05, r - 0.05, r + 0.05, 0, s + 0.1);
+}
+var j = (e) => (t, n, r) => {
+    let i = e.depth ?? 0.75,
+      a = e.trim,
+      o = e.mat;
+    for (let s of e.bays)
+      for (let c of e.floors) {
+        let l = r.grid[c][s],
+          u = r.ys[c],
+          d = e.top ?? C(r, c),
+          f = s * r.bw + 0.3,
+          p = (s + 1) * r.bw - 0.3,
+          m = u + (e.sill ?? 0.9),
+          h = u + d - 0.45,
+          g = i - 0.1,
+          _ = m + (h - m) * 0.62;
+        (t.box(o, n, l, f, p, u, m, 0, i),
+          t.box(o, n, l, f, p, h, u + d, 0, i),
+          t.box(`glass`, n, l, f + 0.1, p - 0.1, m, h, g - 0.02, g));
+        for (let e of [f + 0.02, p - 0.04])
+          t.box(`glass`, n, l, e, e + 0.02, m, h, 0.12, g - 0.06);
+        for (let e of [f, p - 0.1])
+          (t.box(a, n, l, e, e + 0.1, m, h, g - 0.06, i),
+            t.box(a, n, l, e, e + 0.1, m, h, 0, 0.12));
+        for (let e of [1, 2]) {
+          let r = f + ((p - f) * e) / 3;
+          t.box(a, n, l, r - 0.035, r + 0.035, m, h, g - 0.05, g + 0.03);
+        }
+        (t.box(
+          a,
+          n,
+          l,
+          f + 0.1,
+          p - 0.1,
+          _ - 0.04,
+          _ + 0.04,
+          g - 0.05,
+          g + 0.03,
+        ),
+          t.box(a, n, l, f - 0.04, p + 0.04, m - 0.06, m, 0, i + 0.05),
+          t.box(a, n, l, f - 0.04, p + 0.04, h, h + 0.08, 0, i + 0.04),
+          t.box(a, n, l, f + 0.2, p - 0.2, u + 0.2, m - 0.2, i, i + 0.03),
+          (s + c) % 2 &&
+            t.box(
+              `curtain`,
+              n,
+              l,
+              f + 0.15,
+              p - 0.15,
+              h - (h - m) * 0.35,
+              h,
+              g - 0.12,
+              g - 0.11,
+            ),
+          c === e.floors[0] &&
+            !e.ground &&
+            (t.box(a, n, l, f, p, u - 0.22, u, 0, i + 0.04),
+            t.box(o, n, l, f + 0.3, p - 0.3, u - 0.9, u - 0.22, 0, i * 0.55)),
+          c === e.floors[e.floors.length - 1] &&
+            t.box(
+              e.cap || a,
+              n,
+              l,
+              f - 0.08,
+              p + 0.08,
+              u + d,
+              u + d + 0.16,
+              -0.05,
+              i + 0.12,
+            ));
+      }
+  },
+  M = (e, t) => (n, r, i) => {
+    for (let [a, o, s, c] of e) {
+      let e = t ? i.t + c : c,
+        l = 0;
+      for (; l < i.top && i.ys[l + 1] <= o;) l++;
+      for (let t = 0; t < i.nb; t++)
+        n.box(
+          a,
+          r,
+          i.grid[l][t],
+          t === 0 ? t * i.bw - e : t * i.bw,
+          t === i.nb - 1 ? i.L + e : (t + 1) * i.bw,
+          o,
+          s,
+          -i.t,
+          c,
+        );
+    }
+  };
+function N(e, t, n, r, i, a, o, s = 0.9, c = 0.6) {
+  (e.box(n, t, 0, r - s / 2, r + s / 2, a, o, i - c / 2, i + c / 2),
+    e.box(
+      `concrete`,
+      t,
+      0,
+      r - s / 2 - 0.07,
+      r + s / 2 + 0.07,
+      o,
+      o + 0.12,
+      i - c / 2 - 0.07,
+      i + c / 2 + 0.07,
+    ));
+  for (let n of [-s / 4, s / 4])
+    e.add(
+      `brickRed`,
+      new p(0.1, 0.13, 0.45, 8).translate(r + n, o + 0.34, i),
+      t,
+      0,
+    );
+}
+function re(t, n, r) {
+  let i = 3.4,
+    o = -r.W / 2,
+    s = o + i,
+    c = -r.D / 2,
+    l = c + i,
+    u = (o + s) / 2,
+    d = (c + l) / 2,
+    f = r.H,
+    m = f + 6.6;
+  (t.box(`brickRed`, n, 0, o, s, f, m, c, l),
+    t.box(
+      `louver`,
+      n,
+      0,
+      o - 0.04,
+      s + 0.04,
+      f + 4.8,
+      f + 6.1,
+      c - 0.04,
+      l + 0.04,
+    ));
+  for (let [e, r] of [
+    [f + 4.55, f + 4.8],
+    [f + 6.1, f + 6.35],
+  ])
+    t.box(`stone`, n, 0, o - 0.12, s + 0.12, e, r, c - 0.12, l + 0.12);
+  (t.box(`stone`, n, 0, o - 0.2, s + 0.2, m - 0.25, m, c - 0.2, l + 0.2),
+    t.add(
+      `shingle`,
+      ee(
+        new a(2.05 * Math.SQRT2, 2.2, 4)
+          .rotateY(Math.PI / 4)
+          .translate(u, m + 1.1, d),
+      ),
+      n,
+      0,
+    ),
+    t.add(S, new p(0.04, 0.08, 1.2, 8).translate(u, m + 2.7, d), n, 0),
+    t.add(
+      `aluminum`,
+      new p(0.05, 0.08, 7, 8).translate(0, r.roofTop + 3.5, r.D / 2 - 0.6),
+      n,
+      0,
+    ),
+    t.add(
+      `brass`,
+      new e(0.14, 10, 8).translate(0, r.roofTop + 7.1, r.D / 2 - 0.6),
+      n,
+      0,
+    ));
+}
+function ie(e, t, n) {
+  let r = 2.6,
+    i = n.D / 2 - 1.7,
+    o = n.roofTop - 1.6,
+    s = n.roofTop + 1.8,
+    c = s + 2.6,
+    l = -2.6 / 2,
+    u = r / 2,
+    d = i - r / 2,
+    f = i + r / 2;
+  e.box(`sidingWhite`, t, 0, l, u, o, s, d, f);
+  for (let [n, r] of [
+    [l, d],
+    [u, d],
+    [l, f],
+    [u, f],
+  ])
+    e.box(`trimWhite`, t, 0, n - 0.1, n + 0.1, o, s, r - 0.1, r + 0.1);
+  (e.box(`trimWhite`, t, 0, -1.44, 1.44, s, s + 0.25, d - 0.14, f + 0.14),
+    e.box(
+      `louver`,
+      t,
+      0,
+      -1.1600000000000001,
+      1.1600000000000001,
+      s + 0.25,
+      c,
+      d + 0.14,
+      f - 0.14,
+    ));
+  for (let [n, r] of [[-0.96, 0.96]])
+    for (let i of [d - 0.02, f - 0.02])
+      (k(e, `trimWhite`, t, 0, n, c - 0.7, 0, c - 0.15, 0.16, i, i + 0.06),
+        k(e, `trimWhite`, t, 0, r, c - 0.7, 0, c - 0.15, 0.16, i, i + 0.06));
+  e.box(`trimWhite`, t, 0, -1.46, 1.46, c, c + 0.35, d - 0.16, f + 0.16);
+  let p = 7.5,
+    m = c + 0.35 + p;
+  (e.add(
+    `shingle`,
+    ee(
+      new a(1.42 * Math.SQRT2, p, 4)
+        .rotateY(Math.PI / 4)
+        .translate(0, c + 0.35 + p / 2, i),
+    ),
+    t,
+    0,
+  ),
+    e.box(`trimWhite`, t, 0, -0.06, 0.06, m - 0.4, m + 1.3, i - 0.06, i + 0.06),
+    e.box(
+      `trimWhite`,
+      t,
+      0,
+      -0.38,
+      0.38,
+      m + 0.75,
+      m + 0.87,
+      i - 0.06,
+      i + 0.06,
+    ));
+}
+var ae = (e, t, n, r, i) => (a, o, s) => {
+  let c = (i, a) => [(i - e) / (t - e), (a - n - 0.12) / (r - n - 0.24)];
+  E(s, 0, e, t, (t, s, l, u) => {
+    (a.box(`redPaint`, o, t, s, l, n, r, 0.1, i - 0.04),
+      a.box(`signMarquee`, o, t, s, l, n + 0.12, r - 0.12, i - 0.04, i, {
+        planar: c,
+      }));
+    for (let [e, c] of [
+      [n, n + 0.12],
+      [r - 0.12, r],
+    ])
+      a.box(`bronze`, o, t, s, l, e, c, i - 0.06, i + 0.03);
+    a.box(`bronze`, o, t, s, l, r, r + 0.08, 0.1, i + 0.03);
+    for (let n = Math.ceil((s - e) / 0.3) * 0.3 + e + 0.15; n < l; n += 0.3)
+      a.box(
+        `bulb`,
+        o,
+        t,
+        n - 0.05,
+        n + 0.05,
+        r + 0.08,
+        r + 0.18,
+        i - 0.08,
+        i + 0.02,
+      );
+    for (let r = Math.ceil((s - e) / 0.6) * 0.6 + e + 0.3; r < l; r += 0.6)
+      for (let e = 0.6; e < i - 0.2; e += 0.7)
+        a.box(
+          `bulb`,
+          o,
+          t,
+          r - 0.06,
+          r + 0.06,
+          n - 0.08,
+          n,
+          e - 0.06,
+          e + 0.06,
+        );
+    let d = (s + l) / 2;
+    O(a, S, o, t, [d, r + 0.05, i - 0.4], [d, r + 2.4, 0], 0.06);
+  });
+  for (let [c, l] of [
+    [e, 1],
+    [t, -1],
+  ]) {
+    let e = s.grid[0][w(s, c - l * 0.01)];
+    a.box(
+      `redPaint`,
+      o,
+      e,
+      l > 0 ? c : c - 0.08,
+      l > 0 ? c + 0.08 : c,
+      n,
+      r,
+      0.1,
+      i,
+    );
+    for (let t = 0.4; t < i; t += 0.3)
+      a.box(
+        `bulb`,
+        o,
+        e,
+        c - 0.12 * l - 0.05,
+        c - 0.12 * l + 0.05,
+        r + 0.08,
+        r + 0.18,
+        t - 0.05,
+        t + 0.05,
+      );
+  }
+};
+function oe(t, n, r) {
+  let i = r.L / 2;
+  (A(t, n, r.grid[1][2], `signRialto`, i, 5.4, 15.2, 0.3, 1.9, `redPaint`, {
+    bulbs: !0,
+  }),
+    O(t, S, n, r.grid[1][2], [i, 14.9, 1.5], [i, r.H + 2.4, -0.2], 0.08));
+  for (let [e, i] of [
+    [0, `signPoster1`],
+    [r.nb - 1, `signPoster2`],
+  ]) {
+    let a = r.grid[0][e],
+      o = (e + 0.5) * r.bw,
+      s = o - 0.7,
+      c = o + 0.7;
+    (t.box(`bronze`, n, a, s, c, 0.8, 2.9, 0, 0.08),
+      t.box(i, n, a, s + 0.08, c - 0.08, 0.88, 2.82, 0.08, 0.1, {
+        planar: (e, t) => [(e - s - 0.08) / 1.24, (t - 0.88) / 1.94],
+      }),
+      t.box(`bulb`, n, a, s + 0.1, c - 0.1, 2.92, 2.98, 0.02, 0.12));
+  }
+  let a = r.grid[0][2],
+    o = i - 0.8,
+    s = i + 0.8,
+    c = 0.35;
+  (t.box(`bronze`, n, a, o, s, 0, 1, c, 1.75),
+    t.box(`glass`, n, a, o + 0.05, s - 0.05, 1, 2.2, 0.39999999999999997, 1.7));
+  for (let [e, r] of [
+    [o, c],
+    [s - 0.08, c],
+    [o, 1.67],
+    [s - 0.08, 1.67],
+  ])
+    t.box(`bronze`, n, a, e, e + 0.08, 1, 2.2, r, r + 0.08);
+  (t.box(
+    `bronze`,
+    n,
+    a,
+    o - 0.12,
+    s + 0.12,
+    2.2,
+    2.45,
+    0.22999999999999998,
+    1.87,
+  ),
+    t.add(`bronze`, new e(0.16, 10, 8).translate(i, 2.6, 2.1 / 2), n, a));
+}
+function se(t, n, r) {
+  E(r, 0, 0.2, 6.2, (e, r, i) => {
+    (t.box(`whiteSpandrel`, n, e, r, i, 4.72, 4.98, 0.08, 4),
+      t.box(`enamelRed`, n, e, r, i, 4.6, 5.05, 3.98, 4.08));
+    for (let a = Math.ceil(r / 0.9) * 0.9 + 0.45; a < i; a += 0.9)
+      t.box(`bulb`, n, e, a - 0.2, a + 0.2, 4.68, 4.72, 1.6, 1.75);
+  });
+  for (let e of [1, 5.4])
+    t.box(
+      `aluminum`,
+      n,
+      r.grid[0][w(r, e)],
+      e - 0.1,
+      e + 0.1,
+      0,
+      4.72,
+      3.35,
+      3.55,
+    );
+  let i = r.grid[0][0];
+  t.box(`concrete`, n, i, 1.3, 5.1, 0, 0.3, 2.35, 3.05);
+  for (let r of [2.3, 4.1])
+    (t.box(`enamelRed`, n, i, r - 0.32, r + 0.32, 0.3, 1.9, 2.5, 2.9),
+      t.box(`whiteSpandrel`, n, i, r - 0.22, r + 0.22, 1.2, 1.6, 2.9, 2.92),
+      t.box(`aluminum`, n, i, r - 0.12, r + 0.12, 1.9, 2.05, 2.6, 2.8),
+      t.add(`bulb`, new e(0.2, 12, 8).translate(r, 2.25, 2.7), n, i),
+      O(t, `ironDark`, n, i, [r + 0.32, 1.2, 2.7], [r + 0.5, 0.35, 2.4], 0.05));
+  let a = r.L - 0.5,
+    o = r.grid[0][r.nb - 1];
+  (A(t, n, o, `signGarage`, a, 1.2, 10.4, 0.2, 1.6, `enamelRed`, { bulbs: !0 }),
+    O(t, S, n, o, [a, 10.1, 1.3], [a, r.H + 1.4, -0.2], 0.08));
+}
+var P = (e) => (t, n, r) => {
+  let i = `timber`,
+    a = 0.2,
+    o = 0.05;
+  for (let s = 1; s <= r.top; s++) {
+    let c = r.ys[s],
+      l = C(r, s),
+      u = c + 0.18,
+      d = c + l - 0.2,
+      f = c + e.sill,
+      p = f + e.h;
+    for (let m = 0; m < r.nb; m++) {
+      let h = r.grid[s][m],
+        g = m * r.bw,
+        _ = g + r.bw,
+        v = (g + _) / 2,
+        y = v - e.w / 2 - 0.06,
+        b = v + e.w / 2 + 0.06,
+        x = g + (m === 0 ? a : a / 2),
+        S = _ - (m === r.nb - 1 ? a : a / 2);
+      (t.box(i, n, h, m === 0 ? g : g - a / 2, x, c, c + l, 0, o),
+        m === r.nb - 1 && t.box(i, n, h, S, _, c, c + l, 0, o),
+        t.box(i, n, h, g, _, c, u, 0, o),
+        t.box(i, n, h, g, _, d, c + l, 0, o),
+        t.box(i, n, h, y - a, y, u, d, 0, o),
+        t.box(i, n, h, b, b + a, u, d, 0, o),
+        t.box(i, n, h, y, b, f - 0.2, f - 0.04, 0, o),
+        t.box(i, n, h, y, b, p + 0.04, p + 0.2, 0, o),
+        k(t, i, n, h, x, u, y - a, d, 0.16, 0, o),
+        k(t, i, n, h, S, u, b + a, d, 0.16, 0, o),
+        k(t, i, n, h, y, u, v, f - 0.2, 0.14, 0, o),
+        k(t, i, n, h, b, u, v, f - 0.2, 0.14, 0, o));
+    }
+  }
+  if (r.gableCell && e.gh) {
+    let a = r.gableCell,
+      s = r.H,
+      c = r.L / 2,
+      l = s + e.gh * 0.5,
+      u = c / 2 - 0.3;
+    (t.box(i, n, a, 0.3, r.L - 0.3, s + 0.02, s + 0.22, 0, o),
+      t.box(i, n, a, c - 0.1, c + 0.1, s + 0.22, s + e.gh - 0.4, 0, o),
+      t.box(i, n, a, c - u, c + u, l - 0.1, l + 0.1, 0, o));
+    for (let e of [-1, 1])
+      k(
+        t,
+        i,
+        n,
+        a,
+        c + e * c * 0.62,
+        s + 0.22,
+        c + e * 0.1,
+        l - 0.1,
+        0.16,
+        0,
+        o,
+      );
+  }
+};
+function ce(e, t, n) {
+  let r = n.grid[0][0],
+    i = 0.4,
+    a = 3.62;
+  (e.box(S, t, r, 0.37, 0.43000000000000005, a, 3.7, 0, 1.75),
+    O(e, S, t, r, [i, 2.92, 0.02], [i, a, 1], 0.05));
+  for (let n of [0.55, 1.5])
+    e.box(
+      S,
+      t,
+      r,
+      0.388,
+      0.41200000000000003,
+      3.3200000000000003,
+      a,
+      n - 0.012,
+      n + 0.012,
+    );
+  A(
+    e,
+    t,
+    r,
+    `signAnchor`,
+    i,
+    2.3200000000000003,
+    3.3200000000000003,
+    0.4,
+    1.65,
+    `woodDark`,
+    { hang: !0 },
+  );
+}
+var le = (e, n, r, i) => (a, o, s) =>
+    E(s, 0, e, n, (e, n, s) => {
+      let c = 0.45;
+      (a.add(
+        `corrugated`,
+        new t(s - n, 0.06, Math.hypot(i, c))
+          .rotateX(Math.atan2(c, i))
+          .translate((n + s) / 2, r - c / 2, i / 2),
+        o,
+        e,
+      ),
+        a.box(S, o, e, n, s, r - c - 0.2, r - c + 0.02, i - 0.04, i + 0.02));
+      for (let t of [n + 0.15, s - 0.15])
+        O(
+          a,
+          S,
+          o,
+          e,
+          [t, r - 1.4, 0.02],
+          [t, r - c * 0.8 - 0.06, i * 0.8],
+          0.08,
+        );
+    }),
+  ue = (e) => (t, n, r) => {
+    for (let i = 0; i <= r.top; i++) {
+      let a = r.ys[i],
+        o = C(r, i),
+        s = r.grid[i][w(r, e)],
+        c = i === 0 ? 0.6 : a;
+      for (let r = 0; r < 2; r++)
+        t.add(
+          r ? `aluminum` : S,
+          new p(0.09, 0.09, a + o - c, 10).translate(
+            e + r * 0.32,
+            (c + a + o) / 2,
+            0.24,
+          ),
+          n,
+          s,
+        );
+      t.box(
+        S,
+        n,
+        s,
+        e - 0.15,
+        e + 0.47,
+        a + o * 0.5 - 0.04,
+        a + o * 0.5 + 0.04,
+        0,
+        0.3,
+      );
+    }
+    t.box(S, n, r.grid[0][w(r, e)], e - 0.2, e + 0.55, 0.15, 0.62, 0, 0.42);
+    let i = r.grid[r.top][w(r, e)],
+      a = r.H + 1.3;
+    for (let o = 0; o < 2; o++)
+      (t.add(
+        o ? `aluminum` : S,
+        new p(0.09, 0.09, 1.3, 10).translate(e + o * 0.32, r.H + 0.65, 0.24),
+        n,
+        i,
+      ),
+        t.add(
+          o ? `aluminum` : S,
+          new p(0.09, 0.09, 2.5, 10)
+            .rotateX(Math.PI / 2)
+            .translate(e + o * 0.32, a, 0.24 - 1.15),
+          n,
+          i,
+        ));
+  };
+function de(e, t, n) {
+  let r = n.H,
+    i = -n.D / 2 + 4;
+  for (let n of [-3.4, 1.4])
+    (e.box(`louver`, t, 0, n - 1.4, n + 1.4, r, r + 2.2, i - 1.1, i + 1.1),
+      e.box(
+        `aluminum`,
+        t,
+        0,
+        n - 1.5,
+        n + 1.5,
+        r + 2.2,
+        r + 2.35,
+        i - 1.2,
+        i + 1.2,
+      ),
+      e.add(S, new p(0.75, 0.75, 0.45, 18).translate(n, r + 2.55, i), t, 0));
+  for (let n of [-5, -1, 3])
+    e.box(S, t, 0, n - 0.08, n + 0.08, r, r + 1.3, -1.6, 1.6);
+  for (let n of [-1.2, -0.6, 0, 0.6])
+    e.add(
+      n ? `aluminum` : S,
+      new p(0.12, 0.12, 11, 10)
+        .rotateZ(Math.PI / 2)
+        .translate(-0.5, r + 1.45, n),
+      t,
+      0,
+    );
+  e.add(
+    `aluminum`,
+    new p(0.35, 0.4, 4.5, 14).translate(n.W / 2 - 2.2, r + 2.25, n.D / 2 - 3.5),
+    t,
+    0,
+  );
+}
+function fe(t, n, r) {
+  let i = r.gableCell,
+    a = r.L / 2,
+    o = r.H + 1.5;
+  (t.box(`woodDark`, n, i, a - 0.14, a + 0.14, o - 0.14, o + 0.14, -0.3, 1.95),
+    t.add(
+      S,
+      new p(0.18, 0.18, 0.1, 14)
+        .rotateZ(Math.PI / 2)
+        .translate(a, o - 0.34, 1.7),
+      n,
+      i,
+    ),
+    t.box(S, n, i, a - 0.03, a + 0.03, o - 0.4, o - 0.14, 1.66, 1.74),
+    t.box(
+      `wood`,
+      n,
+      r.grid[1][1],
+      a - 0.015,
+      a + 0.015,
+      r.H - 1.8,
+      o - 0.4,
+      1.8,
+      1.83,
+    ),
+    t.box(
+      S,
+      n,
+      r.grid[1][1],
+      a - 0.08,
+      a + 0.08,
+      r.H - 2,
+      r.H - 1.8,
+      1.76,
+      1.86,
+    ));
+  let s = r.grid[0][2];
+  (t.box(`wood`, n, s, 8.9, 10.05, 3.52, 3.56, 0.02, 0.06),
+    [
+      [9.1, 3],
+      [9.55, 2.7],
+      [9.3, 2.3],
+      [9.8, 3.2],
+      [9.2, 1.8],
+      [9.7, 2],
+      [9.45, 1.5],
+    ].forEach(([r, i], a) =>
+      t.add(
+        a % 2 ? `trimWhite` : `redPaint`,
+        new e(0.19, 12, 8).translate(r, i, 0.22),
+        n,
+        s,
+      ),
+    ));
+  for (let [e, r, i] of [
+    [11.55, 0, 0.8],
+    [12.4, 0, 0.8],
+    [11.95, 0.8, 0.75],
+  ])
+    t.box(`wood`, n, s, e - i / 2, e + i / 2, r, r + i, 0.3, 0.3 + i);
+  for (let e of [0.55, 1.25])
+    t.add(
+      `tank`,
+      new p(0.3, 0.3, 0.9, 14).translate(e, 0.45, 0.7),
+      n,
+      r.grid[0][0],
+    );
+}
+var pe = (e) => (t, n, r) => {
+  for (let i = 0; i <= r.nb; i++) {
+    let a = Math.min(r.L - 0.1, Math.max(0.1, i * r.bw)),
+      o = r.grid[r.top][Math.min(i, r.nb - 1)],
+      s = r.H,
+      c = 1.9;
+    (t.box(`trimBrown`, n, o, a - 0.08, a + 0.08, s - 1.7, s - 0.1, 0, 0.1),
+      O(
+        t,
+        `trimBrown`,
+        n,
+        o,
+        [a, s - 0.1, 0.05],
+        [a, s - c * e - 0.2, c],
+        0.14,
+      ),
+      O(
+        t,
+        `trimBrown`,
+        n,
+        o,
+        [a, s - 1.6, 0.08],
+        [a, s - c * 0.62 * e - 0.22, c * 0.62],
+        0.12,
+      ));
+  }
+};
+function me(t, n, r) {
+  let i = r.D / 2,
+    o = r.W;
+  (t.box(`wood`, n, 0, -o / 2 - 3, o / 2 + 3, 0, 0.3, i, i + 3.8),
+    t.box(`concrete`, n, 0, -o / 2 - 3, o / 2 + 3, 0, 0.32, i + 3.8, i + 4.05));
+  let s = o / 2 - 2.6,
+    c = i + 2.2;
+  t.box(`wood`, n, 0, s - 1.1, s + 1.1, 0.8, 0.9, c - 0.5, c + 0.5);
+  for (let e of [-0.8, 0.8])
+    for (let r of [-0.55, 0.55])
+      t.add(
+        S,
+        new p(0.28, 0.28, 0.08, 14)
+          .rotateX(Math.PI / 2)
+          .translate(s + e, 0.58, c + r),
+        n,
+        0,
+      );
+  (O(t, S, n, 0, [s - 1.1, 0.85, c], [s - 2, 0.5, c], 0.05),
+    t.box(`woodDoor`, n, 0, s - 0.9, s - 0.1, 0.9, 1.45, c - 0.35, c + 0.3),
+    t.box(`redPaint`, n, 0, s + 0.05, s + 0.8, 0.9, 1.3, c - 0.3, c + 0.35));
+  let l = -o / 2 + 3,
+    u = i + 0.6;
+  (t.box(`wood`, n, 0, l - 1, l + 1, 0.72, 0.78, u - 0.22, u + 0.22),
+    t.box(`wood`, n, 0, l - 1, l + 1, 0.95, 1.3, u - 0.26, u - 0.22));
+  for (let e of [-0.85, 0.85])
+    t.box(S, n, 0, l + e - 0.03, l + e + 0.03, 0.3, 1.3, u - 0.26, u + 0.2);
+  let d = i + 3.2;
+  t.add(S, new p(0.08, 0.11, 7.5, 10).translate(0, 8.1 / 2, d), n, 0);
+  for (let [r, i] of [
+    [6.6, 1],
+    [7.3, -1],
+  ])
+    (t.box(
+      `redPaint`,
+      n,
+      0,
+      i > 0 ? 0.1 : -1.5,
+      i > 0 ? 1.5 : -0.1,
+      r - 0.15,
+      r + 0.15,
+      d - 0.03,
+      d + 0.03,
+    ),
+      t.box(
+        `trimWhite`,
+        n,
+        0,
+        i > 0 ? 1.2 : -1.3,
+        i > 0 ? 1.3 : -1.2,
+        r - 0.15,
+        r + 0.15,
+        d + 0.03,
+        d + 0.035,
+      ),
+      t.add(
+        `bulb`,
+        new e(0.1, 8, 6).translate(i * 0.25, r + 0.3, d + 0.1),
+        n,
+        0,
+      ));
+  (t.add(S, new a(0.16, 0.3, 10).translate(0, 7.95, d), n, 0),
+    N(t, n, `brickRed`, -4, 0, r.H - 0.5, r.roofTop + 0.8, 0.7, 0.55));
+}
+function he() {
+  return (
+    v(`signFire`, `ENGINE CO. No 3`, {
+      bg: 13616298,
+      fg: 4074014,
+      border: 4074014,
+      aspect: 0.67 / 6,
+      size: 0.62,
+      spacing: 0.14,
+    }),
+    v(`signChapel`, `SEAMEN’S CHAPEL`, {
+      bg: 15920866,
+      fg: 2307402,
+      border: 2307402,
+      aspect: 0.55 / 2.2,
+      size: 0.5,
+      spacing: 0.06,
+    }),
+    v(
+      `signMarquee`,
+      `NOW SHOWING
+THE LONG WATCH`,
+      {
+        bg: 16052194,
+        fg: 1776411,
+        aspect: 1.16 / 10,
+        size: 0.72,
+        font: `"Arial Black", Impact, sans-serif`,
+        weight: 900,
+        spacing: 0.1,
+      },
+    ),
+    v(
+      `signRialto`,
+      `R
+I
+A
+L
+T
+O`,
+      {
+        bg: 9051930,
+        fg: 16770976,
+        aspect: 9.6 / 1.4,
+        width: 300,
+        size: 0.78,
+        font: `"Arial Black", Impact, sans-serif`,
+        weight: 900,
+      },
+    ),
+    v(
+      `signPoster1`,
+      `TIDE
+RUNNER
+★ ★ ★`,
+      {
+        bg: 2046546,
+        fg: 15913594,
+        aspect: 1.94 / 1.24,
+        width: 512,
+        size: 0.6,
+        font: `"Arial Black", Impact, sans-serif`,
+        weight: 900,
+      },
+    ),
+    v(
+      `signPoster2`,
+      `COMING
+SOON`,
+      {
+        bg: 7020330,
+        fg: 16049864,
+        aspect: 1.94 / 1.24,
+        width: 512,
+        size: 0.5,
+        font: `"Arial Black", Impact, sans-serif`,
+        weight: 900,
+      },
+    ),
+    v(`signGarageBand`, `OLYMPIC MOTOR GARAGE`, {
+      bg: 15921386,
+      fg: 11740702,
+      aspect: 0.95 / 10,
+      size: 0.72,
+      font: `"Arial Black", Impact, sans-serif`,
+      weight: 900,
+      spacing: 0.08,
+    }),
+    v(
+      `signGarage`,
+      `G
+A
+R
+A
+G
+E`,
+      {
+        bg: 15921386,
+        fg: 11740702,
+        aspect: 9 / 1.2,
+        width: 300,
+        size: 0.8,
+        font: `"Arial Black", Impact, sans-serif`,
+        weight: 900,
+      },
+    ),
+    v(`signHotel`, `HOTEL`, {
+      bg: 2835558,
+      fg: 16049864,
+      aspect: 6.2 / 1.2,
+      width: 300,
+      size: 0.6,
+      font: `"Arial Black", Impact, sans-serif`,
+      weight: 900,
+    }),
+    v(`signHotelBoard`, `HOTEL  OLYMPIC`, {
+      bg: 2835558,
+      fg: 15255660,
+      border: 15255660,
+      aspect: 0.62 / 11.4,
+      size: 0.66,
+      spacing: 0.3,
+    }),
+    v(
+      `signRooms`,
+      `ROOMS · BATHS
+75¢ A NIGHT`,
+      {
+        fg: 15655878,
+        aspect: 6.8 / 10.2,
+        size: 0.72,
+        font: `"Arial Black", Impact, sans-serif`,
+        weight: 900,
+        spacing: 0.03,
+        fade: 0.35,
+      },
+    ),
+    v(`signPost`, `GREYWATER  POST  OFFICE`, {
+      fg: 5061416,
+      aspect: 0.48 / 12.6,
+      size: 0.8,
+      spacing: 0.25,
+    }),
+    v(
+      `signAnchor`,
+      `THE
+ANCHOR`,
+      {
+        bg: 1912639,
+        fg: 15255660,
+        border: 15255660,
+        aspect: 0.8 / 1.05,
+        width: 512,
+        size: 0.62,
+      },
+    ),
+    v(
+      `signIce`,
+      `HARBOR ICE
+& COLD STORAGE`,
+      {
+        fg: 15921126,
+        aspect: 6.8 / 10.8,
+        size: 0.7,
+        font: `"Arial Black", Impact, sans-serif`,
+        weight: 900,
+        spacing: 0.03,
+        fade: 0.35,
+      },
+    ),
+    v(`signMarine`, `KESTREL MARINE SUPPLY · NETS · ROPE · CHANDLERY`, {
+      bg: 15261896,
+      fg: 1522514,
+      border: 1522514,
+      aspect: 0.55 / 12.4,
+      size: 0.62,
+      spacing: 0.1,
+    }),
+    v(`signDepot`, `GREYWATER`, {
+      bg: 15855074,
+      fg: 1776411,
+      border: 1776411,
+      aspect: 0.58 / 3.8,
+      size: 0.62,
+      spacing: 0.2,
+    }),
+    [
+      {
+        key: `firehouse`,
+        name: `Station No. 3`,
+        plain: 10260354,
+        desc: `Red-brick firehouse: two paneled apparatus doors, stone plaque, corbelled parapet, hose-drying tower.`,
+        W: 14,
+        D: 18,
+        style: {
+          wall: `brickRed`,
+          t: 0.38,
+          bay: 4.6,
+          floors: [5.2, 3.8],
+          parapet: 1.6,
+          win: {
+            w: 1.2,
+            h: 2.2,
+            sill: 0.9,
+            type: `sash`,
+            lites: [1, 1],
+            frame: `trimWhite`,
+            header: `stone`,
+            keystone: !0,
+            sillMat: `stone`,
+            curtains: 0.4,
+          },
+          door: {
+            w: 1.1,
+            h: 2.4,
+            transom: 0.5,
+            frame: `trimWhite`,
+            glazed: !0,
+            hood: `stone`,
+          },
+          loading: {
+            type: `fire`,
+            mat: `redPaint`,
+            trim: `trimWhite`,
+            w: 3.6,
+            h: 4.3,
+          },
+          base: { mat: `stone`, h: 0.5, out: 0.05 },
+          belt: { mat: `stone`, h: 0.25, out: 0.08 },
+          pilaster: { mat: `brickRed`, w: 0.6, out: 0.12, through: !0 },
+          cornice: { type: `corbel`, mat: `brickRed`, h: 0.5, cap: `stone` },
+        },
+        front: {
+          kinds: (e, t) => (e === 0 ? (t < 2 ? `loading` : `door`) : `window`),
+          signs: [
+            { mat: `signFire`, rect: [4, 10, 9.05, 9.72], z0: 0.02, z1: 0.08 },
+          ],
+        },
+        right: { kinds: (e, t) => (e === 0 && t === 1 ? `door` : `window`) },
+        left: { kinds: (e, t) => (e === 0 && t === 0 ? `solid` : `window`) },
+        back: { kinds: (e, t) => (e === 0 && t === 1 ? `door` : `window`) },
+        extra: re,
+      },
+      {
+        key: `chapel`,
+        name: `Seamen’s Chapel`,
+        plain: 12170406,
+        desc: `White clapboard chapel: steep front gable, tall twelve-light windows, red doors, belfry and spire.`,
+        W: 9,
+        D: 16,
+        style: {
+          wall: `sidingWhite`,
+          t: 0.22,
+          bay: 3,
+          floors: [6.2],
+          win: {
+            w: 1,
+            h: 3.6,
+            sill: 1.2,
+            type: `grid`,
+            lites: [2, 6],
+            frame: `trimWhite`,
+            casing: `trimWhite`,
+            rec: 0.08,
+            curtains: 0,
+          },
+          door: {
+            w: 1.5,
+            h: 2.6,
+            transom: 0.7,
+            frame: `trimWhite`,
+            rec: 0.12,
+            mat: `redPaint`,
+            hood: `trimWhite`,
+          },
+          base: { mat: `concrete`, h: 0.6, out: 0.03 },
+          corners: `trimWhite`,
+          eaveTrim: `trimWhite`,
+          roof: {
+            ridge: `z`,
+            pitch: 48 * x,
+            over: 0.45,
+            mat: `shingle`,
+            fascia: `trimWhite`,
+          },
+        },
+        front: {
+          kinds: (e, t) => (t === 1 ? `door` : `window`),
+          signs: [
+            {
+              mat: `signChapel`,
+              rect: [3.4, 5.6, 7, 7.55],
+              z0: 0.02,
+              z1: 0.07,
+            },
+          ],
+        },
+        right: { kinds: () => `window` },
+        left: { kinds: () => `window` },
+        back: { kinds: (e, t) => (t === 1 ? `solid` : `window`) },
+        extra: ie,
+      },
+      {
+        key: `rialto`,
+        name: `The Rialto`,
+        plain: 12103060,
+        desc: `Art Deco picture house: bulb-lit marquee, tall blade sign, ticket booth, poster cases, cream stucco.`,
+        W: 14,
+        D: 22,
+        style: {
+          wall: `stuccoCream`,
+          t: 0.35,
+          bay: 2.8,
+          floors: [5.6, 4.6],
+          parapet: 2.4,
+          win: {
+            w: 1.2,
+            h: 2,
+            sill: 1,
+            type: `grid`,
+            lites: [2, 2],
+            frame: `bronze`,
+            rec: 0.2,
+            curtains: 0.3,
+          },
+          door: {
+            w: 2,
+            h: 2.5,
+            transom: 0.6,
+            frame: `bronze`,
+            glazed: !0,
+            rec: 0.4,
+            step: `granite`,
+          },
+          base: { mat: `granite`, h: 0.7, out: 0.05 },
+          pilaster: { mat: `stuccoCream`, w: 0.5, out: 0.18, through: !0 },
+          cornice: {
+            type: `classic`,
+            mat: `stuccoCream`,
+            h: 0.35,
+            out: 0.2,
+            cap: `bronze`,
+          },
+        },
+        front: {
+          kinds: (e, t, n) =>
+            e === 0
+              ? t === 0 || t === n - 1 || t === 2
+                ? `solid`
+                : `door`
+              : t === 2
+                ? `solid`
+                : `window`,
+          extra: T(ae(2, 12, 3.7, 5.1, 3.4), oe),
+        },
+        right: { kinds: (e, t) => (e === 0 && t === 3 ? `door` : `solid`) },
+        left: { kinds: (e, t) => (e === 0 && t === 3 ? `door` : `solid`) },
+        back: { kinds: (e, t) => (e === 0 && t === 1 ? `door` : `solid`) },
+        extra: (e, t, n) => {
+          e.box(
+            `stuccoCream`,
+            t,
+            0,
+            -2.5,
+            2.5,
+            n.H,
+            n.H + 4.2,
+            -n.D / 2 + 1.5,
+            -n.D / 2 + 5,
+          );
+        },
+      },
+      {
+        key: `garage`,
+        name: `Olympic Motor Garage`,
+        plain: 13158079,
+        desc: `Enamel-panel service garage: roll-up bays, glass office, pump canopy with lit globes, red pylon sign.`,
+        W: 16,
+        D: 14,
+        style: {
+          wall: `whiteSpandrel`,
+          t: 0.3,
+          bay: 4,
+          floors: [5],
+          parapet: 1.4,
+          win: {
+            w: 2.6,
+            h: 2.2,
+            sill: 0.9,
+            type: `grid`,
+            lites: [3, 2],
+            frame: `aluminum`,
+            rec: 0.15,
+            curtains: 0.1,
+          },
+          store: { frame: `aluminum`, fascia: `enamelRed` },
+          door: { w: 1, h: 2.2, transom: 0.3, frame: `aluminum`, glazed: !0 },
+          loading: { type: `rollup`, dock: !1, w: 3.2, h: 3.8 },
+          base: { mat: `enamelRed`, h: 0.5, out: 0.03 },
+        },
+        front: {
+          kinds: (e, t) => [`store`, `loading`, `loading`, `window`][t],
+          signs: [
+            {
+              mat: `signGarageBand`,
+              rect: [3, 13, 5.25, 6.2],
+              z0: 0.01,
+              z1: 0.05,
+            },
+          ],
+          extra: T(
+            M([
+              [`enamelRed`, 4.8, 4.95, 0.04],
+              [`aluminum`, 6.3, 6.45, 0.06],
+            ]),
+            se,
+          ),
+        },
+        right: {
+          kinds: (e, t) => (t === 1 ? `door` : `window`),
+          extra: M(
+            [
+              [`enamelRed`, 4.8, 4.95, 0.04],
+              [`aluminum`, 6.3, 6.45, 0.06],
+            ],
+            !0,
+          ),
+        },
+        left: {
+          kinds: () => `window`,
+          extra: M(
+            [
+              [`enamelRed`, 4.8, 4.95, 0.04],
+              [`aluminum`, 6.3, 6.45, 0.06],
+            ],
+            !0,
+          ),
+        },
+        back: {
+          kinds: (e, t) => (t === 2 ? `loading` : `solid`),
+          extra: M([
+            [`enamelRed`, 4.8, 4.95, 0.04],
+            [`aluminum`, 6.3, 6.45, 0.06],
+          ]),
+        },
+      },
+      {
+        key: `hotel`,
+        name: `Hotel Olympic`,
+        plain: 11904394,
+        desc: `Buff-brick railroad hotel: stacked oriel bays, pressed-metal cornice, blade sign, shops and ghost sign.`,
+        W: 18,
+        D: 15,
+        style: {
+          wall: `brickBuff`,
+          t: 0.38,
+          bay: 3,
+          floors: [4.4, 3.4, 3.4, 3.4],
+          parapet: 1.2,
+          win: {
+            w: 1.1,
+            h: 1.9,
+            sill: 0.85,
+            type: `sash`,
+            lites: [1, 1],
+            frame: `trimWhite`,
+            sillMat: `stone`,
+            header: `stone`,
+            headerH: 0.2,
+            rec: 0.12,
+            curtains: 0.55,
+          },
+          store: { frame: S, fascia: S },
+          awning: { mat: `awningBlue` },
+          door: {
+            w: 1.4,
+            h: 2.5,
+            transom: 0.6,
+            frame: S,
+            glazed: !0,
+            hood: `ironGreen`,
+          },
+          base: { mat: `stone`, h: 0.5, out: 0.05 },
+          belt: { mat: `stone`, h: 0.18, out: 0.06 },
+          cornice: {
+            type: `classic`,
+            mat: `ironGreen`,
+            h: 0.55,
+            out: 0.6,
+            dentils: !0,
+            brackets: !0,
+            cap: `ironGreen`,
+          },
+        },
+        front: {
+          kinds: (e, t) => (e === 0 ? (t === 2 ? `door` : `store`) : `window`),
+          signs: [
+            {
+              mat: `signHotelBoard`,
+              rect: [3.3, 14.7, 4.5, 5.12],
+              z0: 0.02,
+              z1: 0.09,
+            },
+          ],
+          extra: T(
+            j({
+              bays: [1, 4],
+              floors: [1, 2, 3],
+              mat: `brickBuff`,
+              trim: `ironGreen`,
+              cap: `ironGreen`,
+            }),
+            (e, t, n) =>
+              A(
+                e,
+                t,
+                n.grid[2][5],
+                `signHotel`,
+                17.45,
+                5.6,
+                12.2,
+                0.3,
+                1.7,
+                `ironGreen`,
+                { bulbs: !0 },
+              ),
+          ),
+        },
+        left: {
+          kinds: (e, t) => (e === 0 ? `solid` : t === 0 ? `window` : `solid`),
+          signs: [
+            { mat: `signRooms`, rect: [3.4, 13.6, 7, 13.8], z0: 0, z1: 0.004 },
+          ],
+        },
+        right: { kinds: (e, t) => (e === 0 && t === 2 ? `door` : `window`) },
+        back: { kinds: (e, t) => (e === 0 && t === 1 ? `door` : `window`) },
+        extra: (e, t, n) => {
+          (e.box(
+            `brickBuff`,
+            t,
+            0,
+            3,
+            6.5,
+            n.H,
+            n.H + 3,
+            -n.D / 2 + 2,
+            -n.D / 2 + 5,
+          ),
+            e.box(
+              `concrete`,
+              t,
+              0,
+              2.85,
+              6.65,
+              n.H + 3,
+              n.H + 3.15,
+              -n.D / 2 + 1.85,
+              -n.D / 2 + 5.15,
+            ),
+            N(e, t, `brickBuff`, -n.W / 2 + 1.2, -2, n.H, n.H + 2.9),
+            N(e, t, `brickBuff`, -n.W / 2 + 1.2, 2.5, n.H, n.H + 2.9));
+        },
+      },
+      {
+        key: `postoffice`,
+        name: `Greywater Post Office`,
+        plain: 12564646,
+        desc: `Neoclassical limestone post office: five-column portico and pediment, carved frieze, bronze windows.`,
+        W: 20,
+        D: 16,
+        style: {
+          wall: `limestone`,
+          floorMat: [`rustic`, `limestone`],
+          t: 0.45,
+          bay: 3.33,
+          floors: [5.6, 4.4],
+          parapet: 1.4,
+          win0: {
+            w: 1.5,
+            h: 3.4,
+            sill: 1,
+            type: `grid`,
+            lites: [2, 4],
+            frame: `bronze`,
+            header: `limestone`,
+            keystone: !0,
+            headerH: 0.3,
+            sillMat: `limestone`,
+            rec: 0.3,
+            curtains: 0.2,
+          },
+          win: {
+            w: 1.3,
+            h: 2.2,
+            sill: 0.8,
+            type: `grid`,
+            lites: [2, 3],
+            frame: `bronze`,
+            sillMat: `limestone`,
+            rec: 0.25,
+            curtains: 0.3,
+          },
+          door: {
+            w: 2,
+            h: 3.4,
+            transom: 1,
+            frame: `bronze`,
+            glazed: !0,
+            rec: 0.5,
+            step: `granite`,
+          },
+          base: { mat: `granite`, h: 0.9, out: 0.08 },
+          belt: { mat: `limestone`, h: 0.4, out: 0.14 },
+          cornice: {
+            type: `classic`,
+            mat: `limestone`,
+            h: 0.6,
+            out: 0.55,
+            dentils: !0,
+            cap: `limestone`,
+          },
+        },
+        front: {
+          kinds: (e, t) =>
+            e === 0 && (t === 2 || t === 3) ? `door` : `window`,
+          extra: ge,
+        },
+        back: { kinds: (e, t) => (e === 0 && t === 1 ? `door` : `window`) },
+        right: { kinds: () => `window` },
+        left: { kinds: () => `window` },
+        extra: (t, n, r) => {
+          let i = -r.W / 2 + 1.2,
+            a = r.D / 2 + 3.4;
+          (t.box(
+            `granite`,
+            n,
+            0,
+            i - 0.35,
+            i + 0.35,
+            0,
+            0.6,
+            a - 0.35,
+            a + 0.35,
+          ),
+            t.add(
+              `aluminum`,
+              new p(0.05, 0.09, 10.5, 8).translate(i, 5.85, a),
+              n,
+              0,
+            ),
+            t.add(`brass`, new e(0.14, 10, 8).translate(i, 11.2, a), n, 0));
+        },
+      },
+      {
+        key: `anchor`,
+        name: `The Anchor Tavern`,
+        plain: 11774616,
+        desc: `Tudor-revival tavern: stone ground floor, half-timbered upper storey and gables, hanging sign.`,
+        W: 12,
+        D: 11,
+        style: {
+          wall: `stuccoWhite`,
+          floorMat: [`stone`, `stuccoWhite`],
+          t: 0.3,
+          bay: 3,
+          floors: [3.8, 3.2],
+          win0: {
+            w: 1.8,
+            h: 1.6,
+            sill: 1,
+            type: `grid`,
+            lites: [4, 3],
+            frame: `woodDark`,
+            sillMat: `stone`,
+            rec: 0.15,
+            curtains: 0.6,
+          },
+          win: {
+            w: 1.1,
+            h: 1.3,
+            sill: 0.8,
+            type: `grid`,
+            lites: [3, 3],
+            frame: `woodDark`,
+            rec: 0.1,
+            curtains: 0.5,
+          },
+          door: {
+            w: 1.1,
+            h: 2.2,
+            transom: 0.35,
+            frame: `woodDark`,
+            hood: `woodDark`,
+            rec: 0.2,
+          },
+          base: { mat: `concrete`, h: 0.3, out: 0.03 },
+          roof: {
+            ridge: `x`,
+            pitch: 45 * x,
+            over: 0.5,
+            mat: `shingle`,
+            fascia: `woodDark`,
+          },
+        },
+        front: {
+          kinds: (e, t) => (e === 0 && t === 1 ? `door` : `window`),
+          extra: T(P({ w: 1.1, h: 1.3, sill: 0.8 }), ce),
+        },
+        back: {
+          kinds: (e, t) => (e === 0 && t === 2 ? `door` : `window`),
+          extra: P({ w: 1.1, h: 1.3, sill: 0.8 }),
+        },
+        right: {
+          kinds: () => `window`,
+          extra: P({ w: 1.1, h: 1.3, sill: 0.8, gh: 5.5 }),
+        },
+        left: {
+          kinds: () => `window`,
+          extra: P({ w: 1.1, h: 1.3, sill: 0.8, gh: 5.5 }),
+        },
+        extra: (e, t, n) =>
+          N(
+            e,
+            t,
+            `brickRed`,
+            n.W / 2 - 1.2,
+            -0.6,
+            n.H - 0.5,
+            n.roofTop + 1.1,
+            1.1,
+            0.7,
+          ),
+      },
+      {
+        key: `coldstore`,
+        name: `Harbor Ice & Cold Storage`,
+        plain: 11052446,
+        desc: `Near-windowless block-built cold store: ghost sign, docks under a tin canopy, ammonia pipes and condensers.`,
+        W: 16,
+        D: 20,
+        style: {
+          wall: `cmu`,
+          t: 0.4,
+          bay: 4,
+          floors: [5, 4.2, 4.2],
+          parapet: 0.8,
+          win: {
+            w: 1,
+            h: 1,
+            sill: 1.8,
+            type: `grid`,
+            lites: [2, 2],
+            frame: S,
+            sillMat: `concrete`,
+            rec: 0.25,
+            curtains: 0,
+          },
+          door: { w: 1, h: 2.3, transom: 0, frame: S, hood: S },
+          loading: { type: `rollup`, w: 3, h: 3.4 },
+          base: { mat: `concrete`, h: 0.9, out: 0.04 },
+          belt: { mat: `concrete`, h: 0.2, out: 0.05 },
+          pilaster: { mat: `concrete`, w: 0.6, out: 0.15, through: !0 },
+        },
+        front: {
+          kinds: (e, t) =>
+            e === 0
+              ? [`loading`, `loading`, `door`, `solid`][t]
+              : t === 3
+                ? `window`
+                : `solid`,
+          noPilaster: !0,
+          signs: [
+            { mat: `signIce`, rect: [0.6, 11.4, 6, 12.8], z0: 0, z1: 0.004 },
+          ],
+          extra: le(0.3, 8, 4.7, 2.4),
+        },
+        right: {
+          kinds: (e, t) =>
+            e === 0 ? (t === 2 ? `door` : `solid`) : t % 2 ? `window` : `solid`,
+          extra: ue(0.9),
+        },
+        left: { kinds: () => `solid` },
+        back: { kinds: (e, t) => (e === 0 && t < 3 ? `loading` : `solid`) },
+        extra: de,
+      },
+      {
+        key: `netloft`,
+        name: `Kestrel Marine Supply`,
+        plain: 8359048,
+        desc: `Corrugated-iron net loft: barn doors on a rail, hoist beam in the gable, chandlery shop, floats and crates.`,
+        W: 13,
+        D: 18,
+        style: {
+          wall: `corrugatedTeal`,
+          t: 0.2,
+          bay: 3.25,
+          floors: [5, 3.4],
+          win: {
+            w: 1.6,
+            h: 1.2,
+            sill: 1,
+            type: `grid`,
+            lites: [4, 2],
+            frame: `trimWhite`,
+            rec: 0.06,
+            curtains: 0.1,
+          },
+          store: { frame: `trimWhite`, fascia: `trimWhite` },
+          door: { w: 1, h: 2.2, transom: 0, frame: `trimWhite` },
+          loading: {
+            type: `barn`,
+            mat: `wood`,
+            trim: `trimWhite`,
+            w: 4,
+            h: 4.2,
+          },
+          base: { mat: `concrete`, h: 0.4, out: 0.02 },
+          corners: `trimWhite`,
+          roof: {
+            ridge: `z`,
+            pitch: 22 * x,
+            over: 0.6,
+            mat: `corrugated`,
+            fascia: `trimWhite`,
+            ridgeMat: S,
+          },
+        },
+        front: {
+          bay: 13 / 3,
+          kinds: (e, t) =>
+            e === 0
+              ? [`store`, `loading`, `door`][t]
+              : t === 1
+                ? `loading`
+                : `window`,
+          signs: [
+            {
+              mat: `signMarine`,
+              rect: [0.3, 12.7, 4.4, 4.95],
+              z0: 0.08,
+              z1: 0.12,
+            },
+          ],
+          extra: fe,
+        },
+        right: { kinds: (e, t) => (e === 0 && t % 2 ? `solid` : `window`) },
+        left: {
+          kinds: (e, t) =>
+            e === 0 ? (t === 2 ? `loading` : `solid`) : `window`,
+        },
+        back: { kinds: (e, t) => (e === 0 && t === 1 ? `loading` : `window`) },
+      },
+      {
+        key: `depot`,
+        name: `Greywater Depot`,
+        plain: 11836258,
+        desc: `Mustard-and-brown railroad depot: deep bracketed eaves, agent’s bay window, platform, cart and signal.`,
+        W: 24,
+        D: 9,
+        style: {
+          wall: `sidingMustard`,
+          t: 0.22,
+          bay: 3.4,
+          floors: [4.6],
+          win: {
+            w: 1.1,
+            h: 2.2,
+            sill: 0.9,
+            type: `sash`,
+            lites: [1, 1],
+            frame: `trimBrown`,
+            casing: `trimBrown`,
+            rec: 0.08,
+            curtains: 0.3,
+          },
+          door: {
+            w: 1.2,
+            h: 2.4,
+            transom: 0.4,
+            frame: `trimBrown`,
+            glazed: !0,
+            step: `concrete`,
+          },
+          loading: {
+            type: `barn`,
+            mat: `wood`,
+            trim: `trimBrown`,
+            w: 2.6,
+            h: 3.2,
+          },
+          base: { mat: `trimBrown`, h: 0.9, out: 0.02 },
+          corners: `trimBrown`,
+          eaveTrim: `trimBrown`,
+          roof: {
+            ridge: `x`,
+            pitch: 26 * x,
+            over: 2.2,
+            mat: `shingleRed`,
+            fascia: `trimBrown`,
+          },
+        },
+        front: {
+          kinds: (e, t) =>
+            t === 1 || t === 5 ? `door` : t === 6 ? `loading` : `window`,
+          extra: T(
+            j({
+              bays: [3],
+              floors: [0],
+              ground: !0,
+              top: 3.35,
+              depth: 1.2,
+              mat: `sidingMustard`,
+              trim: `trimBrown`,
+              cap: `shingleRed`,
+            }),
+            pe(Math.tan(26 * x)),
+          ),
+        },
+        back: {
+          kinds: (e, t) => (t === 3 ? `door` : `window`),
+          extra: pe(Math.tan(26 * x)),
+        },
+        right: {
+          kinds: (e, t) => (t === 1 ? `door` : `window`),
+          signs: [
+            {
+              mat: `signDepot`,
+              rect: [2.38, 6.18, 4.74, 5.32],
+              z0: 0.02,
+              z1: 0.07,
+            },
+          ],
+        },
+        left: {
+          kinds: () => `window`,
+          signs: [
+            {
+              mat: `signDepot`,
+              rect: [2.38, 6.18, 4.74, 5.32],
+              z0: 0.02,
+              z1: 0.07,
+            },
+          ],
+        },
+        extra: me,
+      },
+    ]
+  );
+}
+function ge(e, t, n) {
+  let r = n.bw - 0.45,
+    i = 5 * n.bw + 0.45,
+    a = n.H,
+    o = a - 1.1,
+    s = n.top;
+  (E(n, 0, r, i, (n, r, i) => {
+    (e.box(`granite`, t, n, r, i, 0, 0.16, 0, 2.9),
+      e.box(`granite`, t, n, r, i, 0, 0.08, 2.9, 3.25));
+  }),
+    E(n, s, r, i, (n, r, i) => {
+      (e.box(`limestone`, t, n, r, i, o, a, 0, 2.9),
+        e.box(`limestone`, t, n, r, i, o, o + 0.22, 2.9, 2.96),
+        e.box(`limestone`, t, n, r, i, a - 0.2, a, 2.9, 3.15));
+    }));
+  let l = r + 0.9,
+    u = i - 0.9;
+  E(n, s, l, u, (n, r, i) =>
+    e.box(`signPost`, t, n, r, i, o + 0.32, o + 0.8, 2.9, 2.92, {
+      planar: (e, t) => [(e - l) / (u - l), (t - o - 0.32) / 0.48],
+    }),
+  );
+  for (let r = 1; r <= 5; r++) {
+    let i = r * n.bw,
+      a = n.grid[0][Math.min(n.nb - 1, r)],
+      s = 2.3,
+      c = 0.5,
+      l = o - 0.45;
+    (e.box(
+      `limestone`,
+      t,
+      a,
+      i - 0.5,
+      i + 0.5,
+      0.16,
+      c,
+      1.7999999999999998,
+      2.8,
+    ),
+      e.add(
+        `limestone`,
+        new p(0.36, 0.42, l - c, 18).translate(i, (c + l) / 2, s),
+        t,
+        a,
+      ),
+      e.add(
+        `limestone`,
+        new p(0.5, 0.37, 0.25, 18).translate(i, l + 0.125, s),
+        t,
+        a,
+      ),
+      e.box(
+        `limestone`,
+        t,
+        a,
+        i - 0.55,
+        i + 0.55,
+        l + 0.25,
+        o,
+        1.7499999999999998,
+        2.8499999999999996,
+      ));
+  }
+  let d = (r + i) / 2,
+    f = 2.3,
+    g = n.grid[s][Math.floor(n.nb / 2)],
+    _ = new h([new c(r, a), new c(i, a), new c(d, a + f)]);
+  e.add(`limestone`, new m(_, { depth: 2.9, bevelEnabled: !1 }), t, g);
+  for (let n of [r - 0.3, i + 0.3])
+    O(e, `limestone`, t, g, [n, a + 0.08, 3], [d, a + f + 0.22, 3], 0.32);
+}
+function _e(e, t, n, r = !0) {
+  let i = new g();
+  ((i.colorSpace = l), (i.anisotropy = 8), (i.wrapS = i.wrapT = r ? f : s));
+  let a = i.source,
+    o = (e) =>
+      Object.defineProperty(a, "data", {
+        value: e,
+        writable: !0,
+        enumerable: !0,
+        configurable: !0,
+      });
+  return (
+    Object.defineProperty(a, "data", {
+      enumerable: !0,
+      configurable: !0,
+      get() {
+        let r = document.createElement(`canvas`);
+        return (
+          (r.width = e),
+          (r.height = t),
+          n(r.getContext(`2d`), e, t),
+          o(r),
+          r
+        );
+      },
+      set(e) {
+        o(e);
+      },
+    }),
+    i
+  );
+}
+var F = Math.PI / 180,
+  I = `ironDark`,
+  ve = (e, t) => Array(e).fill(t),
+  ye = (e, t) => (t < e.top ? e.ys[t + 1] : e.H) - e.ys[t],
+  L = (e, t) => Math.min(e.nb - 1, Math.max(0, Math.floor(t / e.bw))),
+  R = (e) => {
+    let t = e.toNonIndexed();
+    return (t.computeVertexNormals(), t);
+  },
+  z = (e, t = 1) =>
+    `rgb(${[(e >> 16) & 255, (e >> 8) & 255, e & 255].map((e) => Math.max(0, Math.min(255, Math.round(e * t)))).join(`,`)})`;
+function B(e) {
+  let t = e >>> 0;
+  return () => (
+    (t = (Math.imul(t, 1664525) + 1013904223) >>> 0),
+    t / 4294967296
+  );
+}
+function V(e, t, n) {
+  return _e(e, t, n);
+}
+var be = () =>
+    V(256, 256, (e, t) => {
+      let n = t / 6,
+        r = t / 8,
+        i = B(5);
+      ((e.fillStyle = `#4a3418`), e.fillRect(0, 0, t, t));
+      for (let t = 8; t >= -1; t--)
+        for (let a = -1; a <= 6; a++) {
+          let o = a * n + (t & 1 ? n / 2 : 0) + n / 2,
+            s = t * r,
+            c = 0.82 + i() * 0.3,
+            l = e.createLinearGradient(0, s, 0, s + r * 1.3);
+          (l.addColorStop(0, z(9069608, c)),
+            l.addColorStop(1, z(14725208, c)),
+            (e.fillStyle = l),
+            e.beginPath(),
+            e.moveTo(o - n / 2 + 1, s),
+            e.lineTo(o - n / 2 + 1, s + r * 0.8),
+            e.arc(o, s + r * 0.8, n / 2 - 1, Math.PI, 0, !0),
+            e.lineTo(o + n / 2 - 1, s),
+            e.closePath(),
+            e.fill(),
+            (e.strokeStyle = `rgba(40,24,8,.65)`),
+            (e.lineWidth = 2),
+            e.stroke());
+        }
+    }),
+  xe = () =>
+    V(256, 256, (e, t) => {
+      let n = t / 4,
+        r = B(11);
+      for (let i = 0; i < 4; i++) {
+        let a = i * n,
+          o = 0.85 + r() * 0.25,
+          s = e.createLinearGradient(0, a, 0, a + n);
+        (s.addColorStop(0, `#2e1c10`),
+          s.addColorStop(0.14, z(8869935, o * 0.85)),
+          s.addColorStop(0.45, z(11434562, o)),
+          s.addColorStop(0.86, z(7751978, o * 0.85)),
+          s.addColorStop(1, `#23150b`),
+          (e.fillStyle = s),
+          e.fillRect(0, a, t, n));
+        for (let i = 0; i < 50; i++)
+          ((e.fillStyle = `rgba(40,20,5,${r() * 0.28})`),
+            e.fillRect(r() * t, a + n * (0.15 + r() * 0.7), 20 + r() * 90, 1));
+        ((e.fillStyle = `#cfc2a4`), e.fillRect(0, a + n - 4, t, 3));
+      }
+    }),
+  Se = () =>
+    V(256, 256, (e, t) => {
+      let n = B(21);
+      ((e.fillStyle = `#6e5630`), e.fillRect(0, 0, t, t));
+      for (let r = 0; r < 2800; r++) {
+        let r = n() * t,
+          i = n() * t,
+          a = 10 + n() * 34;
+        ((e.strokeStyle = z(11833944, 0.6 + n() * 0.65)),
+          (e.lineWidth = 1 + n()),
+          e.beginPath(),
+          e.moveTo(r, i),
+          e.lineTo(r + (n() - 0.5) * 5, i + a),
+          e.stroke());
+      }
+      for (let n = 0; n < t; n += 64) {
+        let r = e.createLinearGradient(0, n + 40, 0, n + 64);
+        (r.addColorStop(0, `rgba(0,0,0,0)`),
+          r.addColorStop(1, `rgba(30,18,4,.6)`),
+          (e.fillStyle = r),
+          e.fillRect(0, n + 40, t, 24));
+      }
+    }),
+  Ce = () =>
+    V(256, 256, (e, t) => {
+      let n = t / 8,
+        r = B(31);
+      for (let t = 0; t < 8; t++)
+        for (let i = 0; i < 8; i++) {
+          let a = (Math.floor(t / 1) + Math.floor(i / 1)) % 2 == 0,
+            o = t * n,
+            s = i * n,
+            c = 0.85 + r() * 0.2,
+            l = a
+              ? e.createLinearGradient(0, s, 0, s + n)
+              : e.createLinearGradient(o, 0, o + n, 0);
+          (l.addColorStop(0, z(6967856, c)),
+            l.addColorStop(0.5, z(13150314, c)),
+            l.addColorStop(1, z(6967856, c)),
+            (e.fillStyle = l),
+            e.fillRect(o, s, n, n),
+            (e.strokeStyle = `rgba(60,40,15,.35)`),
+            (e.lineWidth = 1));
+          for (let t = 1; t < 4; t++)
+            (e.beginPath(),
+              a
+                ? (e.moveTo(o, s + (t * n) / 4),
+                  e.lineTo(o + n, s + (t * n) / 4))
+                : (e.moveTo(o + (t * n) / 4, s),
+                  e.lineTo(o + (t * n) / 4, s + n)),
+              e.stroke());
+        }
+    }),
+  we = (e) =>
+    V(256, 128, (t, n) => {
+      ((t.fillStyle = e), t.fillRect(0, 0, n, 22));
+      for (let e = 0; e < 4; e++)
+        (t.beginPath(), t.arc(e * 64 + 32, 22, 30, 0, Math.PI), t.fill());
+      t.globalCompositeOperation = `destination-out`;
+      for (let e = 0; e < 4; e++)
+        (t.beginPath(), t.arc(e * 64 + 32, 30, 12, 0, Math.PI * 2), t.fill());
+      t.globalCompositeOperation = `source-over`;
+      for (let e = 0; e <= 4; e++)
+        (t.fillRect(e * 64 - 3, 22, 6, 62),
+          t.beginPath(),
+          t.arc(e * 64, 92, 9, 0, Math.PI * 2),
+          t.fill());
+    }),
+  Te = (e) =>
+    V(128, 128, (t, n) => {
+      ((t.strokeStyle = e), (t.lineWidth = 12));
+      for (let e = -n; e <= n; e += n / 2)
+        (t.beginPath(),
+          t.moveTo(e, 0),
+          t.lineTo(e + n, n),
+          t.stroke(),
+          t.beginPath(),
+          t.moveTo(e, n),
+          t.lineTo(e + n, 0),
+          t.stroke());
+    }),
+  Ee = (e) =>
+    V(256, 256, (t, n) => {
+      let r = B(41),
+        i = n / 4;
+      for (let a = 0; a < 4; a++) {
+        ((t.fillStyle = z(e, 0.88 + r() * 0.24)),
+          t.fillRect(a * i, 0, i, n),
+          (t.fillStyle = z(e, 0.5)),
+          t.fillRect(a * i, 0, 3, n));
+        for (let e = 0; e < 22; e++)
+          ((t.fillStyle = `rgba(0,0,0,${r() * 0.12})`),
+            t.fillRect(a * i + r() * i, 0, 1, n));
+      }
+      t.globalCompositeOperation = `destination-out`;
+      for (let e = 0; e <= 4; e++) {
+        let r = e * i;
+        (t.beginPath(),
+          t.ellipse(r, n * 0.38, i * 0.22, n * 0.13, 0, 0, Math.PI * 2),
+          t.fill(),
+          t.beginPath(),
+          t.arc(r, n * 0.72, i * 0.14, 0, Math.PI * 2),
+          t.fill(),
+          t.beginPath(),
+          t.moveTo(r, n * 0.1),
+          t.lineTo(r + i * 0.13, n * 0.19),
+          t.lineTo(r, n * 0.28),
+          t.lineTo(r - i * 0.13, n * 0.19),
+          t.fill());
+      }
+      t.globalCompositeOperation = `source-over`;
+    }),
+  De = () =>
+    V(256, 128, (e, t, n) => {
+      ((e.strokeStyle = e.fillStyle = `#1b1d20`),
+        (e.lineCap = `round`),
+        e.fillRect(0, 0, t, 10),
+        e.fillRect(0, n - 10, t, 10),
+        (e.lineWidth = 5));
+      for (let r = 0; r <= t; r += 64)
+        (e.beginPath(), e.moveTo(r, 0), e.lineTo(r, n), e.stroke());
+      e.lineWidth = 4;
+      for (let r = 32; r < t; r += 64) {
+        (e.beginPath(),
+          e.moveTo(r, 12),
+          e.lineTo(r + 26, n / 2),
+          e.lineTo(r, n - 12),
+          e.lineTo(r - 26, n / 2),
+          e.closePath(),
+          e.stroke(),
+          e.beginPath(),
+          e.arc(r, n / 2, 11, 0, Math.PI * 2),
+          e.stroke());
+        for (let t of [-1, 1])
+          (e.beginPath(),
+            e.arc(r + t * 32, n / 2, 15, 0, Math.PI * 2),
+            e.stroke());
+      }
+    }),
+  Oe = (e) =>
+    V(128, 256, (t, n, r) => {
+      let i = B(51);
+      for (let n = 0; n < 4; n++)
+        ((t.fillStyle = z(e, 0.88 + i() * 0.2)),
+          t.fillRect(n * 32, 0, 32, r),
+          (t.fillStyle = z(e, 0.6)),
+          t.fillRect(n * 32, 0, 2, r));
+      ((t.fillStyle = z(e, 0.72)),
+        t.fillRect(0, 18, n, 16),
+        t.fillRect(0, r - 34, n, 16),
+        (t.fillStyle = `#140e08`));
+      let a = n / 2,
+        o = r * 0.3;
+      (t.beginPath(),
+        t.moveTo(a, o + 19.8),
+        t.bezierCurveTo(a - 28.8, o, a - 16.2, o - 18 * 1.2, a, o - 6.3),
+        t.bezierCurveTo(a + 16.2, o - 18 * 1.2, a + 28.8, o, a, o + 19.8),
+        t.fill());
+    }),
+  ke = () =>
+    V(128, 64, (e, t, n) => {
+      let r = B(61);
+      ((e.fillStyle = `#2f5a24`), e.fillRect(0, 0, t, n));
+      for (let i = 0; i < 260; i++)
+        ((e.fillStyle =
+          r() < 0.55
+            ? `hsl(${350 + r() * 16},80%,${38 + r() * 16}%)`
+            : `hsl(${95 + r() * 30},45%,${18 + r() * 20}%)`),
+          e.beginPath(),
+          e.arc(r() * t, r() * n, 2 + r() * 4, 0, Math.PI * 2),
+          e.fill());
+    }),
+  Ae = () =>
+    V(64, 256, (e, t) => {
+      let n = [`#c8201c`, `#f4f1ea`, `#1f3f8a`, `#f4f1ea`];
+      for (let r = -8; r < 16; r++)
+        ((e.fillStyle = n[((r % 4) + 4) % 4]),
+          e.beginPath(),
+          e.moveTo(0, r * 32),
+          e.lineTo(t, r * 32 - 64),
+          e.lineTo(t, r * 32 - 32),
+          e.lineTo(0, r * 32 + 32),
+          e.fill());
+    });
+function je() {
+  if (y.hLogs) return;
+  let e = (e, t, n = {}) => ({
+      pat: `lap`,
+      p: { base: e, seed: t, rows: n.rows },
+      scale: n.scale ?? 1.2,
+      rough: 0.7,
+      bump: n.bump ?? 2.5,
+      grime: 0.15,
+    }),
+    t = (e, t = {}) => ({
+      pat: `paint`,
+      p: { base: e },
+      size: 128,
+      scale: 1,
+      rough: t.rough ?? 0.5,
+      metal: t.metal ?? 0,
+      emissive: t.emissive,
+    }),
+    n = (e, t, n = {}) => ({
+      pat: `stucco`,
+      p: { base: e, seed: t, blotch: n.blotch },
+      scale: n.scale ?? 2.2,
+      rough: 0.94,
+      bump: n.bump ?? 0.8,
+      grime: n.grime ?? 0.3,
+    }),
+    r = (e, t, n = {}) => ({
+      pat: `corrugated`,
+      p: { base: e, seed: t },
+      scale: n.scale ?? 0.9,
+      rough: n.rough ?? 0.5,
+      metal: n.metal ?? 0.4,
+      bump: 2.5,
+      swap: n.swap,
+    }),
+    i = (e, t, n, r = {}) => ({
+      pat: `planks`,
+      p: { base: e, n: t, seed: n },
+      scale: r.scale ?? 1.2,
+      rough: r.rough ?? 0.75,
+      bump: 1.2,
+      grime: r.grime ?? 0.2,
+    });
+  (Object.assign(y, {
+    hShingleCedar: {
+      pat: `shingle`,
+      p: { base: 9069632, seed: 101 },
+      scale: 1.1,
+      rough: 0.9,
+      bump: 2.5,
+      grime: 0.18,
+    },
+    hShingleBrown: {
+      pat: `shingle`,
+      p: { base: 5061424, seed: 102 },
+      scale: 1.4,
+      rough: 0.95,
+      bump: 3,
+    },
+    hShingleGrey: {
+      pat: `shingle`,
+      p: { base: 6118232, seed: 103 },
+      scale: 1.4,
+      rough: 0.95,
+      bump: 3,
+    },
+    hShingleRed: {
+      pat: `shingle`,
+      p: { base: 8010288, seed: 104 },
+      scale: 1.2,
+      rough: 0.95,
+      bump: 3,
+    },
+    hSlate: {
+      pat: `shingle`,
+      p: { base: 4608090, seed: 105 },
+      scale: 0.9,
+      rough: 0.7,
+      bump: 2,
+    },
+    hLapTeal: e(6261892, 106),
+    hLapWhite: e(15723747, 107),
+    hLapYellow: e(14729050, 108),
+    hLapBlue: e(7317439, 109),
+    hBattenBrown: {
+      pat: `batten`,
+      p: { base: 8874058, seed: 110 },
+      scale: 1.6,
+      rough: 0.9,
+      bump: 2.2,
+      grime: 0.3,
+    },
+    hRedwood: i(8145456, 8, 111, { scale: 1.6 }),
+    hCladDark: i(2895410, 12, 112, { scale: 2.4, rough: 0.55 }),
+    hCladCedar: i(11105354, 12, 113, { scale: 2.4 }),
+    hPine: i(11830094, 6, 114),
+    hStuccoAdobe: n(12158045, 115, {
+      blotch: 40,
+      scale: 2.6,
+      bump: 1.4,
+      grime: 0.42,
+    }),
+    hStuccoAqua: n(9228226, 116),
+    hStuccoWhite: n(15855076, 117, { blotch: 12, grime: 0.24 }),
+    hStuccoBeige: n(14075040, 118),
+    hStuccoPeach: n(15250574, 136),
+    hBrick70s: {
+      pat: `brick`,
+      p: { base: 7095857, mortar: 8747885, vary: 0.2, burnt: 0.1, seed: 119 },
+      scale: 1.2,
+      rough: 0.92,
+      bump: 1.6,
+      grime: 0.3,
+    },
+    hBrickCream: {
+      pat: `brick`,
+      p: {
+        base: 13481100,
+        mortar: 14472388,
+        vary: 0.12,
+        burnt: 0.02,
+        seed: 120,
+      },
+      scale: 1.2,
+      rough: 0.9,
+      bump: 1.4,
+      grime: 0.3,
+    },
+    hFieldstone: {
+      pat: `ashlar`,
+      p: {
+        base: 9340538,
+        rows: 5,
+        joint: 12,
+        rustic: !0,
+        jointK: 0.45,
+        seed: 121,
+      },
+      scale: 1.3,
+      rough: 0.95,
+      bump: 2.6,
+      grime: 0.3,
+    },
+    hTerraTile: r(11885107, 122, { scale: 0.45, rough: 0.8, metal: 0 }),
+    hTinRed: r(9386796, 123),
+    hTinGreen: r(4025163, 124),
+    hTinRust: r(8215108, 125, { metal: 0.3, rough: 0.7 }),
+    hStainless: r(13094096, 126, {
+      scale: 0.35,
+      rough: 0.28,
+      metal: 0.85,
+      swap: !0,
+    }),
+    hConcreteWhite: n(13881544, 127, { scale: 2.4, grime: 0.3 }),
+    hSnow: n(16054008, 128, { blotch: 6, scale: 3, bump: 0.4, grime: 0 }),
+    hChrome: t(14870250, { rough: 0.15, metal: 0.95 }),
+    hZinc: t(8160652, { rough: 0.45, metal: 0.6 }),
+    hGilt: t(13608261, { rough: 0.3, metal: 0.9 }),
+    hTrimWine: t(7218227),
+    hTrimBlue: t(2907542),
+    hTrimOlive: t(5595194),
+    hTrimRed: t(10695210),
+    hShopBlue: t(1913942, { rough: 0.35 }),
+    hEnamelGreen: t(2783822, { rough: 0.3, metal: 0.1 }),
+    hEnamelTeal: t(3115660, { rough: 0.3, metal: 0.1 }),
+    hEnamelOrange: t(14706730, { rough: 0.3, metal: 0.1 }),
+    hEnamelYellow: t(15251498, { rough: 0.3, metal: 0.1 }),
+    hEnamelRed: t(11740702, { rough: 0.3, metal: 0.1 }),
+    hRubber: t(1842204, { rough: 0.9 }),
+    hDoorBlue: i(3041960, 5, 129),
+    hDoorRed: i(9316898, 5, 130),
+    hDoorGreen: i(2968122, 5, 131),
+    hDoorOrange: i(13657642, 5, 132),
+    hShutterBlue: e(4163240, 133, { rows: 16, scale: 1, bump: 1.2 }),
+    hShutterBlack: e(2303015, 134, { rows: 16, scale: 1, bump: 1.2 }),
+    hShutterSage: e(7178858, 135, { rows: 16, scale: 1, bump: 1.2 }),
+    hNeonRed: t(16734792, { rough: 0.4, emissive: 16722458 }),
+    hNeonBlue: t(8445183, { rough: 0.4, emissive: 2799359 }),
+    hNeonPink: t(16743096, { rough: 0.4, emissive: 16727190 }),
+    hNeonYellow: t(16769146, { rough: 0.4, emissive: 16756768 }),
+    hGlobe: t(16774880, { rough: 0.3, emissive: 16767120 }),
+    hNeonGreen: t(9306024, { rough: 0.4, emissive: 2817898 }),
+    hShutterYellow: e(14264636, 137, { rows: 16, scale: 1, bump: 1.2 }),
+    hAwningBlue: {
+      pat: `stripes`,
+      p: { base: 2047866, alt: 15788760 },
+      size: 256,
+      scale: 1,
+      rough: 0.95,
+    },
+    hGlassBlock: {
+      pat: `brick`,
+      p: { base: 13623523, mortar: 10923952, vary: 0.06, burnt: 0, seed: 138 },
+      scale: 0.9,
+      rough: 0.15,
+      metal: 0.1,
+      emissive: 1976878,
+    },
+  }),
+    (y.hFishScale = { tex: be(), scale: 0.9, rough: 0.85 }),
+    (y.hLogs = { tex: xe(), scale: 1.2, rough: 0.85, grime: 0.2 }),
+    (y.hThatch = { tex: Se(), scale: 1.6, rough: 1 }),
+    (y.hBamboo = { tex: Ce(), scale: 1, rough: 0.9, grime: 0.2 }),
+    (y.hFret = { tex: we(`#f4f1ea`), rough: 0.6, cutout: !0, noShadow: !0 }),
+    (y.hLattice = { tex: Te(`#e9e4d6`), rough: 0.8, cutout: !0, noShadow: !0 }),
+    (y.hCarvedRail = {
+      tex: Ee(5913122),
+      rough: 0.8,
+      cutout: !0,
+      noShadow: !0,
+    }),
+    (y.hCarvedPine = {
+      tex: Ee(11039806),
+      rough: 0.8,
+      cutout: !0,
+      noShadow: !0,
+    }),
+    (y.hIronLace = {
+      tex: De(),
+      rough: 0.5,
+      metal: 0.4,
+      cutout: !0,
+      noShadow: !0,
+    }),
+    (y.hHeartShutter = { tex: Oe(3103290), rough: 0.7 }),
+    (y.hGeranium = { tex: ke(), scale: 0.5, rough: 0.9 }),
+    (y.hPole = { tex: Ae(), rough: 0.3 }));
+}
+function H(e, t, n) {
+  if (n >= e.H - 0.001 && e.gableCell) return e.gableCell;
+  let r = 0;
+  for (; r < e.top && e.ys[r + 1] <= n;) r++;
+  return e.grid[r][L(e, t)];
+}
+function U(e, t, n, r, i, a, o, s, c, l, u) {
+  let d = o;
+  for (let f of [...r.ys.slice(1), r.H]
+    .filter((e) => e > o + 0.001 && e < s - 0.001)
+    .concat([s]))
+    (f > d + 0.001 &&
+      e.box(t, n, H(r, (i + a) / 2, (d + f) / 2), i, a, d, f, c, l, u),
+      (d = f));
+}
+function W(e, t, n) {
+  let r = [];
+  for (let i = 0; i < e.nb; i++) {
+    let a = i === 0 ? t : Math.max(t, i * e.bw),
+      o = i === e.nb - 1 ? n : Math.min(n, (i + 1) * e.bw);
+    o - a > 0.001 && r.push([a, o, i]);
+  }
+  return r;
+}
+function Me(t, n, r, i, a, o, s, c) {
+  let l = i.trim || `trimWhite`,
+    u = i.col || `post`;
+  if (u === `craft`) {
+    let e = 0.3,
+      u = s + 0.95;
+    (t.box(i.pier || `hFieldstone`, n, r, a - e, a + e, 0, u, o - e, o + e),
+      t.box(
+        `concrete`,
+        n,
+        r,
+        a - e - 0.05,
+        a + e + 0.05,
+        u,
+        u + 0.1,
+        o - e - 0.05,
+        o + e + 0.05,
+      ),
+      t.add(
+        l,
+        R(
+          new p(0.17, 0.27, c - u - 0.1, 4)
+            .rotateY(Math.PI / 4)
+            .translate(a, (u + 0.1 + c) / 2, o),
+        ),
+        n,
+        r,
+      ),
+      t.box(l, n, r, a - 0.16, a + 0.16, c - 0.12, c, o - 0.16, o + 0.16));
+  } else if (u === `turned`) {
+    (t.box(l, n, r, a - 0.09, a + 0.09, s, s + 0.45, o - 0.09, o + 0.09),
+      t.add(
+        l,
+        new p(0.055, 0.075, c - s - 0.8, 8).translate(
+          a,
+          (s + 0.45 + c - 0.35) / 2,
+          o,
+        ),
+        n,
+        r,
+      ));
+    for (let i of [s + 0.9, c - 0.6])
+      t.add(l, new e(0.085, 8, 6).translate(a, i, o), n, r);
+    t.box(l, n, r, a - 0.09, a + 0.09, c - 0.35, c, o - 0.09, o + 0.09);
+  } else if (u === `log`)
+    t.add(
+      i.colMat || `wood`,
+      new p(0.12, 0.14, c - s, 8).translate(a, (s + c) / 2, o),
+      n,
+      r,
+    );
+  else {
+    let e = i.colW || 0.08;
+    if (
+      (t.box(i.colMat || l, n, r, a - e, a + e, s, c, o - e, o + e),
+      i.col === `timber`)
+    )
+      for (let e of [-1, 1])
+        O(
+          t,
+          i.colMat || l,
+          n,
+          r,
+          [a, c - 0.8, o],
+          [a + e * 0.7, c - 0.08, o],
+          0.1,
+        );
+  }
+}
+var G = (e) => (n, r, i) => {
+    let a = e.a0 ?? 0,
+      o = e.a1 ?? i.L,
+      s = e.d,
+      c = e.y ?? 0.45,
+      l = e.trim || `trimWhite`,
+      u = e.deck || `wood`,
+      d = e.beam ?? 0.26,
+      f = e.rise ?? 0.5,
+      m = s + (e.eave ?? 0.3),
+      h = s - (e.inset ?? 0.18),
+      g = c + (e.railH ?? 0.9),
+      _ = e.noRoof ? g + 0.12 : e.top,
+      v = e.skirt || l,
+      y = v === `hLattice`;
+    for (let [p, g, b] of W(i, a, o)) {
+      let x = i.grid[0][b];
+      if (
+        (n.box(u, r, x, p, g, c - 0.1, c, 0, s),
+        n.box(l, r, x, p, g, c - 0.16, c + 0.01, s - 0.04, s + 0.02),
+        c > 0.3)
+      ) {
+        n.box(
+          v,
+          r,
+          x,
+          p,
+          g,
+          0,
+          c - 0.16,
+          s - 0.12,
+          s - 0.1,
+          y ? { planar: (e, t) => [e / 0.6, t / 0.6] } : void 0,
+        );
+        for (let [e, t] of [
+          [p === a, p],
+          [g === o, g - 0.02],
+        ])
+          e &&
+            n.box(
+              v,
+              r,
+              x,
+              t,
+              t + 0.02,
+              0,
+              c - 0.16,
+              0,
+              s - 0.1,
+              y ? { planar: (e, t, n) => [n / 0.6, t / 0.6] } : void 0,
+            );
+      }
+      e.noRoof ||
+        (n.box(l, r, x, p, g, _, _ + d, h - 0.1, h + 0.12),
+        n.box(e.ceil || l, r, x, p, g, _ + d, _ + d + 0.03, 0, h + 0.12),
+        n.add(
+          e.roof || `shingle`,
+          new t(g - p, 0.1, Math.hypot(m, f))
+            .rotateX(Math.atan2(f, m))
+            .translate((p + g) / 2, _ + d + f / 2 + 0.05, m / 2),
+          r,
+          x,
+        ),
+        n.box(
+          e.fascia || l,
+          r,
+          x,
+          p,
+          g,
+          _ + d - 0.12,
+          _ + d + 0.1,
+          m - 0.04,
+          m + 0.01,
+        ),
+        e.fret &&
+          n.box(`hFret`, r, x, p, g, _ - 0.34, _, h + 0.04, h + 0.05, {
+            planar: (e, t) => [e / 0.7, (t - _ + 0.34) / 0.34],
+          }));
+    }
+    let b =
+      e.cols ||
+      (() => {
+        let t = Math.max(1, Math.round((o - a - 0.4) / (e.gap || 2.5)));
+        return Array.from(
+          { length: t + 1 },
+          (e, n) => a + 0.2 + (n * (o - a - 0.4)) / t,
+        );
+      })();
+    for (let t of b) {
+      let a = i.grid[0][L(i, t)];
+      if ((Me(n, r, a, e, t, h, c, _), e.brackets && !e.noRoof))
+        for (let e of [-1, 1])
+          k(
+            n,
+            l,
+            r,
+            a,
+            t + e * 0.08,
+            _ - 0.45,
+            t + e * 0.5,
+            _ - 0.02,
+            0.06,
+            h - 0.02,
+            h + 0.02,
+          );
+    }
+    if (e.rail || e.knee) {
+      let t = [...b, ...(e.railExtra || [])].sort((e, t) => e - t),
+        a = e.col === `craft` ? 0.3 : 0.1,
+        o = (e.stepW ?? 1.6) / 2 + 0.05;
+      for (let s = 0; s < t.length - 1; s++) {
+        let u = [[t[s] + a, t[s + 1] - a]];
+        for (let t of e.steps || [])
+          u = u.flatMap(([e, n]) =>
+            t + o <= e || t - o >= n
+              ? [[e, n]]
+              : [
+                  [e, t - o],
+                  [t + o, n],
+                ].filter(([e, t]) => t - e > 0.3),
+          );
+        for (let [o, s] of u) {
+          let u = i.grid[0][L(i, (o + s) / 2)];
+          if (e.knee) {
+            (n.box(e.knee, r, u, o, s, c, g - 0.08, h - 0.12, h + 0.12),
+              n.box(
+                `concrete`,
+                r,
+                u,
+                o - 0.02,
+                s + 0.02,
+                g - 0.08,
+                g,
+                h - 0.16,
+                h + 0.16,
+              ));
+            continue;
+          }
+          if (e.rail === `log`) {
+            for (let e of [c + 0.45, g - 0.06])
+              n.add(
+                `wood`,
+                new p(0.07, 0.07, s - o, 8)
+                  .rotateZ(Math.PI / 2)
+                  .translate((o + s) / 2, e, h),
+                r,
+                u,
+              );
+            continue;
+          }
+          (n.box(l, r, u, o, s, g - 0.06, g, h - 0.05, h + 0.05),
+            n.box(l, r, u, o, s, c + 0.06, c + 0.12, h - 0.04, h + 0.04));
+          for (let e = o + 0.07; e < s - 0.03; e += 0.13)
+            n.box(
+              l,
+              r,
+              u,
+              e - 0.02,
+              e + 0.02,
+              c + 0.12,
+              g - 0.06,
+              h - 0.02,
+              h + 0.02,
+            );
+          for (let e of [o, s])
+            t.some((t) => Math.abs(t + (e === o ? a : -a) - e) < 1e-6) ||
+              n.box(
+                l,
+                r,
+                u,
+                e - 0.06,
+                e + 0.06,
+                c,
+                g + 0.1,
+                h - 0.06,
+                h + 0.06,
+              );
+        }
+      }
+    }
+    for (let t of e.steps || []) {
+      let a = i.grid[0][L(i, t)],
+        o = (e.stepW ?? 1.6) / 2,
+        l = Math.max(1, Math.round(c / 0.18)),
+        d = c / l;
+      for (let i = 1; i < l; i++)
+        n.box(
+          e.stepMat || u,
+          r,
+          a,
+          t - o,
+          t + o,
+          0,
+          c - i * d,
+          s + (i - 1) * 0.28,
+          s + i * 0.28,
+        );
+    }
+  },
+  K =
+    (e, t, n = `wood`, r = 0.6) =>
+    (i, a, o) => {
+      let s = Math.tan(e);
+      for (let e = 0.15; e < o.L - 0.05; e += r)
+        O(
+          i,
+          n,
+          a,
+          o.grid[o.top][L(o, e)],
+          [e, o.H - 0.07, -0.05],
+          [e, o.H - (t - 0.08) * s - 0.07, t - 0.08],
+          0.08,
+        );
+    },
+  Ne = (e, t, n, r, i) => (a, o, s) => {
+    let c = Math.tan(e),
+      l = s.L / 2 + (i ? s.t : 0);
+    for (let e of r) {
+      let r = s.L * e,
+        i = s.H + (l - Math.abs(r - s.L / 2)) * c - 0.05,
+        u = H(s, r, i - 0.6);
+      (a.box(n, o, u, r - 0.07, r + 0.07, i - 1, i, 0, 0.1),
+        a.box(n, o, u, r - 0.06, r + 0.06, i - 0.18, i, 0, t - 0.04),
+        O(a, n, o, u, [r, i - 0.9, 0.08], [r, i - 0.18, t * 0.75], 0.08));
+    }
+  },
+  Pe = (e, t, n, r) => (i, a, o) => {
+    let s = Math.tan(e);
+    for (let e of r) {
+      let r = o.L * e,
+        c = o.H + (o.L / 2 - Math.abs(r - o.L / 2)) * s - 0.04;
+      i.box(
+        n,
+        a,
+        H(o, r, c - 0.3),
+        r - 0.1,
+        r + 0.1,
+        c - 0.26,
+        c,
+        -0.1,
+        t - 0.05,
+      );
+    }
+  },
+  Fe =
+    (e, t, n, r, i = 0.75) =>
+    (a, o, s) => {
+      let c = s.H * 0.72,
+        l = t * 0.62;
+      (U(a, n, o, s, e - t / 2, e + t / 2, 0, c, 0, i),
+        U(
+          a,
+          n,
+          o,
+          s,
+          e - t / 2 + 0.1,
+          e + t / 2 - 0.1,
+          c,
+          c + 0.3,
+          0,
+          i - 0.08,
+        ),
+        U(a, n, o, s, e - l / 2, e + l / 2, c + 0.3, r, 0.02, i - 0.12));
+      let u = H(s, e, r - 0.1);
+      (a.box(
+        `concrete`,
+        o,
+        u,
+        e - l / 2 - 0.07,
+        e + l / 2 + 0.07,
+        r,
+        r + 0.1,
+        -0.05,
+        i - 0.05,
+      ),
+        a.add(I, new p(0.1, 0.1, 0.35, 8).translate(e, r + 0.27, i / 2), o, u));
+    },
+  q =
+    (e, t, n = {}) =>
+    (r, i, a) => {
+      for (let o = 0; o <= a.top; o++)
+        for (let s = 0; s < a.nb; s++) {
+          if (e(o, s, a.nb) !== `window`) continue;
+          let c = (o === 0 && t.win0) || t.win,
+            l = ye(a, o),
+            u = (s + 0.5) * a.bw,
+            d = Math.min(c.w, a.bw - 0.5),
+            f = Math.min(c.h, l - c.sill - 0.35),
+            p = a.ys[o] + c.sill,
+            m = a.grid[o][s],
+            h = d / 2 + 0.02;
+          if (n.mat)
+            for (let e of [-1, 1]) {
+              let t = e < 0 ? u - d / 2 - 0.14 - h : u + d / 2 + 0.14;
+              r.box(n.mat, i, m, t, t + h, p, p + f, 0.01, 0.05, {
+                planar: (e, n) => [(e - t) / h, (n - p) / f],
+              });
+            }
+          n.flowers &&
+            (!n.flowerFloors || n.flowerFloors.includes(o)) &&
+            (r.box(
+              n.boxMat || `woodDark`,
+              i,
+              m,
+              u - d / 2 - 0.05,
+              u + d / 2 + 0.05,
+              p - 0.32,
+              p - 0.04,
+              0.02,
+              0.32,
+            ),
+            r.box(
+              `hGeranium`,
+              i,
+              m,
+              u - d / 2,
+              u + d / 2,
+              p - 0.04,
+              p + 0.2,
+              0.05,
+              0.3,
+            ));
+        }
+    },
+  J = (e) => (t, n, r) => {
+    let i = e.y,
+      a = e.d,
+      o = e.rail || `hCarvedRail`,
+      s = e.trim || `woodDark`,
+      c = e.deck || s,
+      l = e.rh ?? 1,
+      u = o === `hIronLace` ? 1.6 : 0.72,
+      d = (e, t) => [e / u, (t - i - 0.06) / (l - 0.06)],
+      f = (e, t, n) => [n / u, (t - i - 0.06) / (l - 0.06)];
+    for (let [u, p] of W(r, e.a0, e.a1)) {
+      let m = H(r, (u + p) / 2, i + 0.3);
+      (t.box(c, n, m, u, p, i - 0.18, i + 0.04, 0, a),
+        t.box(e.edge || s, n, m, u, p, i - 0.26, i - 0.1, a - 0.1, a + 0.02),
+        t.box(o, n, m, u, p, i + 0.04, i + l, a - 0.07, a - 0.05, {
+          planar: d,
+        }),
+        t.box(s, n, m, u, p, i + l, i + l + 0.07, a - 0.11, a - 0.01));
+      for (let [r, c] of [
+        [u === e.a0, u],
+        [p === e.a1, p - 0.04],
+      ])
+        r &&
+          (t.box(o, n, m, c + 0.01, c + 0.03, i + 0.04, i + l, 0, a - 0.07, {
+            planar: f,
+          }),
+          t.box(s, n, m, c, c + 0.04, i + l, i + l + 0.07, 0, a - 0.01));
+      e.flowers &&
+        (t.box(
+          `woodDark`,
+          n,
+          m,
+          u + 0.1,
+          p - 0.1,
+          i + l - 0.24,
+          i + l - 0.02,
+          a,
+          a + 0.24,
+        ),
+        t.box(
+          `hGeranium`,
+          n,
+          m,
+          u + 0.14,
+          p - 0.14,
+          i + l - 0.02,
+          i + l + 0.2,
+          a + 0.02,
+          a + 0.22,
+        ));
+      for (
+        let r = Math.ceil((u - e.a0 - 0.5) / 1.6) * 1.6 + e.a0 + 0.5;
+        r < p - 0.1;
+        r += 1.6
+      )
+        e.under === `console`
+          ? (t.box(
+              e.deck,
+              n,
+              m,
+              r - 0.12,
+              r + 0.12,
+              i - 0.6,
+              i - 0.18,
+              0,
+              a * 0.35,
+            ),
+            t.box(
+              e.deck,
+              n,
+              m,
+              r - 0.1,
+              r + 0.1,
+              i - 0.4,
+              i - 0.18,
+              a * 0.35,
+              a * 0.7,
+            ))
+          : O(t, s, n, m, [r, i - 1, 0.04], [r, i - 0.22, a * 0.78], 0.12);
+    }
+  },
+  Y = (e, t) => (n, r, i) => {
+    for (let a of e)
+      for (let e = 0; e < i.nb; e++) {
+        let o = (e + 0.5) * i.bw,
+          s = o - t / 2 - 0.05,
+          c = o + t / 2 + 0.05,
+          l = i.ys[a],
+          u = i.grid[a][e];
+        (n.box(`hIronLace`, r, u, s, c, l + 0.1, l + 0.95, 0.04, 0.06, {
+          planar: (e, t) => [(e - s) / 1.6, (t - l - 0.1) / 0.85],
+        }),
+          n.box(I, r, u, s - 0.03, c + 0.03, l + 0.95, l + 1, 0.01, 0.09));
+      }
+  };
+function Ie(e, t, n, r, i, a, s, c, l, d) {
+  let f = [
+      [-i, s, a],
+      [i, s, a],
+      [i, s, -a],
+      [-i, s, -a],
+    ],
+    p = [
+      [-c, d, l],
+      [c, d, l],
+      [c, d, -l],
+      [-c, d, -l],
+    ],
+    m = [],
+    h = (e, t, n, r) => m.push(e, t, n, e, n, r);
+  for (let e = 0; e < 4; e++) {
+    let t = (e + 1) % 4;
+    h(f[e], f[t], p[t], p[e]);
+  }
+  (h(p[0], p[1], p[2], p[3]), h(f[0], f[3], f[2], f[1]));
+  let g = new o();
+  (g.setAttribute(`position`, new u(m.flat(), 3)),
+    g.computeVertexNormals(),
+    e.add(r, g, t, n));
+}
+function Le(e, t, n, r, i, a, o) {
+  let s = Math.tan(i),
+    c = n.W / 2 + a,
+    l = n.D / 2 + a,
+    u = n.H - a * s,
+    d = c - l,
+    f = u + l * s;
+  if ((Ie(e, t, 0, r, c, l, u, d, 0, f), !o)) return f;
+  for (let n of [-1, 1]) {
+    (e.box(o, t, 0, -c, c, u - 0.2, u + 0.02, n * l - 0.03, n * l + 0.03),
+      e.box(o, t, 0, n * c - 0.03, n * c + 0.03, u - 0.2, u + 0.02, -l, l));
+    for (let r of [-1, 1])
+      O(e, o, t, 0, [n * c, u + 0.04, r * l], [n * d, f + 0.04, 0], 0.16);
+  }
+  return (e.box(o, t, 0, -d - 0.05, d + 0.05, f - 0.04, f + 0.1, -0.1, 0.1), f);
+}
+var X = {
+  ridge: `x`,
+  pitch: 0.02,
+  over: 0.02,
+  mat: `tarRoof`,
+  fascia: `tarRoof`,
+};
+function Z(e, n, r, a, o, s, c, l = 0.12) {
+  let u = a.ridge === `z`,
+    d = u ? r.D : r.W,
+    f = u ? r.W : r.D,
+    p = a.pitch,
+    m = a.over,
+    h = n.clone().multiply(new _().makeRotationY(u ? Math.PI / 2 : 0)),
+    g = r.H + (f / 2) * Math.tan(p),
+    v = (f / 2 + m) / Math.cos(p) - l;
+  for (let n of [1, -1]) {
+    let r = new i(0, -Math.sin(p), n * Math.cos(p)),
+      a = new i(0, Math.cos(p), n * Math.sin(p)),
+      f = new i(0, g, 0)
+        .addScaledVector(r, v / 2)
+        .addScaledVector(a, 0.14 + s + c / 2);
+    e.add(
+      o,
+      new t(d + 2 * m - 2 * l, c, v).rotateX(n * p).translate(f.x, f.y, f.z),
+      h,
+      0,
+      { swap: u },
+    );
+  }
+  let y = 0.14 + s + c;
+  e.box(
+    o,
+    h,
+    0,
+    -d / 2 - m + l,
+    d / 2 + m - l,
+    g + y * 0.3,
+    g + y / Math.cos(p) + 0.02,
+    -y * 0.8,
+    y * 0.8,
+  );
+}
+var Re =
+    (e, n = {}) =>
+    (r, i, a) => {
+      let o = Math.tan(e),
+        s = a.L,
+        l = a.H,
+        u = 0.3,
+        d = (e) => l + (s / 2 - Math.abs(e - s / 2)) * o - u * 1.6,
+        f = n.frame || `hPine`,
+        p = n.door ? s / 2 - n.door.w / 2 : 0,
+        g = n.door ? s / 2 + n.door.w / 2 : 0,
+        _ = (e, t, r) => n.door && r < n.door.h && e < g && t > p;
+      for (let e = 0; e < a.nb; e++) {
+        let t = Math.max(e * a.bw, u),
+          n = Math.min((e + 1) * a.bw, s - u);
+        _(t, n, 0)
+          ? (t < p &&
+              r.box(`glassGrey`, i, a.grid[0][e], t, p, 0.05, l, 0.01, 0.03),
+            n > g &&
+              r.box(`glassGrey`, i, a.grid[0][e], g, n, 0.05, l, 0.01, 0.03))
+          : r.box(`glassGrey`, i, a.grid[0][e], t, n, 0.05, l, 0.01, 0.03);
+      }
+      let v = new h(
+        (n.door && n.door.h > l
+          ? [
+              [u, l],
+              [p, l],
+              [p, n.door.h],
+              [g, n.door.h],
+              [g, l],
+              [s - u, l],
+              [s - u, d(s - u)],
+              [s / 2, d(s / 2)],
+              [u, d(u)],
+            ]
+          : [
+              [u, l],
+              [s - u, l],
+              [s - u, d(s - u)],
+              [s / 2, d(s / 2)],
+              [u, d(u)],
+            ]
+        ).map(([e, t]) => new c(e, t)),
+      );
+      r.add(
+        `glassGrey`,
+        new m(v, { depth: 0.02, bevelEnabled: !1 }).translate(0, 0, 0.01),
+        i,
+        a.gableCell,
+      );
+      for (
+        let e = s / 2 - Math.floor((s / 2 - u) / 1.2) * 1.2;
+        e <= s - u + 0.001;
+        e += 1.2
+      )
+        _(e - 0.05, e + 0.05, 0)
+          ? U(r, f, i, a, e - 0.05, e + 0.05, n.door.h, d(e) + 0.05, 0, 0.1)
+          : U(r, f, i, a, e - 0.05, e + 0.05, 0, d(e) + 0.05, 0, 0.1);
+      for (let e of n.rows || [2.4, 4.4, 6.2]) {
+        let t = s / 2 - (e + u * 1.6 - l) / o;
+        e < l
+          ? r.box(f, i, H(a, s / 2, e), u, s - u, e - 0.05, e + 0.05, 0, 0.1)
+          : t > 0.3 &&
+            r.box(
+              f,
+              i,
+              a.gableCell,
+              s / 2 - t,
+              s / 2 + t,
+              e - 0.05,
+              e + 0.05,
+              0,
+              0.1,
+            );
+      }
+      for (let e of [-1, 1]) {
+        let n = [s / 2 - e * (s / 2 - u), d(u)],
+          o = [s / 2, d(s / 2)];
+        r.add(
+          f,
+          new t(Math.hypot(o[0] - n[0], o[1] - n[1]), 0.14, 0.1)
+            .rotateZ(Math.atan2(o[1] - n[1], o[0] - n[0]))
+            .translate((n[0] + o[0]) / 2, (n[1] + o[1]) / 2, 0.05),
+          i,
+          a.gableCell,
+        );
+      }
+    },
+  ze = (e) => (t, n, r) => {
+    let i = r.gableCell,
+      a = r.L,
+      o = r.H,
+      s = o + (a / 2) * Math.tan(e) * 0.34;
+    (t.box(`trimCream`, n, i, 0, a, o, o + 0.24, 0, 0.07),
+      t.box(`trimCream`, n, i, a / 2 - 0.8, a / 2 + 0.8, s, s + 0.8, 0, 0.05),
+      t.box(
+        `louver`,
+        n,
+        i,
+        a / 2 - 0.68,
+        a / 2 + 0.68,
+        s + 0.1,
+        s + 0.7,
+        0.05,
+        0.07,
+      ));
+    for (let r of [a / 2 - 2.2, a / 2 + 2.2])
+      t.box(
+        `trimCream`,
+        n,
+        i,
+        r - 0.06,
+        r + 0.06,
+        o + 0.24,
+        o + (a / 2 - 2.3) * Math.tan(e),
+        0,
+        0.05,
+      );
+  };
+function Be() {
+  let e = 22 * F,
+    t = 0.8,
+    n = (e, t) => (t === 1 ? `door` : `window`);
+  return {
+    key: `hCraftsman`,
+    name: `Alder Street Bungalow`,
+    plain: 9071692,
+    desc: `Craftsman bungalow: low wide front gable, deep porch on tapered columns over fieldstone piers, cedar shingles, rafter tails, knee brackets.`,
+    W: 12,
+    D: 14,
+    style: {
+      wall: `hShingleCedar`,
+      t: 0.25,
+      bay: 4,
+      floors: [3.3],
+      win: {
+        w: 2.2,
+        h: 1.5,
+        sill: 0.9,
+        type: `grid`,
+        lites: [3, 2],
+        frame: `trimCream`,
+        casing: `trimCream`,
+        rec: 0.08,
+        curtains: 0.5,
+      },
+      door: {
+        w: 1.05,
+        h: 2.2,
+        transom: 0,
+        frame: `trimCream`,
+        glazed: !0,
+        mat: `hDoorGreen`,
+        rec: 0.12,
+      },
+      base: { mat: `hFieldstone`, h: 0.6, out: 0.05 },
+      corners: `trimCream`,
+      roof: {
+        ridge: `z`,
+        pitch: e,
+        over: t,
+        mat: `hShingleBrown`,
+        fascia: `trimCream`,
+        gutter: !0,
+      },
+    },
+    front: {
+      kinds: n,
+      extra: T(
+        G({
+          d: 2.8,
+          y: 0.5,
+          top: 2.35,
+          beam: 0.3,
+          rise: 0.4,
+          roof: `hShingleBrown`,
+          trim: `trimCream`,
+          col: `craft`,
+          cols: [0.35, 4.3, 7.7, 11.65],
+          knee: `hShingleCedar`,
+          steps: [6],
+          stepW: 1.8,
+          stepMat: `concrete`,
+        }),
+        Ne(e, t, `trimCream`, [0.1, 0.3, 0.7, 0.9]),
+        ze(e),
+      ),
+    },
+    back: { kinds: n, extra: Ne(e, t, `trimCream`, [0.1, 0.3, 0.7, 0.9]) },
+    right: {
+      kinds: (e, t) => (t === 1 ? `solid` : `window`),
+      extra: K(e, t, `trimCream`),
+    },
+    left: {
+      kinds: (e, t) => (t === 1 ? `solid` : `window`),
+      extra: T(K(e, t, `trimCream`), Fe(6.75, 1.5, `hFieldstone`, 6.4)),
+    },
+  };
+}
+var Ve = (e) => (t, n, r) => {
+    let i = r.gableCell,
+      a = r.L,
+      o = r.H,
+      s = Math.tan(e),
+      l = (a / 2) * s,
+      u = o + 0.25,
+      d = a / 2 - 0.4 / s,
+      f = new h(
+        [
+          [a / 2 - d, u],
+          [a / 2 + d, u],
+          [a / 2, o + l - 0.2],
+        ].map(([e, t]) => new c(e, t)),
+      );
+    (t.add(
+      `hFishScale`,
+      new m(f, { depth: 0.02, bevelEnabled: !1 }).translate(0, 0, 0.005),
+      n,
+      i,
+    ),
+      t.box(`trimCream`, n, i, 0, a, o, o + 0.25, 0, 0.07));
+    let p = a / 2 - 0.42,
+      g = a / 2 + 0.42,
+      _ = o + 1.4,
+      v = o + 2.6;
+    t.box(`glass`, n, i, p, g, _, v, 0.03, 0.04);
+    for (let [e, r, o, s] of [
+      [p - 0.1, p, _, v],
+      [g, g + 0.1, _, v],
+      [p - 0.1, g + 0.1, v, v + 0.12],
+      [p - 0.14, g + 0.14, _ - 0.1, _],
+      [a / 2 - 0.03, a / 2 + 0.03, _, v],
+    ])
+      t.box(`hTrimWine`, n, i, e, r, o, s, 0.02, 0.1);
+    for (let e of [-1, 1])
+      k(
+        t,
+        `hTrimWine`,
+        n,
+        i,
+        a / 2 + e * 0.52,
+        v + 0.12,
+        a / 2,
+        v + 0.55,
+        0.1,
+        0.02,
+        0.1,
+      );
+  },
+  He = (n) => (r, i, o) => {
+    let { u: s, z: c, r: l } = n,
+      u = o.H + (n.lift ?? 1),
+      d = l * Math.cos(Math.PI / 16),
+      f = (e, t, n, a, o) =>
+        r.add(e, t.translate(0, 0, a).rotateY(n).translate(s, 0, c), i, o);
+    for (let e = 0; e <= o.top; e++) {
+      let a = o.ys[e],
+        m = e === o.top ? u : o.ys[e + 1],
+        h = o.grid[e][L(o, s)];
+      (r.add(n.wall, new p(l, l, m - a, 16).translate(s, (a + m) / 2, c), i, h),
+        e === 0
+          ? r.add(
+              n.base,
+              new p(l + 0.04, l + 0.04, 0.6, 16).translate(s, 0.3, c),
+              i,
+              h,
+            )
+          : r.add(
+              n.trim,
+              new p(l + 0.05, l + 0.05, 0.24, 16).translate(s, a, c),
+              i,
+              h,
+            ));
+      for (let r of n.angles) {
+        let i = a + (e === 0 ? 0.95 : 0.8),
+          o = i + 1.75,
+          s = (i + o) / 2;
+        f(`glass`, new t(0.5, o - i, 0.02).translate(0, s, 0), r, d + 0.01, h);
+        for (let e of [-1, 1])
+          f(
+            n.trim,
+            new t(0.08, o - i + 0.1, 0.08).translate(e * 0.28, s, 0),
+            r,
+            d + 0.02,
+            h,
+          );
+        (f(
+          n.trim,
+          new t(0.64, 0.1, 0.12).translate(0, i - 0.05, 0),
+          r,
+          d + 0.03,
+          h,
+        ),
+          f(
+            n.frame,
+            new t(0.64, 0.16, 0.1).translate(0, o + 0.07, 0),
+            r,
+            d + 0.03,
+            h,
+          ),
+          f(
+            n.trim,
+            new t(0.5, 0.05, 0.05).translate(0, i + (o - i) * 0.55, 0),
+            r,
+            d + 0.02,
+            h,
+          ));
+      }
+    }
+    let m = o.grid[o.top][L(o, s)],
+      h = n.capH ?? 4.2;
+    (r.add(
+      n.trim,
+      new p(l + 0.3, l + 0.3, 0.16, 16).translate(s, u + 0.08, c),
+      i,
+      m,
+    ),
+      r.add(
+        n.cap,
+        new a(l + 0.32, h, 16).translate(s, u + 0.16 + h / 2, c),
+        i,
+        m,
+      ),
+      r.add(I, new p(0.03, 0.06, 1.1, 6).translate(s, u + h + 0.6, c), i, m),
+      r.add(`brass`, new e(0.1, 8, 6).translate(s, u + h + 0.4, c), i, m));
+  };
+function Ue() {
+  let e = 50 * F,
+    t = (22.5 * Math.PI) / 180,
+    n = {
+      d: 2.4,
+      y: 0.6,
+      top: 2.8,
+      beam: 0.25,
+      rise: 0.5,
+      roof: `hShingleRed`,
+      trim: `trimCream`,
+      col: `turned`,
+      rail: !0,
+      fret: !0,
+      brackets: !0,
+      skirt: `hLattice`,
+    };
+  return {
+    key: `hQueenAnne`,
+    name: `Holloway House`,
+    plain: 7310468,
+    desc: `Queen Anne Victorian: teal clapboard with wine and cream trim, fish-scale gable, corner turret with a witch’s-hat roof, wraparound spindle porch.`,
+    W: 11,
+    D: 12,
+    style: {
+      wall: `hLapTeal`,
+      t: 0.22,
+      bay: 2.75,
+      floors: [3.4, 3.2],
+      win: {
+        w: 0.95,
+        h: 2,
+        sill: 0.8,
+        type: `sash`,
+        lites: [1, 1],
+        frame: `trimCream`,
+        casing: `hTrimWine`,
+        rec: 0.08,
+        curtains: 0.6,
+      },
+      door: {
+        w: 1.1,
+        h: 2.3,
+        transom: 0.45,
+        frame: `trimCream`,
+        glazed: !0,
+        mat: `hDoorRed`,
+        rec: 0.12,
+      },
+      base: { mat: `brickRed`, h: 0.6, out: 0.03 },
+      belt: { mat: `trimCream`, h: 0.25, out: 0.05 },
+      corners: `hTrimWine`,
+      eaveTrim: `trimCream`,
+      roof: {
+        ridge: `z`,
+        pitch: e,
+        over: 0.4,
+        mat: `hShingleRed`,
+        fascia: `trimCream`,
+      },
+    },
+    front: {
+      kinds: (e, t) =>
+        t === 0 ? `solid` : e === 0 && t === 2 ? `door` : `window`,
+      extra: T(
+        G({
+          ...n,
+          a0: 2.3,
+          a1: 11,
+          cols: [2.5, 5.6, 8.3, 10.8],
+          steps: [6.875],
+          railExtra: [13.4 - 0.2],
+        }),
+        Ve(e),
+        He({
+          u: 0.4,
+          z: 0.4,
+          r: 1.6,
+          wall: `hLapTeal`,
+          trim: `trimCream`,
+          frame: `hTrimWine`,
+          base: `brickRed`,
+          cap: `hShingleRed`,
+          capH: 4.4,
+          angles: [-5.5, -3.5, -1.5, 0.5, 2.5].map(
+            (e) => (e + 0.5) * t - t / 2,
+          ),
+        }),
+      ),
+    },
+    right: {
+      kinds: () => `window`,
+      extra: G({ ...n, a0: -2.62, a1: 5.8, cols: [-2.42, 1, 3.4, 5.6] }),
+    },
+    left: { kinds: (e, t, n) => (t === n - 1 ? `solid` : `window`) },
+    back: { kinds: (e, t) => (e === 0 && t === 1 ? `door` : `window`) },
+    extra: (e, t, n) =>
+      N(e, t, `brickRed`, -2.4, -3.5, n.H - 0.5, n.roofTop + 0.8, 0.8, 0.6),
+  };
+}
+function We(t, n, r) {
+  for (let e of [4, 5])
+    t.box(
+      `brickTan`,
+      n,
+      r.grid[0][e],
+      e * r.bw,
+      (e + 1) * r.bw + (e === 5 ? 0.12 : 0),
+      0,
+      r.H,
+      0,
+      0.12,
+    );
+  let i = 0.3,
+    a = 9.3;
+  for (let [e, o, s] of W(r, i, a)) {
+    let c = r.grid[0][s];
+    (t.box(`brickTan`, n, c, e, o, 0, 0.62, 0.95, 1.25),
+      t.box(
+        `concrete`,
+        n,
+        c,
+        e - (e === i ? 0.03 : 0),
+        o + (o === a ? 0.03 : 0),
+        0.62,
+        0.68,
+        0.92,
+        1.28,
+      ),
+      t.box(`hGeranium`, n, c, e, o, 0.1, 0.62, 0.02, 0.95));
+  }
+  for (let e of [i, 9])
+    t.box(`brickTan`, n, r.grid[0][L(r, e)], e, e + 0.3, 0, 0.62, 0, 0.95);
+  let o = r.grid[0][3];
+  (t.box(`glassGrey`, n, o, 11.25, 11.6, 0.15, 2.2, 0.01, 0.03),
+    t.box(`aluminum`, n, o, 11.2, 11.65, 0.1, 2.25, -0.01, 0.02),
+    t.add(`bulb`, new e(0.14, 10, 8).translate(9.6, 2.1, 0.22), n, o),
+    t.box(`aluminum`, n, o, 9.57, 9.63, 2.1, 2.14, 0, 0.2));
+}
+function Ge(e, t, n) {
+  let r = 5.8,
+    i = 2.6;
+  for (let [a, o, s] of W(n, -0.45, n.L + 0.45)) {
+    let c = n.grid[0][s];
+    (e.box(`trimWhite`, t, c, a, o, i, 2.74, 0, r),
+      e.box(`trimWhite`, t, c, a, o, 2.48, 2.8200000000000003, 5.74, r),
+      e.box(`concrete`, t, c, a, o, 0, 0.05, 0, r));
+  }
+  for (let [i, a] of [
+    [-0.45, 0.06],
+    [n.L + 0.39, 0.06],
+  ])
+    e.box(
+      `trimWhite`,
+      t,
+      n.grid[0][L(n, i)],
+      i,
+      i + a,
+      2.48,
+      2.8200000000000003,
+      0,
+      r,
+    );
+  for (let r of [-0.2, n.L / 2, n.L + 0.2])
+    e.box(I, t, n.grid[0][L(n, r)], r - 0.05, r + 0.05, 0.05, i, 5.45, 5.55);
+}
+function Ke() {
+  return {
+    key: `hRanch`,
+    name: `Sunset Ranch House`,
+    plain: 9067072,
+    desc: `Mid-century ranch: long low roof with deep eaves, floor-to-ceiling picture window, roman-brick wall and planter, carport on thin steel posts.`,
+    W: 18,
+    D: 10,
+    style: {
+      wall: `hRedwood`,
+      t: 0.25,
+      bay: 3,
+      floors: [3],
+      win: {
+        w: 1.9,
+        h: 1,
+        sill: 1.3,
+        type: `grid`,
+        lites: [2, 1],
+        frame: `aluminum`,
+        rec: 0.06,
+        curtains: 0.6,
+      },
+      curtain: {
+        glass: `glassGrey`,
+        spandrel: `hRedwood`,
+        mullion: `aluminum`,
+        module: 1.5,
+        sill: 0.35,
+        head: 0.35,
+        fin: 0.03,
+      },
+      door: {
+        w: 1,
+        h: 2.2,
+        transom: 0,
+        frame: `aluminum`,
+        mat: `hDoorOrange`,
+        rec: 0.15,
+      },
+      base: { mat: `concrete`, h: 0.25, out: 0.02 },
+      roof: {
+        ridge: `x`,
+        pitch: 12 * F,
+        over: 1.4,
+        mat: `hShingleGrey`,
+        fascia: `trimWhite`,
+        gutter: !0,
+      },
+    },
+    front: {
+      kinds: (e, t) =>
+        [`window`, `curtain`, `curtain`, `door`, `solid`, `solid`][t],
+      extra: We,
+    },
+    right: {
+      kinds: (e, t) => (t === 0 ? `window` : t === 1 ? `door` : `solid`),
+      extra: Ge,
+    },
+    left: { kinds: () => `window` },
+    back: {
+      kinds: (e, t) => (t === 2 ? `door` : t === 4 ? `curtain` : `window`),
+    },
+    extra: (e, t, n) =>
+      N(e, t, `brickTan`, 2.5, -1.2, n.H - 0.5, n.roofTop + 0.9, 1.6, 0.8),
+  };
+}
+function qe(t, n, r) {
+  U(t, `brickRed`, n, r, r.L / 2 - 0.12, r.L / 2 + 0.12, 0, r.H, 0, 0.1);
+  for (let [i, a] of [
+    [4.05, 2],
+    [7.95, 3],
+  ]) {
+    let o = r.grid[0][a];
+    (t.box(I, n, o, i - 0.1, i + 0.1, 1.9, 2.3, 0, 0.12),
+      t.add(`bulb`, new e(0.1, 10, 8).translate(i, 2.1, 0.2), n, o),
+      t.box(
+        I,
+        n,
+        o,
+        i - 0.18 + (a === 2 ? -0.35 : 0.35),
+        i + 0.18 + (a === 2 ? -0.35 : 0.35),
+        1.2,
+        1.5,
+        0,
+        0.14,
+      ));
+  }
+}
+function Je(e, n, r) {
+  let i = Math.tan(35 * F),
+    a = r.H,
+    o = r.roofTop,
+    s = a - 0.4 * i + 0.55,
+    l = r.D / 2,
+    u = new h(
+      [
+        [-l, a - 0.6],
+        [l, a - 0.6],
+        [l + 0.4, s],
+        [0, o + 0.7],
+        [-l - 0.4, s],
+      ].map(([e, t]) => new c(e, t)),
+    );
+  e.add(
+    `brickRed`,
+    new m(u, { depth: 0.4, bevelEnabled: !1 })
+      .rotateY(-Math.PI / 2)
+      .translate(0.2, 0, 0),
+    n,
+    0,
+  );
+  let d = l + 0.4,
+    f = o + 0.7 - s,
+    p = Math.hypot(d, f),
+    g = Math.atan2(f, d);
+  for (let r of [1, -1])
+    e.add(
+      `stone`,
+      new t(0.52, 0.1, p + 0.1)
+        .rotateX(r * g)
+        .translate(0, (s + o + 0.7) / 2 + 0.05, (r * d) / 2),
+      n,
+      0,
+    );
+  N(e, n, `brickRed`, 0, -1.4, a, o + 1.3, 1.4, 0.7);
+}
+function Ye() {
+  return {
+    key: `hDuplex`,
+    name: `Maple Court Duplex`,
+    plain: 9325112,
+    desc: `Red-brick side-by-side double house: mirrored front doors under white hoods, stone lintels, party-wall firebreak and shared chimney.`,
+    W: 12,
+    D: 10,
+    style: {
+      wall: `brickRed`,
+      t: 0.3,
+      bay: 2,
+      floors: [3.2, 3],
+      win: {
+        w: 1,
+        h: 1.7,
+        sill: 0.8,
+        type: `sash`,
+        lites: [2, 2],
+        frame: `trimWhite`,
+        header: `stone`,
+        headerH: 0.2,
+        sillMat: `stone`,
+        rec: 0.12,
+        curtains: 0.6,
+      },
+      door: {
+        w: 1,
+        h: 2.2,
+        transom: 0.35,
+        frame: `trimWhite`,
+        mat: `hDoorGreen`,
+        hood: `trimWhite`,
+        rec: 0.2,
+      },
+      base: { mat: `concrete`, h: 0.4, out: 0.03 },
+      belt: { mat: `stone`, h: 0.18, out: 0.05 },
+      roof: {
+        ridge: `x`,
+        pitch: 35 * F,
+        over: 0.4,
+        mat: `shingle`,
+        fascia: `trimWhite`,
+        gutter: !0,
+      },
+    },
+    front: {
+      kinds: (e, t) => (e === 0 && (t === 2 || t === 3) ? `door` : `window`),
+      extra: qe,
+    },
+    back: {
+      kinds: (e, t) => (e === 0 && (t === 1 || t === 4) ? `door` : `window`),
+    },
+    right: { kinds: (e, t) => (t === 1 ? `solid` : `window`) },
+    left: { kinds: (e, t) => (t === 1 ? `solid` : `window`) },
+    extra: Je,
+  };
+}
+function Xe(e, t, n) {
+  let r = n.L / 2;
+  (U(e, `hPine`, t, n, r - 1, r - 0.9, 0, 2.35, 0, 0.12),
+    U(e, `hPine`, t, n, r + 0.9, r + 1, 0, 2.35, 0, 0.12),
+    U(e, `hPine`, t, n, r - 1, r + 1, 2.3, 2.42, 0, 0.12),
+    G({
+      noRoof: !0,
+      a0: -1,
+      a1: n.L + 1,
+      d: 3,
+      y: 0.35,
+      trim: `hPine`,
+      deck: `wood`,
+      col: `post`,
+      colW: 0.07,
+      rail: !0,
+      steps: [r],
+      stepW: 1.4,
+      gap: 2.2,
+    })(e, t, n));
+}
+function Ze() {
+  let e = 60 * F;
+  return {
+    key: `hAframe`,
+    name: `Cedar Hollow A-Frame`,
+    plain: 7035464,
+    desc: `A-frame cabin: 60° shingle roof sweeping almost to the ground, fully glazed pine-framed gable, deck with railings and a stovepipe.`,
+    W: 9,
+    D: 10,
+    style: {
+      wall: `hPine`,
+      t: 0.2,
+      bay: 3,
+      floors: [1],
+      roof: {
+        ridge: `z`,
+        pitch: e,
+        over: 0.45,
+        mat: `hShingleBrown`,
+        fascia: `hPine`,
+      },
+    },
+    front: {
+      kinds: () => `solid`,
+      gableDoor: { w: 1.8, h: 2.3 },
+      extra: T(Re(e, { rows: [2.6, 4.6, 6.3], door: { w: 1.8, h: 2.3 } }), Xe),
+    },
+    back: {
+      kinds: () => `solid`,
+      gableDoor: { w: 1.6, h: 2.3 },
+      extra: (e, t, n) => {
+        let r = n.gableCell,
+          i = n.L / 2,
+          a = n.H + 2.3,
+          o = a + 1.1;
+        e.box(`glassGrey`, t, r, i - 0.6, i + 0.6, a, o, 0.01, 0.03);
+        for (let [n, s, c, l] of [
+          [i - 0.7, i - 0.6, a, o],
+          [i + 0.6, i + 0.7, a, o],
+          [i - 0.7, i + 0.7, a - 0.1, a],
+          [i - 0.7, i + 0.7, o, o + 0.1],
+          [i - 0.03, i + 0.03, a, o],
+        ])
+          e.box(`hPine`, t, r, n, s, c, l, 0, 0.1);
+      },
+    },
+    right: { kinds: () => `solid` },
+    left: { kinds: () => `solid` },
+    extra: (e, t, n) => {
+      (e.add(`hZinc`, new p(0.12, 0.12, 2.6, 10).translate(2, 6.3, -1.5), t, 0),
+        e.add(`hZinc`, new a(0.26, 0.3, 10).translate(2, 7.75, -1.5), t, 0));
+    },
+  };
+}
+var Qe = (e) => (n, r, i) => {
+  let a = i.L / 2,
+    o = i.H,
+    s = e.hw,
+    l = e.gh,
+    u = e.depth,
+    d = i.grid[i.top][L(i, a)],
+    f = 0.3,
+    p = Math.atan2(l, s),
+    g = new h(
+      [
+        [a - s, o],
+        [a + s, o],
+        [a, o + l],
+      ].map(([e, t]) => new c(e, t)),
+    );
+  n.add(
+    e.wall,
+    new m(g, { depth: u, bevelEnabled: !1 }).translate(0, 0, -u),
+    r,
+    d,
+  );
+  for (let i of [-1, 1]) {
+    let c = [a + i * (s + f), o - f * Math.tan(p)],
+      m = [a, o + l],
+      h = Math.hypot(m[0] - c[0], m[1] - c[1]) + 0.08,
+      g = Math.atan2(m[1] - c[1], m[0] - c[0]),
+      _ = [-Math.sin(g), Math.cos(g)],
+      v = [(c[0] + m[0]) / 2, (c[1] + m[1]) / 2],
+      y = i < 0 ? _ : [-_[0], -_[1]];
+    (n.add(
+      e.roof,
+      new t(h, 0.1, u + 0.35)
+        .rotateZ(g)
+        .translate(v[0] + y[0] * 0.06, v[1] + y[1] * 0.06, (0.35 - u) / 2),
+      r,
+      d,
+    ),
+      n.add(
+        e.trim,
+        new t(h, 0.24, 0.06)
+          .rotateZ(g)
+          .translate(v[0] - y[0] * 0.05, v[1] - y[1] * 0.05, 0.36),
+        r,
+        d,
+      ));
+  }
+  let _ = o + 0.35,
+    v = o + 1.35;
+  n.box(`glass`, r, d, a - 0.34, a + 0.34, _, v, 0.01, 0.02);
+  for (let [t, i, o, s] of [
+    [a - 0.44, a - 0.34, _, v],
+    [a + 0.34, a + 0.44, _, v],
+    [a - 0.5, a + 0.5, _ - 0.1, _],
+    [a - 0.03, a + 0.03, _, v],
+    [a - 0.34, a + 0.34, v - 0.03, v + 0.03],
+  ])
+    n.box(e.trim, r, d, t, i, o, s, 0, 0.07);
+  for (let t of [-1, 1])
+    k(n, e.trim, r, d, a + t * 0.44, v, a, v + 0.5, 0.1, 0, 0.07);
+};
+function $e() {
+  return {
+    key: `hFarmhouse`,
+    name: `Lindqvist Farmhouse`,
+    plain: 14473420,
+    desc: `White clapboard farmhouse: full-width porch, green standing-seam roof with a gothic centre gable, black shutters, twin brick chimneys.`,
+    W: 12,
+    D: 9,
+    style: {
+      wall: `hLapWhite`,
+      t: 0.22,
+      bay: 2.4,
+      floors: [3.2, 3],
+      win: {
+        w: 0.9,
+        h: 1.8,
+        sill: 0.75,
+        type: `sash`,
+        lites: [3, 2],
+        frame: `trimWhite`,
+        casing: `trimWhite`,
+        shutter: `hShutterBlack`,
+        rec: 0.08,
+        curtains: 0.5,
+      },
+      door: {
+        w: 1,
+        h: 2.2,
+        transom: 0.35,
+        frame: `trimWhite`,
+        glazed: !0,
+        mat: `hDoorRed`,
+        rec: 0.12,
+      },
+      base: { mat: `hFieldstone`, h: 0.5, out: 0.04 },
+      corners: `trimWhite`,
+      eaveTrim: `trimWhite`,
+      roof: {
+        ridge: `x`,
+        pitch: 40 * F,
+        over: 0.45,
+        mat: `hTinGreen`,
+        fascia: `trimWhite`,
+        gutter: !0,
+      },
+    },
+    front: {
+      kinds: (e, t) => (e === 0 && t === 2 ? `door` : `window`),
+      extra: T(
+        G({
+          d: 2.4,
+          y: 0.5,
+          top: 2.7,
+          beam: 0.25,
+          rise: 0.55,
+          roof: `hTinGreen`,
+          trim: `trimWhite`,
+          col: `post`,
+          colW: 0.09,
+          rail: !0,
+          steps: [6],
+          gap: 2.35,
+          skirt: `hLattice`,
+        }),
+        Qe({
+          hw: 1.5,
+          gh: 2.2,
+          depth: 2.8,
+          wall: `hLapWhite`,
+          roof: `hTinGreen`,
+          trim: `trimWhite`,
+        }),
+      ),
+    },
+    back: { kinds: (e, t) => (e === 0 && t === 2 ? `door` : `window`) },
+    right: { kinds: (e, t) => (e === 0 && t === 1 ? `solid` : `window`) },
+    left: { kinds: () => `window` },
+    extra: (e, t, n) => {
+      for (let r of [-4.2, 4.2])
+        N(e, t, `brickRed`, r, 0, n.H - 0.5, n.roofTop + 0.9, 0.9, 0.6);
+    },
+  };
+}
+function et(e, t, n) {
+  let i = n.gableCell,
+    a = n.L,
+    o = n.H,
+    s = a / 2,
+    c = Math.tan(38 * F),
+    l = s * c,
+    u = o + 0.25;
+  (e.box(`trimWhite`, t, i, 0, a, o, o + 0.22, 0, 0.07),
+    e.add(
+      `trimWhite`,
+      new r(0.28, 12, 0, Math.PI).translate(s, u, 0.04),
+      t,
+      i,
+    ));
+  for (let n = 1; n < 8; n++) {
+    let r = (n / 8) * Math.PI;
+    O(
+      e,
+      `trimWhite`,
+      t,
+      i,
+      [s + Math.cos(r) * 0.3, u + Math.sin(r) * 0.3, 0.04],
+      [s + Math.cos(r) * 1, u + Math.sin(r) * 1, 0.04],
+      0.06,
+    );
+  }
+  let d = o + l * 0.66,
+    f = (l * 0.34 - 0.14) / c;
+  (e.box(
+    `trimWhite`,
+    t,
+    i,
+    s - 0.05,
+    s + 0.05,
+    d - 0.3,
+    o + l - 0.1,
+    0.02,
+    0.09,
+  ),
+    e.box(`trimWhite`, t, i, s - f, s + f, d - 0.06, d + 0.06, 0.02, 0.09),
+    e.box(
+      `hFret`,
+      t,
+      i,
+      s - f + 0.12,
+      s + f - 0.12,
+      d - 0.36,
+      d - 0.06,
+      0.05,
+      0.06,
+      { planar: (e, t) => [e / 0.62, (t - d + 0.36) / 0.3] },
+    ));
+  for (let [r, i] of [
+    [0.12, 1],
+    [a - 0.12, -1],
+  ]) {
+    let a = n.grid[n.top][L(n, r)];
+    (k(
+      e,
+      `trimWhite`,
+      t,
+      a,
+      r,
+      o - 0.75,
+      r + i * 0.55,
+      o - 0.02,
+      0.07,
+      0.02,
+      0.08,
+    ),
+      e.box(`trimWhite`, t, a, r - 0.05, r + 0.05, o - 0.85, o, 0.02, 0.08));
+  }
+}
+function tt() {
+  return {
+    key: `hShotgun`,
+    name: `Magnolia Shotgun House`,
+    plain: 14204010,
+    desc: `Southern shotgun house: one room wide and deep, front gable with a sunburst and gingerbread, raised spindle porch, tall shuttered windows.`,
+    W: 5.6,
+    D: 16,
+    style: {
+      wall: `hLapYellow`,
+      floorMat: [`brickRed`],
+      t: 0.2,
+      bay: 2.8,
+      floors: [0.7, 3.4],
+      win: {
+        w: 1,
+        h: 2.5,
+        sill: 0.2,
+        type: `sash`,
+        lites: [2, 2],
+        frame: `trimWhite`,
+        casing: `trimWhite`,
+        shutter: `shutterGreen`,
+        rec: 0.08,
+        curtains: 0.5,
+      },
+      door: {
+        w: 0.95,
+        h: 2.4,
+        transom: 0.4,
+        frame: `trimWhite`,
+        glazed: !0,
+        mat: `hDoorGreen`,
+        rec: 0.12,
+      },
+      corners: `trimWhite`,
+      eaveTrim: `trimWhite`,
+      roof: {
+        ridge: `z`,
+        pitch: 38 * F,
+        over: 0.35,
+        mat: `corrugated`,
+        fascia: `trimWhite`,
+      },
+    },
+    front: {
+      kinds: (e, t) => (e === 0 ? `solid` : t === 1 ? `door` : `window`),
+      extra: T(
+        G({
+          d: 2,
+          y: 0.7,
+          top: 3.3,
+          beam: 0.22,
+          rise: 0.3,
+          roof: `corrugated`,
+          trim: `trimWhite`,
+          col: `turned`,
+          cols: [0.2, 3.3, 5.4],
+          rail: !0,
+          fret: !0,
+          brackets: !0,
+          skirt: `hLattice`,
+          steps: [4.2],
+          stepW: 1.2,
+        }),
+        et,
+      ),
+    },
+    back: {
+      kinds: (e, t) => (e === 0 ? `solid` : t === 0 ? `door` : `window`),
+    },
+    right: { kinds: (e, t) => (e === 0 || t % 2 ? `solid` : `window`) },
+    left: { kinds: (e) => (e === 0 ? `solid` : `window`) },
+    extra: (e, t, n) =>
+      N(e, t, `brickRed`, 0, 1.5, n.H - 0.5, n.roofTop + 0.8, 0.8, 0.6),
+  };
+}
+function nt(e, t, n) {
+  let r = n.gableCell,
+    i = n.L / 2,
+    a = n.H + 0.34,
+    o = a + 1.8;
+  e.box(`glass`, t, r, i - 0.55, i + 0.55, a, o, 0.01, 0.02);
+  for (let [n, s, c, l] of [
+    [i - 0.65, i - 0.55, a, o],
+    [i + 0.55, i + 0.65, a, o],
+    [i - 0.65, i + 0.65, o, o + 0.12],
+    [i - 0.04, i + 0.04, a, o],
+    [i - 0.55, i + 0.55, a + 1.1, a + 1.16],
+  ])
+    e.box(`trimWhite`, t, r, n, s, c, l, 0, 0.06);
+  for (let a of [-1, 1]) {
+    let o = i + a * 2.1,
+      s = n.H + 0.8,
+      c = s + 0.8;
+    e.box(`glass`, t, r, o - 0.35, o + 0.35, s, c, 0.01, 0.02);
+    for (let [n, i, a, l] of [
+      [o - 0.43, o - 0.35, s, c],
+      [o + 0.35, o + 0.43, s, c],
+      [o - 0.43, o + 0.43, c, c + 0.08],
+      [o - 0.43, o + 0.43, s - 0.08, s],
+      [o - 0.03, o + 0.03, s, c],
+    ])
+      e.box(`trimWhite`, t, r, n, i, a, l, 0, 0.06);
+  }
+}
+function rt() {
+  let e = 24 * F,
+    t = 1.5,
+    n = {
+      ridge: `z`,
+      pitch: e,
+      over: t,
+      mat: `hShingleBrown`,
+      fascia: `woodDark`,
+    },
+    r = {
+      win0: {
+        w: 1,
+        h: 1.3,
+        sill: 0.95,
+        type: `grid`,
+        lites: [2, 3],
+        frame: `trimWhite`,
+        rec: 0.2,
+        curtains: 0.7,
+      },
+      win: {
+        w: 1.1,
+        h: 2.2,
+        sill: 0.05,
+        type: `grid`,
+        lites: [2, 4],
+        frame: `trimWhite`,
+        rec: 0.15,
+        curtains: 0.6,
+      },
+    },
+    i = (e, t) => (e === 0 && t === 2 ? `door` : `window`),
+    a = (e, t) => (t === 1 && e === 0 ? `solid` : `window`),
+    o = Pe(e, t, `woodDark`, [0.02, 0.26, 0.5, 0.74, 0.98]);
+  return {
+    key: `hChalet`,
+    name: `Chalet Edelweiss`,
+    plain: 5916214,
+    desc: `Alpine chalet: white rendered ground floor, dark timber upper storey with a carved balcony and geraniums, heart-cut shutters, wide snowy gable.`,
+    W: 14,
+    D: 11,
+    style: {
+      wall: `woodDark`,
+      floorMat: [`hStuccoWhite`],
+      t: 0.3,
+      bay: 2.8,
+      floors: [3.2, 3],
+      ...r,
+      door: {
+        w: 1.2,
+        h: 2.3,
+        transom: 0,
+        frame: `woodDark`,
+        mat: `woodDark`,
+        rec: 0.25,
+        hood: `woodDark`,
+      },
+      base: { mat: `hFieldstone`, h: 0.8, out: 0.05 },
+      belt: { mat: `woodDark`, h: 0.3, out: 0.06 },
+      roof: n,
+    },
+    front: {
+      kinds: i,
+      extra: T(
+        q(i, r, { mat: `hHeartShutter`, flowers: !0, flowerFloors: [0] }),
+        J({
+          y: 3.2,
+          a0: -0.4,
+          a1: 14.4,
+          d: 1.4,
+          rail: `hCarvedPine`,
+          flowers: !0,
+        }),
+        J({ y: 6.55, a0: 4.3, a1: 9.7, d: 1, rail: `hCarvedPine` }),
+        o,
+        nt,
+      ),
+    },
+    back: { kinds: i, extra: T(q(i, r, { mat: `hHeartShutter` }), o) },
+    right: {
+      kinds: a,
+      extra: T(
+        q(a, r, { mat: `hHeartShutter`, flowers: !0, flowerFloors: [0] }),
+        K(e, t, `woodDark`, 0.9),
+      ),
+    },
+    left: {
+      kinds: a,
+      extra: T(q(a, r, { mat: `hHeartShutter` }), K(e, t, `woodDark`, 0.9)),
+    },
+    extra: (e, t, r) => {
+      (Z(e, t, r, n, `hSnow`, 0, 0.16),
+        N(e, t, `hFieldstone`, 2.5, -2, r.H, r.roofTop + 0.6, 0.9, 0.9));
+    },
+  };
+}
+function it(e, t, n) {
+  for (let [r, i] of [
+    [0.17, -1],
+    [n.L - 0.17, 1],
+  ])
+    for (let a = 0.2, o = 0; a < n.H - 0.1; a += 0.3, o++) {
+      let s = H(n, r, a);
+      o % 2
+        ? e.add(
+            `wood`,
+            new p(0.15, 0.15, 0.75, 8)
+              .rotateX(Math.PI / 2)
+              .translate(r, a, 0.05),
+            t,
+            s,
+          )
+        : e.add(
+            `wood`,
+            new p(0.15, 0.15, 0.75, 8)
+              .rotateZ(Math.PI / 2)
+              .translate(r + i * 0.3, a, -0.17),
+            t,
+            s,
+          );
+    }
+}
+function at(e, t, n) {
+  let r = n.grid[0][0];
+  for (let n = 0; n < 12; n++)
+    for (let i = 0; i < 5; i++) {
+      let a = 1 + n * 0.22 + (i % 2) * 0.11,
+        o = 0.12 + i * 0.2;
+      a < 3.6 &&
+        e.add(
+          `wood`,
+          new p(0.1, 0.1, 0.45, 6).rotateX(Math.PI / 2).translate(a, o, 0.35),
+          t,
+          r,
+        );
+    }
+  (e.add(`wood`, new p(0.28, 0.3, 0.5, 10).translate(4.4, 0.25, 0.9), t, r),
+    O(e, `wood`, t, r, [4.4, 0.52, 0.9], [4.75, 1.05, 1.05], 0.05),
+    e.box(I, t, r, 4.33, 4.47, 0.46, 0.62, 0.84, 0.97));
+}
+function ot() {
+  let e = {
+    ridge: `z`,
+    pitch: 36 * F,
+    over: 0.6,
+    mat: `hShingleBrown`,
+    fascia: `woodDark`,
+  };
+  return {
+    key: `hLogCabin`,
+    name: `Trapper’s Log Cabin`,
+    plain: 7227948,
+    desc: `Snowbound log cabin: round-log walls with crossed corner notches, fieldstone chimney, small log porch, woodpile under the eaves.`,
+    W: 8.5,
+    D: 9,
+    style: {
+      wall: `hLogs`,
+      t: 0.35,
+      bay: 2.83,
+      floors: [2.9],
+      win: {
+        w: 1,
+        h: 1.1,
+        sill: 0.95,
+        type: `grid`,
+        lites: [2, 2],
+        frame: `woodDark`,
+        rec: 0.2,
+        curtains: 0.7,
+      },
+      door: {
+        w: 1,
+        h: 2.1,
+        transom: 0,
+        frame: `woodDark`,
+        mat: `woodDoor`,
+        rec: 0.25,
+      },
+      base: { mat: `hFieldstone`, h: 0.35, out: 0.04 },
+      roof: e,
+    },
+    front: {
+      kinds: (e, t) => (t === 1 ? `door` : `window`),
+      extra: T(
+        G({
+          d: 2,
+          y: 0.35,
+          top: 2.2,
+          beam: 0.2,
+          rise: 0.35,
+          roof: `hShingleBrown`,
+          trim: `wood`,
+          deck: `wood`,
+          col: `log`,
+          cols: [0.3, 3.3, 5.2, 8.2],
+          rail: `log`,
+          steps: [4.25],
+          stepW: 1.2,
+        }),
+        it,
+      ),
+    },
+    back: { kinds: (e, t) => (t === 1 ? `solid` : `window`), extra: it },
+    right: {
+      kinds: (e, t) => (t === 1 ? `solid` : `window`),
+      extra: Fe(4.15, 1.5, `hFieldstone`, 6.9),
+    },
+    left: { kinds: (e, t) => (t === 0 ? `solid` : `window`), extra: at },
+    extra: (t, n, r) => Z(t, n, r, e, `hSnow`, 0, 0.2),
+  };
+}
+function st() {
+  return {
+    key: `hCaribbean`,
+    name: `Coral Bay Cottage`,
+    plain: 9228226,
+    desc: `Caribbean cottage: aqua stucco on a white plinth, red tin hip roof, louvred blue shutters, raised verandah with white fretwork and steps.`,
+    W: 10,
+    D: 9,
+    style: {
+      wall: `hStuccoAqua`,
+      floorMat: [`hStuccoWhite`],
+      t: 0.25,
+      bay: 2.5,
+      floors: [0.9, 3.1],
+      win: {
+        w: 1,
+        h: 1.9,
+        sill: 0.35,
+        type: `sash`,
+        lites: [2, 2],
+        frame: `trimWhite`,
+        shutter: `hShutterBlue`,
+        rec: 0.1,
+        curtains: 0.5,
+      },
+      door: {
+        w: 1.1,
+        h: 2.1,
+        transom: 0.2,
+        frame: `trimWhite`,
+        mat: `hDoorBlue`,
+        rec: 0.12,
+      },
+      corners: `trimWhite`,
+      eaveTrim: `trimWhite`,
+      roof: X,
+    },
+    front: {
+      kinds: (e, t) => (e === 0 ? `solid` : t === 1 ? `door` : `window`),
+      extra: G({
+        d: 2.4,
+        y: 0.9,
+        top: 3.1,
+        beam: 0.18,
+        rise: 0.35,
+        roof: `hTinRed`,
+        trim: `trimWhite`,
+        col: `post`,
+        colW: 0.08,
+        rail: !0,
+        fret: !0,
+        brackets: !0,
+        skirt: `hLattice`,
+        steps: [3.75],
+        stepW: 1.4,
+        gap: 2.4,
+        stepMat: `hStuccoWhite`,
+      }),
+    },
+    back: { kinds: (e) => (e === 0 ? `solid` : `window`) },
+    right: { kinds: (e) => (e === 0 ? `solid` : `window`) },
+    left: { kinds: (e) => (e === 0 ? `solid` : `window`) },
+    extra: (e, t, n) => {
+      Le(e, t, n, `hTinRed`, 36 * F, 0.35, `trimWhite`);
+      let r = n.W / 2 - 0.7,
+        i = -n.D / 2 - 0.9;
+      (e.add(`tank`, new p(0.5, 0.5, 1.2, 14).translate(r, 0.6, i), t, 0),
+        e.add(
+          I,
+          new p(0.05, 0.05, n.H - 1.4, 8).translate(
+            r,
+            (n.H + 1.2) / 2 - 0.2,
+            i + 0.55,
+          ),
+          t,
+          0,
+        ));
+    },
+  };
+}
+function ct(e, t, n) {
+  let r = 2.2,
+    i = 7.8;
+  G({
+    noRoof: !0,
+    a0: -0.3,
+    a1: n.L + 0.3,
+    d: r,
+    y: 0.02,
+    trim: `wood`,
+    deck: `wood`,
+    col: `post`,
+    colW: 0.07,
+    rail: !0,
+    railH: 0.85,
+    gap: 2.3,
+    steps: [i],
+    stepW: 1,
+  })(e, t, n);
+  for (let r of [-0.2, 3, 6, n.L + 0.2])
+    e.add(
+      `timber`,
+      new p(0.12, 0.14, 2.3, 8).translate(r, -1.12, 2),
+      t,
+      n.grid[0][L(n, r)],
+    );
+  let a = n.grid[0][L(n, i)],
+    o = 2.2 / 11,
+    s = 0.26;
+  for (let n of [-0.5, 0.5])
+    (O(
+      e,
+      `wood`,
+      t,
+      a,
+      [i + n, -0.05, r],
+      [i + n, -2.2, 5.0600000000000005],
+      0.08,
+    ),
+      O(
+        e,
+        `wood`,
+        t,
+        a,
+        [i + n, 0.85, r],
+        [i + n, -1.3, 5.0600000000000005],
+        0.05,
+      ),
+      e.box(
+        `wood`,
+        t,
+        a,
+        i + n - 0.04,
+        i + n + 0.04,
+        -2.2,
+        -1.3,
+        5.010000000000001,
+        5.090000000000001,
+      ));
+  for (let n = 1; n <= 11; n++)
+    e.box(
+      `wood`,
+      t,
+      a,
+      7.34,
+      8.26,
+      -n * o - 0.04,
+      -n * o,
+      r + (n - 1) * s,
+      r + n * s,
+    );
+}
+function lt(e, t, n) {
+  for (let n of [-4.3, -2.2, 2.2, 4.3])
+    for (let r of [-3.8, 0, 3.8])
+      e.add(`timber`, new p(0.14, 0.17, 2.3, 8).translate(n, 1.1, r), t, 0);
+  for (let n of [-3.8, 3.8])
+    for (let [r, i] of [
+      [-4.3, -2.2],
+      [2.2, 4.3],
+    ])
+      O(e, `wood`, t, 0, [r, 0.3, n], [i, 1.95, n], 0.08);
+  for (let n of [-4.3, 4.3])
+    O(e, `wood`, t, 0, [n, 0.3, -3.8], [n, 1.95, 0], 0.08);
+  e.add(`tank`, new p(0.35, 0.28, 0.7, 12).translate(-3.2, 0.35, 5.2), t, 0);
+}
+function ut() {
+  let e = {
+      ridge: `x`,
+      pitch: 42 * F,
+      over: 0.75,
+      mat: `hThatch`,
+      fascia: `wood`,
+    },
+    t = { kinds: () => `solid`, extra: null };
+  return {
+    key: `hStilt`,
+    name: `River Stilt House`,
+    plain: 10125400,
+    desc: `Jungle river house: woven bamboo walls on a plank floor two metres up on timber piles, steep deep thatch, open shuttered windows, stair to a deck.`,
+    W: 9,
+    D: 8,
+    style: {
+      wall: `hBamboo`,
+      t: 0.15,
+      bay: 3,
+      floors: [2.2],
+      win: {
+        w: 1.3,
+        h: 1,
+        sill: 0.9,
+        type: `grid`,
+        lites: [1, 1],
+        frame: `wood`,
+        shutter: `wood`,
+        open: !0,
+        rec: 0.05,
+      },
+      door: { w: 1, h: 2, transom: 0, frame: `wood`, mat: `wood`, rec: 0.08 },
+      corners: `timber`,
+    },
+    tiers: [
+      {
+        W: 2.6,
+        D: 2.6,
+        floors: [2.2],
+        style: { wall: `woodDark`, corners: null },
+        front: t,
+        back: t,
+        left: t,
+        right: t,
+      },
+      { floors: [3.1], soffit: !0, style: { roof: e } },
+    ],
+    front: { kinds: (e, t) => (t === 1 ? `door` : `window`), extra: ct },
+    back: { kinds: () => `window` },
+    right: { kinds: () => `window` },
+    left: { kinds: () => `window` },
+    extra: (t, n, r) => {
+      (lt(t, n, r), Z(t, n, r, e, `hThatch`, 0.02, 0.32, -0.2));
+    },
+  };
+}
+var Q =
+  (t = {}) =>
+  (n, r, i) => {
+    let a = i.t,
+      o = i.H + 0.6,
+      s = `hStuccoAdobe`;
+    for (let e = 0; e < i.nb; e++) {
+      let t = e * i.bw,
+        c = t + i.bw;
+      n.add(
+        s,
+        new p(a / 2, a / 2, c - t, 10)
+          .rotateZ(Math.PI / 2)
+          .translate((t + c) / 2, o, -a / 2),
+        r,
+        i.grid[i.top][e],
+      );
+    }
+    if (t.corners)
+      for (let t of [0, i.L])
+        n.add(
+          s,
+          new e(a / 2 + 0.01, 10, 8).translate(t, o, -a / 2),
+          r,
+          i.grid[i.top][L(i, t)],
+        );
+    if (t.vigas)
+      for (let e = 0.6; e < i.L - 0.3; e += 0.85)
+        n.add(
+          `woodDark`,
+          new p(0.1, 0.11, 0.6, 8)
+            .rotateX(Math.PI / 2)
+            .translate(e, i.H - 0.25, 0.2),
+          r,
+          i.grid[i.top][L(i, e)],
+        );
+    for (let e of t.canales || []) {
+      let t = i.grid[i.top][L(i, e)];
+      n.box(
+        `wood`,
+        r,
+        t,
+        e - 0.14,
+        e + 0.14,
+        i.H + 0.02,
+        i.H + 0.08,
+        -0.2,
+        0.85,
+      );
+      for (let a of [-1, 1])
+        n.box(
+          `wood`,
+          r,
+          t,
+          e + a * 0.14 - 0.03,
+          e + a * 0.14 + 0.03,
+          i.H + 0.02,
+          i.H + 0.24,
+          -0.2,
+          0.85,
+        );
+    }
+    if (t.hump) {
+      let t = i.L / 2,
+        o = i.grid[i.top][L(i, t)];
+      (n.box(s, r, o, t - 1.3, t + 1.3, i.H + 0.6, i.H + 1.15, -a, 0),
+        n.add(
+          s,
+          new p(a / 2, a / 2, 2.6, 10)
+            .rotateZ(Math.PI / 2)
+            .translate(t, i.H + 1.15, -a / 2),
+          r,
+          o,
+        ));
+      for (let c of [-1, 1])
+        n.add(
+          s,
+          new e(a / 2 + 0.01, 10, 8).translate(t + c * 1.3, i.H + 1.15, -a / 2),
+          r,
+          o,
+        );
+    }
+  };
+function dt(e, t, n) {
+  let r = n.grid[0][1];
+  for (let n of [3.25, 5])
+    (e.add(
+      `hTrimRed`,
+      new p(0.07, 0.11, 0.95, 7).translate(n, 1.95, 0.14),
+      t,
+      r,
+    ),
+      e.add(`hTrimOlive`, new a(0.08, 0.16, 6).translate(n, 2.5, 0.14), t, r));
+}
+function ft(e, t, n) {
+  let r = n.grid[0][1],
+    i = n.H + 0.9;
+  for (let n of [-0.25, 0.25])
+    O(e, `wood`, t, r, [4 + n, 0, 1], [4 + n, i, 0.08], 0.07);
+  for (let n = 0.35; n < i - 0.1; n += 0.35) {
+    let a = 1 * (1 - n / i) + (n / i) * 0.08;
+    e.box(`wood`, t, r, 3.75, 4.25, n - 0.025, n + 0.025, a - 0.03, a + 0.03);
+  }
+}
+function pt(t, n, r) {
+  let i = -r.W / 2 - 1.8;
+  (t.box(`hStuccoAdobe`, n, 0, i - 0.8, i + 0.8, 0, 0.6, 0.3999999999999999, 2),
+    t.add(
+      `hStuccoAdobe`,
+      new e(0.78, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2).translate(i, 0.6, 1.2),
+      n,
+      0,
+    ),
+    t.box(
+      `hRubber`,
+      n,
+      0,
+      i - 0.22,
+      i + 0.22,
+      0.62,
+      1,
+      1.7999999999999998,
+      1.98,
+    ),
+    t.add(
+      `hStuccoAdobe`,
+      new p(0.1, 0.12, 0.3, 8).translate(i + 0.25, 1.4, 1),
+      n,
+      0,
+    ));
+}
+function mt() {
+  return {
+    key: `hAdobe`,
+    name: `Casa del Sol`,
+    plain: 12158045,
+    desc: `Desert adobe: thick earth walls with rounded parapets, protruding vigas and canales, deep small windows, blue door, portal, horno oven, ladder.`,
+    W: 11,
+    D: 9,
+    style: {
+      wall: `hStuccoAdobe`,
+      t: 0.5,
+      bay: 2.75,
+      floors: [3.2],
+      parapet: 0.6,
+      win: {
+        w: 0.8,
+        h: 1,
+        sill: 1.1,
+        type: `grid`,
+        lites: [2, 2],
+        frame: `hTrimBlue`,
+        header: `woodDark`,
+        headerH: 0.18,
+        rec: 0.38,
+        curtains: 0.5,
+      },
+      door: {
+        w: 1,
+        h: 2.1,
+        transom: 0,
+        frame: `woodDark`,
+        mat: `hDoorBlue`,
+        rec: 0.35,
+        step: `hStuccoAdobe`,
+      },
+    },
+    front: {
+      kinds: (e, t) => (t === 1 ? `door` : `window`),
+      extra: T(
+        Q({ corners: !0, hump: !0, canales: [0.7] }),
+        G({
+          a0: 2.3,
+          a1: 11.3,
+          d: 2.4,
+          y: 0.12,
+          top: 2.55,
+          beam: 0.3,
+          rise: 0.05,
+          roof: `hStuccoAdobe`,
+          trim: `woodDark`,
+          ceil: `wood`,
+          deck: `stone`,
+          col: `post`,
+          colW: 0.12,
+          brackets: !0,
+          gap: 2.8,
+        }),
+        dt,
+      ),
+    },
+    back: {
+      kinds: (e, t) => (t === 2 ? `door` : `window`),
+      extra: Q({ corners: !0, vigas: !0, canales: [2, 9] }),
+    },
+    right: {
+      kinds: (e, t) => (t === 1 ? `solid` : `window`),
+      extra: Q({ vigas: !0 }),
+    },
+    left: {
+      kinds: (e, t) => (t === 1 ? `solid` : `window`),
+      extra: T(Q({ canales: [6.5] }), ft),
+    },
+    extra: pt,
+  };
+}
+function ht(e, t, n) {
+  let i = n.H + 0.02,
+    a = n.W / 2 + 0.12,
+    o = n.D / 2 + 0.12,
+    s = 1.15,
+    c = 3.3;
+  (Ie(e, t, 0, `hSlate`, a, o, i, a - s, o - s, i + c),
+    Ie(
+      e,
+      t,
+      0,
+      `hZinc`,
+      a - s + 0.05,
+      o - s + 0.05,
+      i + c,
+      a - 3.2,
+      o - 3.2,
+      i + c + 0.7,
+    ));
+  for (let n of [-1, 1])
+    (e.box(
+      `hZinc`,
+      t,
+      0,
+      -(a - s) - 0.1,
+      a - s + 0.1,
+      i + c - 0.06,
+      i + c + 0.06,
+      n * (o - s) - 0.1,
+      n * (o - s) + 0.1,
+    ),
+      e.box(
+        `hZinc`,
+        t,
+        0,
+        n * (a - s) - 0.1,
+        n * (a - s) + 0.1,
+        i + c - 0.06,
+        i + c + 0.06,
+        -(o - s),
+        o - s,
+      ));
+  let l = [
+    [[0, 0, n.D / 2], 0, n.W, 6],
+    [[0, 0, -n.D / 2], Math.PI, n.W, 6],
+    [[n.W / 2, 0, 0], Math.PI / 2, n.D, 4],
+    [[-n.W / 2, 0, 0], -Math.PI / 2, n.D, 4],
+  ];
+  for (let [n, a, o, s] of l) {
+    let c = t
+      .clone()
+      .multiply(new _().makeTranslation(...n))
+      .multiply(new _().makeRotationY(a));
+    for (let t = 0; t < s; t++) {
+      let n = -o / 2 + (o / s) * (t + 0.5),
+        a = i + 0.35,
+        l = i + 2.35;
+      (e.box(`limestone`, c, 0, n - 0.7, n + 0.7, a, l, -1.9, 0.02),
+        e.box(
+          `glass`,
+          c,
+          0,
+          n - 0.45,
+          n + 0.45,
+          a + 0.2,
+          l - 0.15,
+          0.02,
+          0.035,
+        ));
+      for (let [t, r, i, o] of [
+        [n - 0.03, n + 0.03, a + 0.2, l - 0.15],
+        [n - 0.45, n + 0.45, a + 1.1, a + 1.15],
+        [n - 0.8, n + 0.8, a - 0.05, a + 0.12],
+      ])
+        e.box(`trimWhite`, c, 0, t, r, i, o, 0.02, 0.07);
+      for (let t of [-1, 1])
+        e.box(
+          `limestone`,
+          c,
+          0,
+          n + t * 0.575 - 0.125,
+          n + t * 0.575 + 0.125,
+          a,
+          l,
+          0.02,
+          0.1,
+        );
+      (e.add(
+        `hZinc`,
+        new p(0.8, 0.8, 2.05, 12, 1, !1, -Math.PI / 2, Math.PI)
+          .rotateX(-Math.PI / 2)
+          .translate(n, l, -0.9),
+        c,
+        0,
+      ),
+        e.add(
+          `limestone`,
+          new r(0.72, 12, 0, Math.PI).translate(n, l, 0.13),
+          c,
+          0,
+        ),
+        e.add(`glass`, new r(0.22, 12).translate(n, l + 0.34, 0.14), c, 0));
+    }
+  }
+  for (let n of [-3, 3.5])
+    N(e, t, `limestone`, n, 0, i + c, i + c + 1.9, 2, 0.7);
+}
+function gt(e, t, n) {
+  let r = n.grid[1][n.nb - 1],
+    i = n.L - 0.4;
+  e.box(I, t, r, i - 0.04, i + 0.04, 5.35, 5.45, 0, 0.5);
+  for (let [n, a] of [
+    [0.9, 0.3],
+    [0.3, 0.9],
+  ])
+    e.box(
+      `hNeonGreen`,
+      t,
+      r,
+      i - 0.06,
+      i + 0.06,
+      5.4 - a / 2,
+      5.4 + a / 2,
+      0.5 - n / 2 + 0.05,
+      0.5 + n / 2 + 0.05,
+    );
+}
+function _t() {
+  let e = {
+    a0: -0.05,
+    a1: 16.05,
+    d: 0.9,
+    rail: `hIronLace`,
+    trim: I,
+    deck: `limestone`,
+    edge: `limestone`,
+    under: `console`,
+  };
+  return {
+    key: `hHaussmann`,
+    name: `12 Rue Lafitte`,
+    plain: 14274748,
+    desc: `Haussmann apartment block: six floors of cream limestone, continuous iron balconies on the 2nd and 5th, slate mansard with oeil-de-boeuf dormers, café and pharmacy below.`,
+    W: 16,
+    D: 14,
+    style: {
+      wall: `limestone`,
+      floorMat: [`rustic`],
+      t: 0.45,
+      bay: 16 / 6,
+      floors: [4.4, 3.3, 3.5, 3.2, 3.1, 3],
+      win: {
+        w: 1.25,
+        h: 2.45,
+        sill: 0.05,
+        type: `grid`,
+        lites: [2, 4],
+        frame: `trimWhite`,
+        header: `limestone`,
+        headerH: 0.3,
+        keystone: !0,
+        rec: 0.2,
+        curtains: 0.6,
+      },
+      store: { frame: `hShopBlue`, fascia: `hShopBlue` },
+      awning: { mat: `awningRed`, depth: 1.5, drop: 0.7 },
+      door: {
+        w: 1.9,
+        h: 3,
+        transom: 0.8,
+        frame: `limestone`,
+        mat: `hDoorGreen`,
+        rec: 0.4,
+        step: `granite`,
+      },
+      base: { mat: `granite`, h: 0.5, out: 0.04 },
+      belt: { mat: `limestone`, h: 0.2, out: 0.06 },
+      cornice: {
+        type: `classic`,
+        mat: `limestone`,
+        h: 0.5,
+        out: 0.5,
+        dentils: !0,
+        cap: `hZinc`,
+      },
+      roof: X,
+    },
+    front: {
+      kinds: (e, t) => (e === 0 ? (t === 2 ? `door` : `store`) : `window`),
+      signs: [
+        {
+          mat: `signHCafe`,
+          rect: [0.15, 5.18, 3.62, 4.08],
+          z0: 0.07,
+          z1: 0.09,
+        },
+        {
+          mat: `signHPharma`,
+          rect: [8.15, 15.85, 3.62, 4.08],
+          z0: 0.07,
+          z1: 0.09,
+        },
+      ],
+      extra: T(
+        J({ ...e, y: 7.7 }),
+        J({ ...e, y: 17.5 }),
+        Y([1, 3, 4], 1.25),
+        gt,
+      ),
+    },
+    right: {
+      kinds: (e) => (e === 0 ? `solid` : `window`),
+      extra: Y([1, 2, 3, 4, 5], 1.25),
+    },
+    left: { kinds: () => `solid` },
+    back: {
+      kinds: (e, t) => (e === 0 ? (t === 2 ? `door` : `solid`) : `window`),
+    },
+    extra: ht,
+  };
+}
+var vt = (e) => (t, n, r) => {
+  let i = e.d,
+    a = r.ys[1],
+    o = e.mat,
+    s = e.trim,
+    c = e.b0 * r.bw,
+    l = (e.b1 + 1) * r.bw,
+    u = 0.4,
+    d = (e, t, n, r) => {
+      let i = (e + t) / 2,
+        o = new h();
+      return (
+        o.moveTo(e, 0),
+        o.lineTo(i - n, 0),
+        o.lineTo(i - n, r),
+        o.absarc(i, r, n, Math.PI, 0, !0),
+        o.lineTo(i + n, 0),
+        o.lineTo(t, 0),
+        o.lineTo(t, a),
+        o.lineTo(e, a),
+        o.closePath(),
+        o
+      );
+    },
+    f = a + 0.18;
+  for (let c = e.b0; c <= e.b1; c++) {
+    let e = c * r.bw,
+      l = e + r.bw,
+      h = r.grid[0][c],
+      g = (r.bw - 0.8) / 2,
+      _ = a - 0.5 - g,
+      v = (e + l) / 2,
+      y = r.grid[1][c];
+    (t.add(
+      o,
+      new m(d(e, l, g, _), {
+        depth: u,
+        bevelEnabled: !1,
+        curveSegments: 10,
+      }).translate(0, 0, i - u),
+      n,
+      h,
+    ),
+      t.box(s, n, h, e, v - g, _ - 0.16, _, i - u - 0.03, i + 0.03),
+      t.box(s, n, h, v + g, l, _ - 0.16, _, i - u - 0.03, i + 0.03),
+      t.box(
+        s,
+        n,
+        h,
+        v - 0.13,
+        v + 0.13,
+        _ + g - 0.12,
+        _ + g + 0.28,
+        i - u - 0.02,
+        i + 0.05,
+      ),
+      t.box(`stone`, n, h, e, l, 0, 0.12, 0, i),
+      t.box(o, n, y, e, l, a, f, 0, i + 0.08),
+      t.box(s, n, y, e, l, a - 0.14, a + 0.02, i, i + 0.12),
+      t.box(s, n, y, e, l, f, f + 0.12, i - 0.22, i),
+      t.box(s, n, y, e, l, f + 0.84, f + 0.96, i - 0.26, i + 0.03));
+    for (let r = e + 0.14; r < l - 0.05; r += 0.26)
+      t.add(
+        s,
+        new p(0.05, 0.07, 0.72, 6).translate(r, f + 0.48, i - 0.11),
+        n,
+        y,
+      );
+  }
+  for (let [e, h] of [
+    [c, 1],
+    [l, -1],
+  ]) {
+    let c = i - u,
+      l = (c - 0.7) / 2,
+      g = a - 0.5 - l,
+      _ = r.grid[0][L(r, e + h * 0.1)],
+      v = r.grid[1][L(r, e + h * 0.1)];
+    t.add(
+      o,
+      new m(d(0, c, l, g), { depth: 0.3, bevelEnabled: !1, curveSegments: 10 })
+        .rotateY(-Math.PI / 2)
+        .translate(h > 0 ? e + 0.3 : e, 0, 0),
+      n,
+      _,
+    );
+    let y = h > 0 ? e : e - 0.22;
+    (t.box(s, n, v, y, y + 0.22, f, f + 0.12, 0, i),
+      t.box(s, n, v, y - 0.02, y + 0.24, f + 0.84, f + 0.96, 0, i));
+    for (let e = 0.25; e < i - 0.2; e += 0.26)
+      t.add(
+        s,
+        new p(0.05, 0.07, 0.72, 6).translate(y + 0.11, f + 0.48, e),
+        n,
+        v,
+      );
+  }
+};
+function yt() {
+  return {
+    key: `hVilla`,
+    name: `Villa Serena`,
+    plain: 15855076,
+    desc: `Mediterranean villa: white stucco, terracotta hip roof, three-arched loggia with a balustraded terrace above, arched windows with sage shutters.`,
+    W: 14,
+    D: 11,
+    style: {
+      wall: `hStuccoWhite`,
+      t: 0.35,
+      bay: 2.8,
+      floors: [3.6, 3.2],
+      win: {
+        w: 1.1,
+        h: 1.9,
+        sill: 0.7,
+        type: `grid`,
+        lites: [2, 3],
+        frame: `woodDark`,
+        arch: 0.55,
+        shutter: `hShutterSage`,
+        sillMat: `stone`,
+        rec: 0.15,
+        curtains: 0.5,
+      },
+      door: {
+        w: 1.4,
+        h: 2.5,
+        transom: 0,
+        frame: `stone`,
+        mat: `woodDoor`,
+        rec: 0.3,
+        step: `stone`,
+      },
+      base: { mat: `stone`, h: 0.35, out: 0.03 },
+      roof: X,
+    },
+    front: {
+      kinds: (e, t) => (e === 0 && t === 2 ? `door` : `window`),
+      extra: vt({ b0: 1, b1: 3, d: 2.4, mat: `hStuccoWhite`, trim: `stone` }),
+    },
+    back: { kinds: (e, t) => (e === 0 && t === 2 ? `door` : `window`) },
+    right: { kinds: () => `window` },
+    left: { kinds: (e, t) => (e === 0 && t === 1 ? `solid` : `window`) },
+    extra: (e, t, n) => {
+      (Le(e, t, n, `hTerraTile`, 26 * F, 0.7, `hTerraTile`),
+        N(e, t, `hStuccoWhite`, 4, -1.5, n.H, n.H + 3.6, 0.9, 0.7),
+        e.add(
+          `hTerraTile`,
+          R(
+            new a(0.75, 0.45, 4)
+              .rotateY(Math.PI / 4)
+              .translate(4, n.H + 4.1, -1.5),
+          ),
+          t,
+          0,
+        ));
+    },
+  };
+}
+function bt(e, t, n) {
+  let r = n.grid[0][0],
+    i = n.bw / 2;
+  for (let n = 0; n < 3; n++)
+    e.box(
+      `concrete`,
+      t,
+      r,
+      i - 0.8,
+      i + 0.8,
+      0.14 * n,
+      0.14 * (n + 1),
+      0.4 + (2 - n) * 0.35 - 0.35,
+      0.4 + (2 - n) * 0.35,
+    );
+  (e.box(`hCladCedar`, t, r, 0.25, 0.75, 0, 0.5, 0.2, 2.6),
+    e.box(`hGeranium`, t, r, 0.3, 0.7, 0.5, 0.62, 0.25, 2.55),
+    e.box(`aluminum`, t, r, i + 0.75, i + 0.95, 1.4, 1.62, 0, 0.03));
+  for (let [r, i] of [
+    [1.2, 0],
+    [5.6, 1],
+  ])
+    e.box(`bulb`, t, n.grid[1][i], r - 0.12, r + 0.12, 5.66, 5.7, 0.5, 0.74);
+}
+function xt() {
+  return {
+    key: `hGlassTown`,
+    name: `Harbor Row Townhouse`,
+    plain: 3026996,
+    desc: `Modern townhouse: charcoal board cladding, full-height glazing, a cedar-clad top floor cantilevered over the entry, flat roof.`,
+    W: 7.5,
+    D: 12,
+    style: {
+      wall: `hCladDark`,
+      t: 0.25,
+      bay: 3.75,
+      floors: [3.2, 3.1],
+      parapet: 0,
+      curtain: {
+        glass: `glassGrey`,
+        spandrel: `hCladDark`,
+        mullion: I,
+        module: 1.25,
+        sill: 0.1,
+        head: 0.35,
+        fin: 0.03,
+      },
+      win: {
+        w: 0.7,
+        h: 2.3,
+        sill: 0.4,
+        type: `grid`,
+        lites: [1, 1],
+        frame: I,
+        rec: 0.05,
+        curtains: 0.3,
+      },
+      door: {
+        w: 1.1,
+        h: 2.4,
+        transom: 0,
+        frame: I,
+        mat: `hCladCedar`,
+        rec: 0.6,
+        step: `concrete`,
+      },
+      loading: { type: `rollup`, dock: !1, w: 2.8, h: 2.5 },
+      roof: {
+        ridge: `x`,
+        pitch: 0.01,
+        over: 0,
+        mat: `floorSlab`,
+        fascia: `hCladDark`,
+      },
+    },
+    tiers: [
+      {},
+      {
+        D: 13.5,
+        dz: 0.75,
+        floors: [3.2],
+        soffit: !0,
+        style: { wall: `hCladCedar`, parapet: 0.35, roof: null },
+        front: {
+          extra: (e, t, n) => {
+            for (let r of [0.1, n.L - 0.3])
+              e.box(
+                `hCladDark`,
+                t,
+                n.grid[0][L(n, r)],
+                r,
+                r + 0.2,
+                0,
+                n.H + 0.35,
+                0,
+                0.3,
+              );
+          },
+        },
+      },
+    ],
+    front: {
+      kinds: (e, t) => (e === 0 ? (t === 0 ? `door` : `loading`) : `curtain`),
+      extra: bt,
+    },
+    back: { kinds: (e) => (e === 1 ? `solid` : `curtain`) },
+    right: { kinds: (e, t) => (t === 1 ? `window` : `solid`) },
+    left: { kinds: () => `solid` },
+  };
+}
+function St(e, t, n) {
+  for (let r = 1; r <= n.top; r++)
+    for (let i of [1, 2, 5, 6]) {
+      let a = n.grid[r][i],
+        o = n.ys[r],
+        s = i * n.bw + 0.12,
+        c = (i + 1) * n.bw - 0.12;
+      e.box(`hConcreteWhite`, t, a, s, c, o - 0.2, o + 1.1, 1.2, 1.3);
+      for (let n of [s, c - 0.1])
+        e.box(`hConcreteWhite`, t, a, n, n + 0.1, o, o + 1.1, 0, 1.2);
+      e.box(
+        `aluminum`,
+        t,
+        a,
+        s,
+        c,
+        o + 1.1,
+        o + 1.14,
+        1.1800000000000002,
+        1.32,
+      );
+    }
+}
+function Ct() {
+  let e = [3.6, 6.5, 9.4, 12.3],
+    t = (t) =>
+      M(
+        e.map((e) => [`hConcreteWhite`, e - 0.12, e + 0.12, 0.04]),
+        t,
+      );
+  return {
+    key: `hSeventies`,
+    name: `Parkview Apartments`,
+    plain: 7095857,
+    desc: `1970s apartment block: brown brick, stacked concrete balconies with solid fronts, exposed slab edges, bronze-glazed lobby, rooftop stair house.`,
+    W: 20,
+    D: 13,
+    style: {
+      wall: `hBrick70s`,
+      t: 0.35,
+      bay: 2.5,
+      floors: [3.6, ...ve(4, 2.9)],
+      parapet: 0.8,
+      parapetMat: `hConcreteWhite`,
+      win: {
+        w: 1.5,
+        h: 1.4,
+        sill: 0.9,
+        type: `grid`,
+        lites: [2, 1],
+        frame: `aluminum`,
+        sillMat: `hConcreteWhite`,
+        rec: 0.1,
+        curtains: 0.7,
+      },
+      win0: {
+        w: 1.4,
+        h: 1.2,
+        sill: 1.6,
+        type: `grid`,
+        lites: [2, 1],
+        frame: `aluminum`,
+        rec: 0.1,
+        curtains: 0.5,
+      },
+      balcony: {
+        w: 1.8,
+        h: 2.3,
+        depth: 1.3,
+        slab: `hConcreteWhite`,
+        rail: `glass`,
+      },
+      lobby: {
+        rec: 0.8,
+        frame: `bronze`,
+        glass: `glassBronze`,
+        head: 0.8,
+        headMat: `hConcreteWhite`,
+        column: `hConcreteWhite`,
+      },
+      door: { w: 1, h: 2.2, transom: 0, frame: `aluminum`, glazed: !0 },
+      base: { mat: `hConcreteWhite`, h: 0.5, out: 0.03 },
+    },
+    front: {
+      kinds: (e, t) =>
+        e === 0
+          ? t === 3
+            ? `lobbyDoor`
+            : t === 4
+              ? `lobby`
+              : `window`
+          : t % 4 == 1 || t % 4 == 2
+            ? `balcony`
+            : `window`,
+      extra: T(St, t(!1)),
+    },
+    back: {
+      kinds: (e, t) => (e === 0 && t === 4 ? `door` : `window`),
+      extra: t(!1),
+    },
+    right: { kinds: (e, t) => (t === 2 ? `window` : `solid`), extra: t(!0) },
+    left: { kinds: (e, t) => (t === 2 ? `window` : `solid`), extra: t(!0) },
+    extra: (e, t, n) => {
+      (e.box(`hBrick70s`, t, 0, -7, -4, n.H, n.H + 2.8, -3, 0.5),
+        e.box(
+          `hConcreteWhite`,
+          t,
+          0,
+          -7.1,
+          -3.9,
+          n.H + 2.8,
+          n.H + 2.95,
+          -3.1,
+          0.6,
+        ));
+      for (let [r, i] of [
+        [3, -2],
+        [6, 1.5],
+      ]) {
+        e.add(
+          `aluminum`,
+          new p(0.03, 0.04, 3, 6).translate(r, n.H + 1.5, i),
+          t,
+          0,
+        );
+        for (let a = 0; a < 4; a++)
+          e.box(
+            `aluminum`,
+            t,
+            0,
+            r - 0.5 + a * 0.08,
+            r + 0.5 - a * 0.08,
+            n.H + 2.2 + a * 0.22,
+            n.H + 2.23 + a * 0.22,
+            i - 0.015,
+            i + 0.015,
+          );
+      }
+    },
+  };
+}
+function wt(t, n, r, i, a) {
+  t.box(`hEnamelGreen`, n, r, i - 0.3, i + 0.3, 0.25, 1.75, a - 0.24, a + 0.24);
+  for (let e of [-1, 1])
+    t.box(
+      `trimWhite`,
+      n,
+      r,
+      i - 0.22,
+      i + 0.22,
+      1,
+      1.5,
+      a + e * 0.24 - 0.01,
+      a + e * 0.24 + 0.01,
+    );
+  (t.add(
+    `hGlobe`,
+    new p(0.13, 0.13, 0.52, 14).rotateX(Math.PI / 2).translate(i, 1.28, a),
+    n,
+    r,
+  ),
+    t.box(`aluminum`, n, r, i - 0.12, i + 0.12, 1.75, 1.85, a - 0.1, a + 0.1),
+    t.add(`hGlobe`, new e(0.22, 14, 10).translate(i, 2.06, a), n, r),
+    t.box(
+      `hEnamelRed`,
+      n,
+      r,
+      i - 0.23,
+      i + 0.23,
+      2.02,
+      2.1,
+      a - 0.23,
+      a + 0.23,
+    ),
+    t.box(I, n, r, i + 0.3, i + 0.36, 1, 1.3, a - 0.06, a + 0.06),
+    O(t, `hRubber`, n, r, [i + 0.36, 1.15, a], [i + 0.5, 0.35, a + 0.45], 0.05),
+    O(
+      t,
+      `hRubber`,
+      n,
+      r,
+      [i + 0.5, 0.35, a + 0.45],
+      [i + 0.36, 1.25, a + 0.05],
+      0.05,
+    ));
+}
+function Tt(e, t, r) {
+  let i = 7.7,
+    a = 7.2;
+  for (let [n, o, s] of W(r, i, 16.5)) {
+    let c = r.grid[0][s];
+    (e.box(`whiteSpandrel`, t, c, n, o, 4, 4.35, 0, a),
+      e.box(`hEnamelGreen`, t, c, n, o, 3.9, 4.55, 7.15, 7.25),
+      e.box(
+        `signHCometBand`,
+        t,
+        c,
+        n,
+        o,
+        3.98,
+        4.47,
+        7.25,
+        7.2700000000000005,
+        { planar: (e, t) => [(e - i) / 8.8, (t - 4 + 0.02) / 0.49] },
+      ));
+    for (
+      let r = Math.ceil((n - i - 0.7) / 1.4) * 1.4 + i + 0.7;
+      r < o - 0.2;
+      r += 1.4
+    )
+      for (let n of [1.8, 5.8])
+        e.box(`bulb`, t, c, r - 0.3, r + 0.3, 3.96, 4, n - 0.1, n + 0.1);
+  }
+  for (let n of [i, 16.4])
+    e.box(`hEnamelGreen`, t, r.grid[0][L(r, n)], n, n + 0.1, 3.9, 4.55, 0, a);
+  let o = r.grid[0][3];
+  (e.box(`concrete`, t, o, 8.9, 15.4, 0, 0.25, 3.3, 4.3),
+    e.box(`hEnamelYellow`, t, o, 8.85, 15.45, 0.02, 0.08, 3.25, 4.35));
+  for (let n of [9.3, 15])
+    e.box(
+      `aluminum`,
+      t,
+      r.grid[0][L(r, n)],
+      n - 0.13,
+      n + 0.13,
+      0.25,
+      4,
+      3.67,
+      3.9299999999999997,
+    );
+  for (let n of [10.7, 12.15, 13.6]) wt(e, t, r.grid[0][L(r, n)], n, 3.8);
+  let s = r.grid[0][1];
+  for (let r = 0; r < 4; r++)
+    e.add(
+      `hRubber`,
+      new n(0.32, 0.12, 6, 14)
+        .rotateX(Math.PI / 2)
+        .translate(7.25, 0.12 + r * 0.24, 0.7),
+      t,
+      s,
+    );
+  e.box(I, t, r.grid[0][0], 0.1, 0.3, 0, 1.6, 0.3, 0.9);
+  for (let n = 0; n < 3; n++)
+    for (let i = 0; i < 3; i++)
+      e.add(
+        i % 2 ? `hEnamelRed` : `hEnamelYellow`,
+        new p(0.08, 0.08, 0.2, 8).translate(0.2, 0.4 + n * 0.45, 0.4 + i * 0.2),
+        t,
+        r.grid[0][0],
+      );
+}
+function Et() {
+  return {
+    key: `hGasStation`,
+    name: `Comet Service Station`,
+    plain: 15132384,
+    desc: `1950s filling station: white enamel office and two roll-up service bays, flat canopy on steel posts over a pump island with lit globes, rooftop COMET sign.`,
+    W: 16,
+    D: 10,
+    style: {
+      wall: `whiteSpandrel`,
+      t: 0.3,
+      bay: 4,
+      floors: [4.2],
+      parapet: 0.9,
+      parapetMat: `hEnamelGreen`,
+      win: {
+        w: 2.4,
+        h: 1.6,
+        sill: 1,
+        type: `grid`,
+        lites: [3, 1],
+        frame: `aluminum`,
+        rec: 0.12,
+        curtains: 0.2,
+      },
+      store: { frame: `aluminum`, fascia: `hEnamelGreen` },
+      door: { w: 1, h: 2.2, transom: 0.3, frame: `aluminum`, glazed: !0 },
+      loading: { type: `rollup`, dock: !1, w: 3.1, h: 3.4 },
+      base: { mat: `hEnamelGreen`, h: 0.5, out: 0.03 },
+    },
+    front: {
+      kinds: (e, t) => [`loading`, `loading`, `store`, `store`][t],
+      signs: [
+        { mat: `signHComet`, rect: [0.3, 7.7, 4.3, 5], z0: 0.02, z1: 0.06 },
+      ],
+      extra: Tt,
+    },
+    right: { kinds: (e, t) => (t === 1 ? `door` : `window`) },
+    left: { kinds: (e, t) => (t === 1 ? `window` : `solid`) },
+    back: { kinds: (e, t) => (t === 1 ? `door` : `solid`) },
+    extra: (e, t, n) => b(e, t, n, `signHCometRoof`, 6, 1.8, 0, 1),
+  };
+}
+var $ =
+  (e, t, n = []) =>
+  (r, i, a) => {
+    for (let [o, s, c, l] of e) {
+      let e = t ? a.t + l : l;
+      for (let t = 0; t < a.nb; t++)
+        (n.includes(t) && s < 2.8) ||
+          r.box(
+            o,
+            i,
+            H(a, (t + 0.5) * a.bw, s),
+            t === 0 ? -e : t * a.bw,
+            t === a.nb - 1 ? a.L + e : (t + 1) * a.bw,
+            s,
+            c,
+            -a.t,
+            l,
+          );
+    }
+  };
+function Dt(e, t, n) {
+  let r = n.L / 2,
+    i = n.grid[0][Math.floor(n.nb / 2)],
+    a = 1.6;
+  for (let n of [-1, 1])
+    (e.box(
+      `hGlassBlock`,
+      t,
+      i,
+      r + n * 1.1 - 0.15,
+      r + n * 1.1 + 0.15,
+      0,
+      2.7,
+      0,
+      a,
+    ),
+      e.box(
+        `hGlassBlock`,
+        t,
+        i,
+        n < 0 ? r - 1.25 : r + 0.62,
+        n < 0 ? r - 0.62 : r + 1.25,
+        0,
+        2.7,
+        1.3,
+        a,
+      ));
+  (e.box(`hStainless`, t, i, r - 1.3, r + 1.3, 2.7, 3.1, 0, 1.6500000000000001),
+    e.box(`hChrome`, t, i, r - 1.35, r + 1.35, 3.1, 3.2, 0, 1.7000000000000002),
+    e.box(
+      `signHEat`,
+      t,
+      i,
+      r - 1.1,
+      r + 1.1,
+      2.74,
+      3.06,
+      1.6500000000000001,
+      1.6700000000000002,
+      { planar: (e, t) => [(e - r + 1.1) / 2.2, (t - 2.74) / 0.32] },
+    ),
+    e.box(
+      `glass`,
+      t,
+      i,
+      r - 0.6,
+      r + 0.6,
+      0.05,
+      2.6,
+      1.4400000000000002,
+      1.46,
+    ));
+  for (let [n, a, o, s] of [
+    [r - 0.62, r - 0.55, 0.05, 2.7],
+    [r + 0.55, r + 0.62, 0.05, 2.7],
+    [r - 0.03, r + 0.03, 0.05, 2.6],
+    [r - 0.62, r + 0.62, 2.6, 2.7],
+  ])
+    e.box(`hChrome`, t, i, n, a, o, s, 1.4000000000000001, 1.5);
+  e.box(`granite`, t, i, r - 1.4, r + 1.4, 0, 0.12, 0, 2);
+}
+function Ot() {
+  let e = [
+    [`hEnamelRed`, 0.72, 0.92, 0.03],
+    [`hEnamelRed`, 1, 1.06, 0.03],
+    [`hChrome`, 3.25, 3.31, 0.05],
+  ];
+  return {
+    key: `hDiner`,
+    name: `Moonbeam Diner`,
+    plain: 13094096,
+    desc: `Streamline diner: fluted stainless skin with red enamel speed stripes, clipped ends, ribbon windows, glass-block vestibule, red neon DINER on the roof.`,
+    W: 18,
+    D: 8,
+    chamfer: { l: 2.2, r: 2.2 },
+    style: {
+      wall: `hStainless`,
+      t: 0.25,
+      bay: 2.72,
+      floors: [4],
+      parapet: 0.7,
+      parapetMat: `hEnamelRed`,
+      ribbon: {
+        glass: `glassGrey`,
+        spandrel: `hStainless`,
+        mullion: `hChrome`,
+        module: 1.1,
+        fin: 0.04,
+        sill: 1.1,
+        head: 0.9,
+      },
+      door: {
+        w: 1.2,
+        h: 2.3,
+        transom: 0.3,
+        frame: `hChrome`,
+        glazed: !0,
+        mat: `hEnamelRed`,
+        rec: 0.3,
+        step: `granite`,
+      },
+      base: { mat: `hEnamelRed`, h: 0.55, out: 0.03 },
+      cornice: { type: `classic`, mat: `hChrome`, h: 0.14, out: 0.1 },
+    },
+    front: {
+      kinds: (e, t, n) => (t === Math.floor(n / 2) ? `door` : `ribbon`),
+      signs: [
+        {
+          mat: `signHDinerBand`,
+          rect: [0.4, 13.2, 4.08, 4.62],
+          z0: 0.02,
+          z1: 0.05,
+        },
+      ],
+      extra: T($(e, !1, [2]), Dt),
+    },
+    corner: {
+      kinds: () => `ribbon`,
+      extra: T($(e, !1), (e, t, n) => {
+        for (let r of [0, n.L - 0.1])
+          e.box(`hChrome`, t, n.grid[0][0], r, r + 0.1, 0, n.H + 0.7, 0, 0.06);
+      }),
+    },
+    right: {
+      kinds: (e, t) => (t === 1 ? `door` : `ribbon`),
+      extra: $(e, !0, [1]),
+    },
+    left: { kinds: () => `ribbon`, extra: $(e, !0) },
+    back: {
+      kinds: (e, t) => (t === 1 ? `door` : `solid`),
+      extra: $(e, !1, [1]),
+    },
+    extra: (e, t, n) => {
+      (b(e, t, n, `signHDiner`, 5.5, 1.5, n.D / 2 - 1.4, 0.5),
+        e.box(`aluminum`, t, 0, 3, 5, n.H, n.H + 1, -2.5, -1),
+        e.box(`louver`, t, 0, 3.05, 4.95, n.H + 0.3, n.H + 0.9, -2.52, -2.5),
+        e.add(
+          I,
+          new p(0.25, 0.25, 1.4, 10).translate(-4, n.H + 0.7, -2),
+          t,
+          0,
+        ));
+    },
+  };
+}
+function kt(e, t, n) {
+  let r = 3.95;
+  for (let [i, a, o] of W(n, 0, n.L)) {
+    let s = n.grid[0][o],
+      c = (o + 0.5) * n.bw,
+      l = o === 2 ? 0.5 : 0,
+      u = i + 0.6,
+      d = a - 0.6;
+    (e.box(`whiteSpandrel`, t, s, i, a, r, 4.15, 0, 3),
+      e.box(
+        `hEnamelTeal`,
+        t,
+        s,
+        i - (o === 0 ? 0.1 : 0),
+        a + (o === n.nb - 1 ? 0.1 : 0),
+        3.75,
+        4.3500000000000005,
+        2.92,
+        3.06,
+      ));
+    for (let n = i + 0.7; n < a - 0.3; n += 1.4)
+      e.box(`bulb`, t, s, n - 0.2, n + 0.2, 3.91, r, 1.4, 1.6);
+    (e.box(I, t, s, u, d, 4.75 + l * 0.5, 5.75 + l * 0.5, l, l + 0.22),
+      e.box(
+        `signHMall${o}`,
+        t,
+        s,
+        u + 0.05,
+        d - 0.05,
+        4.8 + l * 0.5,
+        5.7 + l * 0.5,
+        l + 0.22,
+        l + 0.24,
+        {
+          planar: (e, t) => [
+            (e - u - 0.05) / (d - u - 0.1),
+            (t - 4.8 - l * 0.5) / 0.9,
+          ],
+        },
+      ));
+    for (let [n, r, i, a] of [
+      [c - 0.58, c - 0.5, 0.05, 2.35],
+      [c + 0.5, c + 0.58, 0.05, 2.35],
+      [c - 0.58, c + 0.58, 2.28, 2.36],
+    ])
+      e.box(`aluminum`, t, s, n, r, i, a, -0.2, -0.15);
+    e.box(`aluminum`, t, s, c - 0.4, c + 0.4, 1.05, 1.1, -0.15, -0.1);
+  }
+  for (let i = 0; i <= n.nb; i++) {
+    let a = Math.min(n.L - 0.15, Math.max(0.15, i * n.bw));
+    e.box(
+      `aluminum`,
+      t,
+      n.grid[0][L(n, a)],
+      a - 0.1,
+      a + 0.1,
+      0,
+      r,
+      2.65,
+      2.85,
+    );
+  }
+  let i = n.grid[0][2],
+    a = 11.6;
+  (e.box(`hStuccoBeige`, t, i, a, 16.4, n.H, 8.6, -0.3, 0.5),
+    e.box(`hEnamelTeal`, t, i, 11.5, 16.5, 8.6, 8.75, -0.4, 0.6));
+  let o = new h(
+    [
+      [11.299999999999999, 8.75],
+      [16.7, 8.75],
+      [14, 10.1],
+    ].map(([e, t]) => new c(e, t)),
+  );
+  (e.add(
+    `hTerraTile`,
+    new m(o, { depth: 1.4, bevelEnabled: !1 }).translate(0, 0, -0.7),
+    t,
+    i,
+  ),
+    e.box(`signHPlaza`, t, i, 11.9, 16.099999999999998, 7.3, 8.3, 0.5, 0.52, {
+      planar: (e, t) => [(e - a - 0.3) / 4.199999999999999, (t - 7.3) / 1],
+    }));
+}
+function At() {
+  return {
+    key: `hStripMall`,
+    name: `Greywater Plaza`,
+    plain: 14075040,
+    desc: `Strip mall: five storefronts under one continuous flat canopy on steel columns, lit box signs on a tall parapet, centre tower with a tiled cap.`,
+    W: 28,
+    D: 14,
+    style: {
+      wall: `hStuccoBeige`,
+      t: 0.3,
+      bay: 5.6,
+      floors: [4.6],
+      parapet: 1.6,
+      store: { frame: `aluminum`, fascia: `hStuccoBeige` },
+      door: { w: 1, h: 2.2, transom: 0, frame: `aluminum` },
+      loading: { type: `rollup`, dock: !1, w: 3, h: 3.2 },
+      base: { mat: `granite`, h: 0.4, out: 0.03 },
+      cornice: { type: `classic`, mat: `hEnamelTeal`, h: 0.2, out: 0.12 },
+    },
+    front: { kinds: () => `store`, extra: kt },
+    back: { kinds: (e, t) => (t % 2 ? `loading` : `door`) },
+    right: { kinds: () => `solid` },
+    left: { kinds: () => `solid` },
+    extra: (e, t, n) => {
+      for (let r of [-9, 0, 9])
+        (e.box(`aluminum`, t, 0, r - 1, r + 1, n.H, n.H + 1.1, -3, -1.6),
+          e.box(
+            `louver`,
+            t,
+            0,
+            r - 0.95,
+            r + 0.95,
+            n.H + 0.3,
+            n.H + 1,
+            -1.6,
+            -1.58,
+          ));
+    },
+  };
+}
+var jt = (e, t) => (n, r, i) => {
+  let a = t ?? i.L,
+    o = 3.2,
+    s = 3.95;
+  for (let [t, c, l] of W(i, 0, a)) {
+    let u = i.grid[0][l];
+    (n.box(`hShopBlue`, r, u, t, c, o, s, 0, 0.25),
+      n.box(`hGilt`, r, u, t, c, s, 4.01, -0.02, 0.32),
+      n.box(`hShopBlue`, r, u, t, c, 4.01, 4.11, -0.02, 0.27),
+      n.box(e, r, u, t, c, 3.3000000000000003, 3.85, 0.25, 0.27, {
+        planar: (e, t) => [e / a, (t - o - 0.1) / 0.55],
+      }));
+    for (let e of [l * i.bw, Math.min(a, (l + 1) * i.bw) - 0.3])
+      (n.box(`hShopBlue`, r, u, e, e + 0.3, 0, o, 0, 0.16),
+        n.box(`hGilt`, r, u, e - 0.02, e + 0.32, 3.04, o, 0, 0.19),
+        n.box(
+          `hShopBlue`,
+          r,
+          u,
+          e + 0.06,
+          e + 0.24,
+          0.5,
+          2.8000000000000003,
+          0.16,
+          0.19,
+        ));
+  }
+};
+function Mt(e, t, n) {
+  for (let [r, i] of [
+    [1.3, 0],
+    [5.9, 2],
+  ]) {
+    let a = n.grid[0][i],
+      o = 2.1;
+    (e.add(I, new p(0.03, 0.03, 0.72, 6).translate(r, 0.36, o), t, a),
+      e.add(I, new p(0.22, 0.24, 0.03, 12).translate(r, 0.015, o), t, a),
+      e.add(
+        `trimWhite`,
+        new p(0.32, 0.32, 0.03, 16).translate(r, 0.74, o),
+        t,
+        a,
+      ));
+    for (let n of [-1, 1]) {
+      let i = r + n * 0.58;
+      (e.box(
+        `wood`,
+        t,
+        a,
+        i - 0.2,
+        i + 0.2,
+        0.44,
+        0.48,
+        1.9000000000000001,
+        2.3000000000000003,
+      ),
+        e.box(
+          `wood`,
+          t,
+          a,
+          n > 0 ? i + 0.16 : i - 0.2,
+          n > 0 ? i + 0.2 : i - 0.16,
+          0.48,
+          0.9,
+          1.9000000000000001,
+          2.3000000000000003,
+        ));
+      for (let n of [-0.17, 0.17])
+        for (let r of [-0.17, 0.17])
+          e.box(
+            I,
+            t,
+            a,
+            i + n - 0.015,
+            i + n + 0.015,
+            0,
+            0.44,
+            o + r - 0.015,
+            o + r + 0.015,
+          );
+    }
+  }
+}
+function Nt() {
+  return {
+    key: `hBoulangerie`,
+    name: `Boulangerie Lebrun`,
+    plain: 14274748,
+    desc: `Paris corner bakery: cut-corner entrance, painted blue wooden shopfront with gilded lettering, striped awnings, iron balconettes, café tables.`,
+    W: 10,
+    D: 10,
+    chamfer: { r: 2.4 },
+    style: {
+      wall: `limestone`,
+      t: 0.4,
+      bay: 2.6,
+      floors: [4, 3.3],
+      parapet: 0.5,
+      win: {
+        w: 1.1,
+        h: 2.3,
+        sill: 0.05,
+        type: `grid`,
+        lites: [2, 4],
+        frame: `trimWhite`,
+        header: `limestone`,
+        keystone: !0,
+        rec: 0.18,
+        curtains: 0.6,
+      },
+      store: { frame: `hShopBlue`, fascia: `hShopBlue` },
+      awning: { mat: `hAwningBlue`, depth: 1.3, drop: 0.6 },
+      door: {
+        w: 1.3,
+        h: 2.5,
+        transom: 0.5,
+        frame: `hShopBlue`,
+        glazed: !0,
+        mat: `hShopBlue`,
+        rec: 0.3,
+        step: `granite`,
+      },
+      base: { mat: `granite`, h: 0.4, out: 0.04 },
+      belt: { mat: `limestone`, h: 0.22, out: 0.08 },
+      cornice: {
+        type: `classic`,
+        mat: `limestone`,
+        h: 0.45,
+        out: 0.4,
+        dentils: !0,
+        cap: `hZinc`,
+      },
+    },
+    front: {
+      kinds: (e) => (e === 0 ? `store` : `window`),
+      extra: T(jt(`signHBoulangerie`), Y([1], 1.1), Mt),
+    },
+    corner: {
+      kinds: (e) => (e === 0 ? `door` : `window`),
+      extra: T(jt(`signHPain`), Y([1], 1.1)),
+    },
+    right: {
+      kinds: (e, t) =>
+        e === 0 ? (t === 0 ? `store` : t === 2 ? `door` : `solid`) : `window`,
+      extra: T(jt(`signHVienn`, 2.4), Y([1], 1.1)),
+    },
+    left: { kinds: (e) => (e === 0 ? `solid` : `window`) },
+    back: {
+      kinds: (e, t) => (e === 0 ? (t === 1 ? `door` : `solid`) : `window`),
+    },
+    extra: (e, t, n) =>
+      N(e, t, `limestone`, -3, -2.5, n.H, n.H + 2.2, 1.6, 0.6),
+  };
+}
+function Pt(e, t, n) {
+  let r = 7.7,
+    i = 0.32,
+    a = 0.44,
+    o = n.L;
+  for (let [s, c] of W(n, -0.12, o + 0.12))
+    U(e, `hLapWhite`, t, n, s, c, n.H - 0.35, r, i, a);
+  for (let a of [-0.12, o]) U(e, `hLapWhite`, t, n, a, a + 0.12, n.H, r, 0, i);
+  let s = n.gableCell;
+  (e.box(`signHHardware`, t, s, 0.5, o - 0.5, 4.75, 7, a, 0.46, {
+    planar: (e, t) => [(e - 0.5) / (o - 1), (t - 4.75) / 2.25],
+  }),
+    e.box(`woodDark`, t, s, -0.3, o + 0.3, r, 7.92, 0.1, 0.79),
+    e.box(`woodDark`, t, s, -0.2, o + 0.2, 7.5, r, i, 0.64));
+  for (let n = 0.2; n <= o; n += (o - 0.4) / 5)
+    e.box(`woodDark`, t, s, n - 0.07, n + 0.07, 7.15, 7.5, a, 0.72);
+  let c = n.grid[0][2];
+  for (let [n, r] of [
+    [8.6, 0],
+    [9.3, 1],
+  ])
+    e.add(
+      `tank`,
+      new p(0.3, 0.28, 0.85, 12).translate(n, 0.73, 1.6 + r * 0.2),
+      t,
+      c,
+    );
+  (e.box(`wood`, t, c, 7.4, 8.1, 0.3, 0.95, 1.7, 2.3),
+    e.box(`wood`, t, n.grid[0][0], 0.6, 1.3, 0.3, 0.8, 1.9, 2.35));
+  for (let r of [0.8, 3.2])
+    e.box(
+      `wood`,
+      t,
+      n.grid[0][L(n, r)],
+      r - 0.07,
+      r + 0.07,
+      0,
+      1.05,
+      3.25,
+      3.39,
+    );
+  (e.box(`wood`, t, n.grid[0][0], 0.7, 3.3, 0.95, 1.05, 3.27, 3.37),
+    e.box(`wood`, t, n.grid[0][0], 1, 3, 0, 0.55, 3.55, 4.05));
+}
+function Ft() {
+  return {
+    key: `hFalseFront`,
+    name: `Greywater Hardware & Feed`,
+    plain: 8874058,
+    desc: `Western false-front store: board-and-batten barn behind a tall square false front with a bracketed cornice and painted sign, covered plank boardwalk.`,
+    W: 10,
+    D: 16,
+    style: {
+      wall: `hBattenBrown`,
+      t: 0.2,
+      bay: 3.33,
+      floors: [4.2],
+      win: {
+        w: 1.1,
+        h: 1.6,
+        sill: 1,
+        type: `sash`,
+        lites: [2, 2],
+        frame: `trimWhite`,
+        casing: `trimWhite`,
+        rec: 0.08,
+        curtains: 0.2,
+      },
+      store: { frame: `woodDark`, fascia: `woodDark` },
+      door: {
+        w: 1.3,
+        h: 2.4,
+        transom: 0.5,
+        frame: `woodDark`,
+        glazed: !0,
+        mat: `woodDoor`,
+        rec: 0.2,
+      },
+      loading: { type: `barn`, mat: `wood`, trim: `trimWhite`, w: 2.6, h: 3.2 },
+      base: { mat: `wood`, h: 0.3, out: 0.02 },
+      roof: {
+        ridge: `z`,
+        pitch: 28 * F,
+        over: 0.25,
+        mat: `corrugated`,
+        fascia: `woodDark`,
+      },
+    },
+    front: {
+      kinds: (e, t) => (t === 1 ? `door` : `store`),
+      extra: T(
+        G({
+          d: 2.6,
+          y: 0.3,
+          top: 3.3,
+          beam: 0.24,
+          rise: 0.3,
+          roof: `corrugated`,
+          trim: `woodDark`,
+          deck: `wood`,
+          col: `post`,
+          colW: 0.09,
+          cols: [0.2, 3.1, 6.9, 9.8],
+          brackets: !0,
+        }),
+        Pt,
+      ),
+    },
+    right: { kinds: (e, t) => (t === 3 ? `loading` : `window`) },
+    left: { kinds: (e, t) => (t % 2 ? `window` : `solid`) },
+    back: { kinds: (e, t) => (t === 1 ? `loading` : `solid`) },
+  };
+}
+function It(e, t, n) {
+  let r = 2.66,
+    i = 3.2,
+    a = 1.5;
+  for (let [o, s, c] of W(n, a, 12.5)) {
+    let l = n.grid[0][c];
+    (e.box(`wood`, t, l, o, s, i, 4.1, 2.6, r),
+      e.box(`signHTrading`, t, l, o, s, 3.2600000000000002, 4.04, r, 2.68, {
+        planar: (e, t) => [(e - a) / 11, (t - i - 0.06) / 0.7799999999999995],
+      }));
+  }
+  for (let r of [3, 7, 11])
+    O(
+      e,
+      `wood`,
+      t,
+      n.grid[0][L(n, r)],
+      [r, 3.8999999999999995, 2.58],
+      [r, 3.3, 0.6],
+      0.07,
+    );
+  for (let [r, i, a] of [
+    [3.2, 5.4, `signHIce`],
+    [8.6, 10.8, `signHBait`],
+  ]) {
+    let o = n.grid[0][L(n, (r + i) / 2)],
+      s = 2.34;
+    e.box(a, t, o, r, i, 2.3, 2.8, s, 2.3699999999999997, {
+      planar: (e, t) => [(e - r) / (i - r), (t - 2.3) / 0.5],
+    });
+    for (let n of [r + 0.2, i - 0.2])
+      e.box(I, t, o, n - 0.01, n + 0.01, 2.8, 2.9, s, 2.36);
+  }
+  let o = n.grid[0][0],
+    s = n.grid[0][4];
+  for (let [n, r, i] of [
+    [0.6, 0.3, 1.2],
+    [1.3, 0.3, 1.3],
+    [0.9, 0.85, 1.25],
+  ])
+    e.box(`wood`, t, o, n - 0.28, n + 0.28, r, r + 0.55, i - 0.28, i + 0.28);
+  for (let [n, r] of [
+    [12.6, `hEnamelRed`],
+    [13.3, `hTrimBlue`],
+  ])
+    e.add(r, new p(0.3, 0.3, 0.9, 12).translate(n, 0.75, 1.2), t, s);
+  e.box(`wood`, t, s, 11, 12.2, 0.72, 0.78, 0.3, 0.7);
+  for (let n of [11.1, 12.1])
+    e.box(`wood`, t, s, n - 0.04, n + 0.04, 0.3, 0.72, 0.35, 0.65);
+}
+function Lt() {
+  let e = {
+      d: 2.4,
+      y: 0.3,
+      top: 2.9,
+      beam: 0.2,
+      rise: 0.35,
+      roof: `hTinRust`,
+      trim: `trimWhite`,
+      deck: `wood`,
+      col: `post`,
+      colW: 0.08,
+    },
+    t = 0.22;
+  return {
+    key: `hTradingPost`,
+    name: `Pelican Bay Trading Post`,
+    plain: 7317439,
+    desc: `Island trading post: sky-blue clapboard, rusty tin roof, verandah on posts round three sides, hand-painted signboards, louvred shutters, crates and drums.`,
+    W: 14,
+    D: 11,
+    style: {
+      wall: `hLapBlue`,
+      t,
+      bay: 2.8,
+      floors: [3.8],
+      win: {
+        w: 1.1,
+        h: 1.5,
+        sill: 0.9,
+        type: `grid`,
+        lites: [2, 2],
+        frame: `trimWhite`,
+        shutter: `hShutterYellow`,
+        rec: 0.08,
+        curtains: 0.3,
+      },
+      store: { frame: `trimWhite`, fascia: `trimWhite` },
+      door: {
+        w: 1.4,
+        h: 2.4,
+        transom: 0.4,
+        frame: `trimWhite`,
+        mat: `hDoorRed`,
+        rec: 0.12,
+      },
+      base: { mat: `concrete`, h: 0.3, out: 0.02 },
+      corners: `trimWhite`,
+      roof: {
+        ridge: `x`,
+        pitch: 22 * F,
+        over: 0.5,
+        mat: `hTinRust`,
+        fascia: `trimWhite`,
+      },
+    },
+    front: {
+      kinds: (e, t) => [`window`, `store`, `door`, `store`, `window`][t],
+      extra: T(G({ ...e, a0: 0, a1: 14, steps: [7], gap: 2.8 }), It),
+    },
+    right: {
+      kinds: (e, t) => (t === 1 ? `door` : `window`),
+      extra: G({ ...e, a0: -2.62, a1: 4 }),
+    },
+    left: {
+      kinds: () => `window`,
+      extra: (n, r, i) => G({ ...e, a0: i.L - 4, a1: i.L + t + 2.4 })(n, r, i),
+    },
+    back: { kinds: (e, t) => (t === 2 ? `door` : `window`) },
+    extra: (e, t, n) => {
+      let r = -n.W / 2 + 1.2,
+        i = -n.D / 2 - 1.2;
+      (e.add(`corrugated`, new p(1, 1, 2.2, 16).translate(r, 1.1, i), t, 0),
+        e.add(
+          `corrugated`,
+          R(new a(1.05, 0.3, 16)).translate(r, 2.35, i),
+          t,
+          0,
+        ));
+    },
+  };
+}
+function Rt(t, n, r) {
+  for (let [e, i, a] of W(r, 0, r.L)) {
+    let o = r.grid[0][a];
+    (t.box(`aluminum`, n, o, e, i, 3.55, 3.69, 0, 1.4),
+      t.box(
+        `hEnamelTeal`,
+        n,
+        o,
+        e - (a === 0 ? 0.05 : 0),
+        i + (a === r.nb - 1 ? 0.05 : 0),
+        3.4499999999999997,
+        3.8499999999999996,
+        1.3499999999999999,
+        1.43,
+      ));
+  }
+  for (let [e, i, a] of [
+    [0.4, 7.6, `signHLaundry`],
+    [8.4, 15.6, `signHBarberShop`],
+  ])
+    for (let [o, s, c] of W(r, e, i)) {
+      let l = r.grid[0][c];
+      (t.box(I, n, l, o, s, 4.55, 5.55, 0, 0.2),
+        t.box(a, n, l, o, s, 4.6, 5.5, 0.2, 0.22, {
+          planar: (t, n) => [(t - e) / (i - e), (n - 4.6) / 0.9],
+        }));
+    }
+  for (let e of [0, 1])
+    for (let i = 0; i < 4; i++) {
+      let a = r.grid[0][e],
+        o = e * r.bw + 0.75 + i * 0.83;
+      for (let [e, r] of [
+        [0, -1.5],
+        [1, -1.5],
+      ])
+        (t.box(
+          `whiteSpandrel`,
+          n,
+          a,
+          o - 0.36,
+          o + 0.36,
+          e,
+          e + 0.92,
+          r - 0.35,
+          r + 0.35,
+        ),
+          t.add(
+            `hChrome`,
+            new p(0.24, 0.24, 0.03, 16)
+              .rotateX(Math.PI / 2)
+              .translate(o, e + 0.5, r + 0.36),
+            n,
+            a,
+          ),
+          t.add(
+            `glass`,
+            new p(0.19, 0.19, 0.03, 16)
+              .rotateX(Math.PI / 2)
+              .translate(o, e + 0.5, r + 0.38),
+            n,
+            a,
+          ));
+    }
+  let i = r.grid[0][2],
+    a = 8.38,
+    o = 0.26;
+  t.add(`hPole`, new p(0.1, 0.1, 1.3, 16).translate(a, 2.2, o), n, i, {
+    planar: (e, t, n) => [
+      Math.atan2(e - a, n - o) / (Math.PI * 2) + 0.5,
+      t / 0.6,
+    ],
+  });
+  for (let e of [1.5, 2.9])
+    t.add(`hChrome`, new p(0.13, 0.13, 0.12, 16).translate(a, e, o), n, i);
+  (t.add(`bulb`, new e(0.13, 12, 8).translate(a, 3.05, o), n, i),
+    t.box(I, n, i, 8.350000000000001, 8.41, 1.8, 2.6, 0, 0.18));
+}
+function zt() {
+  return {
+    key: `hLaundromat`,
+    name: `Suds & Shears`,
+    plain: 13481100,
+    desc: `1960s two-unit shop: cream roman brick, big plate windows, a coin laundry full of washers under blue neon, a barber with a striped pole and red neon.`,
+    W: 16,
+    D: 12,
+    style: {
+      wall: `hBrickCream`,
+      t: 0.3,
+      bay: 4,
+      floors: [4.4],
+      parapet: 1.4,
+      store: { frame: `aluminum`, fascia: `hEnamelTeal` },
+      door: {
+        w: 1.1,
+        h: 2.3,
+        transom: 0.4,
+        frame: `aluminum`,
+        glazed: !0,
+        rec: 0.3,
+      },
+      base: { mat: `granite`, h: 0.45, out: 0.03 },
+      cornice: { type: `classic`, mat: `aluminum`, h: 0.15, out: 0.1 },
+    },
+    front: { kinds: (e, t) => (t === 2 ? `door` : `store`), extra: Rt },
+    back: { kinds: (e, t) => (t === 1 || t === 2 ? `door` : `solid`) },
+    right: { kinds: () => `solid` },
+    left: { kinds: () => `solid` },
+    extra: (e, t, n) => {
+      (e.box(`aluminum`, t, 0, -4, -2.4, n.H, n.H + 0.9, -2, -0.8),
+        e.add(
+          `aluminum`,
+          new p(0.3, 0.3, 1.2, 12).translate(3, n.H + 0.6, -3),
+          t,
+          0,
+        ));
+    },
+  };
+}
+function Bt() {
+  let n = 0.3,
+    r = Math.atan2(2.9499999999999993, 16.7),
+    i = (e) =>
+      4.25 + ((e - -6.7) * 2.9499999999999993) / 16.7 - n / 2 / Math.cos(r),
+    a = (e, t) => (n, r, a) => {
+      for (let o = 0; o < a.nb; o++) {
+        let s = o * a.bw,
+          l = s + a.bw,
+          u = a.grid[0][o],
+          d = new h(
+            [
+              [s, a.H],
+              [l, a.H],
+              [l, i(e(l)) + 0.03],
+              [s, i(e(s)) + 0.03],
+            ].map(([e, t]) => new c(e, t)),
+          );
+        (n.add(
+          t,
+          new m(d, { depth: 0.06, bevelEnabled: !1 }).translate(0, 0, -0.12),
+          r,
+          u,
+        ),
+          n.box(`hChrome`, r, u, s, l, a.H - 0.04, a.H + 0.06, -0.14, 0.02),
+          t !== `hEnamelTeal` &&
+            n.box(`hChrome`, r, u, s, s + 0.06, a.H, i(e(s)), -0.13, -0.03));
+      }
+    };
+  function o(t, n, r) {
+    let i = -2.9,
+      a = 2.4,
+      o = r.grid[0][0];
+    (t.box(`hFieldstone`, n, o, -4.1, -1.7, 0, 0.6, 1.5999999999999999, 3.2),
+      t.box(`hEnamelTeal`, n, o, -3.4, -2.4, 0.6, 12, 2.1999999999999997, 2.6),
+      t.box(`signHStarlite`, n, o, -3.32, -2.48, 3.2, 11.6, 2.6, 2.62, {
+        planar: (e, t) => [(e - i + 0.42) / 0.84, (t - 3.2) / 8.4],
+      }),
+      t.box(
+        `signHStarlite`,
+        n,
+        o,
+        -3.32,
+        -2.48,
+        3.2,
+        11.6,
+        2.1799999999999997,
+        2.1999999999999997,
+        { planar: (e, t) => [(-2.48 - e) / 0.84, (t - 3.2) / 8.4] },
+      ),
+      t.box(I, n, o, -4.7, -1.0999999999999999, 1.4, 2.6, 2.15, 2.65),
+      t.box(`signHDriveIn`, n, o, -4.6, -1.2, 1.5, 2.5, 2.65, 2.67, {
+        planar: (e, t) => [(e - i + 1.7) / 3.4, t - 1.5],
+      }),
+      t.add(`hChrome`, new p(0.05, 0.05, 1, 8).translate(i, 12.5, a), n, o),
+      t.add(`hNeonYellow`, new e(0.34, 14, 10).translate(i, 13.1, a), n, o));
+    for (let e = 0; e < 12; e++) {
+      let r = (e / 12) * Math.PI * 2,
+        s = e % 2 ? 0.9 : 1.5;
+      O(
+        t,
+        `hNeonYellow`,
+        n,
+        o,
+        [i, 13.1, a],
+        [i + Math.cos(r) * s, 13.1 + Math.sin(r) * s, a],
+        0.06,
+      );
+    }
+    (O(
+      t,
+      `hEnamelOrange`,
+      n,
+      o,
+      [-2.4, 9.8, a],
+      [0.10000000000000009, 7, a],
+      0.32,
+    ),
+      O(
+        t,
+        `hEnamelOrange`,
+        n,
+        o,
+        [0.10000000000000009, 7, a],
+        [-0.6999999999999997, 6.2, a],
+        0.32,
+      ));
+    for (let e = 0.1; e < 1; e += 0.12)
+      t.box(
+        `bulb`,
+        n,
+        o,
+        -2.4 + 2.5 * e - 0.06,
+        -2.4 + 2.5 * e + 0.06,
+        9.8 - 2.8 * e + 0.12,
+        9.8 - 2.8 * e + 0.24,
+        2.34,
+        2.46,
+      );
+  }
+  function s(e, a) {
+    let o = Math.hypot(16.7, 2.9499999999999993),
+      s = 3.3 / 2,
+      c = 11.45 / 2;
+    e.add(`hStuccoWhite`, new t(19, n, o).rotateX(-r).translate(0, c, s), a, 0);
+    for (let n of [-1, 1])
+      e.add(
+        `hEnamelOrange`,
+        new t(0.12, 0.42, o + 0.1).rotateX(-r).translate(n * 9.56, c, s),
+        a,
+        0,
+      );
+    e.add(
+      `hEnamelOrange`,
+      new t(19.240000000000002, 0.42, 0.12)
+        .rotateX(-r)
+        .translate(0, 7.199999999999999, 10),
+      a,
+      0,
+    );
+    let l = 8.1;
+    for (let t of [-5, 0, 5])
+      for (let n of [-1, 1])
+        O(
+          e,
+          `hEnamelOrange`,
+          a,
+          0,
+          [t + n * 1, 0, l],
+          [t, i(l) - 0.02, l],
+          0.16,
+        );
+    for (let t = 6.1; t < 9.5; t += 1.3)
+      for (let n = -7; n < 8; n += 2)
+        e.box(
+          `bulb`,
+          a,
+          0,
+          n - 0.15,
+          n + 0.15,
+          i(t) - 0.05,
+          i(t) + 0.02,
+          t - 0.15,
+          t + 0.15,
+        );
+  }
+  return {
+    key: `hGoogie`,
+    name: `Starlite Drive-In`,
+    plain: 3115660,
+    desc: `Googie drive-in: glass walls under a dramatic upswept roof on raked orange legs, glazed clerestory, teal enamel and a starburst pylon sign.`,
+    W: 16,
+    D: 11,
+    style: {
+      wall: `hEnamelTeal`,
+      t: 0.25,
+      bay: 3.2,
+      floors: [3.8],
+      curtain: {
+        glass: `glassBlue`,
+        spandrel: `hEnamelTeal`,
+        mullion: `hChrome`,
+        module: 1.6,
+        sill: 0.8,
+        head: 0.2,
+        fin: 0.05,
+      },
+      door: {
+        w: 1.6,
+        h: 2.4,
+        transom: 0.4,
+        frame: `hChrome`,
+        glazed: !0,
+        rec: 0.3,
+      },
+      base: { mat: `hFieldstone`, h: 0.8, out: 0.04 },
+      roof: X,
+    },
+    front: {
+      kinds: (e, t) => (t === 2 ? `door` : `curtain`),
+      extra: T(
+        a(() => 11 / 2, `glassBlue`),
+        o,
+      ),
+    },
+    right: {
+      kinds: () => `curtain`,
+      extra: a((e) => 11 / 2 - 0.25 - e, `glassBlue`),
+    },
+    left: { kinds: () => `curtain`, extra: a((e) => -5.25 + e, `glassBlue`) },
+    back: {
+      kinds: (e, t) => (t === 1 ? `door` : `solid`),
+      extra: a(() => -11 / 2, `hEnamelTeal`),
+    },
+    extra: s,
+  };
+}
+function Vt(e, n, r) {
+  let i = [
+    `redPaint`,
+    `hEnamelYellow`,
+    `hTrimBlue`,
+    `trimWhite`,
+    I,
+    `hEnamelOrange`,
+  ];
+  for (let [a, o] of [
+    [0.4, 0],
+    [8.4, 2],
+  ]) {
+    let s = r.grid[0][o],
+      c = a + 3.2;
+    for (let t of [a, c])
+      e.box(
+        `woodDark`,
+        n,
+        s,
+        t - 0.06,
+        t + 0.06,
+        0,
+        1.3,
+        2.14,
+        2.2600000000000002,
+      );
+    (e.box(`woodDark`, n, s, a, c, 1.2, 1.3, 1.9000000000000001, 2),
+      e.box(`woodDark`, n, s, a, c, 0.15, 0.25, 2.35, 2.5));
+    for (let r = 0; r < 12; r++) {
+      let c = a + 0.2 + r * 0.24 + (r % 2) * 0.05,
+        l = i[(r + o) % i.length];
+      e.add(
+        l,
+        new t(0.08, 1.75, 0.03).rotateX(-0.2).translate(c, 0.95, 2.2),
+        n,
+        s,
+      );
+    }
+    for (let t = 0; t < 4; t++)
+      O(
+        e,
+        `aluminum`,
+        n,
+        s,
+        [a + 0.5 + t * 0.7, 0, 2.5500000000000003],
+        [a + 0.6 + t * 0.7, 1.25, 2.1],
+        0.025,
+      );
+  }
+  for (let [i, a] of [
+    [4.3, `hEnamelOrange`],
+    [4.7, `hTrimBlue`],
+    [7.3, `redPaint`],
+  ])
+    e.add(
+      a,
+      new t(0.28, 1.5, 0.04).rotateX(-0.12).translate(i, 0.78, 0.18),
+      n,
+      r.grid[0][L(r, i)],
+    );
+}
+function Ht(e, t, n) {
+  let r = n.gableCell,
+    i = n.L / 2,
+    a = n.H + 1.45,
+    o = n.H + 2.9;
+  e.box(`glass`, t, r, i - 1.1, i + 1.1, a, o, 0.01, 0.02);
+  for (let [n, s, c, l] of [
+    [i - 1.2, i - 1.1, a, o],
+    [i + 1.1, i + 1.2, a, o],
+    [i - 1.2, i + 1.2, o, o + 0.1],
+    [i - 1.25, i + 1.25, a - 0.1, a],
+    [i - 0.4, i - 0.34, a, o],
+    [i + 0.34, i + 0.4, a, o],
+  ])
+    e.box(`redPaint`, t, r, n, s, c, l, 0, 0.07);
+}
+function Ut() {
+  let e = 34 * F,
+    t = 1.2,
+    n = {
+      ridge: `z`,
+      pitch: e,
+      over: t,
+      mat: `hShingleGrey`,
+      fascia: `woodDark`,
+    };
+  return {
+    key: `hSkiRental`,
+    name: `Alpenglow Ski & Sport`,
+    plain: 11830094,
+    desc: `Alpine ski shop: honey-pine walls on a fieldstone base, big snowy gable, red-framed windows, carved balcony and sign, racks of rental skis out front.`,
+    W: 12,
+    D: 10,
+    style: {
+      wall: `hPine`,
+      t: 0.3,
+      bay: 4,
+      floors: [3.6, 3],
+      win: {
+        w: 1.3,
+        h: 2.1,
+        sill: 0.05,
+        type: `grid`,
+        lites: [2, 3],
+        frame: `redPaint`,
+        rec: 0.15,
+        curtains: 0.4,
+      },
+      store: { frame: `woodDark`, fascia: `woodDark` },
+      door: {
+        w: 1.4,
+        h: 2.4,
+        transom: 0.4,
+        frame: `woodDark`,
+        glazed: !0,
+        mat: `redPaint`,
+        rec: 0.3,
+      },
+      base: { mat: `hFieldstone`, h: 0.9, out: 0.05 },
+      belt: { mat: `woodDark`, h: 0.25, out: 0.06 },
+      corners: `woodDark`,
+      roof: n,
+    },
+    front: {
+      kinds: (e, t) => (e === 0 ? (t === 1 ? `door` : `store`) : `window`),
+      signs: [
+        { mat: `signHSki`, rect: [2.4, 9.6, 7.05, 7.8], z0: 0.02, z1: 0.08 },
+      ],
+      extra: T(
+        J({
+          y: 3.6,
+          a0: 0.6,
+          a1: 11.4,
+          d: 1.2,
+          rail: `hCarvedRail`,
+          trim: `woodDark`,
+        }),
+        Pe(e, t, `woodDark`, [0.02, 0.25, 0.5, 0.75, 0.98]),
+        Vt,
+        Ht,
+      ),
+    },
+    back: {
+      kinds: (e, t) => (e === 0 && t === 1 ? `door` : `window`),
+      extra: Pe(e, t, `woodDark`, [0.02, 0.5, 0.98]),
+    },
+    right: { kinds: () => `window`, extra: K(e, t, `woodDark`, 0.8) },
+    left: { kinds: () => `window`, extra: K(e, t, `woodDark`, 0.8) },
+    extra: (e, t, r) => {
+      (Z(e, t, r, n, `hSnow`, 0, 0.2),
+        N(e, t, `hFieldstone`, -3, -2, r.H - 0.5, r.roofTop + 0.4, 0.9, 0.9));
+    },
+  };
+}
+function Wt() {
+  je();
+  let e = { font: `"Arial Black", Impact, sans-serif`, weight: 900 };
+  return (
+    v(`signHCafe`, `CAFÉ DES ARTS`, {
+      bg: 1913942,
+      fg: 14727242,
+      aspect: 0.46 / 5.03,
+      size: 0.66,
+      spacing: 0.18,
+    }),
+    v(`signHPharma`, `PHARMACIE`, {
+      bg: 2050618,
+      fg: 16052714,
+      aspect: 0.46 / 7.7,
+      size: 0.66,
+      spacing: 0.3,
+    }),
+    v(`signHComet`, `COMET  GASOLINE  ·  LUBRICATION  ·  TIRES`, {
+      bg: 15920864,
+      fg: 2783822,
+      aspect: 0.7 / 7.4,
+      size: 0.6,
+      spacing: 0.05,
+      ...e,
+    }),
+    v(`signHCometBand`, `COMET  ★  SERVICE`, {
+      bg: 2783822,
+      fg: 16773320,
+      glow: 0.3,
+      aspect: 0.49 / 8.8,
+      size: 0.7,
+      spacing: 0.3,
+      ...e,
+    }),
+    v(`signHCometRoof`, `★ COMET ★`, {
+      bg: 2055740,
+      fg: 16773320,
+      border: 15251498,
+      glow: 0.6,
+      aspect: 1.8 / 6,
+      size: 0.66,
+      spacing: 0.12,
+      ...e,
+    }),
+    v(`signHDiner`, `DINER`, {
+      fg: 16730682,
+      glow: 1.5,
+      aspect: 1.5 / 5.5,
+      size: 0.85,
+      spacing: 0.2,
+      ...e,
+    }),
+    v(`signHDinerBand`, `MOONBEAM DINER  ·  OPEN 24 HOURS`, {
+      bg: 11740702,
+      fg: 16052714,
+      glow: 0.4,
+      aspect: 0.54 / 12.8,
+      size: 0.7,
+      spacing: 0.12,
+      ...e,
+    }),
+    v(`signHEat`, `EAT`, {
+      bg: 1513243,
+      fg: 16730682,
+      glow: 1.6,
+      aspect: 0.32 / 2.2,
+      width: 512,
+      size: 0.8,
+      spacing: 0.3,
+      ...e,
+    }),
+    [
+      [`SUNRISE DONUTS`, 16183264, 14706730, 0.3],
+      [`VIDEO WORLD`, 1714794, 16767050, 0.6],
+      [`CASCADE PIZZA`, 10365474, 16773336, 0.4],
+      [`NAIL SPA`, 16049902, 12726378, 0.3],
+      [`TAX & NOTARY`, 2050618, 16052714, 0.2],
+    ].forEach(([t, n, r, i], a) =>
+      v(`signHMall${a}`, t, {
+        bg: n,
+        fg: r,
+        glow: i,
+        aspect: 0.9 / 4.3,
+        width: 1024,
+        size: 0.62,
+        spacing: 0.04,
+        ...e,
+      }),
+    ),
+    v(`signHPlaza`, `GREYWATER PLAZA`, {
+      bg: 15327436,
+      fg: 3108720,
+      aspect: 1 / 4.2,
+      width: 1024,
+      size: 0.5,
+      spacing: 0.08,
+      ...e,
+    }),
+    v(`signHBoulangerie`, `BOULANGERIE · PÂTISSERIE`, {
+      bg: 1913942,
+      fg: 14727242,
+      aspect: 0.55 / 7.6,
+      size: 0.66,
+      spacing: 0.12,
+    }),
+    v(`signHPain`, `PAIN CHAUD`, {
+      bg: 1913942,
+      fg: 14727242,
+      aspect: 0.55 / 3.39,
+      width: 1024,
+      size: 0.62,
+      spacing: 0.12,
+    }),
+    v(`signHVienn`, `VIENNOISERIE`, {
+      bg: 1913942,
+      fg: 14727242,
+      aspect: 0.55 / 2.4,
+      width: 1024,
+      size: 0.5,
+      spacing: 0.06,
+    }),
+    v(
+      `signHHardware`,
+      `GREYWATER
+HARDWARE & FEED`,
+      {
+        bg: 15327951,
+        fg: 7218200,
+        aspect: 2.25 / 9,
+        size: 0.72,
+        spacing: 0.04,
+        ...e,
+      },
+    ),
+    v(`signHTrading`, `PELICAN BAY TRADING POST`, {
+      bg: 15918788,
+      fg: 2050666,
+      border: 12597547,
+      aspect: 0.78 / 11,
+      size: 0.6,
+      spacing: 0.06,
+      ...e,
+    }),
+    v(`signHIce`, `ICE · COLD DRINKS`, {
+      bg: 14169130,
+      fg: 16777215,
+      aspect: 0.5 / 2.2,
+      width: 1024,
+      size: 0.55,
+      ...e,
+    }),
+    v(`signHBait`, `BAIT & TACKLE`, {
+      bg: 16044618,
+      fg: 1845828,
+      aspect: 0.5 / 2.2,
+      width: 1024,
+      size: 0.55,
+      ...e,
+    }),
+    v(`signHLaundry`, `COIN LAUNDRY`, {
+      bg: 993850,
+      fg: 8380671,
+      glow: 1.2,
+      aspect: 0.9 / 7.2,
+      size: 0.72,
+      spacing: 0.12,
+      ...e,
+    }),
+    v(`signHBarberShop`, `BARBER SHOP`, {
+      bg: 1513243,
+      fg: 16730682,
+      glow: 1.2,
+      aspect: 0.9 / 7.2,
+      size: 0.72,
+      spacing: 0.12,
+      ...e,
+    }),
+    v(
+      `signHStarlite`,
+      `S
+T
+A
+R
+L
+I
+T
+E`,
+      {
+        bg: 16052714,
+        fg: 14706730,
+        glow: 0.6,
+        aspect: 10,
+        width: 300,
+        size: 0.82,
+        ...e,
+      },
+    ),
+    v(`signHDriveIn`, `DRIVE-IN`, {
+      bg: 1513243,
+      fg: 8380671,
+      glow: 1.2,
+      aspect: 1 / 3.4,
+      width: 1024,
+      size: 0.7,
+      spacing: 0.1,
+      ...e,
+    }),
+    v(`signHSki`, `ALPENGLOW SKI & SPORT`, {
+      bg: 5913122,
+      fg: 15917752,
+      border: 15917752,
+      aspect: 0.75 / 7.2,
+      size: 0.62,
+      spacing: 0.08,
+    }),
+    [
+      Be(),
+      Ue(),
+      Ke(),
+      Ye(),
+      Ze(),
+      $e(),
+      tt(),
+      rt(),
+      ot(),
+      st(),
+      ut(),
+      mt(),
+      _t(),
+      yt(),
+      xt(),
+      Ct(),
+      Et(),
+      Ot(),
+      At(),
+      Nt(),
+      Ft(),
+      Lt(),
+      zt(),
+      Bt(),
+      Ut(),
+    ]
+  );
+}
+export {
+  A as a,
+  j as c,
+  O as d,
+  M as i,
+  E as l,
+  _e as n,
+  k as o,
+  T as r,
+  he as s,
+  Wt as t,
+  N as u,
+};
+//# sourceMappingURL=homes-styles-VxExOKpz.js.map

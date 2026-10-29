@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head><script src="/session.js" data-ruleset="r17-bascule-v1" data-lobby="1" data-map-name="Bascule" data-map-blurb="Rush · a double-tower bascule bridge at blue hour · every three minutes the leaves lift for a tall ship and the only way across is over the high walkways · 8v8" data-backdrop="/assets/maps/bascule-v1.jpg" data-code="0" data-owner=""></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Friends session</title>
+  <link rel="icon" href="data:," />
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #0b0f14; overscroll-behavior: none; -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
+    #app canvas { touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+    /* Phones held upright: the game is landscape only. */
+    #rotate-hint { display: none; }
+    @media (orientation: portrait) and (pointer: coarse) {
+      #rotate-hint { display: grid; position: fixed; inset: 0; z-index: 100000; place-content: center; gap: 14px; padding: 32px; text-align: center;
+        background: #0b0f14f2; color: #edf2f4; font: 600 20px/1.35 system-ui, sans-serif; }
+      #rotate-hint b { font-size: 56px; line-height: 1; }
+      #rotate-hint small { font-weight: 400; font-size: 15px; color: #9fb2bd; }
+    }
+    #app { position: fixed; inset: 0; }
+    #app canvas { display: block; width: 100%; height: 100%; }
+    #ui-root { position: fixed; inset: 0; pointer-events: none; }
+    #ui-root > * { pointer-events: auto; }
+  </style>
+  <script type="module" crossorigin src="/assets/index-CBqjwezZ.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/graphics-quality-BsjABS0s.js">
+</head>
+<body>
+  <div id="app"></div>
+  <div id="ui-root"></div>
+  <div id="rotate-hint"><b>⟳</b>Turn your phone sideways to play<small>Phone controls are basic. The full game is made for keyboard and mouse.</small></div>
+</body>
+</html>
+<!-- front-desk: assets/front-desk-DGPHybWS.js -->

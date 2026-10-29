@@ -1,0 +1,68 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import { C as e } from "./graphics-quality-CrL3qbU3.js";
+var t = 1800,
+  n = 4e3,
+  r = () => e.fog_vertex.includes(`vFogWorldOfs`);
+function i(e = n, r = t) {
+  let i = r.toFixed(1);
+  return `vec4 farCompressMV(vec4 mv) { float d = length(mv.xyz); if (d > ${i}) mv.xyz *= (${i} + ${(e * 0.985 - r).toFixed(1)} * (1.0 - exp(-(d - ${i}) / 4000.0))) / d; return mv; }\n`;
+}
+function a(e, { haze: a = 1, far: o = n, from: s = t } = {}) {
+  let c = a.toFixed(3);
+  e.vertexShader =
+    i(o, s) +
+    e.vertexShader
+      .replace(
+        `#include <project_vertex>`,
+        `#include <project_vertex>
+    vec4 fcTrue = mvPosition; mvPosition = farCompressMV(mvPosition); gl_Position = projectionMatrix * mvPosition;`,
+      )
+      .replace(
+        `#include <fog_vertex>`,
+        `#include <fog_vertex>
+    #ifdef USE_FOG
+      vFogDepth = -fcTrue.z * ${c};
+      ${r() ? `vFogWorldOfs = vec3(dot(fcTrue.xyz, viewMatrix[0].xyz), dot(fcTrue.xyz, viewMatrix[1].xyz), dot(fcTrue.xyz, viewMatrix[2].xyz)) * ${c};` : ``}
+    #endif`,
+      )
+      .replace(
+        `vViewPosition = - mvPosition.xyz;`,
+        `vViewPosition = - fcTrue.xyz;`,
+      );
+}
+function o(e, t = {}) {
+  let n = e.onBeforeCompile,
+    i = e.customProgramCacheKey?.bind(e);
+  return (
+    (e.onBeforeCompile = (r, i) => {
+      (n?.call(e, r, i), a(r, t));
+    }),
+    (e.customProgramCacheKey = () =>
+      (i ? i() : ``) +
+      `|fc-${t.haze ?? 1}-${t.far ?? 4e3}-${t.from ?? 1800}-${r()}`),
+    e
+  );
+}
+var s = (e, t, n) => {
+  let r = Math.max(0, Math.min(1, (n - e) / (t - e)));
+  return r * r * (3 - 2 * r);
+};
+function c(e, t, n, r, i = 8) {
+  let a = Math.max(Math.abs(e), Math.abs(t)) - r;
+  if (a <= 0) return n;
+  let o = s(0.52, 0.91, t / Math.max(Math.abs(e), Math.abs(t), 1)),
+    c =
+      30 +
+      36 * Math.sin(e * 0.002 + 1) * Math.sin(t * 0.0024) +
+      25 * Math.sin(e * 0.005 - t * 0.003) +
+      65 * s(400, 2200, a),
+    l = n + (Math.max(i + 12, c) - n) * s(0, 430, a),
+    u =
+      95 +
+      30 * Math.sin(e * 0.013 + t * 0.008) +
+      18 * Math.sin(t * 0.027 - e * 0.011),
+    d = n + (i - 28 - n) * s(0, u, a);
+  return d + (l - d) * o;
+}
+export { i as n, o as r, c as t };
+//# sourceMappingURL=harbor-land-d1AqIq2I.js.map

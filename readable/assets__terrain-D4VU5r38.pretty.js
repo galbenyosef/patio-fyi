@@ -1,0 +1,10134 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+const __vite__mapDeps = (
+  i,
+  m = __vite__mapDeps,
+  d = m.f ||
+    (m.f = ["assets/index-D8RniaPa.js", "assets/graphics-quality-CrL3qbU3.js"]),
+) => i.map((i) => d[i]);
+import {
+  $ as e,
+  At as t,
+  Bt as n,
+  Dn as r,
+  En as i,
+  F as a,
+  Gt as o,
+  Hn as s,
+  I as c,
+  L as l,
+  Lt as u,
+  M as d,
+  P as f,
+  U as p,
+  Un as m,
+  Vn as h,
+  Vt as g,
+  W as _,
+  X as v,
+  Zt as y,
+  _n as b,
+  at as x,
+  bn as S,
+  cn as C,
+  ct as w,
+  dt as T,
+  gt as E,
+  lt as D,
+  mn as O,
+  mt as k,
+  nn as ee,
+  nt as A,
+  p as j,
+  pt as M,
+  q as te,
+  tt as N,
+  v as ne,
+  vt as re,
+  z as ie,
+  zn as ae,
+  zt as oe,
+} from "./graphics-quality-CrL3qbU3.js";
+import { c as se, u as ce } from "./index-D8RniaPa.js";
+import {
+  a as le,
+  c as P,
+  i as F,
+  n as ue,
+  o as I,
+  r as L,
+  s as de,
+  t as fe,
+} from "./sim-CY547Hbc.js";
+import { o as pe, t as me } from "./town-beds-C6HTLOgG.js";
+import { i as he, n as ge, r as R, t as _e } from "./shaders-Sr63fOMj.js";
+import { r as ve, t as ye } from "./harbor-land-d1AqIq2I.js";
+import {
+  i as be,
+  n as xe,
+  r as Se,
+  t as Ce,
+} from "./ground-textures-Chd0kE89.js";
+import {
+  _ as z,
+  a as we,
+  b as Te,
+  c as Ee,
+  d as De,
+  f as Oe,
+  g as B,
+  h as ke,
+  i as Ae,
+  m as je,
+  o as Me,
+  p as Ne,
+  r as V,
+  s as Pe,
+  t as H,
+  u as Fe,
+  v as Ie,
+  y as Le,
+} from "./autumn-trees-Dw11AS6l.js";
+import { n as Re, r as ze, t as Be } from "./models-Df-1HzmN.js";
+import { t as Ve } from "./defaultmap-BVQrOy1s.js";
+var He = (e, t, n) => {
+    let r = (e * 374761393 + t * 668265263 + n * 2246822519) | 0;
+    return (
+      (r = Math.imul(r ^ (r >>> 13), 1274126177)),
+      ((r ^ (r >>> 16)) >>> 0) / 4294967296
+    );
+  },
+  Ue = (e) => e * e * (3 - 2 * e);
+function We(e, t, n) {
+  let r = Math.floor(e),
+    i = Math.floor(t),
+    a = Ue(e - r),
+    o = Ue(t - i),
+    s = He(r, i, n),
+    c = He(r + 1, i, n),
+    l = He(r, i + 1, n),
+    u = He(r + 1, i + 1, n);
+  return (s + (c - s) * a + (l - s) * o + (s - c - l + u) * a * o) * 2 - 1;
+}
+function Ge(e, t, n = 4, r = 1) {
+  let i = 0,
+    a = 1,
+    o = 0.5,
+    s = 0;
+  for (let c = 0; c < n; c++)
+    ((i += o * We(e * a, t * a, r + c * 17)),
+      (s += o),
+      (a *= 2.03),
+      (o *= 0.5));
+  return i / s;
+}
+var U = (e, t, n) => {
+    let r = Math.max(0, Math.min(1, (n - e) / (t - e)));
+    return r * r * (3 - 2 * r);
+  },
+  Ke = 8e3,
+  qe = (e) => 40 * Math.sin(e / 500);
+function Je(e) {
+  return e < 550
+    ? 70 + 300 * (1 - U(100, 500, e))
+    : e < 800
+      ? 62
+      : 62 + 650 * U(800, 1350, e) * (1 - U(1750, 2150, e));
+}
+var Ye = (e) => qe(e) + 330 * U(330, 30, e) ** 1.4,
+  Xe = (e, t) => t * Math.log1p(Math.exp(e / t));
+function Ze(e) {
+  return e < 650
+    ? Math.max(0, e) * 0.004
+    : 6 + (e - 650) * 0.004 + 200 * U(1800, 2300, e);
+}
+var Qe = (e, t) => U(0.15, 0.65, -e / Math.max(Math.abs(e), Math.abs(t), 1));
+function $e(e, t, n, r) {
+  let i = Qe(e, t),
+    a = -t,
+    o = e,
+    s = -o - r,
+    c = 0,
+    l = 0;
+  if (i > 0) {
+    let e =
+      (380 +
+        300 * Ge(a / 1400, o / 1400, 4, 3) +
+        140 * Ge(a / 400, o / 400, 3, 7)) *
+      U(150, 600, n);
+    e = Math.max(e, 360 * U(450, 650, n), 12);
+    let t = qe(s),
+      r = Je(s),
+      i = Math.abs(a - t),
+      u =
+        Ze(s) +
+        Xe(i - r, 18) *
+          (s < 800 ? 2.3 : 1.2) *
+          (0.85 + 0.3 * Ge(a / 180, o / 180, 3, 9));
+    (s < 650
+      ? ((u +=
+          0.05 * Math.min(i, r) +
+          2.5 * Ge(a / 120, o / 120, 2, 4) * U(20, 60, Math.abs(a - Ye(s)))),
+        (l = 4.5 * U(42, 12, Math.abs(a - Ye(s)))))
+      : (u -= 30 * U(r, r * 0.4, i) * (1 - U(1750, 2150, s))),
+      (c = Math.min(e, u) - l),
+      (c = Math.max(
+        c,
+        270 * U(r + 30, r + 120, i) * U(220, 80, Math.abs(s - 650 + 70)),
+      )));
+  }
+  let u =
+    1.5 +
+    3 * Ge(e / 300, t / 300, 3, 3) +
+    40 * Ge(e / 2600, t / 2600, 3, 5) * U(400, 2500, n) +
+    170 * U(4200, 7200, n) * (0.5 + 0.5 * Ge(e / 4e3, t / 4e3, 2, 9));
+  return i * c + (1 - i) * u;
+}
+var et = new _(8222058),
+  tt = new _(6117199),
+  nt = new _(6257210),
+  rt = new _(5660730),
+  it = new _(15265266),
+  at = [6261302, 7904324, 4878384, 8679503, 10259046, 7305792].map(
+    (e) => new _(e),
+  ),
+  ot = new _(4018728),
+  st = new _(7109208),
+  ct = new _(),
+  lt = new _(),
+  ut = new _(5796922),
+  dt = new _(7110468),
+  ft = new _(7035461);
+function pt(e, t, n, r, i, a) {
+  let o = t / 140 + 0.3 * We(n / 400, 1, 7),
+    s = n / 110,
+    c = Math.abs((Math.floor(o) * 7 + Math.floor(s) * 13) % at.length);
+  e.copy(at[c]).multiplyScalar(0.9 + 0.15 * We(t / 60, n / 60, 2));
+  let l = o - Math.floor(o),
+    u = s - Math.floor(s),
+    d = Math.min(l, 1 - l, u, 1 - u);
+  e.lerp(ot, 1 - U(0, 0.04, d)).lerp(st, U(1500, 4e3, a));
+  let f = Qe(t, n);
+  if (f > 0) {
+    let r = Math.max(Math.abs(t), Math.abs(n)) - a,
+      i = -n,
+      o = -t - r,
+      s = Math.abs(i - Ye(o));
+    (ct
+      .copy(ut)
+      .lerp(dt, 0.5 + 0.5 * Ge(t / 70, n / 70, 2, 12))
+      .lerp(ft, o < 650 ? U(26, 12, s) * 0.8 : 0),
+      e.lerp(ct, f));
+  }
+  return (
+    lt.copy(et).lerp(tt, U(-0.15, 0.35, Ge(t / 260, n / 260, 2, 5))),
+    ct
+      .copy(nt)
+      .lerp(rt, U(20, 120, r))
+      .lerp(lt, U(0.6, 1.4, i)),
+    ct.lerp(
+      it,
+      U(560, 680, r + 60 * Ge(t / 200, n / 200, 2, 6)) * (1 - U(1.2, 1.8, i)),
+    ),
+    e.lerp(ct, U(15, 60, r) * Qe(t, n) + (1 - Qe(t, n)) * U(0.35, 0.9, i))
+  );
+}
+var mt = 512,
+  ht = [65, 65, 129],
+  gt = [600, 210],
+  _t = 8,
+  vt = 26,
+  yt = 0.118;
+function bt(e, t, r) {
+  let { n: a, res: u, half: d, heights: p } = e,
+    m = St(e),
+    h = Tt(e, m, t),
+    g = (t) => {
+      for (let n = 0; n < a * a; n++) {
+        let r = L(
+          Math.max(e.padMask[n], 1 - P(4, 11, e.roadDist[n]), +!!e.fordMask[n]),
+          0,
+          1,
+        );
+        if (!(r <= 0))
+          for (let e = 0; e < 3; e++)
+            t[n * 3 + e] += (h[n * 3 + e] - t[n * 3 + e]) * r;
+      }
+      return t;
+    },
+    _ = [g(Ct(h, a, 2)), g(Ct(h, a, 1)), h],
+    v = h,
+    y = (t | 0) * 7919 + 13,
+    b = e.opts?.paving?.bounds ?? null,
+    x = b ? (e.opts.paving.ground ?? null) : null,
+    S = x ? R(x, 1).map : b ? Se(`plazaStone`).map : null,
+    C = x ? he(x) : Ce.plazaStone.scale,
+    w = (t) => {
+      let n = new o({
+        vertexColors: !0,
+        flatShading: !0,
+        roughness: 0.96,
+        metalness: 0,
+      });
+      return (
+        (n.userData.uMorphSplit = { value: t }),
+        ge(n, r, {
+          key: `terrain-ground-v9-${e.opts?.biome ?? `temperate`}${b ? `-paved${x ? `-` + x : ``}` : ``}`,
+          ...Et(b, C, !!x),
+          winter: e.opts?.biome === `snow`,
+          biome: e.opts?.biome ?? null,
+          detail: 0.16,
+          cliff: 0.3,
+          skirt: !0,
+          built: !0,
+          facet: 0.19,
+          smoothFar: [95, 330],
+          uniforms: {
+            uMorphSplit: n.userData.uMorphSplit,
+            ...(b ? { uPaveMap: { value: S } } : {}),
+          },
+          vertexDecl: `attribute float aTargetY;
+attribute vec3 aTargetC;
+uniform float uMorphSplit;
+float terMorph = 0.0;`,
+          colorVertex: `
+        if (uMorphSplit > 0.5) {
+          vec3 mwp = (modelMatrix * vec4(position, 1.0)).xyz;
+          terMorph = smoothstep(uMorphSplit * 0.78, uMorphSplit * 0.97, distance(mwp, cameraPosition));
+          vColor.rgb = mix(vColor.rgb, aTargetC, terMorph);
+        }`,
+          extraVertex: `
+        transformed.y = mix(transformed.y, aTargetY, terMorph);`,
+        }),
+        n
+      );
+    },
+    E = [w(0), w(gt[0]), w(gt[1])],
+    O = new T();
+  O.name = `terrain`;
+  let k = new Map(),
+    ee = new Set(),
+    A = 0,
+    j = 128 / u,
+    M = Math.ceil(e.size / 128),
+    te = new Float32Array(M * M).fill(1 / 0),
+    N = new Float32Array(M * M).fill(-1 / 0);
+  for (let e = 0; e < M; e++)
+    for (let t = 0; t < M; t++) {
+      let n = e * M + t,
+        r = Math.min(a - 1, Math.ceil((t + 1) * j)),
+        i = Math.min(a - 1, Math.ceil((e + 1) * j));
+      for (let o = Math.floor(e * j); o <= i; o++)
+        for (let e = Math.floor(t * j); e <= r; e++) {
+          let t = p[o * a + e];
+          (t < te[n] && (te[n] = t), t > N[n] && (N[n] = t));
+        }
+    }
+  function ne(e, t, n, r) {
+    let i = 4 >> e;
+    if (t * i >= M || n * i >= M) return null;
+    let a = 1 / 0,
+      o = -1 / 0;
+    for (let e = n * i; e < Math.min(M, (n + 1) * i); e++)
+      for (let n = t * i; n < Math.min(M, (t + 1) * i); n++) {
+        let t = e * M + n;
+        (te[t] < a && (a = te[t]), N[t] > o && (o = N[t]));
+      }
+    let s = mt >> e,
+      c = -d + t * s,
+      l = -d + n * s;
+    return (
+      (r[0] = c),
+      (r[1] = a - _t - yt),
+      (r[2] = l),
+      (r[3] = Math.min(d, c + s)),
+      (r[4] = o + yt),
+      (r[5] = Math.min(d, l + s)),
+      r
+    );
+  }
+  let re = a - 1.000001;
+  function ie(e, t) {
+    let n = (e + d) / u,
+      r = (t + d) / u;
+    (n > 0 ? n > re && (n = re) : (n = 0),
+      r > 0 ? r > re && (r = re) : (r = 0));
+    let i = n | 0,
+      o = r | 0,
+      s = n - i,
+      c = r - o,
+      l = o * a + i,
+      f = p[l] + (p[l + 1] - p[l]) * s;
+    return f + (p[l + a] + (p[l + a + 1] - p[l + a]) * s - f) * c;
+  }
+  function ae(e, t, n) {
+    let r = (e + d) / n,
+      i = (t + d) / n,
+      a = Math.floor(r),
+      o = Math.floor(i),
+      s = r - a,
+      c = i - o,
+      l = -d + a * n,
+      u = -d + o * n,
+      f = ie(l, u),
+      p = ie(l + n, u),
+      m = ie(l, u + n),
+      h = ie(l + n, u + n),
+      g = f + (p - f) * s;
+    return g + (m + (h - m) * s - g) * c;
+  }
+  function se(t, n) {
+    let r = e.cellIndex(t, n);
+    return L(Math.max(e.padMask[r], 1 - P(3.2, 8, e.roadDist[r])), 0, 1);
+  }
+  function ce(t, n) {
+    let r = e.cellIndex(t, n),
+      i =
+        yt * (1 - 0.86 * Math.max(e.padMask[r], 1 - P(4.5, 11, e.roadDist[r]))),
+      a = Math.round(t),
+      o = Math.round(n);
+    return (
+      ((I(a, o, y) - 0.5) * 0.62 + (I(a >> 1, o >> 1, y + 1) - 0.5) * 0.38) *
+      i *
+      2
+    );
+  }
+  function le(e, t, n, r, i) {
+    let o = (t + d) / u,
+      s = (n + d) / u;
+    (o > 0 ? o > re && (o = re) : (o = 0),
+      s > 0 ? s > re && (s = re) : (s = 0));
+    let c = o | 0,
+      l = s | 0,
+      f = o - c,
+      p = s - l,
+      m = (l * a + c) * 3,
+      h = m + a * 3;
+    for (let t = 0; t < 3; t++) {
+      let n = e[m + t] + (e[m + 3 + t] - e[m + t]) * f,
+        a = e[h + t] + (e[h + 3 + t] - e[h + t]) * f;
+      r[i + t] = n + (a - n) * p;
+    }
+  }
+  let F = new Float32Array(12);
+  function ue(e, t, n, r, i, a) {
+    let o = (t + d) / r,
+      s = (n + d) / r,
+      c = Math.floor(o),
+      l = Math.floor(s),
+      u = o - c,
+      f = s - l,
+      p = -d + c * r,
+      m = -d + l * r;
+    (le(e, p, m, F, 0),
+      le(e, p + r, m, F, 3),
+      le(e, p, m + r, F, 6),
+      le(e, p + r, m + r, F, 9));
+    for (let e = 0; e < 3; e++) {
+      let t = F[e] + (F[3 + e] - F[e]) * u,
+        n = F[6 + e] + (F[9 + e] - F[6 + e]) * u;
+      i[a + e] = t + (n - t) * f;
+    }
+  }
+  function de(e, t, r) {
+    let a = mt >> e,
+      o = a / (ht[e] - 1),
+      s = -d + t * a,
+      f = -d + r * a,
+      p = Math.min(a, d - s),
+      m = Math.min(a, d - f),
+      h = Math.ceil(p / o) + 1,
+      g = Math.ceil(m / o) + 1,
+      v = e === 0 ? 0 : mt / (ht[e - 1] - 1) / (1 << (e - 1)),
+      b = e === 2,
+      x = h * g + 4 * (h + g),
+      S = new Float32Array(x * 3),
+      C = new Float32Array(x * 3),
+      w = new Float32Array(x * 3),
+      T = new Float32Array(x),
+      D = new Float32Array(x),
+      k = new Float32Array(x),
+      ee = new Float32Array(x * 3),
+      A = new Float32Array(x),
+      j = _[e],
+      M = e > 0 ? _[e - 1] : null,
+      te = y + 977,
+      N = 0,
+      ne = (e, t, n, r) => {
+        let i = Math.min(e * o, p),
+          a = Math.min(t * o, m),
+          c = s + i,
+          l = f + a,
+          d = ie(c, l);
+        (b && (d += ce(c, l)),
+          (S[N * 3] = i),
+          (S[N * 3 + 1] = d + n),
+          (S[N * 3 + 2] = a));
+        let h = (ie(c + u, l) - ie(c - u, l)) / (2 * u),
+          g = (ie(c, l + u) - ie(c, l - u)) / (2 * u),
+          _ = 1 / Math.sqrt(h * h + 1 + g * g);
+        ((C[N * 3] = -h * _),
+          (C[N * 3 + 1] = _),
+          (C[N * 3 + 2] = -g * _),
+          le(j, c, l, w, N * 3),
+          M
+            ? ue(M, c, l, v, ee, N * 3)
+            : ((ee[N * 3] = w[N * 3]),
+              (ee[N * 3 + 1] = w[N * 3 + 1]),
+              (ee[N * 3 + 2] = w[N * 3 + 2])),
+          (T[N] = (v ? ae(c, l, v) : d) + n),
+          (D[N] = +!!r),
+          (k[N] = se(c, l)),
+          (A[N] = I(Math.round(c * 2), Math.round(l * 2), te)),
+          N++);
+      };
+    for (let e = 0; e < g; e++) for (let t = 0; t < h; t++) ne(t, e, 0, !1);
+    let re = N;
+    for (let e = 0; e < h; e++) ne(e, 0, 0, !0);
+    let oe = N;
+    for (let e = 0; e < h; e++) ne(e, 0, -8, !0);
+    let P = N;
+    for (let e = 0; e < h; e++) ne(e, g - 1, 0, !0);
+    let F = N;
+    for (let e = 0; e < h; e++) ne(e, g - 1, -8, !0);
+    let L = N;
+    for (let e = 0; e < g; e++) ne(0, e, 0, !0);
+    let de = N;
+    for (let e = 0; e < g; e++) ne(0, e, -8, !0);
+    let fe = N;
+    for (let e = 0; e < g; e++) ne(h - 1, e, 0, !0);
+    let pe = N;
+    for (let e = 0; e < g; e++) ne(h - 1, e, -8, !0);
+    let me = new Uint16Array(((h - 1) * (g - 1) * 2 + 4 * (h + g - 2)) * 3),
+      he = 0,
+      ge = (e, t, n, r, i) => {
+        i
+          ? ((me[he++] = e),
+            (me[he++] = n),
+            (me[he++] = r),
+            (me[he++] = e),
+            (me[he++] = r),
+            (me[he++] = t))
+          : ((me[he++] = e),
+            (me[he++] = n),
+            (me[he++] = t),
+            (me[he++] = t),
+            (me[he++] = n),
+            (me[he++] = r));
+      };
+    for (let e = 0; e < g - 1; e++)
+      for (let t = 0; t < h - 1; t++) {
+        let n = e * h + t,
+          r = n + 1,
+          i = n + h;
+        ge(n, r, i, i + 1, ((t + e) & 1) == 1);
+      }
+    for (let e = 0; e < h - 1; e++)
+      (ge(re + e + 1, re + e, oe + e + 1, oe + e, !0),
+        ge(P + e, P + e + 1, F + e, F + e + 1, !0));
+    for (let e = 0; e < g - 1; e++)
+      (ge(L + e, L + e + 1, de + e, de + e + 1, !0),
+        ge(fe + e + 1, fe + e, pe + e + 1, pe + e, !0));
+    let R = new l();
+    (R.setAttribute(`position`, new c(S, 3)),
+      R.setAttribute(`normal`, new c(C, 3)),
+      R.setAttribute(`color`, new c(w, 3)),
+      R.setAttribute(`aTargetY`, new c(T, 1)),
+      R.setAttribute(`aTargetC`, new c(ee, 3)),
+      R.setAttribute(`aFacet`, new c(A, 1)),
+      R.setAttribute(`aSkirt`, new c(D, 1)),
+      R.setAttribute(`aBuilt`, new c(k, 1)),
+      R.setIndex(new c(me, 1)),
+      R.computeBoundingBox());
+    for (let e = 0; e < T.length; e++)
+      ((R.boundingBox.min.y = Math.min(R.boundingBox.min.y, T[e])),
+        (R.boundingBox.max.y = Math.max(R.boundingBox.max.y, T[e])));
+    R.boundingSphere = R.boundingBox.getBoundingSphere(new i());
+    let _e = new n(R, E[e]);
+    return (
+      _e.position.set(s, 0, f),
+      (_e.castShadow = !1),
+      (_e.receiveShadow = !0),
+      (_e.matrixAutoUpdate = !1),
+      _e.updateMatrix(),
+      (_e.name = `terrain_${e}_${t}_${r}`),
+      (_e.visible = !1),
+      (_e.userData.level = e),
+      O.add(_e),
+      _e
+    );
+  }
+  function fe(e, t, n) {
+    let r = e * 4096 + n * 64 + t,
+      i = k.get(r);
+    return (
+      i || ((i = de(e, t, n)), (i.userData.key = r), k.set(r, i)),
+      (i.userData.used = A),
+      i
+    );
+  }
+  function pe() {
+    let e = 0;
+    for (let t of k.values()) t.userData.level === 2 && e++;
+    if (e <= vt) return;
+    let t = [];
+    for (let e of k.values()) e.userData.level === 2 && !ee.has(e) && t.push(e);
+    t.sort((e, t) => e.userData.used - t.userData.used);
+    for (let n = 0; n < t.length && e > vt; n++, e--) {
+      let e = t[n];
+      (O.remove(e), e.geometry.dispose(), k.delete(e.userData.key));
+    }
+  }
+  let me = new s(),
+    _e = new D(),
+    ve = new oe(),
+    ye = new f(),
+    be = [0, 0, 0, 0, 0, 0];
+  function xe(e) {
+    let t = Math.max(e[0] - me.x, 0, me.x - e[3]),
+      n = Math.max(e[1] - me.y, 0, me.y - e[4]),
+      r = Math.max(e[2] - me.z, 0, me.z - e[5]);
+    return Math.sqrt(t * t + n * n + r * r);
+  }
+  let z = new Set();
+  function we(e, t, n) {
+    if (!ne(e, t, n, be)) return;
+    let r = xe(be);
+    if (e < 2 && r < gt[e]) {
+      for (let r = 0; r < 2; r++)
+        for (let i = 0; i < 2; i++) we(e + 1, t * 2 + i, n * 2 + r);
+      return;
+    }
+    if (
+      (ye.min.set(be[0], be[1], be[2]),
+      ye.max.set(be[3], be[4], be[5]),
+      !_e.intersectsBox(ye))
+    )
+      return;
+    let i = fe(e, t, n);
+    ((i.visible = !0), z.add(i));
+  }
+  function Te(t) {
+    (A++,
+      t.getWorldPosition(me),
+      t.updateMatrixWorld(),
+      ve.multiplyMatrices(t.projectionMatrix, t.matrixWorldInverse),
+      _e.setFromProjectionMatrix(ve),
+      (z = new Set()));
+    let n = Math.ceil(e.size / mt);
+    for (let e = 0; e < n; e++) for (let t = 0; t < n; t++) we(0, t, e);
+    for (let e of ee) z.has(e) || (e.visible = !1);
+    ((ee = z), A % 30 == 0 && pe());
+  }
+  function Ee() {
+    for (let e of k.values()) (e.geometry.dispose(), O.remove(e));
+    (k.clear(), (ee = new Set()));
+    for (let e of E) e.dispose();
+  }
+  return {
+    group: O,
+    update: Te,
+    dispose: Ee,
+    colors: v,
+    ao: m,
+    materials: E,
+    hAt: ie,
+    micro: ce,
+    nodeCount: () => k.size,
+    visibleCount: () => ee.size,
+  };
+}
+function xt(e, t, r, i = null) {
+  let a = !!e.opts?.harborSurround,
+    s = !!e.opts?.greywaterEnv || a,
+    c = e.half,
+    u = s ? Ke : 1500,
+    d = [0, 5, 12, 21, 32];
+  for (let e = 48; e <= 420; e += 16) d.push(e);
+  if (s && j()) for (let e = 466; e <= 1100; e += 30) d.push(e);
+  else if (s) {
+    for (let e = 466; e <= 1500; e += 15) d.push(e);
+    for (let e = 1530; e <= u; e += Math.max(30, e * 0.045)) d.push(e);
+  } else for (let e = 466; e <= u; e += 46) d.push(e);
+  !(s && j()) && d[d.length - 1] < u && d.push(u);
+  let f = 1024,
+    p = (t | 0) + 4441,
+    m = {
+      rock: new _(6710366),
+      rockDark: new _(4342076),
+      snow: new _(11122116),
+      snowFresh: new _(13884388),
+      haze: new _(7766671),
+    };
+  (e.opts?.biome === `desert` &&
+    (m.rock.set(8288884),
+    m.rockDark.set(6118492),
+    m.haze.set(9016736),
+    m.snow.set(9341566)),
+    e.opts?.cinder &&
+      (m.rock.set(4866106),
+      m.rockDark.set(3025190),
+      m.haze.set(3818064),
+      m.snow.set(5917764)),
+    e.opts?.biome === `jungle` &&
+      (m.rock.set(7302496),
+      m.rockDark.set(4146486),
+      m.haze.set(7109226),
+      (m.jungle = new _(3494956))));
+  let h = !!e.opts?.island,
+    g =
+      h && e.opts.island.farIsles !== !1
+        ? [
+            [-1650, 780, 260, 62],
+            [1420, -1080, 210, 48],
+            [1880, 520, 300, 84],
+            [-1120, -1560, 190, 38],
+            [420, 1780, 240, 55],
+          ]
+        : [];
+  h &&
+    ((m.isle = new _(4023345)),
+    (m.isleSand = new _(13221272)),
+    (m.seabed = new _(2902604)),
+    m.haze.set(8227731));
+  let v = (e, t) => {
+      let n = c + e,
+        r = Math.floor(t) % 4,
+        i = t - Math.floor(t);
+      return r === 0
+        ? [-n + 2 * n * i, -n]
+        : r === 1
+          ? [n, -n + 2 * n * i]
+          : r === 2
+            ? [n - 2 * n * i, n]
+            : [-n, n - 2 * n * i];
+    },
+    y = 0;
+  if (s) {
+    let t = 0;
+    for (let n = 0; n < 400; n++) {
+      let [r, i] = v(0, n / 100);
+      ((y += e.getHeight(r, i)), t++);
+    }
+    y /= t;
+  }
+  let b = (t, n) => {
+      let r = Math.max(Math.abs(t), Math.abs(n)) - c,
+        i = L(t, -c, c),
+        o = L(n, -c, c),
+        l = e.getHeight(i, o);
+      if (r <= 0) return l;
+      if (h) {
+        let i = l + (e.waterLevel - 34 - l) * P(0, 240, r);
+        for (let [r, a, o, s] of g) {
+          let c = Math.hypot(t - r, n - a);
+          c < o &&
+            (i = Math.max(
+              i,
+              e.waterLevel -
+                3 +
+                s *
+                  (1 - c / o) ** 1.35 *
+                  (0.82 + 0.3 * F(t / 90, n / 90, 2, p + 17)),
+            ));
+        }
+        return i;
+      }
+      if (a) return ye(t, n, l, c, e.waterLevel);
+      if (s) return l + (y + $e(t, n, r, c) - l) * P(0, 90, r);
+      let u = P(0, 340, r) * (1 - P(860, 1500, r)),
+        d = Math.max(0, 1 - Math.abs(F(t / 620, n / 620, 4, p))) ** 1.6,
+        f = Math.max(0, 1 - Math.abs(F(t / 240, n / 240, 3, p + 7))) ** 1.7,
+        m = (55 + 175 * d + 48 * f) * u * (e.opts?.surroundScale ?? 1),
+        _ = P(880, 1500, r) * 170;
+      return l + (Math.max(e.waterLevel + 30, l - 2 + m - _) - l) * P(0, 80, r);
+    },
+    S = [],
+    C = [],
+    w = [],
+    T = [],
+    E = new _();
+  for (let t = 0; t < d.length; t++) {
+    let n = d[t],
+      r = t > 0 ? d[t] - d[t - 1] : 0;
+    for (let o = 0; o < f; o++) {
+      let [l, u] = v(n, (o / 256) % 4);
+      if (t > 0 && t < d.length - 1) {
+        let e = I(o, t, p + 61) - 0.5,
+          i = I(o, t, p + 62) - 0.5,
+          a = Math.min(r, d[t + 1] - n, (2 * (c + n)) / 256);
+        ((l += e * a * 0.35), (u += i * a * 0.35));
+      }
+      let f = b(l, u),
+        g = (b(l + 16, u) - b(l - 16, u)) / 32,
+        _ = (b(l, u + 16) - b(l, u - 16)) / 32,
+        x = 1 / Math.sqrt(g * g + 1 + _ * _),
+        T = Math.hypot(g, _),
+        D = e.opts?.biome === `snow`,
+        O = D
+          ? 0.97 *
+            (1 - 0.8 * P(0.95, 1.9, T + 0.25 * F(l / 60, u / 60, 2, p + 5)))
+          : P(0, 70, f - (240 + 60 * F(l / 300, u / 300, 2, p + 3))) *
+            (1 - P(0.9, 1.8, T));
+      if (
+        (E.copy(m.rockDark).lerp(
+          m.rock,
+          L(0.4 + 0.5 * F(l / 90, u / 90, 2, p + 11), 0, 1),
+        ),
+        E.lerp(D ? m.snowFresh : m.snow, h ? 0 : O),
+        h &&
+          (f < e.waterLevel - 0.5
+            ? E.copy(m.seabed)
+            : E.copy(m.isleSand)
+                .lerp(m.isle, P(e.waterLevel + 0.6, e.waterLevel + 5, f))
+                .lerp(m.rockDark, 0.35 * P(0.7, 1.4, T))),
+        m.jungle &&
+          E.lerp(
+            m.jungle,
+            0.88 *
+              (1 - P(0.82, 1.65, T + 0.22 * F(l / 70, u / 70, 2, p + 5))) *
+              (1 - P(300, 520, f)),
+          ),
+        a)
+      ) {
+        if (
+          (E.setHex(6648903),
+          E.lerp(m.rock, 0.6 * P(0.35, 1.3, T)),
+          E.multiplyScalar(0.85 + 0.28 * F(l / 45, u / 45, 3, p + 11)),
+          i)
+        ) {
+          let t = e.cellIndex(L(l, -c, c), L(u, -c, c)) * 3,
+            r = P(0, 130, n);
+          E.setRGB(
+            i[t] * (1 - r) + E.r * r,
+            i[t + 1] * (1 - r) + E.g * r,
+            i[t + 2] * (1 - r) + E.b * r,
+          );
+        }
+      } else s && pt(E, l, u, f - y, T, n);
+      (E.lerp(
+        m.haze,
+        s ? 0.06 + 0.1 * P(300, 1400, n) : 0.2 + 0.22 * P(150, 1100, n),
+      ),
+        S.push(l, f, u),
+        w.push(-g * x, x, -_ * x),
+        C.push(E.r, E.g, E.b));
+    }
+  }
+  for (let e = 0; e < d.length - 1; e++) {
+    let t = e * f,
+      n = (e + 1) * f;
+    for (let e = 0; e < f; e++) {
+      let r = (e + 1) % f;
+      T.push(t + e, n + r, n + e, t + e, t + r, n + r);
+    }
+  }
+  let D = new l();
+  (D.setAttribute(`position`, new x(S, 3)),
+    D.setAttribute(`normal`, new x(w, 3)),
+    D.setAttribute(`color`, new x(C, 3)),
+    D.setIndex(T),
+    D.computeBoundingSphere(),
+    D.computeBoundingBox());
+  let O = new o({
+    vertexColors: !0,
+    flatShading: !0,
+    roughness: 0.98,
+    metalness: 0,
+  });
+  if (
+    (ge(O, r, {
+      key: s ? `terrain-surround-gwenv` : `terrain-surround-v5`,
+      detail: a ? 0.18 : 0.055,
+      cliff: s ? 0.25 : 0.9,
+      sun: !1,
+      smoothFar: s ? [0, 1] : [95, 330],
+    }),
+    s)
+  ) {
+    let e = a ? (j()?.far ?? 4e3) : 4e3;
+    ve(O, { haze: 0.18, far: e, from: Math.min(1800, e * 0.78) });
+  }
+  let k = new n(D, O);
+  return (
+    (k.name = `terrainSurround`),
+    (k.castShadow = !1),
+    (k.receiveShadow = !1),
+    (k.matrixAutoUpdate = !1),
+    k.updateMatrix(),
+    {
+      mesh: k,
+      heightAt: b,
+      floor: y,
+      dispose() {
+        (D.dispose(), O.dispose());
+      },
+    }
+  );
+}
+function St(e) {
+  let { n: t, heights: n } = e,
+    r = t * t,
+    i = wt(n, t, 3),
+    a = wt(n, t, 8),
+    o = wt(n, t, 20),
+    s = new Float32Array(r);
+  for (let e = 0; e < r; e++) {
+    let t = n[e],
+      r = L((i[e] - t) / 2.2, 0, 1),
+      c = L((a[e] - t) / 6, 0, 1),
+      l = L((o[e] - t) / 16, 0, 1);
+    s[e] = L(1 - 0.36 * r - 0.3 * c - 0.24 * l, 0.38, 1);
+  }
+  return s;
+}
+function Ct(e, t, n) {
+  let r = t * t,
+    i = new Float32Array(r * 3),
+    a = new Float32Array(r * 3),
+    o = 2 * n + 1;
+  for (let r = 0; r < t; r++) {
+    let i = r * t,
+      s = [0, 0, 0];
+    for (let r = -n; r <= n; r++) {
+      let n = (i + L(r, 0, t - 1)) * 3;
+      ((s[0] += e[n]), (s[1] += e[n + 1]), (s[2] += e[n + 2]));
+    }
+    for (let r = 0; r < t; r++) {
+      let c = (i + r) * 3;
+      ((a[c] = s[0] / o), (a[c + 1] = s[1] / o), (a[c + 2] = s[2] / o));
+      let l = (i + L(r + n + 1, 0, t - 1)) * 3,
+        u = (i + L(r - n, 0, t - 1)) * 3;
+      ((s[0] += e[l] - e[u]),
+        (s[1] += e[l + 1] - e[u + 1]),
+        (s[2] += e[l + 2] - e[u + 2]));
+    }
+  }
+  for (let e = 0; e < t; e++) {
+    let r = [0, 0, 0];
+    for (let i = -n; i <= n; i++) {
+      let n = (L(i, 0, t - 1) * t + e) * 3;
+      ((r[0] += a[n]), (r[1] += a[n + 1]), (r[2] += a[n + 2]));
+    }
+    for (let s = 0; s < t; s++) {
+      let c = (s * t + e) * 3;
+      ((i[c] = r[0] / o), (i[c + 1] = r[1] / o), (i[c + 2] = r[2] / o));
+      let l = (L(s + n + 1, 0, t - 1) * t + e) * 3,
+        u = (L(s - n, 0, t - 1) * t + e) * 3;
+      ((r[0] += a[l] - a[u]),
+        (r[1] += a[l + 1] - a[u + 1]),
+        (r[2] += a[l + 2] - a[u + 2]));
+    }
+  }
+  return i;
+}
+function wt(e, t, n) {
+  let r = new Float32Array(t * t),
+    i = new Float32Array(t * t),
+    a = 2 * n + 1;
+  for (let i = 0; i < t; i++) {
+    let o = i * t,
+      s = 0;
+    for (let r = -n; r <= n; r++) s += e[o + L(r, 0, t - 1)];
+    for (let i = 0; i < t; i++)
+      ((r[o + i] = s / a),
+        (s += e[o + L(i + n + 1, 0, t - 1)] - e[o + L(i - n, 0, t - 1)]));
+  }
+  for (let e = 0; e < t; e++) {
+    let o = 0;
+    for (let i = -n; i <= n; i++) o += r[L(i, 0, t - 1) * t + e];
+    for (let s = 0; s < t; s++)
+      ((i[s * t + e] = o / a),
+        (o +=
+          r[L(s + n + 1, 0, t - 1) * t + e] - r[L(s - n, 0, t - 1) * t + e]));
+  }
+  return i;
+}
+function Tt(e, t, n) {
+  let {
+      n: r,
+      res: i,
+      half: a,
+      heights: o,
+      material: s,
+      waterLevel: c,
+      roadDist: l,
+      slope: u,
+      flow: d,
+      talus: f,
+      padMask: p,
+      padWear: m,
+      fordMask: h,
+      plateauMask: g,
+      riverDist: v,
+      lakeMask: y,
+    } = e,
+    b = r * r,
+    x = e.opts?.biome === `snow`,
+    S = e.opts?.biome === `jungle`,
+    C = e.opts?.biome === `tropical`,
+    w = e.opts?.biome === `quarry` ? e.quarry : null,
+    T = e.opts?.biome === `desert`,
+    E = e.island,
+    D = (e) => new _(e),
+    O = {
+      grassBase: D(6257224),
+      grassCool: D(5007176),
+      grassLush: D(7050304),
+      grassDry: D(8356432),
+      grassOchre: D(9079644),
+      grassAlpine: D(6057038),
+      moss: D(5533756),
+      dirt: D(8612170),
+      dirtDark: D(6244916),
+      dirtPale: D(10388576),
+      rock: D(7236454),
+      rockLight: D(9736330),
+      rockDark: D(4670784),
+      rockWarm: D(8220512),
+      scree: D(8025452),
+      sand: D(11049590),
+      sandWet: D(8221273),
+      road: D(10126962),
+      roadLight: D(11771268),
+      roadRut: D(7167050),
+      shoulder: D(10259828),
+      pad: D(9274481),
+      padDark: D(6642766),
+      padPale: D(10721408),
+      padRut: D(5721666),
+      fordGravel: D(11050117),
+      fordWet: D(7105114),
+      mud: D(7037769),
+      mudDeep: D(3618604),
+      snow: D(14081510),
+      snowShade: D(11058644),
+      ice: D(10467012),
+      slush: D(9344153),
+      slushDark: D(5988454),
+    };
+  (S &&
+    Object.assign(O, {
+      grassBase: D(3562536),
+      grassCool: D(2574122),
+      grassLush: D(4158755),
+      grassDry: D(6055724),
+      grassOchre: D(6710314),
+      grassAlpine: D(3363374),
+      moss: D(2774818),
+      dirt: D(8212270),
+      dirtDark: D(5255452),
+      dirtPale: D(10119749),
+      rock: D(8092269),
+      rockLight: D(11118485),
+      rockDark: D(5e6),
+      rockWarm: D(9075295),
+      scree: D(9144440),
+      sand: D(5589554),
+      sandWet: D(3419423),
+      road: D(9199416),
+      roadLight: D(11039815),
+      roadRut: D(6110242),
+      shoulder: D(8151614),
+      pad: D(8612422),
+      padDark: D(5587755),
+      padPale: D(10125913),
+      padRut: D(4601119),
+      fordGravel: D(9076576),
+      fordWet: D(5197628),
+      mud: D(5194018),
+      mudDeep: D(2367249),
+    }),
+    C &&
+      Object.assign(O, {
+        grassBase: D(5932851),
+        grassCool: D(4616503),
+        grassLush: D(6922287),
+        grassDry: D(9867590),
+        grassOchre: D(10786642),
+        grassAlpine: D(5142584),
+        moss: D(4224812),
+        dirt: D(9067066),
+        dirtDark: D(5913127),
+        dirtPale: D(11240544),
+        rock: D(5723215),
+        rockLight: D(8025710),
+        rockDark: D(3289390),
+        rockWarm: D(6707788),
+        scree: D(6446679),
+        sand: D(14865582),
+        sandWet: D(11772025),
+        road: D(13155484),
+        roadLight: D(14405810),
+        roadRut: D(10589304),
+        shoulder: D(12168072),
+        pad: D(12365454),
+        padDark: D(9471088),
+        padPale: D(13879467),
+        padRut: D(8484447),
+        fordGravel: D(13352863),
+        fordWet: D(10260853),
+        mud: D(7168065),
+        mudDeep: D(3748385),
+      }),
+    w &&
+      Object.assign(O, {
+        grassBase: D(4934707),
+        grassCool: D(3949104),
+        grassLush: D(5265973),
+        grassDry: D(6444349),
+        grassOchre: D(7229495),
+        grassAlpine: D(4736564),
+        moss: D(3884592),
+        dirt: D(7620143),
+        dirtDark: D(4860960),
+        dirtPale: D(9068102),
+        rock: D(6445650),
+        rockLight: D(8747888),
+        rockDark: D(3880240),
+        rockWarm: D(7623999),
+        scree: D(6970705),
+        road: D(6050634),
+        roadLight: D(7168856),
+        roadRut: D(3879982),
+        shoulder: D(5917503),
+        pad: D(5919305),
+        padDark: D(4340790),
+        padPale: D(7234906),
+        padRut: D(3551018),
+      }),
+    T &&
+      Object.assign(O, {
+        grassBase: D(10261362),
+        grassCool: D(9078384),
+        grassLush: D(9407843),
+        grassDry: D(11379075),
+        grassOchre: D(11772538),
+        grassAlpine: D(9407094),
+        moss: D(8881249),
+        dirt: D(10127980),
+        dirtDark: D(7760468),
+        dirtPale: D(11707527),
+        rock: D(8748916),
+        rockLight: D(10722704),
+        rockDark: D(6051920),
+        rockWarm: D(9404784),
+        scree: D(9735552),
+        road: D(10984582),
+        roadLight: D(12432284),
+        roadRut: D(8747622),
+        shoulder: D(11050114),
+        pad: D(10787718),
+        padDark: D(8485226),
+        padPale: D(12103835),
+        padRut: D(7300954),
+      }),
+    T &&
+      e.opts?.cinder &&
+      Object.assign(O, {
+        grassBase: D(5917246),
+        grassCool: D(5129276),
+        grassLush: D(5523514),
+        grassDry: D(6640196),
+        grassOchre: D(7033410),
+        grassAlpine: D(5392448),
+        moss: D(4998198),
+        dirt: D(6178360),
+        dirtDark: D(4535596),
+        dirtPale: D(7362118),
+        rock: D(4866620),
+        rockLight: D(6182222),
+        rockDark: D(3090983),
+        rockWarm: D(5915704),
+        scree: D(5523520),
+        road: D(7234908),
+        roadLight: D(8221544),
+        roadRut: D(5129790),
+        shoulder: D(6181448),
+        pad: D(5917762),
+        padDark: D(4602675),
+        padPale: D(6969934),
+        padRut: D(3813675),
+        snow: D(6180934),
+        snowShade: D(4865848),
+      }));
+  let k = D(4155996),
+    ee = new Float32Array(b * 3),
+    A = new _(),
+    j = new _(),
+    M = (n | 0) + 11,
+    te = (n | 0) + 23,
+    N = (n | 0) + 37,
+    ne = (n | 0) + 41,
+    re = (n | 0) + 53,
+    ie = (n | 0) + 67,
+    ae = e.lake;
+  for (let n = 0; n < r; n++) {
+    let s = -a + n * i;
+    for (let _ = 0; _ < r; _++) {
+      let y = n * r + _,
+        b = -a + _ * i,
+        S = o[y],
+        C = l[y],
+        T = u[y],
+        D = 1 / Math.sqrt(1 + T * T);
+      (_ > 0 && _ - 1, _ < r - 1 && _ + 1);
+      let oe = n > 0 ? n - 1 : n,
+        se = n < r - 1 ? n + 1 : n,
+        ce = -((o[se * r + _] - o[oe * r + _]) / ((se - oe) * i)) * D,
+        ue = le(b / 17 + S / 11, s / 17 - S / 13, M),
+        de = F(b / 140, s / 140, 2, te),
+        fe = le(b / 6.3, s / 6.3, N),
+        pe = F(b / 48, s / 48, 2, re),
+        me = F(b / 66, s / 66, 2, re + 9),
+        he = le(b / 23, s / 23, re + 17),
+        ge = F(b / 420, s / 420, 2, ne),
+        R = I(_, n, ie) - 0.5,
+        _e = S < c - 0.05,
+        ve = v[y] - e.riverWidthAt(e.riverPar[y]),
+        ye = Math.hypot(b - ae.x, s - ae.z) - ae.r,
+        be = Math.min(ve, ye),
+        xe = g[y] > 0.02 && g[y] < 0.98 ? 0.9 : 0,
+        Se = L(
+          P(0.85, 1.28, T + 0.16 * ue + 0.1 * R) +
+            0.85 * f[y] +
+            xe +
+            P(150, 205, S - 20 * de),
+          0,
+          1,
+        ),
+        Ce = L(
+          Math.max(
+            P(0.4, 0.72, T + 0.1 * R),
+            P(0.42, 0.66, de + 0.22 * pe + 0.06 * R),
+          ),
+          0,
+          1,
+        ),
+        z = 1 - P(0.8 + 1.7 * ue + 1.4 * R, 5.6 + 3 * ue, be),
+        we = L(z * P(c + 2.2 + 0.6 * ue, c + 0.05, S), 0, 1);
+      if (
+        (E &&
+          (we = Math.max(
+            we,
+            P(E.r0 + 8, E.r0 + 28, E.radius(b, s) + 14 * ue + 5 * R) *
+              P(c + 4 + 0.6 * ue, c + 2.7, S),
+          )),
+        _e)
+      ) {
+        let e = c - S;
+        (A.copy(O.sandWet).lerp(O.mud, P(0, 1.1, e)),
+          A.lerp(O.mudDeep, P(0.8, 4.8, e)));
+      } else {
+        let e = L(
+          0.2 +
+            1.05 * d[y] +
+            0.42 * (1 - P(5, 42, Math.max(0, be))) +
+            0.26 * de +
+            0.3 * me +
+            0.16 * he,
+          0,
+          1,
+        );
+        (A.copy(O.grassDry).lerp(O.grassBase, P(0.1, 0.44, e)),
+          A.lerp(O.grassLush, 0.8 * P(0.58, 0.95, e)),
+          ge > 0
+            ? A.lerp(O.grassOchre, 0.46 * L(ge * 1.7, 0, 1) * (1 - 0.75 * e))
+            : A.lerp(O.grassCool, 0.42 * L(-ge * 1.5, 0, 1)),
+          A.lerp(O.grassOchre, 0.34 * L(me * 1.9, 0, 1) * (1 - 0.6 * e)),
+          A.lerp(O.moss, 0.22 * L(-me * 1.9, 0, 1)),
+          A.lerp(O.grassAlpine, 0.55 * P(70, 165, S)),
+          A.lerp(
+            O.moss,
+            0.3 * L(0.5 + pe, 0, 1) * P(0.55, 0.15, T) * P(0.3, 0.75, e),
+          ),
+          j.copy(O.dirt).lerp(O.dirtDark, 0.42 + 0.36 * ue),
+          j.lerp(O.dirtPale, 0.35 * L(0.5 + pe, 0, 1)),
+          A.lerp(j, 0.9 * Ce));
+        let t =
+          Math.sin(
+            S * 0.85 +
+              1.9 * F(b / 70 + S / 34, s / 70 - S / 41, 2, te + 5) +
+              0.7 * ue,
+          ) *
+            0.5 +
+          0.5;
+        (j
+          .copy(O.rockDark)
+          .lerp(
+            O.rockLight,
+            L(0.42 + 0.26 * ue + 0.13 * de + 0.26 * (t - 0.5), 0, 1),
+          ),
+          j.lerp(O.rockWarm, 0.32 * P(0.55, 0.9, t)),
+          f[y] > 0.05 && j.lerp(O.scree, 0.5 * f[y]),
+          T < 0.6 && j.lerp(O.moss, 0.3 * (1 - T / 0.6) * L(0.4 + de, 0, 1)));
+        let n =
+          P(0, 22, S - (188 + 16 * de + 46 * Math.max(0, ce) + 6 * R)) *
+          (1 - P(0.85, 1.6, T));
+        if (
+          (j.lerp(O.snow, n),
+          j.lerp(O.snowShade, n * 0.55 * (1 - D)),
+          A.lerp(j, Se),
+          w)
+        ) {
+          let e = w.dist(b, s),
+            n = 1 - P(w.pitch * w.steps - 4, w.pitch * w.steps + 30, e);
+          (j.copy(O.dirt).lerp(O.dirtDark, L(0.45 + 0.4 * ue + 0.2 * R, 0, 1)),
+            A.lerp(j, n * L(0.62 + 0.3 * pe + 0.2 * R, 0, 0.92)));
+          let r = w.faceMask[y];
+          r > 0 &&
+            (j
+              .copy(O.rockDark)
+              .lerp(O.rockLight, L(0.4 + 0.3 * ue + 0.25 * (t - 0.5), 0, 1)),
+            j.lerp(k, 0.35 * P(0.35, 0.8, fe * 0.5 + 0.5) * P(0.2, 0.7, t)),
+            A.lerp(j, 0.9 * r));
+        }
+        we > 0 &&
+          (j.copy(O.sand).lerp(O.sandWet, L((c + 1.5 - S) / 1.6, 0, 1)),
+          j.lerp(O.dirtPale, 0.18 * L(0.5 + ue, 0, 1)),
+          A.lerp(j, we * 0.95));
+      }
+      if (x && !_e) {
+        let e = L(
+          1.02 -
+            P(0.78, 1.35, T + 0.1 * ue + 0.08 * R) -
+            0.16 * L(me * 1.6 - 0.35, 0, 1) * P(0.25, 0.6, T),
+          0,
+          1,
+        );
+        (j
+          .copy(O.snow)
+          .lerp(
+            O.snowShade,
+            L(
+              0.1 +
+                0.34 * d[y] +
+                0.3 * Math.max(0, -ce) * 2.2 +
+                0.1 * de +
+                0.06 * fe,
+              0,
+              0.8,
+            ),
+          ),
+          A.lerp(j, 0.97 * e),
+          be < 5 && A.lerp(O.ice, 0.55 * (1 - P(0.5, 5, be))));
+      }
+      if (
+        (h[y] &&
+          (j.copy(O.fordGravel).lerp(O.fordWet, L((c + 0.7 - S) / 1.5, 0, 1)),
+          j.lerp(O.rockLight, 0.26 * L(0.5 + fe, 0, 1)),
+          A.lerp(j, 0.88 * (0.55 + 0.45 * L(0.5 + ue, 0, 1)))),
+        C < 9 &&
+          (j.copy(O.shoulder).lerp(O.dirtDark, 0.16 + 0.2 * ue),
+          A.lerp(j, 0.8 * P(6.4, 4.5, C)),
+          j
+            .copy(O.road)
+            .lerp(O.roadLight, L(0.5 + 0.28 * ue + 0.18 * fe, 0, 1)),
+          S < c + 0.1 && j.lerp(O.mud, 0.4),
+          A.lerp(j, P(3.35, 2.85, C)),
+          A.lerp(
+            O.roadRut,
+            0.3 * (1 - P(0.7, 1.6, Math.abs(C - 1.55))) * (1 - P(2.6, 3.2, C)),
+          )),
+        p[y] > 0.02)
+      ) {
+        let e = L(
+          0.4 + 0.26 * fe + 0.3 * le(b / 1.75, s / 1.75, N + 9) + 0.24 * R,
+          0,
+          1,
+        );
+        (j.copy(O.pad).lerp(O.padDark, e),
+          j.lerp(O.padPale, 0.5 * P(0.6, 0.96, e)),
+          j.lerp(O.padRut, 0.55 * (m ? m[y] : 0)));
+        let t = L(
+          p[y] +
+            0.3 * fe +
+            0.26 * le(b / 3.2, s / 3.2, N + 11) +
+            0.16 * R -
+            0.17,
+          0,
+          1,
+        );
+        A.lerp(j, 0.95 * P(0.05, 0.38, t));
+      }
+      if (x && (C < 6.4 || p[y] > 0.02)) {
+        let e = Math.max(P(6.4, 3.4, C), P(0.05, 0.38, p[y]));
+        (j.copy(O.snow).lerp(O.slush, L(0.42 + 0.3 * fe + 0.2 * R, 0, 1)),
+          A.lerp(j, 0.84 * e));
+        let t =
+          C < 3.2
+            ? 1 - P(0.5, 1.3, Math.abs(C - 1.55))
+            : (m ? m[y] : 0) * P(0.4, 0.9, p[y]);
+        A.lerp(O.slushDark, 0.62 * t * (0.7 + 0.3 * ue));
+      }
+      let Te = 1 + 0.085 * ge + 0.055 * pe - 0.05 * de,
+        Ee = (0.95 + 0.05 * fe) * t[y] * Te * (1 - 0.09 * P(0.6, 1.6, T));
+      ((ee[y * 3] = A.r * Ee),
+        (ee[y * 3 + 1] = A.g * Ee),
+        (ee[y * 3 + 2] = A.b * Ee));
+    }
+  }
+  return ee;
+}
+function Et(e, t, n = !1) {
+  if (!e) return {};
+  let r = (e) => e.toFixed(1);
+  return {
+    facetMask: `1.0 - terPaveMask()`,
+    ...(n ? { builtMask: `1.0 - terPaveMask()` } : {}),
+    fragmentDecl: `
+uniform sampler2D uPaveMap;
+float terPaveMask() {
+  vec2 p = vTerWPos.xz;
+  vec2 inb = step(vec2(${r(e[0])}, ${r(e[1])}), p) * step(p, vec2(${r(e[2])}, ${r(e[3])}));
+  return inb.x * inb.y * smoothstep(0.45, 0.9, vBuilt);
+}`,
+    extraFragment: `
+  {
+    float pm = terPaveMask();
+    if (pm > 0.0) diffuseColor.rgb = mix(diffuseColor.rgb, texture2D(uPaveMap, vTerWPos.xz / ${t.toFixed(2)}).rgb, pm);
+  }`,
+  };
+}
+var Dt = 208,
+  Ot = 1500,
+  kt = 1.62,
+  At = 4;
+function jt() {
+  let e = new Float32Array(131043),
+    t = new Float32Array(131043),
+    n = new Float32Array(209);
+  for (let e = 0; e < 209; e++) {
+    let t = (e / Dt) * 2 - 1;
+    n[e] = Math.sign(t) * Math.abs(t) ** +kt * Ot;
+  }
+  let r = 0;
+  for (let i = 0; i < 209; i++)
+    for (let a = 0; a < 209; a++)
+      ((e[r * 3] = n[a]),
+        (e[r * 3 + 1] = 0),
+        (e[r * 3 + 2] = n[i]),
+        (t[r * 3] = 0),
+        (t[r * 3 + 1] = 1),
+        (t[r * 3 + 2] = 0),
+        r++);
+  let a = new Uint32Array(259584),
+    o = 0;
+  for (let e = 0; e < Dt; e++)
+    for (let t = 0; t < Dt; t++) {
+      let n = e * 209 + t,
+        r = n + 1,
+        i = n + 209,
+        s = i + 1;
+      (t + e) & 1
+        ? ((a[o++] = n),
+          (a[o++] = i),
+          (a[o++] = s),
+          (a[o++] = n),
+          (a[o++] = s),
+          (a[o++] = r))
+        : ((a[o++] = n),
+          (a[o++] = i),
+          (a[o++] = r),
+          (a[o++] = r),
+          (a[o++] = i),
+          (a[o++] = s));
+    }
+  let u = new l();
+  return (
+    u.setAttribute(`position`, new c(e, 3)),
+    u.setAttribute(`normal`, new c(t, 3)),
+    u.setIndex(new c(a, 1)),
+    (u.boundingSphere = new i(new s(0, 0, 0), Ot * 1.5)),
+    u
+  );
+}
+var Mt = `
+  const vec4 wA  = vec4(0.460, 0.230, 0.105, 0.048);
+  const vec4 wKx = vec4(0.489, 0.760, 1.640, -2.85);
+  const vec4 wKz = vec4(0.202, -0.611, 0.930, 1.62);
+  const vec4 wW  = vec4(0.62, 0.95, 1.62, 2.55);
+  float waveH(vec2 p, float t, out vec2 grad) {
+    vec4 ph = wKx * p.x + wKz * p.y + wW * t;
+    vec4 s = sin(ph), c = cos(ph);
+    grad = vec2(dot(wA * wKx, c), dot(wA * wKz, c));
+    return dot(wA, s);
+  }`,
+  Nt = `
+  const vec4 wA  = vec4(1.050, 0.520, 0.230, 0.085);
+  const vec4 wKx = vec4(0.124, 0.215, -0.420, 1.180);
+  const vec4 wKz = vec4(0.064, -0.168, 0.520, 1.050);
+  const vec4 wW  = vec4(0.47, 0.70, 1.14, 1.98);
+  float waveH(vec2 p, float t, out vec2 grad) {
+    vec4 ph = wKx * p.x + wKz * p.y + wW * t;
+    vec4 s = sin(ph), c = cos(ph);
+    grad = vec2(dot(wA * wKx, c), dot(wA * wKz, c));
+    return dot(wA, s);
+  }`;
+function Pt(e, t, r) {
+  let i = jt(),
+    a = e.opts?.ocean ?? null,
+    c = (a?.hull ?? []).slice(0, 6),
+    l = {
+      value: [...[, , , , , ,]].map((e, t) => new m(...(c[t] ?? [0, 0, 0, 0]))),
+    },
+    u = { value: new m(0, 0, 0, 0) },
+    d = new o({
+      color: new _(16777215),
+      roughness: 0.46,
+      metalness: 0,
+      flatShading: !0,
+      transparent: !0,
+      opacity: 1,
+      depthWrite: !0,
+    }),
+    f = e.opts?.biome === `snow`,
+    p = e.opts?.biome === `jungle`,
+    h = e.opts?.biome === `tropical`,
+    g = e.opts?.biome === `storm`,
+    v = f
+      ? [
+          `vec3(0.300, 0.370, 0.400)`,
+          `vec3(0.150, 0.230, 0.270)`,
+          `vec3(0.060, 0.115, 0.160)`,
+          `vec3(0.028, 0.060, 0.095)`,
+        ]
+      : p
+        ? [
+            `vec3(0.255, 0.200, 0.108)`,
+            `vec3(0.170, 0.126, 0.058)`,
+            `vec3(0.098, 0.070, 0.030)`,
+            `vec3(0.052, 0.036, 0.016)`,
+          ]
+        : g
+          ? [
+              `vec3(0.205, 0.245, 0.228)`,
+              `vec3(0.135, 0.172, 0.166)`,
+              `vec3(0.072, 0.104, 0.112)`,
+              `vec3(0.036, 0.058, 0.070)`,
+            ]
+          : h
+            ? [
+                `vec3(0.360, 0.700, 0.640)`,
+                `vec3(0.100, 0.540, 0.560)`,
+                `vec3(0.030, 0.310, 0.430)`,
+                `vec3(0.014, 0.110, 0.245)`,
+              ]
+            : [
+                `vec3(0.330, 0.545, 0.480)`,
+                `vec3(0.150, 0.415, 0.395)`,
+                `vec3(0.062, 0.245, 0.325)`,
+                `vec3(0.030, 0.120, 0.230)`,
+              ],
+    y = { value: new _(12178410) },
+    b = { value: r ? r.bedTex : null },
+    x = { value: r ? r.bedRange : 14 },
+    S = p
+      ? [`0.58`, `0.97`, `0.04`, `0.80`]
+      : g
+        ? [`0.66`, `0.97`, `0.03`, `1.4`]
+        : h
+          ? [`0.28`, `0.96`, `0.12`, `4.5`]
+          : [`0.34`, `0.95`, `0.10`, `3.2`],
+    C = p ? `0.22` : g ? `0.55` : h ? `1.35` : `1.0`,
+    w = { value: p ? 0.16 : g ? 0.3 : 0.42 },
+    T = { value: 0 };
+  ((d.onBeforeCompile = (e) => {
+    for (let n in t) e.uniforms[n] = t[n];
+    ((e.uniforms.uTint = y),
+      (e.uniforms.uBed = b),
+      (e.uniforms.uBedRange = x),
+      (e.uniforms.uFres = w),
+      (e.uniforms.uNight = T),
+      (e.uniforms.uHull = l),
+      (e.uniforms.uMotion = u),
+      (e.vertexShader = e.vertexShader
+        .replace(
+          `#include <common>`,
+          `#include <common>
+        varying vec3 vTerWPos; varying vec3 vWaveN; varying float vDepth; varying float vWaveH;
+        uniform float uTime, uBedRange, uMapInv;
+        uniform vec2 uMapOrigin;
+        uniform vec4 uMotion;
+        uniform sampler2D uBed;
+        ${a ? Nt : Mt}`,
+        )
+        .replace(
+          `#include <begin_vertex>`,
+          `#include <begin_vertex>
+        {
+          vec3 wpos3 = (modelMatrix * vec4(position, 1.0)).xyz;
+          vec2 wp = wpos3.xz;
+          vec2 g;
+          float h = waveH(wp, uTime, g);
+          // past ~230 m the facets are wider than the dominant wavelength: keep the swell, drop the aliasing
+          float wfade = 1.0 - smoothstep(${a ? `420.0, 1100.0` : `150.0, 430.0`}, distance(wpos3, cameraPosition));
+          h *= wfade; g *= wfade;
+          vec2 uvb = clamp((wp - uMapOrigin) * uMapInv, 0.0015, 0.9985);
+          float depth = texture2D(uBed, uvb).r * uBedRange;
+          vDepth = depth;
+          // shoaling: the swell flattens out as the bed comes up, so the waterline never cuts the bank
+          float damp = smoothstep(0.0, 2.2, depth);
+          transformed.y += h * damp;
+          vWaveH = h * damp;
+          // the sea heaving, rolling and pitching against a ship that holds still
+          transformed.y += uMotion.z - wp.y * sin(uMotion.x) + (wp.x - uMotion.w) * sin(uMotion.y);
+          vWaveN = normalize(vec3(-g.x * damp, 1.0, -g.y * damp));
+        }`,
+        )
+        .replace(
+          `#include <project_vertex>`,
+          `#include <project_vertex>
+        vTerWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;`,
+        )),
+      (e.fragmentShader = e.fragmentShader
+        .replace(
+          `#include <common>`,
+          `#include <common>
+        varying vec3 vTerWPos; varying vec3 vWaveN; varying float vDepth; varying float vWaveH;
+        uniform vec4 uHull[6];
+        uniform vec3 uTint;
+        uniform sampler2D uSunVis;
+        uniform float uSunElev, uSunSoft, uMapInv, uTime, uFres, uNight;
+        uniform vec2 uMapOrigin;
+        uniform vec3 uFogCool, uFogWarm, uFogSky, uSunDirW;
+        uniform float uValleyY, uFogHeight, uFogDensity, uFogWarmMix;
+        float terSunVis() {
+          vec2 uv = clamp((vTerWPos.xz - uMapOrigin) * uMapInv, 0.0015, 0.9985);
+          return smoothstep(-uSunSoft, uSunSoft, uSunElev - texture2D(uSunVis, uv).r);
+        }
+        vec3 terAerial(out float ff) {
+          vec3 delta = vTerWPos - cameraPosition;
+          float dist = length(delta);
+          vec3 vd = delta / max(dist, 1e-4);
+          float H = uFogHeight;
+          float cY = cameraPosition.y - uValleyY, pY = vTerWPos.y - uValleyY;
+          float ec = exp(-max(cY, -40.0) / H), ep = exp(-max(pY, -40.0) / H);
+          float dy = pY - cY;
+          float ht = abs(dy) > 1.0 ? (ec - ep) * H / dy : ec;
+          ff = 1.0 - exp(-dist * uFogDensity * max(ht, 0.06));
+          ff *= 1.0 - 0.55 * smoothstep(120.0, 600.0, cY);
+          vec3 aerial = mix(uFogCool, uFogWarm, uFogWarmMix * pow(max(dot(vd, uSunDirW), 0.0), 4.0));
+          return mix(aerial, uFogSky, smoothstep(0.02, 0.55, vd.y));
+        }`,
+        )
+        .replace(
+          `#include <color_fragment>`,
+          `#include <color_fragment>
+        {
+          // shallow water is a bright teal that grades to a saturated blue; the shallow end is deliberately
+          // luminous so the armoured ford bed reads straight through the surface as a light streak
+          vec3 wash    = ${v[0]};
+          vec3 shallow = ${v[1]};
+          vec3 midc    = ${v[2]};
+          vec3 deep    = ${v[3]};
+          float d0 = smoothstep(0.05, 0.85, vDepth);
+          float d1 = smoothstep(0.55, 2.1, vDepth), d2 = smoothstep(1.8, 6.0, vDepth);
+          vec3 body = mix(mix(mix(wash, shallow, d0), midc, d1), deep, d2);
+          float ripple = 0.55 + 0.45 * sin(vDepth * 7.5 - uTime * 2.1);
+          float foam = (1.0 - smoothstep(0.05, 1.05, vDepth)) * ripple * smoothstep(0.0, 0.14, vDepth) * ${C};
+          foam *= 1.0 - smoothstep(55.0, 190.0, distance(vTerWPos, cameraPosition));   // no bright rim at map scale
+          ${
+            a
+              ? `{
+            // whitecaps: the chop breaking on the swell's crests, in streaks blown downwind
+            vec2 q = vTerWPos.xz;
+            float n1 = fract(sin(dot(floor(q * vec2(0.42, 0.9) + vec2(uTime * 0.6, 0.0)), vec2(12.9898, 78.233))) * 43758.5453);
+            float streak = 0.5 + 0.5 * sin(q.x * 0.9 + q.y * 0.35 + sin(q.y * 0.21) * 3.0 + uTime * 0.8);
+            float cap = smoothstep(1.05, 1.75, vWaveH) * (0.35 + 0.65 * n1) * (0.55 + 0.45 * streak);
+            // broken water slapping the hull: a band along every side, surging with the swell
+            float hb = 1e4;
+            for (int i = 0; i < 6; i++) {
+              vec4 r = uHull[i]; if (r.z <= r.x) continue;
+              vec2 dd = max(vec2(r.x - q.x, r.y - q.y), vec2(q.x - r.z, q.y - r.w));
+              hb = min(hb, length(max(dd, 0.0)) + min(max(dd.x, dd.y), 0.0));
+            }
+            float slap = (1.0 - smoothstep(0.0, 3.2 + 2.0 * streak, hb)) * (0.55 + 0.45 * sin(uTime * 1.3 + q.x * 0.11 + q.y * 0.2));
+            float lace = (1.0 - smoothstep(2.0, 11.0, hb)) * smoothstep(0.62, 0.95, n1 * streak) * 0.6;
+            foam = max(foam, max(cap, max(slap, lace)));
+          }`
+              : ``
+          }
+          diffuseColor.rgb = mix(body, vec3(0.60, 0.70, 0.70), foam * 0.58);
+          // at night the luminous shallow teal would be the brightest thing in the frame: sit it near the bank's value
+          diffuseColor.rgb *= mix(1.0, 0.42, uNight);
+          diffuseColor.a = mix(${S[0]}, ${S[1]}, smoothstep(${S[2]}, ${S[3]}, vDepth));
+          diffuseColor.a = mix(diffuseColor.a, 0.88, foam * 0.55);
+          diffuseColor.a *= smoothstep(0.0, 0.30, vDepth);   // feather the waterline off the terrain lattice
+        }`,
+        )
+        .replace(
+          `#include <normal_fragment_begin>`,
+          `#include <normal_fragment_begin>
+        // Three's lighting normal is view-space; wave gradients are world-space.
+        // Transform only this lighting copy. Fresnel below compares world vectors.
+        normal = normalize(mix(normal, normalize(mat3(viewMatrix) * vWaveN), 0.14 + 0.5 * smoothstep(90.0, 320.0, distance(vTerWPos, cameraPosition))));`,
+        )
+        .replace(
+          `getDirectionalLightInfo( directionalLight, directLight );`,
+          `getDirectionalLightInfo( directionalLight, directLight );
+        directLight.color *= terSunVis();`,
+        )
+        .replace(
+          `#include <lights_fragment_end>`,
+          `#include <lights_fragment_end>
+        reflectedLight.directSpecular *= 0.24;
+        reflectedLight.indirectSpecular *= 0.35;`,
+        )
+        .replace(
+          `#include <opaque_fragment>`,
+          `{
+          // clamped fresnel against a saturated tint: at a grazing angle or a low sun the round-2 version
+          // saturated toward white and the river read as wet asphalt
+          vec3 vw = normalize(cameraPosition - vTerWPos);
+          float fres = min(pow(1.0 - clamp(dot(vw, normalize(vWaveN)), 0.0, 1.0), 4.0), 0.36);
+          vec3 sky = mix(uTint, vec3(0.07, 0.20, 0.30), 0.62);
+          outgoingLight = mix(outgoingLight, sky, fres * uFres);
+        }
+        #include <opaque_fragment>`,
+        )
+        .replace(
+          `gl_FragColor.rgb = mix( gl_FragColor.rgb, fogColor, fogFactor );`,
+          `{
+          float aff;
+          vec3 aerial = terAerial(aff);
+          gl_FragColor.rgb = mix( gl_FragColor.rgb, aerial, clamp(aff, 0.0, 1.0) );
+        }`,
+        )));
+  }),
+    (d.customProgramCacheKey = () =>
+      `terrain-water-v8-${e.opts?.biome ?? `temperate`}-${a ? `ocean` : `still`}`));
+  let E = new n(i, d);
+  (E.position.set(0, e.waterLevel, 0),
+    (E.receiveShadow = !1),
+    (E.castShadow = !1),
+    (E.name = `water`),
+    (E.renderOrder = 1),
+    (E.frustumCulled = !1),
+    (E.matrixAutoUpdate = !1),
+    E.updateMatrix());
+  let D = new s();
+  return {
+    mesh: E,
+    material: d,
+    update(t) {
+      a ||
+        (t.getWorldPosition(D),
+        E.position.set(
+          Math.round(D.x / At) * At,
+          e.waterLevel,
+          Math.round(D.z / At) * At,
+        ),
+        E.updateMatrix(),
+        E.updateMatrixWorld());
+    },
+    setSkyTint(e) {
+      y.value.copy(e);
+    },
+    setMotion(e = 0, t = 0, n = 0, r = 0) {
+      u.value.set(e, t, n, r);
+    },
+    setNight(e) {
+      let t = Math.min(1, Math.max(0, e));
+      ((w.value = 0.42 - 0.3 * t), (T.value = t));
+    },
+    dispose() {
+      (i.dispose(), d.dispose());
+    },
+  };
+}
+function Ft(e = []) {
+  let t = new Map();
+  for (let n of e) {
+    let e = n.slice();
+    if (
+      e.length !== 4 ||
+      !e.every(Number.isFinite) ||
+      e[0] > e[2] ||
+      e[1] > e[3]
+    )
+      throw Error(`Invalid scatter exclusion footprint`);
+    for (let n = Math.floor(e[1] / 16); n <= Math.floor(e[3] / 16); n++)
+      for (let r = Math.floor(e[0] / 16); r <= Math.floor(e[2] / 16); r++) {
+        t.has(n) || t.set(n, new Map());
+        let i = t.get(n);
+        (i.has(r) || i.set(r, []), i.get(r).push(e));
+      }
+  }
+  return (e, n, r, i) => {
+    if (!t.size) return !1;
+    for (let a = Math.floor(n / 16); a <= Math.floor(i / 16); a++) {
+      let o = t.get(a);
+      if (o)
+        for (let t = Math.floor(e / 16); t <= Math.floor(r / 16); t++) {
+          let a = o.get(t);
+          if (a) {
+            for (let t of a)
+              if (e <= t[2] && r >= t[0] && n <= t[3] && i >= t[1]) return !0;
+          }
+        }
+    }
+    return !1;
+  };
+}
+var W = {
+    OAK: 100,
+    ROUND: 101,
+    BLOSSOM: 102,
+    WILLOW: 103,
+    COMPOUND: 104,
+    SCALE: 105,
+    PINE: 106,
+    TWIG: 107,
+    SNOW: 108,
+    GINKGO: 109,
+    BIGLEAF: 110,
+    BERRY: 111,
+    MAPLE: 112,
+    BROAD: 113,
+    NEEDLE: 114,
+    SINGLE: 115,
+  },
+  It = null;
+function Lt() {
+  if (It) return It;
+  let e = document.createElement(`canvas`);
+  e.width = e.height = 1024;
+  let t = e.getContext(`2d`),
+    n = Te(911),
+    r = (e) => `rgb(${e | 0},${e | 0},${e | 0})`,
+    i = (e, n) => {
+      (t.save(),
+        t.translate((e % 4) * 256, Math.floor(e / 4) * 256),
+        t.beginPath(),
+        t.rect(0, 0, 256, 256),
+        t.clip(),
+        n(),
+        t.restore());
+    },
+    a = (e, n, i, a, o, s = 95) => {
+      ((t.strokeStyle = r(s)),
+        (t.lineWidth = o),
+        (t.lineCap = `round`),
+        t.beginPath(),
+        t.moveTo(e, n),
+        t.lineTo(i, a),
+        t.stroke());
+    },
+    o = (e, n, i, a, o, s, c) => {
+      (t.save(), t.translate(e, n), t.rotate(o));
+      let l = [],
+        u = [];
+      for (let e = 0; e <= 40; e++) {
+        let t = e / 40,
+          n = a * c(t);
+        (l.push([-n, -i * t]), u.push([n, -i * t]));
+      }
+      let d = t.createLinearGradient(-a, 0, a, 0);
+      (d.addColorStop(0, r(s - 30)),
+        d.addColorStop(0.5, r(s)),
+        d.addColorStop(1, r(s - 15)),
+        t.beginPath(),
+        [...l, ...u.reverse()].forEach(([e, n], r) =>
+          r ? t.lineTo(e, n) : t.moveTo(e, n),
+        ),
+        t.closePath(),
+        (t.fillStyle = d),
+        t.fill(),
+        (t.strokeStyle = r(s - 60)),
+        (t.lineWidth = 1.1),
+        t.beginPath(),
+        t.moveTo(0, 0),
+        t.lineTo(0, -i * 0.92),
+        t.stroke(),
+        t.restore());
+    },
+    s = (e) => Math.sin(Math.PI * e ** 0.8) * 0.95,
+    c = (e) =>
+      (0.55 + 0.45 * Math.abs(Math.sin(e * Math.PI * 4.5))) *
+      Math.sin(Math.PI * e ** 0.75),
+    l = (e) => Math.sin(Math.PI * e ** 0.6) * 0.9,
+    u = (e, t, r, i) => {
+      for (let e = 0; e < 4; e++) {
+        let t = e * 1.6 + n();
+        a(
+          128,
+          128,
+          128 + Math.cos(t) * r * 0.9,
+          128 + Math.sin(t) * r * 0.9,
+          3,
+          90,
+        );
+      }
+      for (let a = 0; a < e; a++) {
+        let e = n() * Math.PI * 2,
+          a = t + n() * (r - t);
+        i(128 + Math.cos(e) * a, 128 + Math.sin(e) * a, e);
+      }
+    };
+  (i(0, () =>
+    u(13, 16, 70, (e, t, r) =>
+      o(
+        e,
+        t,
+        58 + n() * 20,
+        20 + n() * 6,
+        r + Math.PI / 2 + (n() - 0.5),
+        196 + ((n() * 55) | 0),
+        c,
+      ),
+    ),
+  ),
+    i(1, () =>
+      u(26, 10, 90, (e, t, r) =>
+        o(
+          e,
+          t,
+          30 + n() * 10,
+          15 + n() * 4,
+          r + Math.PI / 2 + (n() - 0.5) * 1.5,
+          200 + ((n() * 50) | 0),
+          (e) => Math.sin(Math.PI * e ** 0.62),
+        ),
+      ),
+    ),
+    i(2, () => {
+      (a(38.4, 217.6, 217.6, 51.2, 4, 80), a(128, 133.12, 64, 51.2, 3, 80));
+      for (let e = 0; e < 17; e++) {
+        let e = 256 * (0.14 + n() * 0.72),
+          i = 256 * (0.14 + n() * 0.72),
+          a = 14 + n() * 12,
+          o = 215 + ((n() * 40) | 0),
+          s = n() * 6.28;
+        for (let n = 0; n < 5; n++) {
+          let c = s + (n / 5) * Math.PI * 2;
+          (t.beginPath(),
+            t.ellipse(
+              e + Math.cos(c) * a * 0.55,
+              i + Math.sin(c) * a * 0.55,
+              a * 0.55,
+              a * 0.38,
+              c,
+              0,
+              Math.PI * 2,
+            ),
+            (t.fillStyle = r(o - (n % 2) * 12)),
+            t.fill(),
+            (t.strokeStyle = r(o - 45)),
+            (t.lineWidth = 0.8),
+            t.stroke());
+        }
+        (t.beginPath(),
+          t.arc(e, i, a * 0.22, 0, Math.PI * 2),
+          (t.fillStyle = r(120)),
+          t.fill());
+      }
+      for (let e = 0; e < 6; e++)
+        (t.beginPath(),
+          t.arc(
+            256 * (0.1 + n() * 0.8),
+            256 * (0.1 + n() * 0.8),
+            6 + n() * 4,
+            0,
+            Math.PI * 2,
+          ),
+          (t.fillStyle = r(190)),
+          t.fill());
+    }),
+    i(3, () => {
+      a(128, 4, 134, 252, 2.5, 110);
+      for (let e = 0; e < 26; e++) {
+        let t = 12 + (e / 26) * 226,
+          r = e % 2 ? 1 : -1;
+        o(
+          128 + r * 2,
+          t,
+          60 + n() * 26,
+          7 + n() * 2,
+          r * (0.25 + n() * 0.35) + Math.PI,
+          200 + ((n() * 50) | 0),
+          l,
+        );
+      }
+    }),
+    i(4, () => {
+      for (let e = 0; e < 4; e++) {
+        let r = e * 1.57 + n() * 0.6 - Math.PI / 2;
+        (t.save(),
+          t.translate(128, 128),
+          t.rotate(r),
+          a(0, 0, 0, -105, 2.5, 100));
+        for (let e = 1; e <= 6; e++) {
+          let t = (e / 6.4) * -105,
+            r = 30 - e * 1.5;
+          (o(0, t, r, 8, -1.1 - n() * 0.2, 200 + ((n() * 50) | 0), s),
+            o(0, t, r, 8, 1.1 + n() * 0.2, 200 + ((n() * 50) | 0), s));
+        }
+        (o(0, -105, 30, 8, 0, 225, s), t.restore());
+      }
+    }),
+    i(5, () => {
+      let e = (i, a, o, s, c) => {
+        let l = i + Math.cos(o) * s,
+          u = a + Math.sin(o) * s;
+        if (
+          ((t.strokeStyle = r(175 + ((n() * 60) | 0))),
+          (t.lineWidth = Math.max(3, 9 - c * 2.5)),
+          (t.lineCap = `round`),
+          t.beginPath(),
+          t.moveTo(i, a),
+          t.lineTo(l, u),
+          t.stroke(),
+          c < 3)
+        )
+          for (let t = 1; t < 5; t++) {
+            let r = t / 5,
+              d = i + (l - i) * r,
+              f = a + (u - a) * r;
+            for (let t of [-1, 1])
+              e(d, f, o + t * (0.75 + n() * 0.2), s * (0.45 - r * 0.2), c + 1);
+          }
+      };
+      e(128, 250, -Math.PI / 2, 230.4, 0);
+    }),
+    i(6, () => {
+      for (let e = 0; e < 3; e++) {
+        let i = 256 * (0.3 + 0.2 * e),
+          o = 256 * (0.55 + (e % 2) * 0.1);
+        a(i, 252, i, o, 5, 90);
+        for (let e = 0; e < 70; e++) {
+          let e = -Math.PI / 2 + (n() - 0.5) * 2.6,
+            a = 55 + n() * 45;
+          ((t.strokeStyle = r(165 + ((n() * 85) | 0))),
+            (t.lineWidth = 1.8),
+            t.beginPath(),
+            t.moveTo(i, o + 10),
+            t.lineTo(i + Math.cos(e) * a, o + 10 + Math.sin(e) * a),
+            t.stroke());
+        }
+      }
+    }),
+    i(7, () => {
+      let e = (i, a, o, s, c) => {
+        let l = i + Math.cos(o) * s,
+          u = a + Math.sin(o) * s;
+        if (
+          ((t.strokeStyle = r(170 + ((n() * 60) | 0))),
+          (t.lineWidth = c),
+          (t.lineCap = `round`),
+          t.beginPath(),
+          t.moveTo(i, a),
+          t.quadraticCurveTo(
+            (i + l) / 2 + (n() - 0.5) * s * 0.3,
+            (a + u) / 2,
+            l,
+            u,
+          ),
+          t.stroke(),
+          c > 1.3)
+        )
+          for (let t = 0; t < 2 + (n() < 0.4); t++)
+            e(l, u, o + (n() - 0.5) * 1.3, s * (0.6 + n() * 0.2), c * 0.66);
+      };
+      for (let t = 0; t < 3; t++)
+        e(128 + (t - 1) * 20, 252, -Math.PI / 2 + (t - 1) * 0.45, 62, 6);
+    }),
+    i(8, () => {
+      for (let e = 0; e < 22; e++) {
+        let e = n() * 6.28,
+          i = n() * 256 * 0.3,
+          a = 128 + Math.cos(e) * i * 1.3,
+          o = 128 + Math.sin(e) * i * 0.7,
+          s = 22 + n() * 30,
+          c = t.createRadialGradient(
+            a - s * 0.3,
+            o - s * 0.3,
+            s * 0.1,
+            a,
+            o,
+            s,
+          );
+        (c.addColorStop(0, r(255)),
+          c.addColorStop(0.75, r(238)),
+          c.addColorStop(1, r(205)),
+          (t.fillStyle = c),
+          t.beginPath(),
+          t.arc(a, o, s, 0, Math.PI * 2),
+          t.fill());
+      }
+    }),
+    i(9, () =>
+      u(15, 14, 78, (e, i, a) => {
+        (t.save(), t.translate(e, i), t.rotate(a + Math.PI / 2 + (n() - 0.5)));
+        let o = 30 + n() * 12,
+          s = 205 + ((n() * 45) | 0);
+        (t.beginPath(),
+          t.moveTo(0, 0),
+          t.arc(0, 0, o, -Math.PI / 2 - 0.85, -Math.PI / 2 + 0.85),
+          t.closePath(),
+          (t.fillStyle = r(s)),
+          t.fill(),
+          (t.strokeStyle = r(s - 40)),
+          (t.lineWidth = 0.7));
+        for (let e = -4; e <= 4; e++) {
+          let n = -Math.PI / 2 + e * 0.19;
+          (t.beginPath(),
+            t.moveTo(0, 0),
+            t.lineTo(Math.cos(n) * o, Math.sin(n) * o),
+            t.stroke());
+        }
+        ((t.fillStyle = `rgba(0,0,0,1)`),
+          (t.globalCompositeOperation = `destination-out`),
+          t.beginPath(),
+          t.moveTo(0, -o * 0.45),
+          t.lineTo(-4, -o - 2),
+          t.lineTo(4, -o - 2),
+          t.closePath(),
+          t.fill(),
+          (t.globalCompositeOperation = `source-over`),
+          t.restore());
+      }),
+    ),
+    i(10, () => {
+      let e = (e, n, i, a, o) => {
+        (t.save(), t.translate(e, n), t.rotate(a), t.beginPath());
+        for (let e = 0; e <= 80; e++) {
+          let n = (e / 80) * Math.PI * 2,
+            r = Math.abs(Math.cos(1.5 * (n - Math.PI / 2))) ** 0.9,
+            a = 1 - 0.7 * Math.exp(-(((n - Math.PI * 1.5) / 0.35) ** 2)),
+            o = i * (0.55 + 0.45 * r) * a,
+            s = Math.cos(n) * o,
+            c = -Math.sin(n) * o;
+          e ? t.lineTo(s, c) : t.moveTo(s, c);
+        }
+        t.closePath();
+        let s = t.createRadialGradient(0, 0, 0, 0, 0, i);
+        (s.addColorStop(0, r(o - 25)),
+          s.addColorStop(1, r(o)),
+          (t.fillStyle = s),
+          t.fill(),
+          (t.strokeStyle = r(o - 65)),
+          (t.lineWidth = 1.2));
+        for (let e = -1; e <= 1; e++) {
+          let n = Math.PI / 2 + e * 1.05;
+          (t.beginPath(),
+            t.moveTo(0, 0),
+            t.lineTo(Math.cos(n) * i * 0.85, -Math.sin(n) * i * 0.85),
+            t.stroke());
+        }
+        t.restore();
+      };
+      u(0, 0, 80, () => {});
+      for (let t = 0; t < 7; t++) {
+        let t = n() * 6.28,
+          r = 20 + n() * 58;
+        e(
+          128 + Math.cos(t) * r,
+          128 + Math.sin(t) * r,
+          38 + n() * 14,
+          n() * 6.28,
+          200 + ((n() * 50) | 0),
+        );
+      }
+      e(128, 128, 50, n(), 245);
+    }),
+    i(11, () => {
+      for (let e = 0; e < 5; e++) {
+        let e = 256 * (0.2 + n() * 0.6),
+          i = 256 * (0.2 + n() * 0.6);
+        a(e, i - 30, e, i, 2, 90);
+        for (let a = 0; a < 7; a++) {
+          let a = e + (n() - 0.5) * 36,
+            o = i + (n() - 0.5) * 30,
+            s = 7 + n() * 4,
+            c = t.createRadialGradient(a - s * 0.35, o - s * 0.35, 1, a, o, s);
+          (c.addColorStop(0, r(255)),
+            c.addColorStop(0.35, r(215)),
+            c.addColorStop(1, r(150)),
+            (t.fillStyle = c),
+            t.beginPath(),
+            t.arc(a, o, s, 0, Math.PI * 2),
+            t.fill());
+        }
+      }
+    }));
+  let d = ke().image;
+  for (let e = 0; e < 4; e++)
+    t.drawImage(
+      d,
+      (e % 2) * 256,
+      Math.floor(e / 2) * 256,
+      256,
+      256,
+      (e % 4) * 256,
+      768,
+      256,
+      256,
+    );
+  let f = new ie(e);
+  return ((f.colorSpace = b), (f.anisotropy = 4), (It = f), f);
+}
+var Rt = (e, t, n, r) => {
+    let i =
+      Math.sin(t * 9.1 + n * 3.3) * Math.sin(r * 8.7 - n * 2.1) +
+      0.5 * Math.sin(n * 7.7 + t * 5 + r * 4);
+    (e
+      .copy(H(9079402))
+      .lerp(H(14209712), u.clamp(i * 0.8 + 0.5, 0, 1))
+      .lerp(H(7170648), i < -0.6 ? 0.6 : 0),
+      e.lerp(H(4867126), u.clamp(1 - n / 0.8, 0, 1) * 0.6));
+  },
+  zt = (e, t) => (n, r, i, a) => {
+    let o =
+      0.5 + 0.5 * Math.sin(Math.atan2(a, r) * 5 + Math.floor(i * 2.2) * 1.7);
+    n.copy(H(e))
+      .lerp(H(3023900), 0.45 * (1 - o))
+      .lerp(H(t), u.smoothstep(i, 3, 6));
+  },
+  Bt = (e, t, n, r) => {
+    let i = Math.atan2(r, t),
+      a = Math.sin(n * 3.1 + i * 2) > 0.9 && Math.cos(i * 2 - n) > 0.3;
+    (e.copy(H(14277830)).lerp(H(12173476), 0.5 + 0.5 * Math.sin(i * 4 + n)),
+      a && e.lerp(H(2959910), 0.85),
+      e.lerp(H(4603962), u.clamp(1 - n / 0.7, 0, 1) * 0.7));
+  },
+  Vt = Pe(H(5909532), H(10115642), H(3809300), 0.4),
+  Ht = Pe(H(3814188), H(7234133), H(2367258), 0.5),
+  Ut = Pe(H(6117973), H(9341570), H(3486254), 0.5),
+  Wt = Pe(H(3877408), H(6966328), H(2760729)),
+  Gt = (e, t, n, r) => {
+    (e
+      .copy(H(4859426))
+      .lerp(H(8011832), 0.5 + 0.5 * Math.sin(Math.atan2(r, t) * 3 + n)),
+      Math.sin(n * 26) > 0.86 && e.lerp(H(12098694), 0.5),
+      e.lerp(H(2758676), u.clamp(1 - n / 0.8, 0, 1) * 0.5));
+  },
+  Kt = Pe(H(4078118), H(7041088), H(2763288), 0.6),
+  qt = Pe(H(3810328), H(7028777), H(2365200), 0.3),
+  Jt = (e, t) => B([e, t, t], { core: 0.25, jitter: 0.12 }),
+  Yt = { snowTile: W.SNOW },
+  Xt =
+    (e, t = 10137706) =>
+    (n, r, i, a) => {
+      (n
+        .copy(H(e[0]))
+        .lerp(H(e[1]), 0.25 + 0.5 * i + 0.25 * r)
+        .lerp(H(t), 0.25 * i * i),
+        n.multiplyScalar(0.9 + 0.2 * a()));
+    },
+  Zt =
+    (e, t = 0.5) =>
+    (n, r, i, a) => {
+      a() < t && n.set(e[(a() * e.length) | 0]);
+    },
+  Qt = {
+    trunkH: 3.2,
+    trunkR: 0.34,
+    lean: 0.25,
+    leanA: 0.6,
+    wobble: 0.08,
+    roots: 5,
+    limbs: 5,
+    spread: 0.75,
+    limbLen: 3,
+    rise: 0.22,
+    gnarl: 0.22,
+    fork: 0.75,
+    kids: 2,
+    depth: 2,
+    lenFalloff: 0.62,
+    leader: !0,
+    clumpR: 1.5,
+    cards: 22,
+    cardSize: 1.35,
+    core: 0.65,
+    sideClump: 0.35,
+    tile: W.BROAD,
+    barkColor: Wt,
+  },
+  G =
+    (e) =>
+    (t, n = 0) =>
+      Ne({ ...Qt, ...e }, t, n),
+  $t = {
+    h: 11.5,
+    trunkR: 0.3,
+    skirt: 1.3,
+    whorls: 15,
+    perWhorl: 8,
+    baseLen: 3.3,
+    droop: 0.42,
+    cardsPerM: 3.4,
+    cardSize: 1.1,
+    cross: 0.5,
+    barkColor: qt,
+  },
+  en =
+    (e) =>
+    (t, n = 0) =>
+      je({ ...$t, ...e }, t, n),
+  tn = {
+    trunkH: 2.6,
+    trunkR: 0.58,
+    lean: 0.3,
+    spread: 1.1,
+    gnarl: 0.36,
+    limbLen: 3.9,
+    rise: 0.1,
+    fork: 0.9,
+    clumpR: 1.8,
+    cards: 26,
+    cardSize: 1.3,
+    limbs: 6,
+    barkColor: Ht,
+    tile: W.OAK,
+  },
+  nn = {
+    trunkH: 3.4,
+    trunkR: 0.36,
+    spread: 0.72,
+    limbLen: 3.1,
+    gnarl: 0.22,
+    clumpR: 1.6,
+    cards: 25,
+    cardSize: 1.45,
+    tile: W.MAPLE,
+    barkColor: Ut,
+  },
+  rn = {
+    trunkH: 5.2,
+    trunkR: 0.2,
+    lean: 0.3,
+    leanA: 4,
+    wobble: 0.1,
+    roots: 3,
+    spread: 0.5,
+    limbLen: 2.2,
+    rise: 0.25,
+    gnarl: 0.28,
+    fork: 0.8,
+    lenFalloff: 0.66,
+    clumpR: 1.2,
+    cards: 18,
+    cardSize: 1.15,
+    core: 0.6,
+    barkColor: Ee,
+    tile: W.ROUND,
+  },
+  an = {
+    trunkH: 2.8,
+    trunkR: 0.46,
+    lean: 0.35,
+    spread: 0.95,
+    limbLen: 3.3,
+    rise: 0.32,
+    gnarl: 0.2,
+    clumpR: 1.3,
+    cards: 9,
+    cardSize: 1.2,
+    tile: W.WILLOW,
+    barkColor: Ut,
+    shell: 0.2,
+  },
+  on = {
+    trunkH: 3.4,
+    trunkR: 0.44,
+    limbs: 5,
+    spread: 0.5,
+    rise: 0.36,
+    limbLen: 3.8,
+    fork: 0.7,
+    gnarl: 0.18,
+    lenFalloff: 0.7,
+    clumpR: 1.6,
+    cards: 22,
+    barkColor: Ut,
+    leader: !1,
+  },
+  sn = {
+    trunkH: 6.8,
+    trunkR: 0.34,
+    lean: 0.4,
+    limbStart: 0.72,
+    limbs: 6,
+    spread: 1.25,
+    rise: 0.14,
+    limbLen: 3,
+    gnarl: 0.32,
+    fork: 0.8,
+    clumpR: 1.3,
+    cards: 18,
+    cardSize: 1.25,
+    tile: W.PINE,
+    barkColor: zt(4864556, 12609594),
+    core: 0.6,
+  },
+  cn = {
+    h: 14,
+    trunkR: 0.42,
+    skirt: 1,
+    whorls: 17,
+    perWhorl: 8,
+    baseLen: 3.3,
+    droop: 0.62,
+    cardsPerM: 3,
+    cardSize: 1.25,
+    cross: 0.4,
+    sprigTile: W.SCALE,
+    barkColor: Vt,
+  },
+  ln = (...e) => e,
+  un = [
+    {
+      season: `Spring`,
+      key: `cherry`,
+      name: `Kanzan Cherry`,
+      note: `Vase-shaped flowering cherry smothered in double pink blossom.`,
+      litter: ln(15902912, 16237523, 14976936),
+      build: G({
+        trunkH: 2.2,
+        trunkR: 0.3,
+        spread: 1.05,
+        limbLen: 3.4,
+        rise: 0.12,
+        clumpR: 1.5,
+        cards: 26,
+        cardSize: 1.2,
+        tile: W.BLOSSOM,
+        barkColor: Gt,
+        leafColor: B([11553400, 14184602, 15769788, 16762584, 16770798], {
+          core: 0.4,
+        }),
+        accent: { tile: W.ROUND, colors: [8030778, 9675340], share: 0.1 },
+      }),
+    },
+    {
+      season: `Spring`,
+      key: `magnolia`,
+      name: `Saucer Magnolia`,
+      note: `Low multi-stem magnolia holding big white-and-rose goblet flowers on bare wood.`,
+      litter: ln(16045790, 15315907, 16773362),
+      build: G({
+        trunkH: 1.3,
+        trunkR: 0.24,
+        limbs: 6,
+        spread: 0.62,
+        rise: 0.36,
+        limbLen: 3,
+        clumpR: 1.15,
+        cards: 13,
+        cardSize: 1.25,
+        shell: 0.25,
+        tile: W.BLOSSOM,
+        barkColor: Ut,
+        leafColor: B([11032186, 13931696, 15782108, 16774390], { core: 0.3 }),
+      }),
+    },
+    {
+      season: `Spring`,
+      key: `crabapple`,
+      name: `Prairiefire Crabapple`,
+      note: `Round little tree, dense with deep rose-red blossom and bronze new leaves.`,
+      litter: ln(13120620, 14965388, 11020376),
+      build: G({
+        trunkH: 1.9,
+        trunkR: 0.28,
+        spread: 0.92,
+        limbLen: 2.5,
+        clumpR: 1.35,
+        cards: 24,
+        cardSize: 1.1,
+        gnarl: 0.3,
+        tile: W.BLOSSOM,
+        barkColor: Wt,
+        leafColor: B([9050692, 11807326, 14174846, 15760034], { core: 0.5 }),
+        accent: {
+          tile: W.ROUND,
+          colors: [6965802, 8018478, 6122026],
+          share: 0.2,
+        },
+      }),
+    },
+    {
+      season: `Spring`,
+      key: `dogwoodw`,
+      name: `Flowering Dogwood`,
+      note: `Tiered horizontal branches floating white bracts, the understorey star of spring.`,
+      litter: ln(15987172, 15131340),
+      build: G({
+        trunkH: 1.6,
+        trunkR: 0.24,
+        limbs: 6,
+        spread: 1.22,
+        rise: 0.04,
+        limbLen: 2.9,
+        gnarl: 0.14,
+        lenFalloff: 0.66,
+        clumpR: 1.1,
+        cards: 20,
+        cardSize: 1.15,
+        tile: W.BLOSSOM,
+        barkColor: Ut,
+        leafColor: B([12433560, 14868684, 16316138, 16777215], { core: 0.35 }),
+        accent: { tile: W.ROUND, colors: [7311162, 8955978], share: 0.28 },
+      }),
+    },
+    {
+      season: `Spring`,
+      key: `redbud`,
+      name: `Eastern Redbud`,
+      note: `Zig-zag leaning trunk with tiny magenta pea-flowers crowding every twig.`,
+      litter: ln(13128346, 11023998),
+      build: G({
+        trunkH: 1.8,
+        trunkR: 0.25,
+        lean: 0.55,
+        leanA: 2.2,
+        spread: 0.95,
+        limbLen: 2.8,
+        gnarl: 0.34,
+        clumpR: 1.2,
+        cards: 28,
+        cardSize: 0.85,
+        shell: 0.2,
+        tile: W.BLOSSOM,
+        barkColor: Wt,
+        leafColor: B([6953552, 9841778, 12470930, 14578866], { core: 0.35 }),
+      }),
+    },
+    {
+      season: `Spring`,
+      key: `pear`,
+      name: `Callery Pear`,
+      note: `Tight upright oval of white blossom over the first green leaves.`,
+      litter: ln(16118762, 15263446),
+      build: G({
+        trunkH: 2.4,
+        trunkR: 0.3,
+        limbs: 7,
+        limbStart: 0.3,
+        spread: 0.36,
+        rise: 0.46,
+        limbLen: 3.4,
+        clumpR: 1.3,
+        cards: 24,
+        cardSize: 1.1,
+        tile: W.BLOSSOM,
+        barkColor: Ut,
+        leafColor: B([12763298, 15132372, 16448240, 16777215], { core: 0.45 }),
+        accent: { tile: W.ROUND, colors: [8824906, 10666074], share: 0.15 },
+      }),
+    },
+    {
+      season: `Spring`,
+      key: `willowsp`,
+      name: `Spring Willow`,
+      note: `Weeping willow in its first lime-green flush, curtains down to the grass.`,
+      litter: null,
+      build: G({
+        ...an,
+        leafColor: B([5927960, 8298024, 10798148, 13296246], { core: 0.35 }),
+        weep: { strands: 15, len: 5.8, card: 0.95 },
+      }),
+    },
+    {
+      season: `Spring`,
+      key: `birchsp`,
+      name: `Silver Birch in Leaf`,
+      note: `Young birch catkins and small bright leaves, white trunk, airy crown.`,
+      litter: null,
+      build: G({
+        ...rn,
+        leafColor: B([6191648, 8823854, 11324236, 13689978], {
+          core: 0.35,
+          jitter: 0.1,
+        }),
+        accent: {
+          tile: W.WILLOW,
+          colors: [11575392, 13154414],
+          share: 0.08,
+          size: 0.6,
+        },
+      }),
+    },
+    {
+      season: `Spring`,
+      key: `plum`,
+      name: `Purple-leaf Plum`,
+      note: `Wine-dark foliage lit by pale pink blossom: a street tree in April.`,
+      litter: ln(15909072, 15247548),
+      build: G({
+        trunkH: 2,
+        trunkR: 0.28,
+        spread: 0.7,
+        rise: 0.3,
+        limbLen: 2.7,
+        clumpR: 1.3,
+        cards: 22,
+        cardSize: 1.1,
+        tile: W.ROUND,
+        barkColor: Gt,
+        leafColor: B([2756126, 4593710, 6562878, 8533068], { core: 0.5 }),
+        accent: {
+          tile: W.BLOSSOM,
+          colors: [16041172, 16308450, 15247552],
+          share: 0.35,
+        },
+      }),
+    },
+    {
+      season: `Spring`,
+      key: `chestnutsp`,
+      name: `Horse Chestnut in Flower`,
+      note: `Big dome of palmate leaves carrying upright white candles of flowers.`,
+      litter: null,
+      build: G({
+        trunkH: 3,
+        trunkR: 0.5,
+        limbs: 6,
+        spread: 0.9,
+        limbLen: 3.8,
+        clumpR: 1.8,
+        cards: 24,
+        cardSize: 1.5,
+        tile: W.BIGLEAF,
+        barkColor: Ut,
+        leafColor: B([2046484, 3364894, 5143082, 7248442], { core: 0.55 }),
+        accent: {
+          tile: W.BLOSSOM,
+          colors: [16447208, 16051408, 15915216],
+          share: 0.22,
+          size: 0.8,
+        },
+      }),
+    },
+    {
+      season: `Summer`,
+      key: `oakeng`,
+      name: `English Oak`,
+      note: `Broad, gnarled, low-limbed oak in deep midsummer green.`,
+      litter: null,
+      build: G({
+        ...tn,
+        leafColor: B([1717010, 2773016, 4485162, 6984764], { core: 0.55 }),
+      }),
+    },
+    {
+      season: `Summer`,
+      key: `plane`,
+      name: `London Plane`,
+      note: `Tall city tree with flaking camouflage bark and big maple-like leaves.`,
+      litter: null,
+      build: G({
+        trunkH: 4.6,
+        trunkR: 0.5,
+        limbs: 6,
+        limbStart: 0.55,
+        spread: 0.8,
+        limbLen: 3.8,
+        rise: 0.26,
+        clumpR: 1.8,
+        cards: 22,
+        cardSize: 1.6,
+        tile: W.BIGLEAF,
+        barkColor: Rt,
+        leafColor: B([2375706, 3826212, 5801010, 8299590], { core: 0.55 }),
+      }),
+    },
+    {
+      season: `Summer`,
+      key: `poplar`,
+      name: `Lombardy Poplar`,
+      note: `Narrow green exclamation mark; planted in windbreak rows.`,
+      litter: null,
+      build: G({
+        trunkH: 2,
+        trunkR: 0.36,
+        limbs: 12,
+        limbStart: 0.05,
+        spread: 0.13,
+        rise: 0.8,
+        limbLen: 7.5,
+        gnarl: 0.1,
+        fork: 0.25,
+        depth: 1,
+        kids: 2,
+        lenFalloff: 0.45,
+        clumpR: 1.35,
+        cards: 20,
+        cardSize: 1,
+        sideClump: 0.95,
+        tile: W.ROUND,
+        barkColor: Ut,
+        leafColor: B([2771478, 4089376, 5932590, 8167488], { core: 0.5 }),
+      }),
+    },
+    {
+      season: `Summer`,
+      key: `willowsu`,
+      name: `Weeping Willow`,
+      note: `Full summer willow: a green waterfall of leaf strands.`,
+      litter: null,
+      build: G({
+        ...an,
+        trunkH: 3,
+        trunkR: 0.52,
+        leafColor: B([3428378, 5140002, 7245360, 9875530], { core: 0.4 }),
+        weep: { strands: 19, len: 6.4, card: 1 },
+      }),
+    },
+    {
+      season: `Summer`,
+      key: `dougfir`,
+      name: `Douglas Fir`,
+      note: `Tall Northwest conifer, soft upswept blue-green boughs.`,
+      litter: null,
+      build: en({
+        h: 16,
+        trunkR: 0.4,
+        skirt: 1.8,
+        whorls: 18,
+        perWhorl: 8,
+        baseLen: 3.6,
+        droop: 0.24,
+        leafColor: Xt([1257502, 2774070], 8036458),
+      }),
+    },
+    {
+      season: `Summer`,
+      key: `redcedar`,
+      name: `Western Red Cedar`,
+      note: `Drooping lacy sprays of scale foliage over fibrous red bark.`,
+      litter: null,
+      build: en({ ...cn, leafColor: Xt([1980948, 4088866], 10137680) }),
+    },
+    {
+      season: `Summer`,
+      key: `scots`,
+      name: `Scots Pine`,
+      note: `Tall bare trunk turning orange up top, flat tufted blue-green crown.`,
+      litter: null,
+      build: G({
+        ...sn,
+        leafColor: B([1980972, 3035200, 4483162, 6589044], { core: 0.5 }),
+      }),
+    },
+    {
+      season: `Summer`,
+      key: `cypress`,
+      name: `Italian Cypress`,
+      note: `Dark, pencil-thin column of dense scale foliage.`,
+      litter: null,
+      build: en({
+        h: 13,
+        trunkR: 0.22,
+        skirt: 0.3,
+        whorls: 22,
+        perWhorl: 6,
+        baseLen: 0.85,
+        droop: 0.02,
+        cardsPerM: 5.5,
+        cardSize: 0.95,
+        cross: 0.8,
+        sprigTile: W.SCALE,
+        barkColor: Vt,
+        leafColor: Xt([926738, 2047516], 5140018),
+      }),
+    },
+    {
+      season: `Summer`,
+      key: `aspensu`,
+      name: `Quaking Aspen`,
+      note: `Chalky white trunk, round leaves that shimmer in the wind.`,
+      litter: null,
+      build: G({
+        ...rn,
+        trunkH: 5.6,
+        barkColor: Bt,
+        leafColor: B([3824154, 5930534, 8167476, 10666066], {
+          core: 0.4,
+          jitter: 0.12,
+        }),
+      }),
+    },
+    {
+      season: `Summer`,
+      key: `lindensu`,
+      name: `Summer Linden`,
+      note: `Upright oval shade tree in heart-leaf green, humming with bees.`,
+      litter: null,
+      build: G({
+        trunkH: 4.6,
+        trunkR: 0.42,
+        lean: 0.3,
+        leanA: 2.2,
+        wobble: 0.12,
+        roots: 6,
+        limbStart: 0.4,
+        limbs: 6,
+        spread: 0.85,
+        rise: 0.3,
+        gnarl: 0.2,
+        fork: 0.7,
+        lenFalloff: 0.6,
+        clumpR: 1.65,
+        cards: 20,
+        cardSize: 1.5,
+        core: 0.72,
+        sideClump: 0.3,
+        tile: W.BROAD,
+        barkColor: Pe(H(4863270), H(8807754), H(3023643)),
+        leafColor: B([2244634, 3563040, 5406764, 7774782], { core: 0.5 }),
+      }),
+    },
+    {
+      season: `Summer`,
+      key: `elm`,
+      name: `American Elm`,
+      note: `Classic vase: limbs fork up and arch over the street.`,
+      litter: null,
+      build: G({
+        ...on,
+        leafColor: B([2244120, 3562528, 5274666, 7511100], { core: 0.5 }),
+      }),
+    },
+    {
+      season: `Summer`,
+      key: `locust`,
+      name: `Black Locust`,
+      note: `Deeply furrowed trunk under an airy, see-through crown of compound leaves.`,
+      litter: null,
+      build: G({
+        trunkH: 3.8,
+        trunkR: 0.36,
+        lean: 0.4,
+        spread: 0.7,
+        limbLen: 3.2,
+        gnarl: 0.38,
+        clumpR: 1.4,
+        cards: 16,
+        cardSize: 1.4,
+        shell: 0.2,
+        tile: W.COMPOUND,
+        barkColor: Pe(H(3024416), H(6180930), H(1972244), 0.4),
+        leafColor: B([3824158, 5799464, 7904822, 10271824], { core: 0.35 }),
+      }),
+    },
+    {
+      season: `Summer`,
+      key: `copperbeech`,
+      name: `Copper Beech`,
+      note: `Smooth grey giant wearing dark purple-copper leaves.`,
+      litter: null,
+      build: G({
+        trunkH: 2.8,
+        trunkR: 0.46,
+        lean: 0.25,
+        leanA: 5.2,
+        wobble: 0.06,
+        roots: 6,
+        spread: 0.95,
+        limbLen: 3.6,
+        rise: 0.12,
+        gnarl: 0.2,
+        fork: 0.8,
+        lenFalloff: 0.6,
+        leader: !1,
+        clumpR: 1.6,
+        cards: 32,
+        cardSize: 1.3,
+        core: 0.55,
+        tile: W.BROAD,
+        barkColor: Pe(H(7038560), H(10196364), H(3814960), 0.6),
+        leafColor: B([2231314, 4068894, 6169130, 8401978], { core: 0.5 }),
+      }),
+    },
+    {
+      season: `Summer`,
+      key: `ponderosa`,
+      name: `Ponderosa Pine`,
+      note: `Dry-country giant: orange jigsaw bark, long-needled open crown.`,
+      litter: null,
+      build: G({
+        ...sn,
+        trunkH: 8.6,
+        trunkR: 0.46,
+        lean: 0.2,
+        limbs: 7,
+        limbStart: 0.66,
+        spread: 1.3,
+        limbLen: 3.2,
+        cardSize: 1.45,
+        barkColor: zt(10115632, 12745284),
+        leafColor: B([3033630, 4745766, 6588982, 8955978], { core: 0.5 }),
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `scarletoak`,
+      name: `Scarlet Oak`,
+      note: `Glossy lobed oak leaves turned brilliant scarlet.`,
+      litter: [10099218, 12855834, 8001552, 7027228],
+      build: G({
+        ...tn,
+        leafColor: B([5901836, 9312786, 12462616, 14698538, 15757376], {
+          core: 0.55,
+        }),
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `sugarmaple`,
+      name: `Sugar Maple`,
+      note: `The blaze-orange maple of a New England October.`,
+      litter: [14832938, 15759930, 15900722, 12858138],
+      build: G({
+        ...nn,
+        leafColor: B([10104334, 13126164, 15496222, 16425008, 16761940], {
+          core: 0.55,
+        }),
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `ginkgo`,
+      name: `Ginkgo`,
+      note: `Irregular, ancient-looking tree of pure butter-yellow fans.`,
+      litter: [15913002, 16769104, 14726174],
+      build: G({
+        trunkH: 3.4,
+        trunkR: 0.3,
+        spread: 0.5,
+        rise: 0.36,
+        limbLen: 3.2,
+        gnarl: 0.32,
+        kids: 2,
+        clumpR: 1.3,
+        cards: 22,
+        cardSize: 1.2,
+        tile: W.GINKGO,
+        barkColor: Ut,
+        leafColor: B([12093968, 14463004, 15913006, 16770138, 16773258], {
+          core: 0.45,
+        }),
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `larch`,
+      name: `Golden Larch`,
+      note: `The conifer that turns: soft gold needles before they drop.`,
+      litter: [13146666, 14726208, 11040798],
+      build: en({
+        h: 13.5,
+        trunkR: 0.3,
+        whorls: 14,
+        perWhorl: 6,
+        baseLen: 3,
+        droop: 0.3,
+        cardsPerM: 2.6,
+        cross: 0.3,
+        leafColor: Xt([8016914, 13146666], 16044128),
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `aspengold`,
+      name: `Golden Aspen`,
+      note: `White trunks and a crown of trembling gold coins.`,
+      litter: [15909930, 14722590, 16767056],
+      build: G({
+        ...rn,
+        trunkH: 5.6,
+        barkColor: Bt,
+        leafColor: B([10514446, 13670936, 15777834, 16767056, 16771210], {
+          core: 0.4,
+          jitter: 0.1,
+        }),
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `sweetgum`,
+      name: `Sweetgum`,
+      note: `Pyramid of star leaves in every autumn colour at once: purple, red, orange, gold.`,
+      litter: [6953530, 11807258, 15234078, 15908906],
+      build: G({
+        trunkH: 3.6,
+        trunkR: 0.32,
+        limbs: 7,
+        limbStart: 0.3,
+        spread: 0.7,
+        rise: 0.3,
+        limbLen: 3,
+        lenFalloff: 0.55,
+        clumpR: 1.3,
+        cards: 24,
+        cardSize: 1.25,
+        tile: W.MAPLE,
+        barkColor: Wt,
+        leafColor: B([5902384, 9312806, 13122074, 15497762, 16039984], {
+          core: 0.4,
+          pick: Zt([6953546, 9052224, 15234078, 15908906], 0.3),
+        }),
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `japmaple`,
+      name: `Japanese Maple`,
+      note: `Small, low and layered: a lace of deep crimson leaves.`,
+      litter: [11015198, 13115434, 9047574],
+      build: G({
+        trunkH: 1.1,
+        trunkR: 0.17,
+        lean: 0.6,
+        leanA: 1.2,
+        roots: 3,
+        limbs: 5,
+        spread: 1.15,
+        rise: 0.05,
+        limbLen: 2.4,
+        gnarl: 0.3,
+        clumpR: 1,
+        cards: 22,
+        cardSize: 0.9,
+        tile: W.MAPLE,
+        barkColor: Ut,
+        leafColor: B([5899790, 9047576, 12065316, 14430262, 15750218], {
+          core: 0.45,
+        }),
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `chestnutau`,
+      name: `Horse Chestnut in Autumn`,
+      note: `Big palmate leaves browning from the edge inward, rust and ochre.`,
+      litter: [9062938, 11823650, 13146682, 7027228],
+      build: G({
+        trunkH: 3,
+        trunkR: 0.5,
+        limbs: 6,
+        spread: 0.9,
+        limbLen: 3.8,
+        clumpR: 1.8,
+        cards: 22,
+        cardSize: 1.5,
+        tile: W.BIGLEAF,
+        barkColor: Ut,
+        leafColor: B([5910032, 9062936, 11825694, 13672506, 14729312], {
+          core: 0.5,
+          pick: Zt([8030766, 5913114], 0.12),
+        }),
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `willowgold`,
+      name: `Golden Willow`,
+      note: `Weeping willow gone yellow, its curtain thinning in the wind.`,
+      litter: [14201898, 13146658, 15256656],
+      build: G({
+        ...an,
+        leafColor: B([9071124, 12096542, 14465072, 15915098], { core: 0.35 }),
+        weep: { strands: 13, len: 5.6, card: 0.95 },
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `tuliptree`,
+      name: `Tulip Tree`,
+      note: `Very tall straight trunk; square-tipped leaves turn clear yellow.`,
+      litter: [15253552, 14198820, 15915098],
+      build: G({
+        trunkH: 6.2,
+        trunkR: 0.44,
+        limbs: 6,
+        limbStart: 0.5,
+        spread: 0.6,
+        rise: 0.34,
+        limbLen: 3.4,
+        clumpR: 1.5,
+        cards: 22,
+        cardSize: 1.45,
+        tile: W.BIGLEAF,
+        barkColor: Ut,
+        leafColor: B([10123796, 13148190, 15254580, 16309344], {
+          core: 0.5,
+          pick: Zt([9083438], 0.1),
+        }),
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `sumac`,
+      name: `Staghorn Sumac`,
+      note: `Small flat-topped thicket tree of fiery compound leaves.`,
+      litter: [12855834, 14698538, 11016724],
+      build: G({
+        trunkH: 1.5,
+        trunkR: 0.14,
+        lean: 0.4,
+        roots: 3,
+        limbs: 4,
+        spread: 0.95,
+        rise: 0.5,
+        limbLen: 2.2,
+        depth: 1,
+        kids: 3,
+        clumpR: 1.05,
+        cards: 20,
+        cardSize: 1.3,
+        tile: W.COMPOUND,
+        barkColor: Wt,
+        leafColor: B([7998988, 11804178, 14694938, 16017962, 16293952], {
+          core: 0.4,
+        }),
+        accent: {
+          tile: W.BERRY,
+          colors: [7999504, 9312788],
+          share: 0.06,
+          size: 0.7,
+        },
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `dogwoodau`,
+      name: `Dogwood in Autumn`,
+      note: `Tiered little tree of burgundy leaves studded with red berries.`,
+      litter: [6951968, 9051690, 11020842],
+      build: G({
+        trunkH: 1.6,
+        trunkR: 0.24,
+        limbs: 6,
+        spread: 1.22,
+        rise: 0.04,
+        limbLen: 2.9,
+        gnarl: 0.14,
+        lenFalloff: 0.66,
+        clumpR: 1.1,
+        cards: 22,
+        cardSize: 1.1,
+        tile: W.ROUND,
+        barkColor: Ut,
+        leafColor: B([4065812, 6165536, 8527914, 10499130], { core: 0.45 }),
+        accent: {
+          tile: W.BERRY,
+          colors: [14163486, 12588058],
+          share: 0.08,
+          size: 0.6,
+        },
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `bigleaf`,
+      name: `Bigleaf Maple`,
+      note: `The Northwest native: mossy limbs and dinner-plate leaves in tawny yellow.`,
+      litter: [13146682, 11040810, 14200912, 9071146],
+      build: G({
+        trunkH: 3.4,
+        trunkR: 0.56,
+        lean: 0.35,
+        spread: 0.95,
+        limbLen: 4.2,
+        rise: 0.2,
+        gnarl: 0.26,
+        clumpR: 2,
+        cards: 22,
+        cardSize: 1.8,
+        tile: W.BIGLEAF,
+        barkColor: Kt,
+        leafColor: B([8016916, 11040798, 13410362, 14992480], {
+          core: 0.5,
+          pick: Zt([9079342, 6965786], 0.15),
+        }),
+      }),
+    },
+    {
+      season: `Autumn`,
+      key: `garryoak`,
+      name: `Oregon White Oak`,
+      note: `Gnarled, crooked prairie oak in russet and leather-brown.`,
+      litter: [9067050, 7028768, 11041338],
+      build: G({
+        ...tn,
+        lean: 0.55,
+        gnarl: 0.46,
+        trunkH: 2.2,
+        leafColor: B([4860434, 7225368, 9723946, 12092478], {
+          core: 0.55,
+          pick: Zt([6973988], 0.08),
+        }),
+      }),
+    },
+    {
+      season: `Winter`,
+      key: `oakbare`,
+      name: `Bare Oak`,
+      note: `The oak skeleton: thick crooked limbs, a dense crown of dark twigs.`,
+      litter: null,
+      build: G({
+        ...tn,
+        tile: W.TWIG,
+        cards: 14,
+        cardSize: 1.9,
+        shell: 0.15,
+        leafColor: Jt(3024930, 5918790),
+      }),
+    },
+    {
+      season: `Winter`,
+      key: `maplebare`,
+      name: `Bare Maple`,
+      note: `Fine upright twig spray on a smooth grey frame.`,
+      litter: null,
+      build: G({
+        ...nn,
+        tile: W.TWIG,
+        cards: 14,
+        cardSize: 1.8,
+        shell: 0.15,
+        leafColor: Jt(3814962, 6972506),
+      }),
+    },
+    {
+      season: `Winter`,
+      key: `birchbare`,
+      name: `Bare Birch`,
+      note: `White trunk and a purple haze of fine birch twigs.`,
+      litter: null,
+      build: G({
+        ...rn,
+        tile: W.TWIG,
+        cards: 12,
+        cardSize: 1.6,
+        shell: 0.15,
+        leafColor: Jt(3809840, 6964818),
+      }),
+    },
+    {
+      season: `Winter`,
+      key: `willowbare`,
+      name: `Winter Willow`,
+      note: `Leafless willow: long golden twigs still hanging in a curtain.`,
+      litter: null,
+      build: G({
+        ...an,
+        tile: W.TWIG,
+        cards: 6,
+        leafColor: Jt(8022570, 12099658),
+        weep: { strands: 14, len: 5.6, card: 0.85, gap: 0.5, tile: W.WILLOW },
+      }),
+    },
+    {
+      season: `Winter`,
+      key: `sprucesnow`,
+      name: `Snowy Spruce`,
+      note: `Blue-black spruce with snow loaded on every layered bough.`,
+      litter: null,
+      build: en({
+        ...Yt,
+        snow: 0.9,
+        leafColor: Xt([926744, 2244652], 5140052),
+      }),
+    },
+    {
+      season: `Winter`,
+      key: `firsnow`,
+      name: `Snowy Subalpine Fir`,
+      note: `Narrow spire of a mountain fir, frosted white.`,
+      litter: null,
+      build: en({
+        ...Yt,
+        snow: 0.95,
+        h: 12.5,
+        baseLen: 2.2,
+        droop: 0.2,
+        whorls: 17,
+        perWhorl: 7,
+        leafColor: Xt([1058844, 2376750], 5798490),
+      }),
+    },
+    {
+      season: `Winter`,
+      key: `pinesnow`,
+      name: `Snowy Scots Pine`,
+      note: `Orange-topped pine with snow caps on its needle tufts and limbs.`,
+      litter: null,
+      build: G({
+        ...sn,
+        ...Yt,
+        snow: 0.6,
+        leafColor: B([1453602, 2375732, 3560520, 5271648], { core: 0.5 }),
+        accent: {
+          tile: W.SNOW,
+          colors: [15922943, 15134458],
+          share: 0.22,
+          size: 0.9,
+        },
+      }),
+    },
+    {
+      season: `Winter`,
+      key: `elmbare`,
+      name: `Bare Elm`,
+      note: `Winter vase: the elm’s fan of limbs drawn in ink against the sky.`,
+      litter: null,
+      build: G({
+        ...on,
+        tile: W.TWIG,
+        cards: 14,
+        cardSize: 1.9,
+        shell: 0.15,
+        leafColor: Jt(3025446, 5919820),
+      }),
+    },
+    {
+      season: `Winter`,
+      key: `holly`,
+      name: `English Holly`,
+      note: `Dense evergreen cone of glossy dark leaves and red berries.`,
+      litter: null,
+      build: G({
+        trunkH: 1.1,
+        trunkR: 0.24,
+        limbs: 9,
+        limbStart: 0.15,
+        spread: 0.55,
+        rise: 0.42,
+        limbLen: 3.6,
+        lenFalloff: 0.55,
+        clumpR: 1.1,
+        cards: 26,
+        cardSize: 1,
+        sideClump: 0.6,
+        tile: W.BROAD,
+        barkColor: Ut,
+        leafColor: B([530444, 1190422, 1981984, 3036208], { core: 0.55 }),
+        accent: {
+          tile: W.BERRY,
+          colors: [14686232, 13110288, 15739422],
+          share: 0.2,
+          size: 0.8,
+        },
+      }),
+    },
+    {
+      season: `Winter`,
+      key: `cedarsnow`,
+      name: `Snowy Red Cedar`,
+      note: `Drooping cedar sprays bowed under wet snow.`,
+      litter: null,
+      build: en({
+        ...cn,
+        ...Yt,
+        snow: 0.8,
+        leafColor: Xt([1323034, 3035682], 7375424),
+      }),
+    },
+    {
+      season: `Winter`,
+      key: `birchfrost`,
+      name: `Frosted Birch`,
+      note: `Bare birch after an ice storm: white twigs, snow along every limb.`,
+      litter: null,
+      build: G({
+        ...rn,
+        ...Yt,
+        snow: 0.8,
+        snowDepth: 2,
+        tile: W.TWIG,
+        cards: 12,
+        cardSize: 1.6,
+        shell: 0.15,
+        leafColor: Jt(10133674, 15133940),
+      }),
+    },
+    {
+      season: `Winter`,
+      key: `oakwinter`,
+      name: `Winter Oak`,
+      note: `Young oak that keeps its dead leaves: rattling tan and brown all winter.`,
+      litter: null,
+      build: G({
+        ...tn,
+        trunkH: 2.2,
+        trunkR: 0.42,
+        limbLen: 3.2,
+        clumpR: 1.5,
+        cards: 10,
+        shell: 0.1,
+        leafColor: B([5913116, 8016944, 10122310, 12097118], { core: 0.4 }),
+        accent: {
+          tile: W.TWIG,
+          colors: [3813930, 4866102],
+          share: 0.45,
+          size: 1.4,
+        },
+      }),
+    },
+  ];
+un.forEach((e, t) => {
+  let n = e.build,
+    r = 101 + t * 17;
+  e.build = e.grow = (e = r, t = 0) => n(e, t);
+});
+var K = s,
+  dn = new K(1, 0, 0),
+  fn = new _(),
+  pn = new K(),
+  mn = u.clamp,
+  q = {
+    PINNATE: 100,
+    FAN: 101,
+    PADDLE: 102,
+    BAMBOO: 103,
+    FERN: 104,
+    GLOSSY: 105,
+    FEATHER: 106,
+    BLOSSOM: 107,
+    MONSTERA: 108,
+    HEART: 109,
+    STRAP: 110,
+    FRUIT: 111,
+    STIFF: 112,
+    FISHTAIL: 113,
+    ROUND: 114,
+    LOBED: 115,
+  },
+  hn = null;
+function gn() {
+  if (hn) return hn;
+  let e = document.createElement(`canvas`);
+  e.width = e.height = 1024;
+  let t = e.getContext(`2d`),
+    n = Te(5150),
+    r = (e) => ((e = Math.max(0, Math.min(255, e | 0))), `rgb(${e},${e},${e})`),
+    i = (e, n) => {
+      (t.save(),
+        t.translate((e % 4) * 256, Math.floor(e / 4) * 256),
+        t.beginPath(),
+        t.rect(3, 3, 250, 250),
+        t.clip(),
+        n(),
+        t.restore());
+    },
+    a = (e, n, i, a, o, s = 120) => {
+      ((t.strokeStyle = r(s)),
+        (t.lineWidth = o),
+        (t.lineCap = `round`),
+        t.beginPath(),
+        t.moveTo(e, n),
+        t.lineTo(i, a),
+        t.stroke());
+    },
+    o = (e, n, i, a, o, s) => {
+      (t.beginPath(),
+        t.moveTo(e - a / 2, n),
+        t.lineTo(e - o / 2, i),
+        t.lineTo(e + o / 2, i),
+        t.lineTo(e + a / 2, n),
+        t.closePath(),
+        (t.fillStyle = r(s)),
+        t.fill());
+    },
+    s = (e, n, i = 50) => {
+      (t.beginPath(),
+        e.forEach(([e, n], r) => (r ? t.lineTo(e, n) : t.moveTo(e, n))),
+        t.closePath(),
+        (t.fillStyle = r(n)),
+        t.fill(),
+        i && ((t.strokeStyle = r(n - i)), (t.lineWidth = 0.8), t.stroke()));
+    },
+    c = (e, n, i, a, o, s, c, l = !0) => {
+      (t.save(), t.translate(e, n), t.rotate(o));
+      let u = [],
+        d = [];
+      for (let e = 0; e <= 30; e++) {
+        let t = e / 30,
+          n = a * c(t);
+        (u.push([-n, -i * t]), d.push([n, -i * t]));
+      }
+      let f = t.createLinearGradient(-a, 0, a, 0);
+      (f.addColorStop(0, r(s - 32)),
+        f.addColorStop(0.5, r(s)),
+        f.addColorStop(1, r(s - 14)),
+        t.beginPath(),
+        [...u, ...d.reverse()].forEach(([e, n], r) =>
+          r ? t.lineTo(e, n) : t.moveTo(e, n),
+        ),
+        t.closePath(),
+        (t.fillStyle = f),
+        t.fill(),
+        l &&
+          ((t.strokeStyle = r(s - 55)),
+          (t.lineWidth = 1),
+          t.beginPath(),
+          t.moveTo(0, 0),
+          t.lineTo(0, -i * 0.9),
+          t.stroke()),
+        t.restore());
+    },
+    l = (e) => Math.sin(Math.PI * e ** 0.8) * 0.95,
+    u = (e) => Math.sin(Math.PI * e ** 0.6) * 0.9,
+    d = (e, n, i, a, o) => {
+      let s = t.createRadialGradient(
+        e - i * 0.35,
+        n - a * 0.35,
+        1,
+        e,
+        n,
+        Math.max(i, a),
+      );
+      (s.addColorStop(0, r(o + 30)),
+        s.addColorStop(0.45, r(o)),
+        s.addColorStop(1, r(o - 70)),
+        (t.fillStyle = s),
+        t.beginPath(),
+        t.ellipse(e, n, i, a, 0, 0, Math.PI * 2),
+        t.fill());
+    },
+    f = (e) => {
+      ((t.globalCompositeOperation = `destination-out`),
+        (t.strokeStyle = t.fillStyle = `rgba(0,0,0,1)`),
+        e(),
+        (t.globalCompositeOperation = `source-over`));
+    };
+  (i(0, () => {
+    for (let e of [-1, 1])
+      for (let t = 0; t < 40; t++) {
+        let r = 0.1 + (0.86 * (t + (e > 0 ? 0.5 : 0))) / 40,
+          i = 252 + -244 * r,
+          a =
+            8 +
+            112 *
+              Math.sin(Math.PI * Math.min(1, (r - 0.06) / 0.96)) ** 0.55 *
+              (0.88 + 0.12 * n());
+        c(128 + e, i, a, 3.3, e * (0.82 + 0.25 * r), 188 + ((n() * 62) | 0), u);
+      }
+    o(128, 252, 8, 7, 1.5, 160);
+  }),
+    i(1, () => {
+      let e = 215.04,
+        i = 1.72;
+      a(128, 252, 128, e, 7, 150);
+      for (let t = 0; t < 30; t++) {
+        let r = -1.72 + (2 * i * (t + 0.5)) / 30,
+          a = 118 * (0.9 + 0.1 * n());
+        c(
+          128,
+          e,
+          a,
+          ((a * i) / 30) * 1.1,
+          r,
+          (t % 2 ? 196 : 236) + ((n() * 18) | 0),
+          (e) =>
+            Math.min(1, e * 1.15) *
+            (e > 0.78 ? Math.max(0.05, (1 - e) / 0.22) : 1),
+        );
+      }
+      (t.beginPath(),
+        t.arc(128, e, 9, 0, Math.PI * 2),
+        (t.fillStyle = r(170)),
+        t.fill());
+    }),
+    i(2, () => {
+      let e = 230.4,
+        i = (e) =>
+          116 * Math.sin(Math.PI * Math.min(1, 0.04 + e * 0.96)) ** 0.32;
+      a(128, 252, 128, e, 9, 180);
+      let s = [],
+        c = [];
+      for (let t = 0; t <= 50; t++) {
+        let n = t / 50,
+          r = e + -222.4 * n;
+        (s.push([128 - i(n), r]), c.push([128 + i(n), r]));
+      }
+      let l = t.createLinearGradient(12, 0, 244, 0);
+      (l.addColorStop(0, r(190)),
+        l.addColorStop(0.45, r(238)),
+        l.addColorStop(0.55, r(238)),
+        l.addColorStop(1, r(200)),
+        t.beginPath(),
+        [...s, ...c.reverse()].forEach(([e, n], r) =>
+          r ? t.lineTo(e, n) : t.moveTo(e, n),
+        ),
+        t.closePath(),
+        (t.fillStyle = l),
+        t.fill(),
+        (t.strokeStyle = r(205)),
+        (t.lineWidth = 0.8));
+      for (let n = 226.4; n > 14; n -= 5) {
+        let r = i((e - n) / 222.4);
+        (t.beginPath(),
+          t.moveTo(124, n),
+          t.lineTo(128 - r, n - r * 0.35),
+          t.moveTo(132, n),
+          t.lineTo(128 + r, n - r * 0.35),
+          t.stroke());
+      }
+      (o(128, 234.4, 16, 9, 2, 250),
+        f(() => {
+          t.lineWidth = 1.8;
+          for (let r = 0; r < 16; r++) {
+            let a = r % 2 ? 1 : -1,
+              o = 0.12 + n() * 0.8,
+              s = e + -222.4 * o,
+              c = i(o),
+              l = c * (0.2 + 0.75 * n());
+            (t.beginPath(),
+              t.moveTo(128 + a * (c + 3), s - (c + 3) * 0.35),
+              t.lineTo(128 + a * (c - l), s - (c - l) * 0.35),
+              t.stroke());
+          }
+        }));
+    }),
+    i(3, () => {
+      for (let e = 0; e < 5; e++) {
+        let t = -Math.PI / 2 + (e - 2) * 0.42 + (n() - 0.5) * 0.2,
+          r = 128 + Math.cos(t) * 150,
+          i = 250 + Math.sin(t) * 150;
+        a(128, 250, r, i, 2.2, 120);
+        for (let e = 0; e < 7; e++) {
+          let a = 0.3 + (0.7 * e) / 6,
+            o = 128 + (r - 128) * a,
+            s = 250 + (i - 250) * a,
+            l = e % 2 ? 1 : -1;
+          c(
+            o,
+            s,
+            58 + n() * 20,
+            7,
+            t + Math.PI / 2 + l * (0.8 + n() * 0.6),
+            192 + ((n() * 58) | 0),
+            u,
+          );
+        }
+      }
+    }),
+    i(4, () => {
+      for (let e of [-1, 1])
+        for (let t = 0; t < 24; t++) {
+          let r = 0.08 + (0.9 * (t + (e > 0 ? 0.5 : 0))) / 24,
+            i = 252 + -244 * r,
+            o =
+              10 +
+              104 *
+                Math.sin(Math.PI * (0.12 + (0.88 * (r - 0.08)) / 0.9)) ** 0.8,
+            s = e * (1.12 - 0.2 * r),
+            u = Math.sin(s),
+            d = -Math.cos(s);
+          a(128, i, 128 + u * o, i + d * o, 1.4, 150);
+          for (let e = 0; e < 9; e++) {
+            let t = (e + 0.6) / 9.5,
+              r = 128 + u * o * t,
+              a = i + d * o * t,
+              f = o * 0.26 * (1 - t * 0.65) + 3;
+            for (let e of [-1, 1])
+              c(r, a, f, 2.8, s + e * 1.05, 196 + ((n() * 56) | 0), l, !1);
+          }
+        }
+      o(128, 252, 8, 6, 1.5, 130);
+    }),
+    i(5, () => {
+      for (let e = 0; e < 4; e++) {
+        let t = e * 1.6 + n();
+        a(128, 128, 128 + Math.cos(t) * 70, 128 + Math.sin(t) * 70, 3, 100);
+      }
+      for (let e = 0; e < 12; e++) {
+        let e = n() * Math.PI * 2,
+          t = 16 + n() * 56,
+          r = 128 + Math.cos(e) * t,
+          i = 128 + Math.sin(e) * t;
+        c(
+          r,
+          i,
+          64 + n() * 22,
+          21 + n() * 6,
+          e + Math.PI / 2 + (n() - 0.5) * 0.9,
+          200 + ((n() * 50) | 0),
+          l,
+        );
+      }
+    }),
+    i(6, () => {
+      for (let e = 0; e < 5; e++) {
+        (t.save(),
+          t.translate(128, 128),
+          t.rotate(e * 1.26 + n() * 0.4),
+          a(0, 0, 0, -112, 2, 130));
+        for (let e = 1; e <= 7; e++) {
+          let i = (-112 * e) / 8,
+            o = 38 * (1 - (0.35 * e) / 8);
+          for (let e of [-1, 1]) {
+            (t.save(),
+              t.translate(0, i),
+              t.rotate(e * 1.1),
+              a(0, 0, 0, -o, 1, 140));
+            for (let e = 1; e <= 10; e++) {
+              let i = (-o * e) / 11;
+              for (let e of [-1, 1])
+                ((t.fillStyle = r(195 + ((n() * 60) | 0))),
+                  t.beginPath(),
+                  t.ellipse(e * 4.5, i, 4.2, 1.9, e * -0.5, 0, Math.PI * 2),
+                  t.fill());
+            }
+            t.restore();
+          }
+        }
+        t.restore();
+      }
+    }),
+    i(7, () => {
+      for (let e = 0; e < 3; e++) {
+        let t = e * 2.1 + n();
+        a(128, 128, 128 + Math.cos(t) * 80, 128 + Math.sin(t) * 80, 2.5, 110);
+      }
+      for (let e = 0; e < 22; e++) {
+        let e = n() * Math.PI * 2,
+          i = Math.sqrt(n()) * 92,
+          a = 128 + Math.cos(e) * i,
+          o = 128 + Math.sin(e) * i,
+          s = 13 + n() * 11,
+          c = 212 + ((n() * 42) | 0),
+          l = n() * 6.28;
+        for (let e = 0; e < 5; e++) {
+          let n = l + (e / 5) * Math.PI * 2;
+          (t.beginPath(),
+            t.ellipse(
+              a + Math.cos(n) * s * 0.55,
+              o + Math.sin(n) * s * 0.55,
+              s * 0.58,
+              s * 0.4,
+              n,
+              0,
+              Math.PI * 2,
+            ),
+            (t.fillStyle = r(c - (e % 2) * 14)),
+            t.fill(),
+            (t.strokeStyle = r(c - 50)),
+            (t.lineWidth = 0.8),
+            t.stroke());
+        }
+        (t.beginPath(),
+          t.arc(a, o, s * 0.2, 0, Math.PI * 2),
+          (t.fillStyle = r(c - 40)),
+          t.fill());
+      }
+    }));
+  let p = (e, n, i, a, o) => {
+    t.beginPath();
+    for (let r = 0; r <= 120; r++) {
+      let o = (r / 120) * Math.PI * 2,
+        s = Math.sin(o),
+        c = 16 * s * s * s,
+        l =
+          13 * Math.cos(o) -
+          5 * Math.cos(2 * o) -
+          2 * Math.cos(3 * o) -
+          Math.cos(4 * o);
+      r ? t.lineTo(e + c * i, n + l * a) : t.moveTo(e + c * i, n + l * a);
+    }
+    t.closePath();
+    let s = t.createRadialGradient(e, n + 30, 5, e, n, 130);
+    (s.addColorStop(0, r(o)),
+      s.addColorStop(1, r(o - 40)),
+      (t.fillStyle = s),
+      t.fill());
+  };
+  (i(8, () => {
+    (p(128, 126, 7.2, 7, 236), (t.strokeStyle = r(200)), (t.lineWidth = 1.2));
+    for (let e = 0; e < 8; e++) {
+      let n = 150 - e * 18;
+      for (let e of [-1, 1])
+        (t.beginPath(),
+          t.moveTo(128, n + 6),
+          t.lineTo(128 + e * 120, n - 34),
+          t.stroke());
+    }
+    (o(128, 162, 12, 7, 2, 205),
+      f(() => {
+        t.lineWidth = 4.5;
+        for (let e = 0; e < 7; e++) {
+          let n = 158 - e * 20;
+          for (let r of [-1, 1])
+            (t.beginPath(),
+              t.moveTo(128 + r * (60 - e * 3), n - 12),
+              t.lineTo(128 + r * 130, n - 40),
+              t.stroke());
+        }
+        for (let e = 0; e < 5; e++)
+          for (let n of [-1, 1])
+            (t.beginPath(),
+              t.ellipse(
+                128 + n * (24 + e * 1.5),
+                142 - e * 22,
+                4,
+                7,
+                n * 0.6,
+                0,
+                Math.PI * 2,
+              ),
+              t.fill());
+      }));
+  }),
+    i(9, () => {
+      (p(128, 128, 6.8, 6.9, 226),
+        (t.strokeStyle = r(252)),
+        (t.lineWidth = 2.2),
+        t.beginPath(),
+        t.moveTo(128, 150),
+        t.lineTo(128, 16),
+        t.stroke(),
+        (t.lineWidth = 1.3));
+      for (let e of [-1, 1])
+        for (let n = 0; n < 5; n++) {
+          let r = e * (0.45 + n * 0.42),
+            i = 110 - n * 8;
+          (t.beginPath(),
+            t.moveTo(128, 150),
+            t.quadraticCurveTo(
+              128 + Math.sin(r) * i * 0.5,
+              150 - Math.cos(r) * i * 0.6,
+              128 + Math.sin(r) * i,
+              150 - Math.cos(r) * i * 0.9,
+            ),
+            t.stroke());
+        }
+    }),
+    i(10, () => {
+      let e = (e) => 112 * (1 - e) ** 0.75 * Math.min(1, 0.6 + e * 5),
+        n = [],
+        i = [];
+      for (let t = 0; t <= 60; t++) {
+        let r = t / 60,
+          a = 252 + -244 * r,
+          o = t % 2 ? 5 : 0;
+        (n.push([128 - e(r) - o, a]), i.push([128 + e(r) + o, a]));
+      }
+      let a = t.createLinearGradient(16, 0, 240, 0);
+      (a.addColorStop(0, r(200)),
+        a.addColorStop(0.5, r(240)),
+        a.addColorStop(1, r(205)),
+        t.beginPath(),
+        [...n, ...i.reverse()].forEach(([e, n], r) =>
+          r ? t.lineTo(e, n) : t.moveTo(e, n),
+        ),
+        t.closePath(),
+        (t.fillStyle = a),
+        t.fill(),
+        o(128, 252, 18, 6, 1, 175));
+    }),
+    i(11, () => {
+      a(128, 8, 128, 40, 6, 150);
+      for (let e = 0; e < 16; e++) {
+        let t = 128 + (e / 15 - 0.5) * 190 + (n() - 0.5) * 14,
+          r = 140 + n() * 100;
+        a(128, 36, t, r, 2, 160);
+        for (let e = 0; e < 4; e++) {
+          let i = 0.4 + e * 0.19 + n() * 0.06;
+          d(
+            128 + (t - 128) * i + (n() - 0.5) * 8,
+            36 + (r - 36) * i,
+            7,
+            10,
+            200 + ((n() * 30) | 0),
+          );
+        }
+      }
+    }),
+    i(12, () => {
+      for (let e of [-1, 1])
+        for (let t = 0; t < 52; t++) {
+          let r = 0.08 + (0.9 * (t + (e > 0 ? 0.5 : 0))) / 52,
+            i = 252 + -244 * r,
+            a =
+              116 *
+                Math.min(1, (r - 0.04) / 0.12) *
+                Math.min(1, (1 - r) / 0.3) +
+              4;
+          c(128, i, a, 2.3, e * 1.2, 190 + ((n() * 60) | 0), u, !1);
+        }
+      o(128, 252, 8, 8, 2, 150);
+    }),
+    i(13, () => {
+      let e = (e, t, n, r, i, a) => {
+        let o = [[e, t]];
+        for (let a = 0; a <= 8; a++) {
+          let s = n - i + (2 * i * a) / 8,
+            c = r * (a % 2 ? 0.86 : 1);
+          o.push([e + Math.sin(s) * c, t - Math.cos(s) * c]);
+        }
+        s(o, a, 40);
+      };
+      for (let t of [-1, 1])
+        for (let r = 0; r < 14; r++) {
+          let i = 0.1 + (0.86 * (r + (t > 0 ? 0.5 : 0))) / 14,
+            o = 252 + -244 * i,
+            s = t * (0.85 + 0.2 * i),
+            c = 34 + 78 * Math.sin(Math.PI * (0.15 + 0.8 * i)),
+            l = Math.sin(s),
+            u = -Math.cos(s);
+          a(128, o, 128 + l * c, o + u * c, 1.5, 140);
+          for (let t = 0; t < 6; t++) {
+            let r = 0.12 + t * 0.15;
+            e(
+              128 + l * c * r,
+              o + u * c * r,
+              s + (t % 2 ? 0.55 : -0.55),
+              30 - t * 2,
+              0.42,
+              196 + ((n() * 56) | 0),
+            );
+          }
+          e(128 + l * c, o + u * c, s, 28, 0.45, 220);
+        }
+      o(128, 252, 8, 7, 1.5, 140);
+    }),
+    i(14, () => {
+      for (let e = 0; e < 4; e++) {
+        let t = e * 1.6 + n();
+        a(128, 128, 128 + Math.cos(t) * 60, 128 + Math.sin(t) * 60, 3, 100);
+      }
+      for (let e = 0; e < 9; e++) {
+        let i = (e / 9) * Math.PI * 2 + n() * 0.3,
+          a = e ? 58 + n() * 18 : 0,
+          o = 128 + Math.cos(i) * a,
+          s = 128 + Math.sin(i) * a,
+          c = 30 + n() * 12,
+          l = 205 + ((n() * 45) | 0),
+          u = t.createRadialGradient(o - c * 0.3, s - c * 0.3, 2, o, s, c);
+        (u.addColorStop(0, r(l + 15)),
+          u.addColorStop(1, r(l - 30)),
+          (t.fillStyle = u),
+          t.beginPath(),
+          t.arc(o, s, c, 0, Math.PI * 2),
+          t.fill(),
+          (t.strokeStyle = r(l - 70)),
+          (t.lineWidth = 1.2));
+        for (let e = -2; e <= 2; e++) {
+          let n = i + Math.PI + e * 0.7;
+          (t.beginPath(),
+            t.moveTo(o, s),
+            t.lineTo(o - Math.cos(n) * c * 0.85, s - Math.sin(n) * c * 0.85),
+            t.stroke());
+        }
+      }
+    }),
+    i(15, () => {
+      let e = 153.6;
+      a(128, 252, 128, e, 5, 170);
+      for (let t = 0; t < 7; t++) {
+        let r = -2.25 + (4.5 * t) / 6,
+          i = 108 - (26 * Math.abs(r)) / 2.25;
+        c(
+          128,
+          e,
+          i,
+          22,
+          r,
+          200 + ((n() * 48) | 0),
+          (e) =>
+            (0.55 + 0.45 * Math.abs(Math.sin(e * Math.PI * 2.5))) *
+            Math.sin(Math.PI * e ** 0.7),
+        );
+      }
+      (t.beginPath(),
+        t.arc(128, e, 10, 0, Math.PI * 2),
+        (t.fillStyle = r(205)),
+        t.fill());
+    }));
+  let m = new ie(e);
+  return ((m.colorSpace = b), (m.anisotropy = 4), (hn = m), m);
+}
+var _n = (e) => {
+    let t = (e.length > 1 ? e : [e[0], e[0]]).map((e) => new _(e));
+    return (e, n = new _()) => {
+      e = mn(e, 0, 1) * (t.length - 1);
+      let r = Math.min(t.length - 2, Math.floor(e));
+      return n.copy(t[r]).lerp(t[r + 1], e - r);
+    };
+  },
+  J =
+    (e, t = 1) =>
+    (n) =>
+      n.set(e).multiplyScalar(t),
+  vn = (e, t) => t[(e() * t.length) | 0];
+function yn(e, t, n, r) {
+  let i = new l();
+  return (
+    i.setAttribute(`position`, new x(e, 3)),
+    i.setAttribute(`normal`, new x(t, 3)),
+    i.setAttribute(`uv`, new x(n, 2)),
+    i.setAttribute(`color`, new x(r, 3)),
+    i
+  );
+}
+function bn(e, t, n, r) {
+  let i = e.length,
+    a = [],
+    o = new C(),
+    s = new _(),
+    c = new K().subVectors(e[1], e[0]).normalize(),
+    l = new K().crossVectors(c, Math.abs(c.y) < 0.95 ? V : dn).normalize(),
+    u = new K().crossVectors(c, l);
+  for (let d = 0; d < i; d++) {
+    let f = new K()
+      .subVectors(e[Math.min(d + 1, i - 1)], e[Math.max(d - 1, 0)])
+      .normalize();
+    (o.setFromUnitVectors(c, f),
+      l.applyQuaternion(o),
+      u.applyQuaternion(o),
+      c.copy(f));
+    let p = d / (i - 1),
+      m = [];
+    for (let i = 0; i <= n; i++) {
+      let a = (i / n) * Math.PI * 2,
+        o = l
+          .clone()
+          .multiplyScalar(Math.cos(a))
+          .addScaledVector(u, Math.sin(a)),
+        c = e[d].clone().addScaledVector(o, t(p, a, e[d]));
+      (r(s, p, a, c), m.push([c, o, i / n, p, s.r, s.g, s.b]));
+    }
+    a.push(m);
+  }
+  let d = [],
+    f = [],
+    p = [],
+    m = [],
+    h = (e) => {
+      (d.push(e[0].x, e[0].y, e[0].z),
+        f.push(e[1].x, e[1].y, e[1].z),
+        p.push(e[2], e[3]),
+        m.push(e[4], e[5], e[6]));
+    };
+  for (let e = 0; e < i - 1; e++)
+    for (let t = 0; t < n; t++) {
+      let n = a[e][t],
+        r = a[e][t + 1],
+        i = a[e + 1][t + 1],
+        o = a[e + 1][t];
+      (h(n), h(r), h(i), h(n), h(i), h(o));
+    }
+  return yn(d, f, p, m);
+}
+function xn(e, t, n, r = 1, i = 1) {
+  let a = new k(t, r);
+  (a.scale(1, i, 1), a.translate(e.x, e.y, e.z));
+  let o = a.attributes.position.count,
+    s = new Float32Array(o * 3),
+    l = new _(n);
+  for (let e = 0; e < o; e++) s.set([l.r, l.g, l.b], e * 3);
+  return (a.setAttribute(`color`, new c(s, 3)), a);
+}
+function Sn() {
+  let e = [],
+    t = [],
+    n = [],
+    r = [];
+  return {
+    tri(i, a, o, s, c) {
+      let l = new K().subVectors(a, i).cross(new K().subVectors(o, i));
+      l.dot(s) < 0 && ([a, o] = [o, a]);
+      let u =
+        l.lengthSq() > 1e-12
+          ? l.normalize().multiplyScalar(Math.sign(l.dot(s)) || 1)
+          : s;
+      for (let s of [i, a, o])
+        (e.push(s.x, s.y, s.z),
+          t.push(u.x, u.y, u.z),
+          n.push(0, 0),
+          r.push(c.r, c.g, c.b));
+    },
+    geo: () => yn(e, t, n, r),
+  };
+}
+function Cn(e, t, n, r, i, a, o = 6) {
+  let s = Sn(),
+    c = new K(Math.cos(e), 0, Math.sin(e)),
+    l = new K(-c.z, 0, c.x),
+    u = new _(),
+    d = [],
+    f = [],
+    p = [];
+  for (let e = 0; e <= o; e++) {
+    let a = e / o,
+      s = t * 0.7 + (n - t * 0.7) * a,
+      u = Math.sin(a * Math.PI * 1.4) * 0.12 * n,
+      m = c.clone().multiplyScalar(s).addScaledVector(l, u);
+    (d.push(m.clone().setY(r * (1 - a) ** 2.1 + 0.03)),
+      f.push(m.clone().setY(-0.08)),
+      p.push(i * (1 - 0.75 * a)));
+  }
+  for (let e = 0; e < o; e++) {
+    a(u, d[e].x, d[e].y * 0.5, d[e].z);
+    for (let t of [-1, 1]) {
+      let n = l.clone().multiplyScalar(t * 0.5),
+        r = l.clone().multiplyScalar(t),
+        i = f[e].clone().addScaledVector(n, p[e]),
+        a = f[e + 1].clone().addScaledVector(n, p[e + 1]),
+        o = d[e].clone().addScaledVector(n, p[e]),
+        c = d[e + 1].clone().addScaledVector(n, p[e + 1]);
+      (s.tri(i, a, c, r, u), s.tri(i, c, o, r, u));
+    }
+    let t = d[e].clone().addScaledVector(l, -p[e] / 2),
+      n = d[e].clone().addScaledVector(l, p[e] / 2),
+      r = d[e + 1].clone().addScaledVector(l, -p[e + 1] / 2),
+      i = d[e + 1].clone().addScaledVector(l, p[e + 1] / 2),
+      o = V.clone().addScaledVector(c, 0.5).normalize();
+    (u.multiplyScalar(1.08), s.tri(t, n, i, o, u), s.tri(t, i, r, o, u));
+  }
+  return s.geo();
+}
+function wn(e, t, n, r = 0.015, i = 20) {
+  let a = Sn(),
+    o = new _(t),
+    s = new _(n),
+    c = new _();
+  for (let t = 0; t < i; t++) {
+    let n = (t / i) * Math.PI * 2,
+      l = ((t + 1) / i) * Math.PI * 2,
+      u = 0.85 + 0.15 * Math.sin(t * 2.7);
+    (c.copy(o).lerp(s, 0.5 + 0.5 * Math.sin(t * 1.3)),
+      a.tri(
+        new K(0, r, 0),
+        new K(Math.cos(n) * e * u, r, Math.sin(n) * e * u),
+        new K(Math.cos(l) * e * u, r, Math.sin(l) * e * u),
+        V,
+        c,
+      ));
+  }
+  return a.geo();
+}
+function Tn(e, t, n, r, i, a, o, s = 0, c = 0) {
+  let l = i - 100,
+    u = 0.25,
+    d = 0.004,
+    f = (l % 4) * u,
+    p = 1 - (Math.floor(l / 4) + 1) * u,
+    m = t.length,
+    h = [];
+  for (let e = 0; e < m; e++) {
+    let i = e / (m - 1),
+      o = t[e],
+      l = new K()
+        .subVectors(t[Math.min(e + 1, m - 1)], t[Math.max(e - 1, 0)])
+        .normalize(),
+      f = n.clone().addScaledVector(l, -n.dot(l));
+    (f.lengthSq() < 1e-6 && f.crossVectors(l, Math.abs(l.y) > 0.9 ? dn : V),
+      f.normalize(),
+      c && f.applyAxisAngle(l, c * i));
+    let g = new K().crossVectors(f, l).normalize(),
+      _ = (Math.cos(s) * r) / 2,
+      v = (Math.sin(s) * r) / 2;
+    h.push({
+      L: o.clone().addScaledVector(f, -_).addScaledVector(g, v),
+      C: o,
+      R: o.clone().addScaledVector(f, _).addScaledVector(g, v),
+      v: p + d + (u - 2 * d) * i,
+      col: a(i).clone(),
+    });
+  }
+  let g = (t, n, r, i) => {
+      e.pos.push(t.x, t.y, t.z);
+      let a = o(t);
+      (e.nor.push(a.x, a.y, a.z), e.uv.push(n, r), e.col.push(i.r, i.g, i.b));
+    },
+    _ = f + d,
+    v = f + u / 2,
+    y = f + u - d;
+  for (let e = 0; e < m - 1; e++) {
+    let t = h[e],
+      n = h[e + 1];
+    (g(t.L, _, t.v, t.col),
+      g(t.C, v, t.v, t.col),
+      g(n.C, v, n.v, n.col),
+      g(t.L, _, t.v, t.col),
+      g(n.C, v, n.v, n.col),
+      g(n.L, _, n.v, n.col),
+      g(t.C, v, t.v, t.col),
+      g(t.R, y, t.v, t.col),
+      g(n.R, y, n.v, n.col),
+      g(t.C, v, t.v, t.col),
+      g(n.R, y, n.v, n.col),
+      g(n.C, v, n.v, n.col));
+  }
+}
+function En(e, t, n, r, i, a = 0.04) {
+  let o = [e.clone()],
+    s = t.clone().normalize(),
+    c = e.clone(),
+    l = n / r;
+  for (let e = 0; e < r; e++)
+    (s.addScaledVector(V, (-i * 2) / r).normalize(),
+      c.addScaledVector(s, l),
+      c.y < a && (c.y = a + 0.01 * e),
+      o.push(c.clone()));
+  return { pts: o, d: s };
+}
+var Dn = (e, t, n, r, i, a) => {
+    for (let o = 0; o < t.length - 1; o++)
+      e.push(
+        z(
+          t[o],
+          t[o + 1],
+          n + ((r - n) * o) / (t.length - 1),
+          n + ((r - n) * (o + 1)) / (t.length - 1),
+          i,
+          a,
+        ),
+      );
+  },
+  On =
+    (e, t = 0.55, n = 1) =>
+    (r) =>
+      pn
+        .subVectors(r, e)
+        .multiply(new K(1, n, 1))
+        .normalize()
+        .multiplyScalar(1 - t)
+        .addScaledVector(V, t)
+        .normalize(),
+  Y = (e) => new K(Math.cos(e), 0, Math.sin(e)),
+  kn = (e) => new K(-e.z, 0, e.x),
+  An = (e, t) =>
+    e.clone().multiplyScalar(Math.cos(t)).addScaledVector(V, Math.sin(t));
+function X(e, t) {
+  return { r: Te(e), lod: t, wood: [], sink: De() };
+}
+function jn(e, t) {
+  let n = new f(),
+    r = new f();
+  for (let r of [e, t])
+    r &&
+      (r.computeBoundingBox(),
+      r.computeBoundingSphere(),
+      n.union(r.boundingBox));
+  r.copy(t ? t.boundingBox : n);
+  let i = r.getSize(new K());
+  return {
+    wood: e,
+    leaves: t,
+    height: n.max.y,
+    crown: { c: r.getCenter(new K()), r: Math.max(i.x, i.z) * 0.5 },
+  };
+}
+function Z(e) {
+  return jn(
+    e.wood.length ? Ie(e.wood) : null,
+    e.sink.pos.length ? Oe(e.sink) : null,
+  );
+}
+function Mn(e, t, n = new K(), r = null) {
+  r && (t = { ...t, ...r });
+  let { r: i, lod: a, wood: o } = e,
+    s = t.h,
+    c =
+      a > 1 ? 3 : Math.max(6, Math.round((t.rings ?? s * 6) * (a ? 0.35 : 1))),
+    l = Y(t.leanA ?? 0),
+    u = i() * 6,
+    d = [];
+  for (let e = 0; e <= c; e++) {
+    let r = e / c,
+      i = (t.lean ?? 0) * (t.arc ? 1 - (1 - r) ** 2 : r * r);
+    d.push(
+      n
+        .clone()
+        .addScaledVector(V, s * r)
+        .addScaledVector(l, i)
+        .add(
+          new K(Math.sin(r * 6 + u), 0, Math.cos(r * 5 + u)).multiplyScalar(
+            (t.wob ?? 0.04) * r,
+          ),
+        ),
+    );
+  }
+  let f = (e, r = 0, i = null) => {
+    let a = i ? i.y - n.y : e * s,
+      o =
+        (t.r0 + (t.r1 - t.r0) * e) *
+        (1 + (t.flare ?? 0.6) * Math.exp(-a / 0.35));
+    return (t.bulge && (o *= t.bulge(e)), t.bump && (o *= t.bump(e, r, a)), o);
+  };
+  o.push(
+    bn(d, f, a > 1 ? 4 : a ? 6 : (t.radial ?? 9), (e, r, i, a) =>
+      t.bark(e, r, i, a.y - n.y),
+    ),
+  );
+  let p = d[c].clone(),
+    m = f(1),
+    h = new K().subVectors(d[c], d[c - 1]).normalize();
+  if (t.shaft) {
+    let e = t.shaft,
+      n = [],
+      r = _n(e.cols),
+      i = a > 1 ? 1 : 5;
+    for (let t = 0; t <= i; t++)
+      n.push(p.clone().addScaledVector(h, (e.len * t) / i));
+    (o.push(
+      bn(
+        n,
+        (t) => m * e.r * (1 + 0.06 * Math.sin(t * 3) - 0.2 * t * t),
+        a > 1 ? 4 : a ? 6 : 10,
+        (e, t) => r(t, e),
+      ),
+    ),
+      (p = n[i]),
+      (m *= e.r * 0.8));
+  }
+  (t.boots && a < 2 && Pn(e, t.boots, d, f),
+    t.skirt && Fn(e, t.skirt, d, f, n),
+    t.crown && Nn(e, t.crown, p, m));
+  let g = (e) => () =>
+    pn.copy(e).multiplyScalar(0.8).addScaledVector(V, 0.4).normalize();
+  if (t.coconuts && a < 2) {
+    let e = t.coconuts,
+      n = i() * 6;
+    for (let t = 0; t < e.n; t++) {
+      let r = Y(n + (t % 3) * 2.1 + (i() - 0.5) * 0.9),
+        s = p
+          .clone()
+          .addScaledVector(V, -0.3 - i() * 0.35)
+          .addScaledVector(r, m + 0.1 + i() * 0.12);
+      o.push(xn(s, 0.13 + 0.03 * i(), vn(i, e.cols), +!a, 1.12));
+    }
+  }
+  if (t.bunches && a < 2) {
+    let n = t.bunches,
+      r = new _();
+    for (let t = 0; t < n.n; t++) {
+      let a = Y(t * 2.4 + i()),
+        s = p
+          .clone()
+          .addScaledVector(V, -(n.drop ?? 0.35))
+          .addScaledVector(a, m * 0.9),
+        c = s
+          .clone()
+          .addScaledVector(a, n.reach ?? 0.35)
+          .addScaledVector(V, -0.12);
+      (o.push(z(s, c, 0.04, 0.025, 4, J(n.stalk ?? 12094010))),
+        r.set(vn(i, n.cols)).multiplyScalar(0.85 + 0.25 * i()));
+      let l = c
+          .clone()
+          .addScaledVector(V, -n.h * 0.46)
+          .addScaledVector(a, 0.04),
+        u = g(a);
+      (Le(e.sink, l, a, V, n.w, n.h, q.FRUIT, r, u),
+        Le(
+          e.sink,
+          l,
+          kn(a),
+          V,
+          n.w * 0.85,
+          n.h * 0.95,
+          q.FRUIT,
+          r.multiplyScalar(0.85),
+          u,
+        ));
+    }
+  }
+  return { top: p, topR: m, pts: d, radAt: f, tdir: h };
+}
+function Nn(e, t, n, r, i = null) {
+  let { r: a, lod: o, sink: s, wood: c } = e,
+    l = Math.max(3, Math.round(t.n * (o > 1 ? 0.4 : o ? 0.6 : 1))),
+    d = o > 1 ? 2 : o ? Math.min(4, t.segs ?? 8) : (t.segs ?? 8),
+    f = n.clone().addScaledVector(V, t.cy ?? 0.3),
+    p = i ?? On(f, t.nk ?? 0.5),
+    m = _n(t.stops),
+    h = _n(t.deadStops ?? [10123844, 8018480, 11571288]),
+    g = new _(),
+    v = Math.max(1, Math.floor((l - 1) / 2));
+  for (let e = 0; e < l; e++) {
+    let i = l > 1 ? e / (l - 1) : 0,
+      f;
+    t.plane == null
+      ? (f = e * 2.39996 + a() * 0.35 + (t.a0 ?? 0))
+      : ((i = Math.floor(e / 2) / v),
+        (f = t.plane + (e % 2) * Math.PI + (a() - 0.5) * 0.1));
+    let y = Y(f),
+      b = i > 1 - (t.dead ?? 0) + 1e-6,
+      x = An(
+        y,
+        u.lerp(t.eTop, t.eBot, Math.min(1, i)) +
+          (a() - 0.5) * 0.2 -
+          (b ? 0.5 : 0),
+      ),
+      S = n
+        .clone()
+        .addScaledVector(y, r * 0.6)
+        .addScaledVector(V, -Math.min(1, i) * (t.drop ?? 0.25));
+    if (t.petiole && o < 2) {
+      let e = t.petiole * (0.8 + 0.35 * a()),
+        n = En(S, x, e, 2, t.petDroop ?? 0.08);
+      (Dn(
+        c,
+        n.pts,
+        t.petR ?? 0.035,
+        (t.petR ?? 0.035) * 0.6,
+        o ? 3 : 5,
+        J(b ? 8020032 : (t.petCol ?? 6978106)),
+      ),
+        (S = n.pts[n.pts.length - 1]),
+        (x = n.d));
+    }
+    let C =
+        t.len *
+        (t.even ? 1 : 0.72 + 0.28 * Math.min(1, i * 2.5)) *
+        (0.9 + 0.2 * a()),
+      { pts: w } = En(
+        S,
+        x,
+        C,
+        d,
+        t.droop * (b ? 2.4 : 1) * (0.7 + 0.6 * Math.min(1, i)),
+      ),
+      T = b ? h(a(), new _()) : m(Math.min(1, i) * 0.8 + 0.2 * a(), new _());
+    T.multiplyScalar(0.88 + 0.22 * a());
+    let E = kn(y),
+      D = (e) => g.copy(T).multiplyScalar(0.8 + 0.32 * e);
+    (Tn(
+      s,
+      w,
+      E,
+      t.w * (b ? 0.8 : 1),
+      t.tile,
+      D,
+      p,
+      (t.keel ?? 0) * (b ? -1 : 1),
+      (t.twist ?? 0) * (0.6 + 0.8 * a()),
+    ),
+      t.cross &&
+        !b &&
+        o < 2 &&
+        Tn(
+          s,
+          w,
+          V,
+          t.w * 0.7,
+          t.tile,
+          (e) => D(e).multiplyScalar(0.9),
+          p,
+          0.2,
+          0,
+        ));
+  }
+}
+function Pn(e, t, n, r) {
+  let { r: i, lod: a, wood: o } = e,
+    s = n.length - 1,
+    c = Math.round(t.n * (a ? 0.4 : 1));
+  for (let e = 0; e < c; e++) {
+    let l = t.t0 + ((t.t1 - t.t0) * e) / c,
+      u = e * 2.39996,
+      d = Y(u),
+      f = n[Math.round(l * s)].clone().addScaledVector(d, r(l, u) * 0.85),
+      p = f.clone().addScaledVector(
+        d
+          .clone()
+          .multiplyScalar(t.out ?? 0.6)
+          .addScaledVector(V, 0.8)
+          .normalize(),
+        t.len * (0.7 + 0.5 * i()),
+      );
+    o.push(z(f, p, t.r, t.r * 0.3, a ? 3 : 4, J(t.col, 0.75 + 0.4 * i())));
+  }
+}
+function Fn(e, t, n, r, i) {
+  let { r: a, lod: o, sink: s } = e,
+    c = _n(t.cols),
+    l = new _(),
+    u = n.length - 1,
+    d = n[u].y - i.y,
+    f = t.size * 0.4,
+    p = Math.max(1, Math.round(t.len / f)),
+    m = Math.round(t.per * (o > 1 ? 0.3 : o ? 0.6 : 1));
+  for (let e = 0; e < p; e++) {
+    let i = mn((d - 0.15 - e * f) / d, 0, 1),
+      o = n[Math.round(i * u)];
+    for (let n = 0; n < m; n++) {
+      let u = ((n + (e % 2) * 0.5) / m) * Math.PI * 2 + a() * 0.25,
+        d = Y(u),
+        f = r(i, u) + 0.04 + (0.02 * e) / p,
+        h = o
+          .clone()
+          .addScaledVector(d, f)
+          .addScaledVector(V, t.size * 0.1),
+        g = h
+          .clone()
+          .addScaledVector(V, -t.size * 0.5)
+          .addScaledVector(d, 0.08 + 0.1 * a()),
+        v = g
+          .clone()
+          .addScaledVector(V, -t.size * 0.5)
+          .addScaledVector(d, 0.06 + 0.1 * a());
+      if (v.y < 0.1) continue;
+      let y = c(a(), new _()).multiplyScalar(0.8 + 0.3 * a());
+      Tn(
+        s,
+        [h, g, v],
+        kn(d),
+        t.size * 0.85,
+        q.FAN,
+        (e) => l.copy(y).multiplyScalar(0.72 + 0.35 * e),
+        () =>
+          pn.copy(d).multiplyScalar(0.85).addScaledVector(V, 0.3).normalize(),
+        -0.4,
+      );
+    }
+  }
+}
+var In =
+    (e, t, n, r = 3813928, i = 0.55) =>
+    (a, o, s, c) => {
+      let l =
+        0.5 + 0.5 * Math.sin((c * Math.PI * 2) / n + Math.sin(s * 2) * 0.3);
+      (a
+        .set(e)
+        .lerp(
+          fn.set(t),
+          u.smoothstep(l, 0.55, 1) * i + 0.08 * Math.sin(s * 5 + c * 1.3),
+        ),
+        a.lerp(fn.set(r), mn(1 - c / 0.7, 0, 1) * 0.5));
+    },
+  Ln =
+    (e, t, n = 6, r = 16) =>
+    (i, a, o, s) => {
+      let c = Math.sin(o * n + s * r) * Math.sin(o * n - s * r);
+      i.set(t).lerp(fn.set(e), mn(c * 0.5 + 0.5, 0, 1) ** 1.3);
+    },
+  Rn = (e, t, n) => (r, i, a) =>
+    1 + n * Math.max(0, Math.sin(i * e + a * t) * Math.sin(i * e - a * t)),
+  zn = (e, t) => (n, r, i, a) =>
+    n
+      .set(e)
+      .lerp(
+        fn.set(t),
+        0.5 + 0.5 * Math.sin(i * 11 + a * 7) * Math.sin(a * 19 + i * 3),
+      ),
+  Bn = (e) => (t, n, r) =>
+    1 + e * (0.5 + 0.5 * Math.sin(n * 9 + r * 13) * Math.cos(r * 7 - n * 4)),
+  Vn = In(9075302, 5917758, 0.42),
+  Hn = {
+    h: 13,
+    r0: 0.19,
+    r1: 0.14,
+    flare: 0.9,
+    lean: 3.2,
+    leanA: 0.4,
+    arc: !0,
+    rings: 110,
+    radial: 8,
+    bark: Vn,
+    crown: {
+      n: 24,
+      len: 4.8,
+      w: 1.7,
+      tile: q.PINNATE,
+      eTop: 1.2,
+      eBot: -0.45,
+      droop: 0.9,
+      keel: -0.55,
+      twist: 0.6,
+      stops: [8823858, 5932070, 4090396],
+      dead: 0.08,
+    },
+    coconuts: { n: 11, cols: [6191650, 7244326, 10127914, 6965796] },
+  };
+function Un(e, t) {
+  let { r: n, wood: r, sink: i } = e;
+  r.push(xn(t.clone().add(new K(0, 0.15, 0)), 0.2, 8016432, 1, 0.8));
+  for (let e = 0; e < 4; e++) {
+    let i = Y(e * 1.7 + n());
+    r.push(
+      z(
+        t
+          .clone()
+          .add(new K(0, 0.08, 0))
+          .addScaledVector(i, 0.12),
+        t
+          .clone()
+          .addScaledVector(i, 0.35)
+          .add(new K(0, -0.04, 0)),
+        0.018,
+        0.008,
+        4,
+        J(9072720),
+      ),
+    );
+  }
+  let a = t.clone().add(new K(0.02, 0.3, 0));
+  (r.push(z(t.clone().add(new K(0, 0.22, 0)), a, 0.05, 0.04, 6, J(8030778))),
+    Nn(
+      e,
+      {
+        n: 5,
+        len: 1.35,
+        w: 0.38,
+        tile: q.PADDLE,
+        eTop: 1.5,
+        eBot: 0.95,
+        droop: 0.4,
+        keel: 0.5,
+        stops: [10140218, 7248426],
+        drop: 0.05,
+        even: !0,
+      },
+      a,
+      0.03,
+    ));
+}
+function Wn(e) {
+  let { r: t, lod: n, wood: r } = e,
+    i = Mn(e, {
+      ...Hn,
+      h: 6.4,
+      lean: 1.1,
+      leanA: 2,
+      crown: null,
+      coconuts: null,
+      rings: 60,
+    }),
+    a = i.top,
+    o = i.topR;
+  for (let e = 0; e < 8; e++) {
+    let n = Y(e * 0.8 + t() * 0.4),
+      i = a
+        .clone()
+        .addScaledVector(n, o * 0.6)
+        .addScaledVector(V, -0.05);
+    r.push(
+      z(
+        i,
+        i
+          .clone()
+          .addScaledVector(
+            n.clone().multiplyScalar(0.35).addScaledVector(V, 1).normalize(),
+            0.18 + t() * 0.45,
+          ),
+        0.06,
+        0.004,
+        3,
+        J(e % 2 ? 13152392 : 11047016),
+      ),
+    );
+  }
+  (r.push(xn(a.clone().addScaledVector(V, 0.02), o * 0.95, 11836010, 1, 0.25)),
+    Nn(
+      e,
+      {
+        n: 4,
+        len: 3.2,
+        w: 1.1,
+        tile: q.PINNATE,
+        eTop: -0.2,
+        eBot: -0.6,
+        droop: 1.8,
+        keel: 0.4,
+        stops: [10123844, 8018480],
+        drop: 0.2,
+      },
+      a.clone().addScaledVector(V, -0.35),
+      o,
+    ));
+  let s = Y(0.9),
+    c = new K(1.2, 0.17, -1.6),
+    l = c.clone().addScaledVector(s, 2.6),
+    u = [];
+  for (let e = 0; e <= 10; e++) u.push(c.clone().lerp(l, e / 10));
+  (r.push(
+    bn(
+      u,
+      () => 0.16,
+      n ? 6 : 8,
+      (e, t, n, r) => Vn(e, t, n, (r.x - c.x) * 3 + 2),
+    ),
+  ),
+    r.push(xn(c, 0.155, 12625016, 0, 1)));
+  let d = l.clone().addScaledVector(s, 0.1);
+  Nn(
+    e,
+    {
+      n: 10,
+      len: 3.6,
+      w: 1.4,
+      tile: q.PINNATE,
+      eTop: 0.35,
+      eBot: -0.05,
+      droop: 0.2,
+      keel: 0.35,
+      stops: [11049022, 9075254, 8020528],
+      cy: 0,
+    },
+    d,
+    0.15,
+  );
+  for (let e = 0; e < 3; e++)
+    r.push(
+      xn(
+        d
+          .clone()
+          .add(new K(t() * 1.4 - 0.7, -0.03, t() * 1.4 - 0.7))
+          .setY(0.13),
+        0.14,
+        vn(t, [6965796, 8018474]),
+        1,
+        1.1,
+      ),
+    );
+}
+function Gn(e) {
+  let { r: t, lod: n, wood: r } = e;
+  for (let i = 0; i < 6; i++) {
+    let a = Y(i * 1.05 + t() * 0.5),
+      o = 0.6 + t() * 0.8,
+      s = a.clone().multiplyScalar(0.2 + t() * 0.9),
+      c = [
+        s.clone().setY(0.06),
+        s
+          .clone()
+          .addScaledVector(a, o * 0.5)
+          .setY(0.1),
+        s.clone().addScaledVector(a, o).setY(0.38),
+      ],
+      l = zn(8021064, 11045472);
+    (r.push(
+      bn(
+        c,
+        () => 0.09,
+        n ? 5 : 7,
+        (e, t, n, r) => l(e, t, n, r.y),
+      ),
+    ),
+      Nn(
+        e,
+        {
+          n: 9,
+          len: 0.95,
+          w: 0.95,
+          tile: q.FAN,
+          segs: 3,
+          eTop: 1.1,
+          eBot: 0.25,
+          droop: 0.3,
+          keel: 0.35,
+          petiole: 0.9,
+          petR: 0.016,
+          petCol: 8030794,
+          stops: [9087072, 7246424, 8034922],
+          dead: 0.12,
+        },
+        c[2],
+        0.06,
+      ));
+  }
+}
+function Kn(e) {
+  let { r: t, lod: n, wood: r, sink: i } = e,
+    a = [];
+  for (let e = 0; e <= 14; e++)
+    a.push(new K(0.03 * Math.sin(e), (1.5 * e) / 14, 0));
+  r.push(
+    bn(
+      a,
+      (e, t) =>
+        (0.1 + 0.52 * (1 - e) ** 2.4) * (1 + 0.04 * Math.sin(t * 7 + e * 20)),
+      n ? 7 : 14,
+      (e, t, n, r) =>
+        e
+          .set(8023650)
+          .lerp(fn.set(10129024), 0.5 + 0.5 * Math.sin(n * 7 + r.y * 20))
+          .lerp(fn.set(4866104), mn(1 - r.y / 0.3, 0, 1) * 0.4),
+    ),
+  );
+  let o = a[14],
+    s = _n([5929520, 4876842, 6982202]),
+    c = new _();
+  for (let e = 0; e < 3; e++) {
+    let a = Y(e * 2.2 + 0.3),
+      l = o.clone().addScaledVector(An(a, 1.05 + t() * 0.2), 0.7 + t() * 0.8);
+    r.push(z(o, l, 0.1, 0.07, n ? 5 : 8, J(8812906)));
+    let u = On(l.clone().addScaledVector(V, -0.3), 0.4),
+      d = n ? 20 : 46;
+    for (let e = 0; e < d; e++) {
+      let r = Y(e * 2.39996),
+        { pts: a } = En(
+          l,
+          An(r, 1.2 - (e / d) * 1.3),
+          1 + t() * 0.5,
+          n ? 3 : 6,
+          1.2 + t() * 0.6,
+        ),
+        o = s(t(), new _()).multiplyScalar(0.85 + 0.25 * t());
+      Tn(
+        i,
+        a,
+        kn(r),
+        0.06,
+        q.STRAP,
+        (e) => c.copy(o).multiplyScalar(0.8 + 0.3 * e),
+        u,
+        0.3,
+        1.2,
+      );
+    }
+  }
+}
+function qn(e) {
+  let { r: t, lod: n, wood: r, sink: i } = e,
+    a = Mn(e, {
+      h: 3,
+      r0: 0.14,
+      r1: 0.12,
+      flare: 0.1,
+      lean: 0.8,
+      leanA: 1,
+      rings: 40,
+      radial: 9,
+      bump: Bn(0.06),
+      bark: In(9075296, 13154452, 0.18, 5917242, 0.7),
+    }),
+    o = J(8285782);
+  for (let e = 0; e < 8; e++) {
+    let i = Y(e * 0.8 + t() * 0.3),
+      s = 0.15 + t() * 0.3,
+      c = a.pts[Math.round(s * (a.pts.length - 1))],
+      l = c.clone().addScaledVector(i, 0.1),
+      u = c
+        .clone()
+        .setY(-0.05)
+        .addScaledVector(i, 0.7 + t() * 0.7);
+    Dn(
+      r,
+      [
+        l,
+        l
+          .clone()
+          .lerp(u, 0.5)
+          .addScaledVector(i, 0.15)
+          .addScaledVector(V, 0.12),
+        u,
+      ],
+      0.045,
+      0.055,
+      n ? 4 : 6,
+      o,
+    );
+  }
+  let s = [],
+    c = (e, i, a, l, u) => {
+      let d = e.clone().addScaledVector(i, a);
+      if ((r.push(z(e, d, l, l * 0.8, n ? 5 : 7, o)), u === 2)) {
+        s.push({ p: d, d: i });
+        return;
+      }
+      for (let e = 0; e < 2; e++)
+        c(
+          d,
+          i
+            .clone()
+            .addScaledVector(Y(t() * 6.28), 0.7)
+            .addScaledVector(V, 0.35)
+            .normalize(),
+          a * 0.75,
+          l * 0.78,
+          u + 1,
+        );
+    };
+  for (let e = 0; e < 3; e++) c(a.top, An(Y(e * 2.1 + 0.5), 0.8), 1, 0.1, 1);
+  let l = _n([4877872, 5930552, 7244346]),
+    u = new _();
+  s.forEach((e, a) => {
+    let o = On(e.p, 0.45),
+      s = n ? 10 : 22;
+    for (let r = 0; r < s; r++) {
+      let c = Y(r * 2.39996 + a),
+        d = r / s,
+        { pts: f } = En(
+          e.p,
+          An(c, 1.3 - d * 1.4).addScaledVector(e.d, 0.3),
+          1.3 + 0.3 * t(),
+          n ? 3 : 6,
+          0.5,
+        ),
+        p = l(d + 0.2 * t(), new _()).multiplyScalar(0.85 + 0.2 * t());
+      Tn(
+        i,
+        f,
+        kn(c),
+        0.14,
+        q.STRAP,
+        (e) => u.copy(p).multiplyScalar(0.8 + 0.3 * e),
+        o,
+        0.6,
+        0.5,
+      );
+    }
+    a % 3 == 0 &&
+      r.push(
+        xn(e.p.clone().addScaledVector(V, -0.3), 0.19, 14181406, +!n, 1.15),
+      );
+  });
+}
+function Jn(e) {
+  let { wood: t } = e;
+  (t.push(wn(2.6, 3813408, 4866088)),
+    Nn(
+      e,
+      {
+        n: 12,
+        len: 5.2,
+        w: 1.35,
+        tile: q.PINNATE,
+        eTop: 1.45,
+        eBot: 0.85,
+        droop: 0.4,
+        keel: 0.55,
+        petiole: 0.9,
+        petR: 0.06,
+        petCol: 8030778,
+        stops: [6982190, 5141032, 5929514],
+        dead: 0.1,
+        drop: 0,
+      },
+      new K(0, 0.05, 0),
+      0.25,
+    ),
+    t.push(
+      z(new K(0.15, 0, 0.1), new K(0.35, 0.55, 0.2), 0.05, 0.04, 6, J(6974e3)),
+    ),
+    t.push(xn(new K(0.38, 0.8, 0.22), 0.3, 5913118, 1, 1)));
+}
+function Yn(e, t, n, r, i, a) {
+  let { r: o } = e;
+  for (let s = 0; s < n; s++) {
+    let n = s * 2.39996 + o() * 0.4,
+      c = s ? r * (0.4 + 0.6 * o()) : 0;
+    Mn(e, t, Y(n).multiplyScalar(c), {
+      h: i[0] + (i[1] - i[0]) * o(),
+      lean: a[0] + (a[1] - a[0]) * (c / r),
+      leanA: n,
+    });
+  }
+}
+var Xn = [
+    {
+      key: `coconut`,
+      name: `Coconut Palm`,
+      note: `Leaning, curving ringed trunk under drooping feather fronds and a cluster of green coconuts.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (Mn(n, Hn), Z(n));
+      },
+    },
+    {
+      key: `royal`,
+      name: `Royal Palm`,
+      note: `Smooth grey concrete-like column swelling mid-height, topped by a glossy green crownshaft.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, {
+            h: 14,
+            r0: 0.3,
+            r1: 0.24,
+            flare: 0.3,
+            lean: 0.3,
+            rings: 50,
+            radial: 12,
+            bulge: (e) => 1 + 0.2 * Math.exp(-(((e - 0.55) / 0.2) ** 2)),
+            bark: In(12894388, 11052184, 0.7, 6973022, 0.3),
+            shaft: { len: 2.6, r: 1.1, cols: [5208628, 6984770] },
+            crown: {
+              n: 16,
+              len: 4.3,
+              w: 1.6,
+              tile: q.PINNATE,
+              eTop: 1.35,
+              eBot: -0.3,
+              droop: 0.6,
+              keel: -0.2,
+              twist: 1.2,
+              stops: [4880938, 3828260, 3037726],
+            },
+            bunches: {
+              n: 2,
+              w: 0.9,
+              h: 1.3,
+              drop: 2.5,
+              cols: [6961738, 9067082],
+              stalk: 10127962,
+            },
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `date`,
+      name: `Date Palm`,
+      note: `Straight trunk armoured with diamond leaf bases, stiff grey-green fronds and amber date bunches.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, {
+            h: 11,
+            r0: 0.3,
+            r1: 0.27,
+            flare: 0.25,
+            lean: 0.6,
+            leanA: 2.5,
+            rings: 110,
+            radial: 14,
+            bump: Rn(6, 16, 0.07),
+            bark: Ln(10124374, 5915696),
+            crown: {
+              n: 34,
+              len: 4.2,
+              w: 1.3,
+              tile: q.PINNATE,
+              eTop: 1.35,
+              eBot: -0.25,
+              droop: 0.32,
+              keel: 0.6,
+              stops: [10005640, 8033390, 6453338],
+              dead: 0.1,
+            },
+            bunches: {
+              n: 6,
+              w: 0.8,
+              h: 1.1,
+              drop: 0.5,
+              reach: 0.45,
+              cols: [13666858, 12084254, 13138468],
+            },
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `canary`,
+      name: `Canary Island Date Palm`,
+      note: `Fat pineapple-textured trunk carrying a huge dense ball of arching bright-green fronds.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, {
+            h: 6.5,
+            r0: 0.55,
+            r1: 0.6,
+            flare: 0.15,
+            lean: 0.2,
+            rings: 80,
+            radial: 18,
+            bulge: (e) => 1 + 0.28 * u.smoothstep(e, 0.75, 1),
+            bump: Rn(7, 13, 0.09),
+            bark: Ln(10518616, 5126696, 7, 13),
+            crown: {
+              n: 64,
+              len: 5.6,
+              w: 1.5,
+              tile: q.PINNATE,
+              eTop: 1.3,
+              eBot: -0.45,
+              droop: 0.6,
+              keel: 0.45,
+              stops: [6986294, 5145128, 4091426],
+              dead: 0.04,
+              drop: 0.5,
+            },
+            bunches: {
+              n: 4,
+              w: 0.8,
+              h: 1,
+              drop: 0.6,
+              reach: 0.6,
+              cols: [14711326, 13657626],
+            },
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `washrob`,
+      name: `Mexican Fan Palm`,
+      note: `Very tall, skinny trunk with a small head of glossy fans over a skirt of dead fronds.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, {
+            h: 20,
+            r0: 0.2,
+            r1: 0.16,
+            flare: 1.1,
+            lean: 0.9,
+            leanA: 1.2,
+            rings: 100,
+            radial: 8,
+            bark: In(9075818, 6970960, 0.3),
+            crown: {
+              n: 18,
+              len: 1.5,
+              w: 1.5,
+              tile: q.FAN,
+              segs: 3,
+              eTop: 1.2,
+              eBot: -0.15,
+              droop: 0.35,
+              keel: 0.45,
+              petiole: 1.2,
+              petR: 0.03,
+              petCol: 9079370,
+              stops: [5937710, 4883496, 4092450],
+            },
+            skirt: {
+              len: 2.8,
+              size: 1.3,
+              per: 9,
+              cols: [11045466, 9072196, 12624496],
+            },
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `washfil`,
+      name: `California Fan Palm`,
+      note: `Stout column hidden under a long straw petticoat, crowned with big grey-green fans.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, {
+            h: 10.5,
+            r0: 0.45,
+            r1: 0.42,
+            flare: 0.3,
+            lean: 0.2,
+            rings: 50,
+            radial: 12,
+            bark: In(10129022, 8023648, 0.35),
+            crown: {
+              n: 24,
+              len: 2.1,
+              w: 2.1,
+              tile: q.FAN,
+              segs: 3,
+              eTop: 1.15,
+              eBot: -0.3,
+              droop: 0.4,
+              keel: 0.4,
+              petiole: 1.5,
+              petR: 0.045,
+              petCol: 9081952,
+              stops: [8822896, 7244384, 6191702],
+            },
+            skirt: {
+              len: 7.2,
+              size: 1.8,
+              per: 12,
+              cols: [13151866, 11572320, 14205068],
+            },
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `windmill`,
+      name: `Windmill Palm`,
+      note: `Hardy little fan palm on a thin trunk wrapped in shaggy brown fibre.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, {
+            h: 4.4,
+            r0: 0.13,
+            r1: 0.11,
+            flare: 0.3,
+            lean: 0.35,
+            leanA: 3.4,
+            rings: 44,
+            radial: 9,
+            bump: Bn(0.14),
+            bark: zn(3811870, 6966836),
+            crown: {
+              n: 18,
+              len: 0.95,
+              w: 0.95,
+              tile: q.FAN,
+              segs: 3,
+              eTop: 1.25,
+              eBot: -0.2,
+              droop: 0.4,
+              keel: 0.3,
+              petiole: 0.75,
+              petR: 0.018,
+              petCol: 5925434,
+              stops: [3828266, 3037732, 2510366],
+              dead: 0.1,
+            },
+            skirt: { len: 0.9, size: 0.8, per: 6, cols: [6967862, 9072200] },
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `sago`,
+      name: `Sago Palm`,
+      note: `Cycad, not a true palm: a stubby scaly trunk with a rosette of stiff, glossy, feather leaves.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t),
+          r = Mn(n, {
+            h: 0.7,
+            r0: 0.28,
+            r1: 0.25,
+            flare: 0.1,
+            rings: 16,
+            radial: 14,
+            bump: Rn(8, 30, 0.12),
+            bark: Ln(9071176, 4863524, 8, 30),
+            crown: {
+              n: 24,
+              len: 1.4,
+              w: 0.42,
+              tile: q.STIFF,
+              eTop: 1,
+              eBot: 0.05,
+              droop: 0.42,
+              keel: 0.5,
+              stops: [3037726, 2247192, 1981972],
+              drop: 0.05,
+              cy: 0.1,
+            },
+          });
+        return (
+          n.wood.push(
+            xn(r.top.clone().addScaledVector(V, 0.06), 0.14, 10123834, 1, 1.3),
+          ),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `foxtail`,
+      name: `Foxtail Palm`,
+      note: `Smooth grey trunk and crownshaft under bushy fronds whose leaflets bristle all round like a fox tail.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, {
+            h: 7.5,
+            r0: 0.25,
+            r1: 0.16,
+            flare: 0.3,
+            lean: 0.4,
+            leanA: 5,
+            rings: 40,
+            radial: 10,
+            bulge: (e) => 1 + 0.18 * Math.exp(-((e / 0.3) ** 2)),
+            bark: In(11841702, 9341568, 0.25, 5920334, 0.4),
+            shaft: { len: 1.3, r: 1.15, cols: [5933626, 8826446] },
+            crown: {
+              n: 10,
+              len: 3.3,
+              w: 1.25,
+              tile: q.PINNATE,
+              eTop: 1.25,
+              eBot: -0.15,
+              droop: 0.6,
+              keel: -0.1,
+              twist: 0.8,
+              cross: !0,
+              stops: [6986294, 5933614, 4880934],
+            },
+            bunches: {
+              n: 2,
+              w: 0.7,
+              h: 0.9,
+              drop: 1.2,
+              reach: 0.3,
+              cols: [14172190, 14703134],
+            },
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `bottle`,
+      name: `Bottle Palm`,
+      note: `Squat trunk swollen like a bottle, a short green crownshaft and a few strongly recurved fronds.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, {
+            h: 3,
+            r0: 0.22,
+            r1: 0.12,
+            flare: 0.1,
+            lean: 0.1,
+            rings: 34,
+            radial: 14,
+            bulge: (e) => 1 + 1.15 * Math.exp(-(((e - 0.32) / 0.24) ** 2)),
+            bark: In(11052184, 8288880, 0.12, 5920334, 0.35),
+            shaft: { len: 0.9, r: 1.3, cols: [6982202, 9087058] },
+            crown: {
+              n: 6,
+              len: 2.6,
+              w: 1,
+              tile: q.PINNATE,
+              eTop: 1.4,
+              eBot: 0.7,
+              droop: 1.15,
+              keel: 0.55,
+              stops: [4880938, 4090404],
+              even: !0,
+            },
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `traveller`,
+      name: `Traveller's Palm`,
+      note: `Banana-like paddle leaves on long stalks, all held in one flat vertical fan.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, {
+            h: 3.4,
+            r0: 0.22,
+            r1: 0.2,
+            flare: 0.3,
+            rings: 30,
+            radial: 10,
+            bark: In(9077876, 6182988, 0.2),
+            crown: {
+              n: 18,
+              plane: 0.3,
+              len: 2.6,
+              w: 0.75,
+              tile: q.PADDLE,
+              segs: 6,
+              eTop: 1.5,
+              eBot: 0.3,
+              droop: 0.22,
+              keel: 0.12,
+              petiole: 1.6,
+              petR: 0.05,
+              petCol: 6982202,
+              stops: [5933618, 4880938, 3828260],
+              dead: 0.11,
+              drop: 0.3,
+            },
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `areca`,
+      name: `Areca Palm Clump`,
+      note: `Clump of slender golden-green canes with feathery, arching yellow-green fronds.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Yn(
+            n,
+            {
+              h: 4,
+              r0: 0.06,
+              r1: 0.05,
+              flare: 0.3,
+              rings: 30,
+              radial: 6,
+              wob: 0.08,
+              bark: In(11053130, 6187562, 0.22, 5921322, 0.7),
+              shaft: { len: 0.5, r: 1.3, cols: [10135626, 11843674] },
+              crown: {
+                n: 6,
+                len: 2,
+                w: 0.8,
+                tile: q.PINNATE,
+                eTop: 1.25,
+                eBot: 0.1,
+                droop: 0.85,
+                keel: 0.35,
+                stops: [10137150, 8298034, 6983212],
+              },
+            },
+            7,
+            0.45,
+            [2.4, 5.4],
+            [0.2, 1.3],
+          ),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `pygmy`,
+      name: `Pygmy Date Palm`,
+      note: `Three knobbly little trunks, each under a dense round mop of fine, soft dark fronds.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Yn(
+            n,
+            {
+              h: 1.9,
+              r0: 0.1,
+              r1: 0.09,
+              flare: 0.3,
+              rings: 30,
+              radial: 9,
+              bump: Rn(5, 26, 0.15),
+              bark: Ln(8021064, 4075556, 5, 26),
+              crown: {
+                n: 28,
+                len: 1.25,
+                w: 0.55,
+                tile: q.PINNATE,
+                eTop: 1.3,
+                eBot: -0.55,
+                droop: 0.9,
+                keel: 0.2,
+                stops: [3039780, 2510366, 1983e3],
+              },
+            },
+            3,
+            0.3,
+            [1.5, 2.2],
+            [0.3, 0.6],
+          ),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `sabal`,
+      name: `Cabbage Palm`,
+      note: `Trunk criss-crossed with split leaf-base boots under a dense globe of recurved olive fans.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, {
+            h: 8,
+            r0: 0.24,
+            r1: 0.24,
+            flare: 0.3,
+            lean: 0.5,
+            leanA: 4.2,
+            rings: 60,
+            radial: 10,
+            bark: Ln(9075296, 5917754, 4, 9),
+            boots: {
+              n: 70,
+              t0: 0.35,
+              t1: 0.96,
+              len: 0.32,
+              r: 0.06,
+              col: 8021064,
+              out: 0.8,
+            },
+            crown: {
+              n: 36,
+              len: 1.4,
+              w: 1.4,
+              tile: q.FAN,
+              segs: 3,
+              eTop: 1.3,
+              eBot: -0.6,
+              droop: 0.8,
+              keel: 0.55,
+              petiole: 1,
+              petR: 0.025,
+              petCol: 6978116,
+              stops: [5929526, 5140016, 4087336],
+              dead: 0.08,
+            },
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `bismarck`,
+      name: `Bismarck Palm`,
+      note: `Massive silver-blue fans, three metres across, on a thick ringed grey trunk.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, {
+            h: 6.5,
+            r0: 0.45,
+            r1: 0.42,
+            flare: 0.25,
+            rings: 44,
+            radial: 12,
+            bark: In(11052186, 8815226, 0.28, 5920334, 0.4),
+            crown: {
+              n: 22,
+              len: 2.7,
+              w: 2.7,
+              tile: q.FAN,
+              segs: 4,
+              eTop: 1.2,
+              eBot: -0.1,
+              droop: 0.3,
+              keel: 0.35,
+              petiole: 1.7,
+              petR: 0.07,
+              petCol: 11056304,
+              stops: [11059398, 9744570, 8823468],
+              dead: 0.07,
+            },
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `fishtail`,
+      name: `Fishtail Palm`,
+      note: `Huge twice-divided fronds of jagged fishtail leaflets and long hanging fruit strands.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, {
+            h: 8,
+            r0: 0.2,
+            r1: 0.18,
+            flare: 0.3,
+            lean: 0.3,
+            rings: 50,
+            radial: 9,
+            bark: In(10131082, 7236192, 0.3, 4867646, 0.6),
+            crown: {
+              n: 9,
+              len: 4.4,
+              w: 2.4,
+              tile: q.FISHTAIL,
+              eTop: 1.25,
+              eBot: 0,
+              droop: 0.5,
+              keel: 0.25,
+              twist: 0.4,
+              stops: [4091432, 3301922, 2774048],
+            },
+            bunches: {
+              n: 4,
+              w: 0.6,
+              h: 2.2,
+              drop: 1.8,
+              reach: 0.25,
+              cols: [6954538, 8006186, 5909050],
+              stalk: 6974010,
+            },
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `oilpalm`,
+      name: `Oil Palm`,
+      note: `Rough trunk bristling with old frond stubs, a heavy dark crown and red-black fruit bunches.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t),
+          r = Mn(n, {
+            h: 6.5,
+            r0: 0.38,
+            r1: 0.36,
+            flare: 0.25,
+            lean: 0.4,
+            leanA: 0.8,
+            rings: 50,
+            radial: 12,
+            bump: Bn(0.06),
+            bark: zn(4864554, 7232064),
+            boots: {
+              n: 110,
+              t0: 0.12,
+              t1: 0.97,
+              len: 0.42,
+              r: 0.07,
+              col: 5917236,
+              out: 0.9,
+            },
+            crown: {
+              n: 40,
+              len: 5,
+              w: 1.2,
+              tile: q.PINNATE,
+              eTop: 1.25,
+              eBot: -0.3,
+              droop: 0.5,
+              keel: 0.3,
+              twist: 1.1,
+              stops: [3036704, 2509338, 1981974],
+              dead: 0.08,
+            },
+          });
+        for (let e = 0; e < 4; e++) {
+          let i = Y(e * 1.6 + 0.4),
+            a = r.top
+              .clone()
+              .addScaledVector(V, -0.5)
+              .addScaledVector(i, r.topR + 0.25);
+          n.wood.push(xn(a, 0.28, e % 2 ? 8003088 : 5904912, +!t, 1.2));
+          for (let e = 0; e < (t ? 0 : 6); e++)
+            n.wood.push(
+              xn(
+                a
+                  .clone()
+                  .add(
+                    new K(n.r() - 0.5, n.r() - 0.5, n.r() - 0.5)
+                      .normalize()
+                      .multiplyScalar(0.27),
+                  ),
+                0.06,
+                14704666,
+                0,
+              ),
+            );
+        }
+        return Z(n);
+      },
+    },
+    {
+      key: `nipa`,
+      name: `Nipa Palm`,
+      note: `Mangrove palm with no trunk: tall erect fronds rise straight out of the tidal mud around a round fruit head.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (Jn(n), Z(n));
+      },
+    },
+    {
+      key: `ponytail`,
+      name: `Ponytail Palm`,
+      note: `Swollen elephant-foot base and a few stems ending in fountains of thin, curling leaves.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (Kn(n), Z(n));
+      },
+    },
+    {
+      key: `pandanus`,
+      name: `Pandanus Screwpine`,
+      note: `Leaning trunk on stilt prop roots, forking into spiral tufts of saw-edged strap leaves.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (qn(n), Z(n));
+      },
+    },
+    {
+      key: `sprout`,
+      name: `Coconut Sprout`,
+      note: `A husked coconut in the grass putting up its first few undivided, pleated leaves.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (Un(n, new K()), Z(n));
+      },
+    },
+    {
+      key: `broken`,
+      name: `Storm-broken Palm`,
+      note: `Coconut trunk snapped by a hurricane, a few dead fronds hanging, its crown lying in the grass.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (Wn(n), Z(n));
+      },
+    },
+    {
+      key: `twin`,
+      name: `Double-trunk Coconut`,
+      note: `Two coconut trunks from one base, leaning apart in a wide V, each with its own crown.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, Hn, new K(0.13, 0, 0), { h: 12, lean: 3, leanA: 0.1 }),
+          Mn(n, Hn, new K(-0.13, 0, 0), {
+            h: 9.5,
+            lean: 2.4,
+            leanA: 2.7,
+            crown: { ...Hn.crown, n: 20 },
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `palmetto`,
+      name: `Saw Palmetto Thicket`,
+      note: `Knee-high thicket of creeping stems and stiff yellow-green fans.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (Gn(n), Z(n));
+      },
+    },
+    {
+      key: `raffia`,
+      name: `Raffia Palm`,
+      note: `Shaggy trunk holding up the largest leaves in the plant world: erect fronds ten metres long.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          Mn(n, {
+            h: 4.5,
+            r0: 0.4,
+            r1: 0.36,
+            flare: 0.3,
+            rings: 36,
+            radial: 12,
+            bump: Bn(0.12),
+            bark: zn(3812384, 6178352),
+            crown: {
+              n: 13,
+              len: 10,
+              w: 2.4,
+              tile: q.PINNATE,
+              segs: 10,
+              eTop: 1.42,
+              eBot: 0.6,
+              droop: 0.34,
+              keel: 0.35,
+              stops: [5933614, 4880936, 4090404],
+              dead: 0.08,
+            },
+            bunches: {
+              n: 2,
+              w: 1,
+              h: 1.7,
+              drop: 0.5,
+              reach: 0.4,
+              cols: [6961694, 8014372],
+            },
+          }),
+          Z(n)
+        );
+      },
+    },
+  ],
+  Zn = {
+    trunkH: 3.2,
+    trunkR: 0.34,
+    lean: 0.25,
+    leanA: 0.6,
+    wobble: 0.05,
+    roots: 5,
+    limbs: 5,
+    spread: 0.75,
+    limbLen: 3,
+    rise: 0.22,
+    gnarl: 0.22,
+    fork: 0.75,
+    kids: 2,
+    depth: 2,
+    lenFalloff: 0.62,
+    leader: !0,
+    clumpR: 1.5,
+    cards: 22,
+    cardSize: 1.35,
+    core: 0.65,
+    sideClump: 0.35,
+    tile: q.GLOSSY,
+  },
+  Qn = (e, { core: t = 0.5, jitter: n = 0.08, pick: r = null } = {}) => {
+    let i = _n(e);
+    return (e, a, o, s) => {
+      (i(a * 0.75 + 0.25 * s(), e),
+        r && r(e, a, o, s),
+        e.multiplyScalar(1 - t * (1 - o) * 0.9 + (s() - 0.5) * n * 2),
+        e.offsetHSL((s() - 0.5) * 0.025, 0, 0));
+    };
+  },
+  $n =
+    (e, t, n, r = 0.5) =>
+    (i, a, o, s) => {
+      let c = 0.5 + 0.5 * Math.sin(Math.atan2(s, a) * 7 + o * 1.3);
+      i.set(e)
+        .lerp(fn.set(t), 0.35 + 0.45 * c)
+        .lerp(fn.set(n), mn(1 - o / 1.1, 0, 1) * r);
+    },
+  er = (e, t, n) => (r, i, a, o) => {
+    let s =
+      Math.sin(i * 7.1 + a * 2.3) * Math.sin(o * 6.7 - a * 1.9) +
+      0.4 * Math.sin(a * 5.3 + i * 4);
+    r.set(e)
+      .lerp(fn.set(t), mn(s * 0.7 + 0.5, 0, 1))
+      .lerp(fn.set(n), mn(1 - a / 0.8, 0, 1) * 0.5);
+  };
+function tr(e, t, n, r = null) {
+  let i = [],
+    a = Te(t * 977 + 5),
+    o = e.barkColor,
+    s = Ne(
+      {
+        ...Zn,
+        ...e,
+        barkColor: (e, t, n, r) => {
+          (o(e, t, n, r), a() < 0.12 && i.push(new K(t, n, r)));
+        },
+      },
+      t,
+      n,
+    );
+  if (!r) return jn(s.wood, s.leaves);
+  let c = X(t * 31 + 1, n);
+  r(c, i, s);
+  let l = c.wood.length ? Ie([s.wood, ...c.wood]) : s.wood,
+    u = c.sink.pos.length ? Oe(c.sink) : null;
+  return jn(l, s.leaves && u ? Ie([s.leaves, u]) : (s.leaves ?? u));
+}
+var nr = (e) => (t) => {
+  let n = mn(t / e.trunkH, 0, 1);
+  return e.trunkR * (1 - 0.45 * n) * (1 + 0.55 * Math.exp(-n * 14));
+};
+function rr(e, t, n, r) {
+  let i = [];
+  if (!e) return i;
+  let a = e.attributes.position;
+  for (let e = 0; e < t * 60 && i.length < t; e++) {
+    let e = (n() * a.count) | 0,
+      t = new K(a.getX(e), a.getY(e), a.getZ(e));
+    (!r || r(t)) && i.push(t);
+  }
+  return i;
+}
+function ir(e, t, n, r, i, a, o = 0.2, s = 0.72) {
+  let c = t.crown.c,
+    l = t.crown.r;
+  for (let u of rr(
+    t.leaves,
+    Math.round(n * (e.lod ? 0.5 : 1)),
+    e.r,
+    (e) =>
+      Math.hypot(e.x - c.x, e.z - c.z) > l * s &&
+      e.y < c.y + l * 0.2 &&
+      e.y > 1.2,
+  )) {
+    let t = u.clone().addScaledVector(V, -o);
+    (e.wood.push(z(u, t, 0.012, 0.01, 3, J(5921322))),
+      e.wood.push(
+        xn(
+          t.clone().addScaledVector(V, -r * i * 0.9),
+          r,
+          vn(e.r, a),
+          +!e.lod,
+          i,
+        ),
+      ));
+  }
+}
+function ar(e, t, n, r, i, a, o) {
+  for (let s = 0; s < t; s++)
+    e.wood.push(
+      Cn(
+        (s / t) * Math.PI * 2 + e.r() * 0.5,
+        n,
+        r * (0.75 + 0.5 * e.r()),
+        i * (0.8 + 0.4 * e.r()),
+        a,
+        o,
+        e.lod ? 3 : 6,
+      ),
+    );
+}
+function or(e, t, n, r, i, a) {
+  t = { ...Zn, ...t };
+  let o = nr(t),
+    s = Y(t.leanA);
+  for (let c = 0; c < n; c++) {
+    let l = [],
+      u = (c / n) * Math.PI * 2,
+      d = c % 2 ? 1 : -1,
+      f = r * (0.6 + 0.4 * e.r());
+    for (let e = 0; e <= 18; e++) {
+      let n = f * (1 - e / 18),
+        r = u + d * n * 0.45,
+        a = n / t.trunkH;
+      l.push(
+        Y(r)
+          .multiplyScalar(o(n) * 0.98 + i * 0.6)
+          .addScaledVector(s, t.lean * a * a)
+          .setY(n - (e === 18 ? 0.1 : 0)),
+      );
+    }
+    e.wood.push(
+      bn(
+        l,
+        (e) => i * (0.8 + 0.5 * e),
+        e.lod ? 4 : 6,
+        (e, t, n, r) => a(e, r.x, r.y, r.z),
+      ),
+    );
+  }
+}
+function sr(e, t, n = 1, r = !0, i = 9) {
+  let { r: a, lod: o, wood: s, sink: c } = e,
+    l = 2.5 * n,
+    u = Y(a() * 6).multiplyScalar(0.12 * n),
+    d = [];
+  for (let e = 0; e <= 6; e++)
+    d.push(
+      t
+        .clone()
+        .addScaledVector(V, (l * e) / 6)
+        .addScaledVector(u, (e / 6) ** 2),
+    );
+  s.push(
+    bn(
+      d,
+      (e) => 0.16 * n * (1 - 0.35 * e) * (1 + 0.3 * Math.exp(-e * 10)),
+      o ? 6 : 10,
+      (e, n, r, i) =>
+        e
+          .set(6982202)
+          .lerp(
+            fn.set(5913130),
+            mn(Math.sin(r * 3 + i.y * 4) * Math.sin(i.y * 7 - r) - 0.2, 0, 1) *
+              0.8,
+          )
+          .lerp(fn.set(6969914), mn(1 - (i.y - t.y) / 0.5, 0, 1) * 0.6),
+    ),
+  );
+  let f = d[6];
+  if (
+    (Nn(
+      e,
+      {
+        n: i,
+        len: 2.6 * n,
+        w: 0.72 * n,
+        tile: q.PADDLE,
+        segs: 7,
+        eTop: 1.4,
+        eBot: 0.05,
+        droop: 0.75,
+        keel: 0.15,
+        twist: 0.25,
+        stops: [8038458, 5935152, 4618792],
+        dead: 0.15,
+        deadStops: [9072186, 723e4],
+        drop: 0.35 * n,
+        cy: 0.2,
+      },
+      f,
+      0.08 * n,
+    ),
+    !r)
+  )
+    return;
+  let p = Y(a() * 6),
+    m = f.clone().addScaledVector(V, 0.05),
+    h = m.clone().addScaledVector(p, 0.45).addScaledVector(V, 0.12),
+    g = h.clone().addScaledVector(p, 0.2).addScaledVector(V, -0.55),
+    _ = g.clone().addScaledVector(p, 0.03).addScaledVector(V, -0.6);
+  (Dn(s, [m, h, g, _], 0.04, 0.03, o ? 4 : 6, J(8030778)),
+    s.push(
+      z(
+        _,
+        _.clone().addScaledVector(V, -0.3),
+        0.08,
+        0.01,
+        o ? 5 : 8,
+        J(5904938),
+      ),
+    ));
+  let v = o ? 3 : 6;
+  for (let e = 0; e < v; e++) {
+    let t = e / v,
+      n = h
+        .clone()
+        .lerp(g, Math.min(1, t * 1.4))
+        .lerp(_, Math.max(0, t * 1.4 - 1) * 0.6),
+      r = new K().subVectors(g, h).normalize(),
+      i = new K().crossVectors(r, V).normalize(),
+      o = new K().crossVectors(i, r);
+    for (let t = 0; t < 9; t++) {
+      let r = (t / 9) * Math.PI * 2 + e * 0.3,
+        c = i
+          .clone()
+          .multiplyScalar(Math.cos(r))
+          .addScaledVector(o, Math.sin(r)),
+        l = n.clone().addScaledVector(c, 0.05),
+        u = l.clone().addScaledVector(c, 0.08).addScaledVector(V, 0.08);
+      Dn(
+        s,
+        [l, u, u.clone().addScaledVector(V, 0.09).addScaledVector(c, 0.02)],
+        0.026,
+        0.018,
+        4,
+        J(8823346, 0.85 + 0.25 * a()),
+      );
+    }
+  }
+}
+function cr(e, t) {
+  let { r: n, lod: r, wood: i, sink: a } = e,
+    o = new _(),
+    s = _n(t.stops),
+    c = Math.round(t.n * (r ? 0.6 : 1)),
+    l = On(new K(0, t.cy ?? 0.6, 0), 0.5);
+  for (let e = 0; e < c; e++) {
+    let c = Y(e * 2.39996 + n() * 0.3),
+      u = c.clone().multiplyScalar(Math.sqrt(n()) * t.rad),
+      d = t.lean[0] + (t.lean[1] - t.lean[0]) * n(),
+      f = t.pet[0] + (t.pet[1] - t.pet[0]) * n(),
+      p = En(u, An(c, Math.PI / 2 - d), f, 3, t.petDroop ?? 0.05);
+    Dn(
+      i,
+      p.pts,
+      t.petR,
+      t.petR * 0.6,
+      r ? 3 : 5,
+      J(t.petCol, 0.85 + 0.2 * n()),
+    );
+    let m = p.pts[3],
+      h = s(n(), new _()).multiplyScalar(0.85 + 0.25 * n());
+    if (t.card) {
+      let e = c
+          .clone()
+          .multiplyScalar(0.65)
+          .addScaledVector(V, -0.75)
+          .normalize(),
+        r = V.clone().multiplyScalar(0.75).addScaledVector(c, 0.65).normalize(),
+        i = t.size * (0.75 + 0.4 * n());
+      Le(
+        a,
+        m.clone().addScaledVector(e, i * 0.22),
+        r,
+        e,
+        i * 0.85,
+        i,
+        t.tile,
+        h,
+        l,
+        0.12,
+      );
+    } else {
+      let { pts: e } = En(
+        m,
+        p.d,
+        t.len * (0.8 + 0.35 * n()),
+        r ? 3 : 5,
+        t.droop,
+      );
+      Tn(
+        a,
+        e,
+        kn(c),
+        t.w,
+        t.tile,
+        (e) => o.copy(h).multiplyScalar(0.8 + 0.3 * e),
+        l,
+        t.keel ?? 0.2,
+        (n() - 0.5) * 0.8,
+      );
+    }
+  }
+}
+function lr(e) {
+  let { r: t, lod: n, wood: r } = e;
+  for (let e = 0; e < (n ? 3 : 6); e++) {
+    let n = Y(e * 2.2 + t()),
+      i = n.clone().multiplyScalar(0.1 + t() * 0.3),
+      a = i
+        .clone()
+        .addScaledVector(n, 0.1)
+        .setY(1 + t() * 0.35);
+    r.push(z(i, a, 0.018, 0.014, 5, J(5929562)));
+    let o = n.clone().addScaledVector(V, 0.08).normalize(),
+      s = kn(n);
+    r.push(
+      z(a, a.clone().addScaledVector(o, 0.24), 0.034, 0.005, 6, (e, t, n, r) =>
+        e
+          .set(4876882)
+          .lerp(
+            fn.set(10498122),
+            mn(Math.hypot(t - a.x, r - a.z) / 0.24, 0, 1),
+          ),
+      ),
+    );
+    let c = a.clone().addScaledVector(o, 0.08).addScaledVector(V, 0.03);
+    for (let e = 0; e < 3; e++)
+      r.push(
+        z(
+          c,
+          c.clone().addScaledVector(
+            V.clone()
+              .addScaledVector(o, 0.1 + e * 0.14)
+              .addScaledVector(s, (e - 1) * 0.3)
+              .normalize(),
+            0.17,
+          ),
+          0.02,
+          0.003,
+          4,
+          J(16747028),
+        ),
+      );
+    r.push(
+      z(
+        c,
+        c
+          .clone()
+          .addScaledVector(
+            o.clone().multiplyScalar(0.8).addScaledVector(V, 0.6).normalize(),
+            0.13,
+          ),
+        0.013,
+        0.002,
+        4,
+        J(2768584),
+      ),
+    );
+  }
+}
+function ur(e) {
+  let { r: t, lod: n, wood: r } = e;
+  for (let e = 0; e < (n ? 3 : 5); e++) {
+    let n = Y(e * 2.5 + t()),
+      i = n.clone().multiplyScalar(0.15 + t() * 0.35),
+      a = i
+        .clone()
+        .addScaledVector(n, 0.2)
+        .setY(1.4 + t() * 0.5),
+      o = kn(n);
+    r.push(z(i, a, 0.025, 0.018, 5, J(4880938)));
+    for (let e = 0; e < 8; e++) {
+      let t = a
+          .clone()
+          .addScaledVector(V, 0.08 + e * 0.075)
+          .addScaledVector(o, (e % 2 ? 1 : -1) * 0.015),
+        i = e % 2 ? 1 : -1,
+        s = o
+          .clone()
+          .multiplyScalar(i * 0.75)
+          .addScaledVector(V, 0.55)
+          .addScaledVector(n, 0.15)
+          .normalize(),
+        c = 0.2 - e * 0.014;
+      r.push(
+        z(
+          t,
+          t.clone().addScaledVector(s, c),
+          0.045 - e * 0.003,
+          0.004,
+          5,
+          (e, n, r, i) =>
+            e
+              .set(14163486)
+              .lerp(
+                fn.set(15777824),
+                mn(Math.hypot(n - t.x, r - t.y, i - t.z) / c - 0.45, 0, 1) *
+                  1.6,
+              ),
+        ),
+      );
+    }
+    r.push(
+      z(
+        a.clone().addScaledVector(V, 0.06 + 0.6),
+        a.clone().addScaledVector(V, 0.74),
+        0.016,
+        0.004,
+        4,
+        J(4880938),
+      ),
+    );
+  }
+}
+function dr(e) {
+  let { r: t, lod: n, wood: r, sink: i } = e,
+    a = new _(),
+    o = _n([4880938, 6986294, 8826954]),
+    s = On(new K(0, 9, 0), 0.45, 0.6),
+    c = n ? 12 : 22;
+  for (let e = 0; e < c; e++) {
+    let c = Y(e * 2.39996 + t() * 0.3),
+      l = Math.sqrt(t()) * 1.1,
+      u = c.clone().multiplyScalar(l),
+      d = 11 + t() * 6,
+      f = 0.04 + (l / 1.1) * 0.16 + t() * 0.06,
+      p = 0.1 + 0.2 * t(),
+      m = 0.8 + 0.2 * t(),
+      h = (e) =>
+        u
+          .clone()
+          .addScaledVector(c, Math.sin(f) * e + d * p * (e / d) ** 3)
+          .addScaledVector(V, e * Math.cos(f)),
+      g = [],
+      _ = [];
+    for (let e = 0; e <= d + 1e-6; e += m)
+      for (let t of n ? [0] : [-0.05, 0, 0.05]) {
+        let n = mn(e + t, 0, d);
+        (!_.length || n > _[_.length - 1] + 1e-4) && (_.push(n), g.push(h(n)));
+      }
+    let v = t() < 0.25 ? 7248438 : 5930538,
+      y = (e) => !n && Math.abs(((_[e] + m * 0.5) % m) - m * 0.5) < 0.01;
+    r.push(
+      bn(
+        g,
+        (e, t, n) => {
+          let r = Math.round(e * (g.length - 1));
+          return (0.11 * (1 - (0.7 * _[r]) / d) + 0.015) * (y(r) ? 1.1 : 1);
+        },
+        n ? 4 : 5,
+        (e, t) => {
+          let n = Math.round(t * (g.length - 1));
+          (e.set(v).lerp(fn.set(9085008), (_[n] / d) * 0.4),
+            y(n) && e.set(12105866));
+        },
+      ),
+    );
+    for (let e = d * 0.42; e < d; e += m)
+      for (let r = 0; r < (n ? 1 : 2); r++) {
+        let n = Y(t() * 6.28)
+            .addScaledVector(c, 0.6)
+            .normalize(),
+          r = h(e)
+            .addScaledVector(n, 0.5 + 0.4 * t())
+            .addScaledVector(V, -0.1),
+          l = n.clone().addScaledVector(V, -0.5).normalize(),
+          u = 1.3 + 0.6 * t();
+        (a.copy(o(t())).multiplyScalar(0.8 + 0.3 * t()),
+          Le(
+            i,
+            r,
+            V.clone()
+              .addScaledVector(n, 0.4)
+              .addScaledVector(kn(n), t() - 0.5)
+              .normalize(),
+            l,
+            u,
+            u * 1.1,
+            q.BAMBOO,
+            a,
+            s,
+            0.15,
+          ));
+      }
+    for (let e = 0; e < 3; e++) {
+      let n = h(d - 0.3 * e);
+      (a.copy(o(0.8 + 0.2 * t())),
+        Le(
+          i,
+          n,
+          Y(t() * 6.28)
+            .addScaledVector(V, 0.5)
+            .normalize(),
+          c.clone().addScaledVector(V, 0.3),
+          1.4,
+          1.6,
+          q.BAMBOO,
+          a,
+          s,
+          0.1,
+        ));
+    }
+  }
+}
+function fr(e) {
+  let { r: t, lod: n, wood: r, sink: i } = e,
+    a = new _(),
+    o = _n([4091430, 5144110, 5933620]),
+    s = (e, t, n, r) =>
+      e
+        .set(9078138)
+        .lerp(fn.set(6973020), 0.5 + 0.5 * Math.sin(n * 3 + t * 5 + r * 4)),
+    c = new K(0.04, 1.3, 0);
+  r.push(z(new K(0, 0, 0), c, 0.2, 0.16, n ? 6 : 10, s));
+  let l = [],
+    u = (e, i, a, o, c) => {
+      let d = e.clone().addScaledVector(i, a);
+      if (
+        (r.push(z(e, d, o, o * 0.9, n ? 5 : 8, s)),
+        r.push(xn(d, o * 0.92, 8288880, 0)),
+        c === 3)
+      ) {
+        l.push({ p: d, d: i });
+        return;
+      }
+      let f = c < 2 && t() < 0.55 ? 3 : 2,
+        p = t() * 6.28;
+      for (let e = 0; e < f; e++)
+        u(
+          d,
+          i
+            .clone()
+            .addScaledVector(Y(p + (e / f) * 6.28), 0.5 + 0.3 * t())
+            .addScaledVector(V, 0.3)
+            .normalize(),
+          a * 0.82,
+          o * 0.8,
+          c + 1,
+        );
+    };
+  u(c, V, 0.9, 0.15, 0);
+  for (let e of l) {
+    let r = On(new K(0, 3, 0), 0.5, 0.8),
+      s = n ? 5 : 10;
+    for (let c = 0; c < s; c++) {
+      let l = Y(c * 2.39996 + t()),
+        { pts: u } = En(
+          e.p,
+          An(l, 0.95 - (c / s) * 1).addScaledVector(e.d, 0.3),
+          0.45 + 0.1 * t(),
+          n ? 2 : 3,
+          0.25,
+        ),
+        d = o(t(), new _()).multiplyScalar(0.85 + 0.2 * t());
+      Tn(
+        i,
+        u,
+        kn(l),
+        0.15,
+        q.PADDLE,
+        (e) => a.copy(d).multiplyScalar(0.8 + 0.3 * e),
+        r,
+        0.3,
+        0,
+      );
+    }
+    let c = e.p.clone().addScaledVector(V, 0.12);
+    (a.set(vn(t, [16774882, 16773328, 16771304])),
+      Le(i, c, V, Y(t() * 6), 0.42, 0.42, q.BLOSSOM, a, () => V),
+      Le(
+        i,
+        c.clone().addScaledVector(V, 0.02),
+        Y(t() * 6)
+          .addScaledVector(V, 0.4)
+          .normalize(),
+        V,
+        0.34,
+        0.34,
+        q.BLOSSOM,
+        a,
+        () => V,
+      ));
+  }
+}
+function pr(e) {
+  let { r: t, lod: n, wood: r, sink: i } = e,
+    a = [];
+  for (let e = 0; e <= 30; e++)
+    a.push(
+      new K(0.15 * (e / 30) ** 2, (4.2 * e) / 30, 0.05 * Math.sin(e * 0.3)),
+    );
+  r.push(
+    bn(
+      a,
+      (e) => 0.14 - 0.06 * e + 0.08 * Math.exp(-e * 25),
+      n ? 6 : 10,
+      (e, t, n, r) =>
+        e
+          .set(9081976)
+          .lerp(
+            fn.set(13158568),
+            Math.max(0, Math.sin(r.y * 11) * Math.sin(n * 5 + r.y * 4) - 0.4) *
+              1.5,
+          )
+          .lerp(fn.set(5921352), mn(1 - r.y / 0.5, 0, 1) * 0.5),
+    ),
+  );
+  let o = a[30],
+    s = new _(),
+    c = _n([4094506, 5147184, 6198838]),
+    l = On(o.clone().addScaledVector(V, 0.2), 0.55),
+    u = n ? 10 : 18;
+  for (let e = 0; e < u; e++) {
+    let a = e / (u - 1),
+      d = Y(e * 2.39996),
+      f = e >= u - 2,
+      p = En(
+        o.clone().addScaledVector(V, -a * 0.35),
+        An(d, 1 - a * 1.25),
+        1.1 + 0.25 * t(),
+        3,
+        0.15 + 0.3 * a,
+      );
+    Dn(r, p.pts, 0.022, 0.015, n ? 3 : 5, J(f ? 11049546 : 9085024));
+    let m = p.pts[3],
+      h = Y(Math.atan2(p.d.z, p.d.x)),
+      g = f ? 0.8 : 0.95 + 0.25 * t(),
+      _ = f ? s.set(13153338) : c(t(), s);
+    Le(
+      i,
+      m
+        .clone()
+        .addScaledVector(h, g * 0.12)
+        .addScaledVector(V, 0.03),
+      V.clone()
+        .multiplyScalar(0.85)
+        .addScaledVector(h, 0.35 - !!f)
+        .normalize(),
+      h,
+      g,
+      g,
+      q.LOBED,
+      _.clone().multiplyScalar(0.85 + 0.25 * t()),
+      l,
+      0.12,
+    );
+  }
+  for (let e = 0; e < (n ? 6 : 13); e++) {
+    let i = e * 2.2 + t(),
+      a = 3.35 + (e % 5) * -0.17 - t() * 0.1,
+      o = a / 4.2,
+      s = 0.14 - 0.06 * o,
+      c = new K(0.15 * o * o, a, 0).addScaledVector(Y(i), s + 0.075);
+    r.push(
+      xn(
+        c,
+        0.085,
+        vn(t, a > 3 ? [6982186, 8034862] : [13148202, 14190634, 9083438]),
+        +!n,
+        1.35,
+      ),
+    );
+  }
+}
+function mr(e) {
+  let { r: t, lod: n, wood: r, sink: i } = e,
+    a = [],
+    o = Y(1.1);
+  for (let e = 0; e <= 50; e++) {
+    let t = e / 50;
+    a.push(new K(0, 9 * t, 0).addScaledVector(o, 0.6 * t * t));
+  }
+  let s = (e, t, n, r) => {
+    e.set(10132110)
+      .lerp(fn.set(14211276), Math.max(0, Math.sin(r.y * 12) - 0.7) * 3)
+      .lerp(fn.set(5921360), mn(1 - r.y / 0.5, 0, 1) * 0.5);
+  };
+  r.push(bn(a, (e) => 0.17 - 0.07 * e + 0.1 * Math.exp(-e * 30), n ? 6 : 9, s));
+  let c = [a[50]];
+  new _();
+  let l = _n([6982234, 8297070, 10137230, 12108974]);
+  for (let e = 0; e < 4; e++) {
+    let i = 0.78 + e * 0.05,
+      o = a[Math.round(i * 50)],
+      l = Y(e * 1.7 + 0.4 + t() * 0.3),
+      u = 1.8 + t() * 0.9,
+      d = o.clone().addScaledVector(An(l, 0.6), u * 0.55),
+      f = d.clone().addScaledVector(An(l, 1.25), u * 0.5),
+      p = [];
+    for (let e = 0; e <= 8; e++) {
+      let t = e / 8;
+      p.push(
+        o
+          .clone()
+          .multiplyScalar((1 - t) ** 2)
+          .addScaledVector(d, 2 * t * (1 - t))
+          .addScaledVector(f, t * t),
+      );
+    }
+    (r.push(bn(p, (e) => 0.075 - 0.03 * e, n ? 5 : 7, s)), c.push(f));
+  }
+  for (let e of c) {
+    let a = On(e.clone().addScaledVector(V, -0.2), 0.6),
+      o = n ? 5 : 8;
+    for (let n = 0; n < o; n++) {
+      let s = Y(n * 2.39996 + t()),
+        c = En(e, An(s, 0.55 - (n / o) * 0.7), 0.8 + 0.2 * t(), 2, 0.1);
+      Dn(r, c.pts, 0.018, 0.012, 4, J(10127962));
+      let u = c.pts[2],
+        d = 1.2 + 0.3 * t(),
+        f = l(t(), new _()).multiplyScalar(0.85 + 0.25 * t());
+      Le(
+        i,
+        u.clone().addScaledVector(s, d * 0.12),
+        V.clone().addScaledVector(s, 0.25).normalize(),
+        s,
+        d,
+        d,
+        q.LOBED,
+        f,
+        a,
+        0.25,
+      );
+    }
+  }
+}
+function hr(e) {
+  let t = Mn(e, {
+    h: 3.8,
+    r0: 0.2,
+    r1: 0.17,
+    flare: 0.4,
+    lean: 0.4,
+    leanA: 2,
+    rings: 40,
+    radial: 11,
+    bump: Bn(0.18),
+    bark: zn(3022870, 5914152),
+    crown: {
+      n: 18,
+      len: 3,
+      w: 1,
+      tile: q.FERN,
+      eTop: 1.35,
+      eBot: -0.25,
+      droop: 0.7,
+      keel: 0.15,
+      twist: 0.3,
+      stops: [8038970, 5935150, 4880936],
+      dead: 0.14,
+      deadStops: [8018484, 6177832],
+    },
+  });
+  for (let n = 0; n < 5; n++)
+    e.wood.push(
+      xn(
+        t.top
+          .clone()
+          .addScaledVector(Y(n * 1.3), 0.08)
+          .addScaledVector(V, 0.12 + (n % 2) * 0.05),
+        0.06,
+        6974010,
+        0,
+      ),
+    );
+}
+function gr(e, t) {
+  let n = {
+    ...Zn,
+    trunkH: 7.2,
+    trunkR: 0.32,
+    lean: 0,
+    wobble: 0.015,
+    roots: 5,
+    limbs: 4,
+    limbStart: 0.88,
+    spread: 0.7,
+    rise: 0.3,
+    limbLen: 3,
+    clumpR: 1.5,
+    cards: 18,
+    cardSize: 1.3,
+    tile: q.GLOSSY,
+    barkColor: er(6974042, 9079402, 4079150),
+    leafColor: Qn([3037726, 4618794, 6460986, 8433230]),
+  };
+  return tr(n, e, t, (e) => {
+    let { r: t, wood: r, sink: i } = e,
+      a = nr(n),
+      o = new _(),
+      s = _n([1985046, 2775580, 3040800]),
+      c = [],
+      l = t() * 6;
+    for (let e = 0; e <= 60; e++) {
+      let t = 0.05 + (6.9 * e) / 60,
+        n = l + t * 1.25;
+      c.push(
+        Y(n)
+          .multiplyScalar(a(t) + 0.03)
+          .setY(t),
+      );
+    }
+    r.push(bn(c, () => 0.035, e.lod ? 4 : 5, J(5925418)));
+    let u = (e) =>
+      pn
+        .set(e.x, 0, e.z)
+        .normalize()
+        .multiplyScalar(0.75)
+        .addScaledVector(V, 0.55)
+        .normalize();
+    for (let e = 2; e < 60; e += 3) {
+      let n = c[e].y,
+        a = Y(l + n * 1.25),
+        d = 0.5 + (n / 6.9) * 0.85 * (0.8 + 0.4 * t());
+      if (n < 1.3) {
+        (o.copy(s(t())).multiplyScalar(0.9),
+          Le(
+            i,
+            c[e].clone().addScaledVector(a, 0.03),
+            a,
+            V,
+            0.22,
+            0.26,
+            q.HEART,
+            o,
+            u,
+          ));
+        continue;
+      }
+      let f = a
+          .clone()
+          .multiplyScalar(0.6)
+          .addScaledVector(V, -0.8)
+          .normalize(),
+        p = c[e].clone().addScaledVector(a, 0.12);
+      if (
+        (r.push(
+          z(
+            c[e],
+            p.clone().addScaledVector(V, 0.08),
+            0.014,
+            0.01,
+            4,
+            J(5929514),
+          ),
+        ),
+        o.copy(s(t())).multiplyScalar(0.85 + 0.25 * t()),
+        Le(
+          i,
+          p
+            .clone()
+            .addScaledVector(f, d * 0.3)
+            .addScaledVector(a, 0.1),
+          a.clone().multiplyScalar(0.8).addScaledVector(V, 0.6).normalize(),
+          f,
+          d * 0.9,
+          d,
+          q.MONSTERA,
+          o,
+          u,
+          0.08,
+        ),
+        e % 9 == 2 && n > 2.5)
+      ) {
+        let n = c[e].clone().addScaledVector(a, 0.06);
+        r.push(
+          z(
+            n,
+            n
+              .clone()
+              .setY(0.02)
+              .addScaledVector(a, 0.1 + 0.2 * t()),
+            0.012,
+            0.01,
+            4,
+            J(6967860),
+          ),
+        );
+      }
+    }
+  });
+}
+function _r(e, t) {
+  return tr(
+    {
+      trunkH: 3,
+      trunkR: 0.2,
+      lean: 0.25,
+      roots: 0,
+      limbs: 6,
+      spread: 0.95,
+      rise: 0.25,
+      limbLen: 2.8,
+      gnarl: 0.3,
+      clumpR: 1.45,
+      cards: 24,
+      cardSize: 1.1,
+      tile: q.ROUND,
+      barkColor: er(5918272, 8023646, 3813928),
+      leafColor: Qn([1980952, 2772510, 4088872, 5799476]),
+    },
+    e,
+    t,
+    (e, t, n) => {
+      let { r, wood: i } = e,
+        a = 1.5;
+      (n.wood.translate(0, a, 0),
+        n.leaves && n.leaves.translate(0, a, 0),
+        i.push(wn(3, 3813408, 4866608)),
+        i.push(xn(new K(0, a, 0), 0.24, 4866100, 0, 1.2)));
+      let o = (e, t, n, r) =>
+          e
+            .set(6181444)
+            .lerp(fn.set(8023128), 0.5 + 0.5 * Math.sin(t * 5 + n * 3 + r * 4))
+            .lerp(fn.set(3025442), mn(1 - n / 0.4, 0, 1) * 0.6),
+        s = (t, n, r) => {
+          let a = t.clone().lerp(n, 0.5).addScaledVector(V, r),
+            s = [];
+          for (let e = 0; e <= 8; e++) {
+            let r = e / 8;
+            s.push(
+              t
+                .clone()
+                .multiplyScalar((1 - r) ** 2)
+                .addScaledVector(a, 2 * r * (1 - r))
+                .addScaledVector(n, r * r),
+            );
+          }
+          i.push(
+            bn(
+              s,
+              (e) => 0.055 + 0.02 * e,
+              e.lod ? 4 : 6,
+              (e, t, n, r) => o(e, r.x, r.y, r.z),
+            ),
+          );
+        };
+      for (let t = 0; t < (e.lod ? 8 : 15); t++) {
+        let e = Y((t / 15) * Math.PI * 2 + r() * 0.3);
+        s(
+          new K(0, a + r() * 1.1, 0).addScaledVector(e, 0.15),
+          e
+            .clone()
+            .multiplyScalar(1.2 + r() * 1.5)
+            .setY(-0.05),
+          0.5 + 0.4 * r(),
+        );
+      }
+      for (let e of t
+        .filter((e) => e.y > 1.8 && Math.hypot(e.x, e.z) > 0.9)
+        .slice(0, 60)
+        .filter((e, t) => t % 12 == 0)) {
+        let t = e.clone().setY(e.y + a),
+          n = new K(e.x, 0, e.z).normalize();
+        s(
+          t,
+          t
+            .clone()
+            .addScaledVector(n, 0.8 + r())
+            .setY(-0.05),
+          0.3,
+        );
+      }
+    },
+  );
+}
+function vr(e, t) {
+  let n = {
+    trunkH: 6.5,
+    trunkR: 0.3,
+    lean: 0,
+    wobble: 0.015,
+    roots: 4,
+    limbs: 5,
+    limbStart: 0.75,
+    spread: 0.6,
+    rise: 0.3,
+    limbLen: 3.4,
+    clumpR: 1.6,
+    cards: 20,
+    cardSize: 1.2,
+    tile: q.GLOSSY,
+    barkColor: er(8026736, 11053210, 4868672),
+    leafColor: Qn([3037726, 4617258, 6459450, 8694862]),
+  };
+  return tr(n, e, t, (e) => {
+    let t = nr(n),
+      r = e.r() * 6,
+      i = [];
+    for (let e = 0; e <= 16; e++) {
+      let n = e / 16,
+        a = 1.55 - 0.6 * n,
+        o = r + n * 2.6;
+      i.push(
+        Y(o)
+          .multiplyScalar(t(a) + 0.005)
+          .setY(a),
+      );
+    }
+    e.wood.push(bn(i, () => 0.018, 4, J(3811872)));
+    let a = i[16],
+      o = new K(a.x, 0, a.z).normalize();
+    (e.wood.push(
+      z(
+        a,
+        a.clone().addScaledVector(o, 0.08).addScaledVector(V, -0.03),
+        0.008,
+        0.006,
+        3,
+        J(9079434),
+      ),
+    ),
+      e.wood.push(
+        xn(
+          a.clone().addScaledVector(o, 0.12).addScaledVector(V, -0.12),
+          0.065,
+          5917242,
+          1,
+          0.8,
+        ),
+      ),
+      e.wood.push(
+        xn(
+          a.clone().addScaledVector(o, 0.12).addScaledVector(V, -0.08),
+          0.052,
+          15657178,
+          0,
+          0.3,
+        ),
+      ));
+  });
+}
+var yr = [
+    {
+      key: `banana`,
+      name: `Banana Plant`,
+      note: `Blotched pseudostem, tattered paddle leaves and a hanging hand-by-hand bunch with its purple bell.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          sr(n, new K()),
+          sr(n, new K(0.75, 0, 0.35), 0.4, !1, 5),
+          sr(n, new K(-0.5, 0, 0.55), 0.3, !1, 4),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `birdpara`,
+      name: `Bird of Paradise`,
+      note: `Clump of stiff blue-green paddle leaves with orange-and-blue crane-head flowers.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          cr(n, {
+            n: 24,
+            rad: 0.45,
+            lean: [0.1, 0.45],
+            pet: [0.6, 1],
+            petR: 0.018,
+            petCol: 5929562,
+            len: 0.55,
+            w: 0.2,
+            droop: 0.2,
+            tile: q.PADDLE,
+            keel: 0.35,
+            stops: [4614744, 5536354, 4087374],
+            cy: 1,
+          }),
+          lr(n),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `strangler`,
+      name: `Strangler Fig`,
+      note: `Rainforest giant: a lattice of fused fig roots around a vanished host, flared into plank buttresses.`,
+      litter: null,
+      build: (e, t) => {
+        let n = {
+          trunkH: 7,
+          trunkR: 0.95,
+          lean: 0.2,
+          wobble: 0.03,
+          roots: 0,
+          limbs: 7,
+          limbStart: 0.6,
+          spread: 0.95,
+          limbLen: 6,
+          rise: 0.2,
+          gnarl: 0.25,
+          clumpR: 2.4,
+          cards: 26,
+          cardSize: 1.9,
+          core: 0.6,
+          tile: q.GLOSSY,
+          barkColor: er(8024676, 10130046, 4867128),
+          leafColor: Qn([1718290, 2641432, 3828258, 5933620], { core: 0.55 }),
+        };
+        return tr(n, e, t, (e) => {
+          (ar(e, 7, 0.95, 3.4, 2.6, 0.3, n.barkColor),
+            or(e, n, t ? 5 : 10, 7.5, 0.13, er(7235672, 9340530, 4078128)));
+        });
+      },
+    },
+    {
+      key: `kapok`,
+      name: `Kapok Tree`,
+      note: `Emergent ceiba: huge plank buttresses, a clean grey column and a flat, tiered crown above the canopy.`,
+      litter: null,
+      build: (e, t) => {
+        let n = {
+          trunkH: 20,
+          trunkR: 0.95,
+          lean: 0.15,
+          wobble: 0.03,
+          roots: 0,
+          limbs: 7,
+          limbStart: 0.9,
+          spread: 1.36,
+          limbLen: 7.5,
+          rise: 0.06,
+          gnarl: 0.16,
+          fork: 0.6,
+          lenFalloff: 0.6,
+          clumpR: 2.4,
+          cards: 18,
+          cardSize: 1.7,
+          shell: 0.3,
+          tile: q.GLOSSY,
+          barkColor: er(9081474, 11054746, 5922384),
+          leafColor: Qn([4090402, 5933614, 8038466, 10141786], { core: 0.45 }),
+        };
+        return tr(n, e, t, (e) => ar(e, 6, 0.95, 5, 5, 0.4, n.barkColor));
+      },
+    },
+    {
+      key: `banyan`,
+      name: `Banyan`,
+      note: `Low, enormously wide crown on braided trunks, curtained with aerial roots that thicken into pillars.`,
+      litter: null,
+      build: (e, t) => {
+        let n = {
+          trunkH: 3.2,
+          trunkR: 1,
+          lean: 0.1,
+          wobble: 0.03,
+          roots: 0,
+          limbs: 8,
+          limbStart: 0.5,
+          spread: 1.32,
+          rise: 0.08,
+          limbLen: 8.5,
+          gnarl: 0.2,
+          clumpR: 2.3,
+          cards: 22,
+          cardSize: 1.7,
+          tile: q.GLOSSY,
+          barkColor: er(8025190, 10130562, 4867642),
+          leafColor: Qn([1980948, 3036184, 4616228, 6458420], { core: 0.55 }),
+        };
+        return tr(n, e, t, (e, r) => {
+          or(e, n, t ? 4 : 8, 3.6, 0.2, n.barkColor);
+          let i = r.filter((e) => e.y > 2.8 && Math.hypot(e.x, e.z) > 2.5);
+          i.forEach((r, a) => {
+            if (!(a % Math.max(1, Math.floor(i.length / (t ? 20 : 48))))) {
+              if (Math.hypot(r.x, r.z) > 4 && e.r() < 0.22) {
+                let i = [];
+                for (let e = 0; e <= 6; e++)
+                  i.push(
+                    r
+                      .clone()
+                      .setY(r.y * (1 - e / 6) - (e === 6 ? 0.1 : 0))
+                      .add(
+                        new K(
+                          Math.sin(e * 1.7) * 0.05,
+                          0,
+                          Math.cos(e * 1.3) * 0.05,
+                        ),
+                      ),
+                  );
+                e.wood.push(
+                  bn(
+                    i,
+                    (e) => 0.13 + 0.08 * e * e,
+                    t ? 5 : 7,
+                    (e, t, r, i) => n.barkColor(e, i.x, i.y, i.z),
+                  ),
+                );
+              } else {
+                let t = r
+                    .clone()
+                    .setY(
+                      Math.max(
+                        0.02,
+                        r.y * (e.r() < 0.4 ? 0 : 0.2 + 0.5 * e.r()),
+                      ),
+                    ),
+                  n = r
+                    .clone()
+                    .lerp(t, 0.5)
+                    .add(
+                      new K(e.r() - 0.5, 0, e.r() - 0.5).multiplyScalar(0.15),
+                    );
+                Dn(e.wood, [r, n, t], 0.028, 0.016, 3, J(8022610));
+              }
+            }
+          });
+        });
+      },
+    },
+    {
+      key: `mahogany`,
+      name: `Mahogany`,
+      note: `Tall clean reddish bole with low buttresses and a dark, dense, upright crown holding woody pear-shaped pods.`,
+      litter: null,
+      build: (e, t) => {
+        let n = {
+          trunkH: 6.5,
+          trunkR: 0.5,
+          lean: 0.2,
+          roots: 0,
+          limbs: 6,
+          limbStart: 0.7,
+          spread: 0.55,
+          limbLen: 4.2,
+          rise: 0.36,
+          gnarl: 0.2,
+          clumpR: 1.9,
+          cards: 24,
+          cardSize: 1.3,
+          tile: q.GLOSSY,
+          barkColor: $n(4860444, 8014386, 3021844),
+          leafColor: Qn([1058830, 1849876, 2772506, 4088868], { core: 0.55 }),
+          accent: { tile: q.GLOSSY, colors: [9058850, 10113064], share: 0.08 },
+        };
+        return tr(n, e, t, (e, t, r) => {
+          (ar(e, 5, 0.5, 1.4, 1.2, 0.18, n.barkColor),
+            ir(e, r, 10, 0.07, 1.6, [6965802, 8018482], 0.05, 0.5));
+        });
+      },
+    },
+    {
+      key: `teak`,
+      name: `Teak`,
+      note: `Straight fluted trunk and a crown of huge, dull-green, sandpapery leaves with cream flower sprays.`,
+      litter: [9071162, 11043914, 723e4],
+      build: (e, t) =>
+        tr(
+          {
+            trunkH: 7.5,
+            trunkR: 0.42,
+            lean: 0.2,
+            limbs: 5,
+            limbStart: 0.65,
+            spread: 0.6,
+            rise: 0.3,
+            limbLen: 4,
+            clumpR: 1.9,
+            cards: 16,
+            cardSize: 2.2,
+            tile: q.ROUND,
+            barkColor: $n(5917242, 9075300, 3812900),
+            leafColor: Qn([3824158, 5403690, 7245880, 9087050], { core: 0.45 }),
+            accent: {
+              tile: q.BLOSSOM,
+              colors: [15788752, 15129792],
+              share: 0.14,
+              size: 0.8,
+            },
+          },
+          e,
+          t,
+        ),
+    },
+    {
+      key: `raintree`,
+      name: `Rain Tree`,
+      note: `Monkeypod: a vast low umbrella of feathery leaves on massive spreading limbs, pink puff flowers.`,
+      litter: null,
+      build: (e, t) =>
+        tr(
+          {
+            trunkH: 3.6,
+            trunkR: 0.75,
+            lean: 0.2,
+            roots: 6,
+            limbs: 7,
+            limbStart: 0.6,
+            spread: 1.12,
+            rise: 0.17,
+            limbLen: 7.5,
+            gnarl: 0.22,
+            clumpR: 2.3,
+            cards: 30,
+            cardSize: 1.6,
+            tile: q.FEATHER,
+            barkColor: $n(3814440, 6971470, 2499098),
+            leafColor: Qn([2771480, 4089376, 5933612, 8038462]),
+            accent: {
+              tile: q.BLOSSOM,
+              colors: [15241392, 15771844],
+              share: 0.06,
+              size: 0.7,
+            },
+          },
+          e,
+          t,
+        ),
+    },
+    {
+      key: `flame`,
+      name: `Flame Tree`,
+      note: `Royal poinciana: a flat umbrella of scarlet blossom over fern-like leaves, long dark pods hanging.`,
+      litter: [13639706, 15747610, 15228958],
+      build: (e, t) =>
+        tr(
+          {
+            trunkH: 3.4,
+            trunkR: 0.42,
+            lean: 0.3,
+            roots: 6,
+            limbs: 6,
+            spread: 1.12,
+            rise: 0.14,
+            limbLen: 5.2,
+            gnarl: 0.2,
+            clumpR: 1.7,
+            cards: 26,
+            cardSize: 1.3,
+            tile: q.BLOSSOM,
+            barkColor: $n(5919816, 9077360, 3814956),
+            leafColor: Qn([11015180, 13642258, 15747610, 16742954], {
+              core: 0.4,
+            }),
+            accent: {
+              tile: q.FEATHER,
+              colors: [4880930, 5933610],
+              share: 0.32,
+            },
+          },
+          e,
+          t,
+          (e, t) => {
+            t.filter((e) => e.y > 2.4 && Math.hypot(e.x, e.z) > 1.2).forEach(
+              (t, n) => {
+                if (n % 7) return;
+                let r = t
+                  .clone()
+                  .add(new K((e.r() - 0.5) * 0.1, -0.5, (e.r() - 0.5) * 0.1));
+                Dn(
+                  e.wood,
+                  [
+                    t,
+                    t
+                      .clone()
+                      .lerp(r, 0.5)
+                      .add(new K(0.04, 0, 0)),
+                    r,
+                  ],
+                  0.03,
+                  0.022,
+                  3,
+                  J(3810328),
+                );
+              },
+            );
+          },
+        ),
+    },
+    {
+      key: `jacaranda`,
+      name: `Jacaranda`,
+      note: `Open, leaning vase of branches drowned in lavender-blue trumpet flowers.`,
+      litter: [9071304, 10520792, 8018104],
+      build: (e, t) =>
+        tr(
+          {
+            trunkH: 3.2,
+            trunkR: 0.34,
+            lean: 0.5,
+            leanA: 2.3,
+            limbs: 5,
+            spread: 0.85,
+            rise: 0.32,
+            limbLen: 4.2,
+            gnarl: 0.32,
+            clumpR: 1.6,
+            cards: 24,
+            cardSize: 1.25,
+            tile: q.BLOSSOM,
+            barkColor: $n(4077104, 6971478, 2761760),
+            leafColor: Qn([5913248, 8018112, 10123992, 12098280], {
+              core: 0.4,
+            }),
+            accent: { tile: q.FEATHER, colors: [5933614, 6986294], share: 0.2 },
+          },
+          e,
+          t,
+        ),
+    },
+    {
+      key: `frangipani`,
+      name: `Frangipani`,
+      note: `Candelabra of thick, blunt grey branches with leaf rosettes and waxy white flowers at each tip.`,
+      litter: [16774364, 16312488, 16777215],
+      build: (e, t) => {
+        let n = X(e, t);
+        return (fr(n), Z(n));
+      },
+    },
+    {
+      key: `breadfruit`,
+      name: `Breadfruit`,
+      note: `Dense dome of giant, deeply lobed glossy leaves hung with round, knobbly green fruit.`,
+      litter: null,
+      build: (e, t) =>
+        tr(
+          {
+            trunkH: 3.5,
+            trunkR: 0.4,
+            limbs: 6,
+            limbStart: 0.55,
+            spread: 0.7,
+            rise: 0.3,
+            limbLen: 4,
+            clumpR: 1.9,
+            cards: 16,
+            cardSize: 1.7,
+            shell: 0.35,
+            tile: q.LOBED,
+            barkColor: er(6972504, 9077874, 4078128),
+            leafColor: Qn([1980948, 3036184, 4485151, 6195756]),
+          },
+          e,
+          t,
+          (e, t, n) =>
+            ir(e, n, 16, 0.13, 1.05, [10139706, 9087026, 11059264], 0.08),
+        ),
+    },
+    {
+      key: `mango`,
+      name: `Mango Tree`,
+      note: `Big, dense dark-green dome with bronze new growth and ripening mangoes on long stalks.`,
+      litter: null,
+      build: (e, t) =>
+        tr(
+          {
+            trunkH: 2.4,
+            trunkR: 0.5,
+            limbs: 6,
+            spread: 0.95,
+            rise: 0.2,
+            limbLen: 4.2,
+            clumpR: 2.2,
+            cards: 30,
+            cardSize: 1.25,
+            tile: q.GLOSSY,
+            barkColor: $n(3813416, 6181444, 2367e3),
+            leafColor: Qn([1190416, 1849876, 2772506, 4088868], { core: 0.55 }),
+            accent: {
+              tile: q.GLOSSY,
+              colors: [9058858, 10508858, 8014378],
+              share: 0.1,
+            },
+          },
+          e,
+          t,
+          (e, t, n) =>
+            ir(
+              e,
+              n,
+              18,
+              0.07,
+              1.4,
+              [14712862, 13651994, 9084976, 15249450],
+              0.3,
+            ),
+        ),
+    },
+    {
+      key: `papaya`,
+      name: `Papaya`,
+      note: `Single scarred stem topped by an umbrella of long-stalked lobed leaves over a ring of fruit.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (pr(n), Z(n));
+      },
+    },
+    {
+      key: `cacao`,
+      name: `Cacao`,
+      note: `Small shade-loving understorey tree with red new leaves and ribbed pods growing straight off the trunk.`,
+      litter: null,
+      build: (e, t) =>
+        tr(
+          {
+            trunkH: 1.2,
+            trunkR: 0.14,
+            lean: 0.2,
+            roots: 3,
+            limbs: 4,
+            limbStart: 0.9,
+            spread: 0.9,
+            rise: 0.2,
+            limbLen: 2.4,
+            clumpR: 1.2,
+            cards: 16,
+            cardSize: 1.3,
+            tile: q.GLOSSY,
+            barkColor: er(5918272, 8023642, 3813928),
+            leafColor: Qn([1718290, 2641432, 3828258, 5144106]),
+            accent: {
+              tile: q.GLOSSY,
+              colors: [11024954, 13130314, 9056320],
+              share: 0.12,
+            },
+          },
+          e,
+          t,
+          (e, n) => {
+            n.filter((e) => e.y > 0.35 && e.y < 2.2).forEach((n, r) => {
+              if (r % 5 || e.r() < 0.3) return;
+              let i = new K(n.x, 0, n.z).normalize();
+              e.wood.push(
+                xn(
+                  n.clone().addScaledVector(i, 0.05).addScaledVector(V, -0.12),
+                  0.06,
+                  vn(e.r, [14196766, 13132826, 8006186, 11055152]),
+                  +!t,
+                  2,
+                ),
+              );
+            });
+          },
+        ),
+    },
+    {
+      key: `rubber`,
+      name: `Rubber Tree`,
+      note: `Straight, mottled grey plantation tree with a spiral tapping cut and a latex cup on the trunk.`,
+      litter: null,
+      build: (e, t) => vr(e, t),
+    },
+    {
+      key: `mangrove`,
+      name: `Red Mangrove`,
+      note: `Leathery dark crown lifted over the tidal mud on a tangle of arching prop roots.`,
+      litter: null,
+      build: (e, t) => _r(e, t),
+    },
+    {
+      key: `bamboo`,
+      name: `Giant Bamboo`,
+      note: `Dense clump of towering jointed green culms arching outward under plumes of narrow leaves.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (dr(n), Z(n));
+      },
+    },
+    {
+      key: `heliconia`,
+      name: `Heliconia`,
+      note: `Banana-leaved clump sending up zig-zag lobster-claw bracts in red and yellow.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          cr(n, {
+            n: 18,
+            rad: 0.6,
+            lean: [0.1, 0.4],
+            pet: [0.7, 1.3],
+            petR: 0.022,
+            petCol: 4880938,
+            len: 1.4,
+            w: 0.4,
+            droop: 0.45,
+            tile: q.PADDLE,
+            keel: 0.2,
+            stops: [4091430, 5144624, 5933622],
+            cy: 1.2,
+          }),
+          ur(n),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `taro`,
+      name: `Elephant Ear`,
+      note: `Taro clump: huge heart-shaped leaves hanging tip-down from tall succulent stalks.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (
+          cr(n, {
+            n: 12,
+            rad: 0.3,
+            lean: [0.15, 0.65],
+            pet: [0.9, 1.5],
+            petR: 0.03,
+            petCol: 5925434,
+            card: !0,
+            size: 1.15,
+            tile: q.HEART,
+            stops: [3037726, 4091430, 4880938],
+            cy: 1,
+          }),
+          Z(n)
+        );
+      },
+    },
+    {
+      key: `monstera`,
+      name: `Monstera-draped Trunk`,
+      note: `Rainforest trunk climbed by a monstera vine: shingle leaves low, huge split leaves and aerial roots higher up.`,
+      litter: null,
+      build: (e, t) => gr(e, t),
+    },
+    {
+      key: `treefern`,
+      name: `Tree Fern`,
+      note: `Shaggy fibrous trunk under a lacy parasol of arching bipinnate fronds and new fiddleheads.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (hr(n), Z(n));
+      },
+    },
+    {
+      key: `cecropia`,
+      name: `Cecropia`,
+      note: `Pioneer tree: pale ringed trunk, a few candelabra branches ending in umbrellas of silvery hand-shaped leaves.`,
+      litter: null,
+      build: (e, t) => {
+        let n = X(e, t);
+        return (mr(n), Z(n));
+      },
+    },
+    {
+      key: `seagrape`,
+      name: `Sea Grape`,
+      note: `Sprawling beach tree of round leathery leaves with red veins and hanging grape-like clusters.`,
+      litter: null,
+      build: (e, t) =>
+        tr(
+          {
+            trunkH: 0.8,
+            trunkR: 0.2,
+            lean: 0.7,
+            roots: 3,
+            limbs: 6,
+            limbStart: 0.3,
+            spread: 1.05,
+            rise: 0.3,
+            gnarl: 0.4,
+            limbLen: 3.2,
+            clumpR: 1.4,
+            cards: 20,
+            cardSize: 1.25,
+            tile: q.ROUND,
+            barkColor: er(6970960, 9339504, 4077100),
+            leafColor: Qn([4086306, 5796904, 7639086, 9742398]),
+            accent: {
+              tile: q.ROUND,
+              colors: [11026474, 9056288, 12081712],
+              share: 0.12,
+            },
+          },
+          e,
+          t,
+          (e, n, r) => {
+            for (let n of rr(
+              r.leaves,
+              t ? 5 : 10,
+              e.r,
+              (e) =>
+                e.y > 0.9 &&
+                Math.hypot(e.x - r.crown.c.x, e.z - r.crown.c.z) >
+                  r.crown.r * 0.6,
+            ))
+              Le(
+                e.sink,
+                n.clone().addScaledVector(V, -0.22),
+                Y(e.r() * 6),
+                V,
+                0.28,
+                0.46,
+                q.FRUIT,
+                new _(vn(e.r, [5909066, 8034874, 4857402])),
+                () => V,
+              );
+          },
+        ),
+    },
+    {
+      key: `bougain`,
+      name: `Bougainvillea Tree`,
+      note: `Gnarled standard smothered in cascading magenta paper bracts.`,
+      litter: [13115018, 14695072, 11016816],
+      build: (e, t) =>
+        tr(
+          {
+            trunkH: 1.8,
+            trunkR: 0.2,
+            lean: 0.4,
+            roots: 3,
+            wobble: 0.1,
+            limbs: 5,
+            spread: 0.95,
+            rise: 0.25,
+            gnarl: 0.42,
+            limbLen: 2.6,
+            clumpR: 1.3,
+            cards: 26,
+            cardSize: 1.1,
+            tile: q.BLOSSOM,
+            barkColor: $n(4865588, 7233618, 3024416),
+            leafColor: Qn([9048160, 12066434, 14170784, 15753400], {
+              core: 0.4,
+            }),
+            accent: { tile: q.GLOSSY, colors: [3828260, 4880938], share: 0.2 },
+            weep: { strands: 9, len: 2.4, card: 0.7, tile: q.BLOSSOM },
+          },
+          e,
+          t,
+        ),
+    },
+  ],
+  br = (e, t) =>
+    e.map((e, n) => {
+      let r = e.build,
+        i = t + n * 17;
+      return { ...e, key: `ft` + e.key, build: (e = i, t = 0) => r(e, t) };
+    }),
+  xr = [
+    { name: `Palms`, list: br(Xn, 7001), atlas: gn, spacing: 13 },
+    { name: `Jungle & island`, list: br(yr, 7501), atlas: gn, spacing: 16 },
+  ].flatMap((e) => e.list),
+  Sr = (e) => {
+    let t = xr.find((t) => t.key === `ft` + e);
+    if (!t) throw Error(`tropical species ${e}`);
+    return t;
+  },
+  Cr = 0.62,
+  wr = 700,
+  Tr = (e) =>
+    e ? (e.index ? e.index.count : e.attributes.position.count) / 3 : 0;
+function Er(e, t = 1) {
+  let n = e.leaves,
+    r = e.wood,
+    i = [],
+    a = n.attributes.position,
+    o = n.attributes.color,
+    s = 0,
+    c = 0;
+  if (r) {
+    let e = r.attributes.position;
+    for (let t = 0; t < e.count; t++) {
+      let n = e.getY(t);
+      n > 0.6 && n < 1.4 && ((s += Math.hypot(e.getX(t), e.getZ(t))), c++);
+    }
+  }
+  n.computeBoundingBox();
+  let l = n.boundingBox,
+    d = c ? Math.min(0.9, (s / c) * 0.8) : 0.25,
+    f = l.min.y + (l.max.y - l.min.y) * 0.45,
+    p = new te(d * 0.7, d, f, 5, 1, !0).toNonIndexed();
+  p.translate(0, f / 2, 0);
+  let m = new _(5917758);
+  if (r) {
+    let e = r.attributes.color,
+      t = 0,
+      n = 0,
+      i = 0;
+    for (let r = 0; r < e.count; r++)
+      ((t += e.getX(r)), (n += e.getY(r)), (i += e.getZ(r)));
+    m.setRGB(t / e.count, n / e.count, i / e.count);
+  }
+  i.push(Dr(p, () => m));
+  let h = Math.max(1, Math.floor(a.count / 1500)),
+    g = [];
+  for (let e = 0; e < a.count; e += h) g.push(e);
+  let v = Array.from({ length: 4 }, (e, t) => {
+      let n = g[Math.floor(((t + 0.5) / 4) * g.length)];
+      return [a.getX(n), a.getY(n), a.getZ(n)];
+    }),
+    y = new Int32Array(g.length);
+  for (let e = 0; e < 6; e++)
+    (g.forEach((e, t) => {
+      let n = 0,
+        r = 1 / 0;
+      (v.forEach((t, i) => {
+        let o =
+          (a.getX(e) - t[0]) ** 2 +
+          (a.getY(e) - t[1]) ** 2 +
+          (a.getZ(e) - t[2]) ** 2;
+        o < r && ((r = o), (n = i));
+      }),
+        (y[t] = n));
+    }),
+      (v = v.map((e, t) => {
+        let n = 0,
+          r = 0,
+          i = 0,
+          o = 0;
+        return (
+          g.forEach((e, s) => {
+            y[s] === t &&
+              ((n += a.getX(e)), (r += a.getY(e)), (i += a.getZ(e)), o++);
+          }),
+          o ? [n / o, r / o, i / o] : e
+        );
+      })));
+  v.forEach((e, t) => {
+    let n = 0,
+      r = 0,
+      s = 0,
+      c = 0,
+      l = 0,
+      d = 0,
+      f = 0;
+    if (
+      (g.forEach((i, u) => {
+        y[u] === t &&
+          (n++,
+          (r += (a.getX(i) - e[0]) ** 2),
+          (s += (a.getY(i) - e[1]) ** 2),
+          (c += (a.getZ(i) - e[2]) ** 2),
+          (l += o.getX(i)),
+          (d += o.getY(i)),
+          (f += o.getZ(i)));
+      }),
+      n < 8)
+    )
+      return;
+    let p = new k(1, 1);
+    (p.scale(
+      Math.sqrt(r / n) * 1.75,
+      Math.sqrt(s / n) * 1.75,
+      Math.sqrt(c / n) * 1.75,
+    ),
+      p.translate(e[0], e[1], e[2]));
+    let m = new _(l / n, d / n, f / n).multiplyScalar(Cr),
+      h = new _();
+    i.push(
+      Dr(p, (t) =>
+        h
+          .copy(m)
+          .multiplyScalar(
+            0.72 +
+              0.4 * u.clamp((t - e[1]) / (Math.sqrt(s / n) * 3) + 0.5, 0, 1),
+          ),
+      ),
+    );
+  });
+  let b = ne(
+    i.map((e) => (e.deleteAttribute(`uv`), e)),
+    !1,
+  );
+  for (let e of i) e.dispose();
+  return (
+    b.computeBoundingSphere(),
+    b.computeBoundingBox(),
+    { wood: b, leaves: null }
+  );
+}
+function Dr(e, t) {
+  let n = e.attributes.position,
+    r = new Float32Array(n.count * 3);
+  for (let e = 0; e < n.count; e++) {
+    let i = t(n.getY(e));
+    ((r[e * 3] = i.r), (r[e * 3 + 1] = i.g), (r[e * 3 + 2] = i.b));
+  }
+  return (e.setAttribute(`color`, new c(r, 3)), e);
+}
+function Or() {
+  let e = (e, t, n, r) => {
+    let i = t.map(([e, t, , r]) => {
+      let i = Sr(e),
+        a = [0, 1, 2].map((e) => ({ ...i.build(t, e), cat: !0 }));
+      a[1].leaves &&
+        Tr(a[2].wood) + Tr(a[2].leaves) > wr &&
+        (a[2] = { ...Er(a[1], t), cat: !0 });
+      let o = new f();
+      for (let e of [a[0].wood, a[0].leaves])
+        e && (e.computeBoundingBox(), o.union(e.boundingBox));
+      let s = Math.max(-o.min.x, o.max.x, -o.min.z, o.max.z),
+        c = Math.min((r ?? n[0]) / o.max.y, n[1] / s, 1.2);
+      for (let t of a)
+        for (let n of [t.wood, t.leaves])
+          if (n) {
+            for (let [t, r] of Object.entries(n.attributes))
+              if (r.array.some((e) => !Number.isFinite(e)))
+                throw Error(`tropical ${e}: non-finite ${t}`);
+          }
+      for (let e of a)
+        for (let t of [e.wood, e.leaves])
+          t &&
+            (t.scale(c, c, c),
+            t.computeBoundingSphere(),
+            t.computeBoundingBox());
+      return a;
+    });
+    return {
+      name: e,
+      near: i.map((e) => e[0]),
+      mid: i.map((e) => e[1]),
+      far: i.map((e) => e[2]),
+      height: r,
+      weights: { forest: t.map((e) => e[2]), town: t.map(() => 0) },
+      litter: t.map(() => null),
+    };
+  };
+  return [
+    e(
+      `upland`,
+      [
+        [`cecropia`, 7741, 0.35],
+        [`royal`, 7742, 0.7],
+        [`foxtail`, 7743, 0.7],
+        [`sabal`, 7744, 0.8],
+        [`monstera`, 7745, 0.6],
+        [`rubber`, 7746, 0.4],
+      ],
+      [10.4, 4.2],
+      10.2,
+    ),
+    e(
+      `grove`,
+      [
+        [`mango`, 7751, 1],
+        [`breadfruit`, 7752, 1],
+        [`mahogany`, 7753, 0.6],
+        [`teak`, 7754, 0.5],
+        [`seagrape`, 7755, 0.7],
+        [`frangipani`, 7756, 0.5],
+        [`papaya`, 7757, 0.6],
+        [`flame`, 7758, 0.12],
+        [`cacao`, 7759, 0.4],
+      ],
+      [8.6, 5.2],
+      8,
+    ),
+    e(
+      `palm`,
+      [
+        [`coconut`, 7761, 1.4],
+        [`coconut`, 7762, 1.4],
+        [`coconut`, 7763, 1.2],
+        [`date`, 7764, 0.5],
+        [`oilpalm`, 7765, 0.5],
+        [`royal`, 7766, 0.35],
+        [`bismarck`, 7767, 0.3],
+        [`fishtail`, 7768, 0.3],
+        [`sabal`, 7769, 0.4],
+      ],
+      [10.3, 6],
+      10.1,
+    ),
+    e(
+      `under`,
+      [
+        [`banana`, 7771, 1, 3.6],
+        [`heliconia`, 7772, 1],
+        [`taro`, 7773, 1.1],
+        [`birdpara`, 7774, 0.7],
+        [`palmetto`, 7775, 1],
+        [`sago`, 7776, 0.6],
+        [`pygmy`, 7777, 0.5, 2.6],
+        [`sprout`, 7778, 0.5],
+        [`treefern`, 7779, 0.5, 3.4],
+      ],
+      [2.2, 3],
+      2,
+    ),
+  ];
+}
+var kr = 240,
+  Ar = 46,
+  jr = 36e3,
+  Mr = 7,
+  Nr = 110,
+  Pr = [0, 4, 2.3];
+function Fr({
+  hf: e,
+  trees: t,
+  species: n,
+  mic: r,
+  excluded: i,
+  U: a,
+  injectSurface: o,
+  seed: c,
+}) {
+  let l = j();
+  l
+    ? ((Ar = l.litter.r), (jr = l.litter.cap), (Mr = l.litter.perM2))
+    : ((Ar = 46), (jr = 36e3), (Mr = 7));
+  let u = t.slice(),
+    d = u.length,
+    f = new T();
+  f.name = `leaf-litter`;
+  let p = new ee(1, 1);
+  {
+    let e = p.attributes.uv;
+    for (let t = 0; t < e.count; t++)
+      e.setXY(t, 0.5 + e.getX(t) * 0.5, e.getY(t) * 0.5);
+  }
+  let m = Ae(a, o, {
+      wind: !1,
+      glow: 0.15,
+      key: `terrain-autumn-litter-v1`,
+      vertexColors: !1,
+    }),
+    h = Ae(a, o, {
+      wind: !1,
+      glow: 0.55,
+      key: `terrain-autumn-fall-v1`,
+      vertexColors: !1,
+    }),
+    g = (e) => (
+      (e.instanceColor = new E(
+        new Float32Array(e.instanceMatrix.count * 3).fill(1),
+        3,
+      )),
+      e
+    ),
+    v = g(new re(p, m, jr));
+  ((v.frustumCulled = !1),
+    (v.receiveShadow = !0),
+    (v.castShadow = !1),
+    (v.count = 0),
+    (v.name = `leaf_litter`),
+    v.instanceMatrix.setUsage(N));
+  let y = g(new re(p, h, Nr));
+  ((y.frustumCulled = !1),
+    (y.castShadow = !1),
+    (y.count = 0),
+    (y.name = `leaf_fall`),
+    y.instanceMatrix.setUsage(N),
+    f.add(v, y));
+  let b = new oe(),
+    x = new C(),
+    S = new A(),
+    w = new s(),
+    D = new s(),
+    O = new _(),
+    k = (e) => n[e.sp]?.litter?.[Math.min(e.v, n[e.sp].litter.length - 1)],
+    M = new Map();
+  function te(t) {
+    let n = M.get(t);
+    if (n) return n;
+    let a = u[t],
+      o = k(a),
+      s = Pr[a.sp] * a.s * a.sxz * 1.15,
+      l = Math.min(kr, Math.round(Math.PI * s * s * Mr * 0.55)),
+      d = [],
+      f = i();
+    for (let n = 0; n < l; n++) {
+      let i = I(t, n, c + 401),
+        u = I(t, n, c + 402),
+        p = I(t, n, c + 403),
+        m = I(t, n, c + 404),
+        h = i * 6.2832,
+        g = n < l * 0.08,
+        _ = g ? 0.35 + 1.2 * u : s * Math.sqrt(u) * (p < 0.2 ? 1.5 : 1),
+        v = a.x + Math.cos(h) * _,
+        y = a.z + Math.sin(h) * _;
+      if (f(v - 0.3, y - 0.3, v + 0.3, y + 0.3)) continue;
+      let b = e.cellIndex(v, y);
+      if (e.material[b] === fe.WATER) continue;
+      let x = e.getHeight(v, y) + r(v, y);
+      x < e.waterLevel + 0.3 ||
+        Math.abs(x - e.sampleSmooth(v, y)) > 0.5 ||
+        (O.set(o[(m * o.length) | 0]).multiplyScalar(0.72 + 0.3 * p),
+        d.push(
+          v,
+          x + 0.025 + (g ? 0.1 * p * (1 - _ / 1.6) : 0.02 * m),
+          y,
+          m * 6.2832,
+          (u - 0.5) * 0.5,
+          0.26 + 0.18 * p,
+          O.r,
+          O.g,
+          O.b,
+        ));
+    }
+    return (
+      (n = new Float32Array(d)),
+      M.size > 3e3 && M.clear(),
+      M.set(t, n),
+      n
+    );
+  }
+  let ne = [],
+    ie = () => {
+      ((ne = []),
+        u.forEach((e, t) => {
+          Pr[e.sp] && k(e) && ne.push(t);
+        }));
+    };
+  ie();
+  let ae = null,
+    se = [];
+  function ce(e) {
+    let t = 0;
+    se = [];
+    let n = (Ar + 6) * (Ar + 6);
+    for (let r of ne) {
+      let i = u[r];
+      if (i.excluded) continue;
+      let a = i.x - e.x,
+        o = i.z - e.z,
+        s = a * a + o * o;
+      if (s > n) continue;
+      s < 1024 && se.push(i);
+      let c = te(r);
+      for (let n = 0; n < c.length && t < jr; n += 9) {
+        let r = c[n] - e.x,
+          i = c[n + 2] - e.z;
+        r * r + i * i > Ar * Ar ||
+          (S.set(-Math.PI / 2 + c[n + 4], 0, c[n + 3], `XZY`),
+          x.setFromEuler(S),
+          v.setMatrixAt(
+            t,
+            b.compose(
+              w.set(c[n], c[n + 1], c[n + 2]),
+              x,
+              D.setScalar(c[n + 5]),
+            ),
+          ),
+          v.setColorAt(t, O.setRGB(c[n + 6], c[n + 7], c[n + 8])),
+          t++);
+      }
+    }
+    ((v.count = t),
+      (v.instanceMatrix.needsUpdate = !0),
+      (v.instanceColor.needsUpdate = !0));
+  }
+  let le = Array.from({ length: Nr }, (e, t) => ({
+      t: null,
+      p: new s(),
+      v: 0,
+      i: t,
+      ph: t * 1.7,
+      rot: new A(),
+      spin: new s(),
+      floor: 0,
+      sc: 0.3,
+    })),
+    P = (e, t) => {
+      let r = se.length ? se[(Math.random() * se.length) | 0] : null;
+      if (((e.t = r), !r)) return;
+      let i = k(r),
+        a = Pr[r.sp] * r.s * r.sxz * 0.8,
+        o = Math.random() * 6.2832,
+        s = a * Math.sqrt(Math.random()),
+        c = r.y0 + n[r.sp].height * r.s * r.sy * 0.75;
+      ((e.floor = r.y0),
+        e.p.set(
+          r.x + Math.cos(o) * s,
+          t ? e.floor + Math.random() * (c - e.floor) : c - Math.random() * 2,
+          r.z + Math.sin(o) * s,
+        ),
+        (e.v = 0.55 + Math.random() * 0.5),
+        e.spin.set(
+          (Math.random() - 0.5) * 4,
+          (Math.random() - 0.5) * 3,
+          (Math.random() - 0.5) * 4,
+        ),
+        (e.sc = 0.28 + Math.random() * 0.14),
+        y.setColorAt(e.i, O.set(i[(Math.random() * i.length) | 0])),
+        (y.instanceColor.needsUpdate = !0));
+    },
+    F = performance.now(),
+    ue = !1;
+  function L(e, t) {
+    for (let n of le) {
+      if (((!n.t || n.p.y < n.floor + 0.05) && P(n, !ue), !n.t)) {
+        y.setMatrixAt(n.i, b.makeScale(0, 0, 0));
+        continue;
+      }
+      ((n.p.y -= n.v * t),
+        (n.p.x += (Math.sin(e * 1.3 + n.ph) * 0.9 + 0.35) * t),
+        (n.p.z += Math.cos(e * 1.1 + n.ph * 1.7) * 0.6 * t),
+        (n.rot.x += n.spin.x * t),
+        (n.rot.y += n.spin.y * t),
+        (n.rot.z += n.spin.z * t),
+        x.setFromEuler(n.rot),
+        y.setMatrixAt(n.i, b.compose(n.p, x, D.setScalar(n.sc))));
+    }
+    ((ue = se.length > 0), (y.count = Nr), (y.instanceMatrix.needsUpdate = !0));
+  }
+  return {
+    group: f,
+    update(e, t) {
+      let n = performance.now(),
+        r = Math.min(0.1, (n - F) / 1e3);
+      if (((F = n), t)) {
+        ((v.count = 0), (y.count = 0), (ae = null));
+        return;
+      }
+      ((!ae || e.distanceToSquared(ae) > 25) &&
+        (ce(e), (ae = ae ? ae.copy(e) : e.clone())),
+        L(n / 1e3, r));
+    },
+    reset() {
+      (M.clear(), (ae = null));
+    },
+    setExtra(e) {
+      ((u = t.concat(e.map((e) => ({ ...e, excluded: !1 })))),
+        (d = t.length),
+        ie(),
+        M.clear(),
+        (ae = null));
+    },
+    setExtraVisible(e, t) {
+      let n = u[d + e];
+      n && ((n.excluded = !t), (ae = null));
+    },
+    setNight(e) {
+      (m.color.copy(e), h.color.copy(e));
+    },
+    dispose() {
+      (v.dispose(), y.dispose(), p.dispose(), m.dispose(), h.dispose());
+    },
+  };
+}
+var Ir = {
+    rust: [4855570, 8267288, 11550751, 14051882],
+    gold: [6044942, 9397268, 12882218, 15187786],
+  },
+  Lr = [9316892, 12076330, 14250542, 15246641],
+  Rr = [10235418, 12865567, 14711340, 15378741, 9067046, 7226662];
+function zr({ U: e, injectSurface: t, leafMat: r, seed: i }) {
+  let o = new T();
+  o.name = `town-dressing`;
+  let c = (e, t) => I(e, t, i + 911),
+    l = (n, r) => t(n, e, { key: r }),
+    u = {
+      kerbStone: xe(`kerbStone`, l),
+      mulch: xe(`mulch`, l),
+      grate: xe(`grate`, l),
+    },
+    d = Ae(e, t, {
+      wind: !1,
+      glow: 0.15,
+      key: `terrain-autumn-drift-v1`,
+      vertexColors: !1,
+    }),
+    f = {},
+    p = (e) =>
+      (f[e] ??= Fe(i + (e === `gold` ? 71 : 37), {
+        w: 1.3,
+        d: 1,
+        h: 0.75,
+        stops: Ir[e],
+      })),
+    m = (() => {
+      let e = document.createElement(`canvas`);
+      e.width = e.height = 128;
+      let t = e.getContext(`2d`),
+        n = t.createRadialGradient(64, 64, 0, 64, 64, 64);
+      return (
+        n.addColorStop(0, `rgba(0,0,0,1)`),
+        n.addColorStop(0.5, `rgba(0,0,0,.55)`),
+        n.addColorStop(1, `rgba(0,0,0,0)`),
+        (t.fillStyle = n),
+        t.fillRect(0, 0, 128, 128),
+        new ie(e)
+      );
+    })(),
+    h = (() => {
+      let e = document.createElement(`canvas`);
+      ((e.width = 4), (e.height = 64));
+      let t = e.getContext(`2d`),
+        n = t.createLinearGradient(0, 0, 0, 64);
+      return (
+        n.addColorStop(0, `rgba(0,0,0,1)`),
+        n.addColorStop(0.35, `rgba(0,0,0,.45)`),
+        n.addColorStop(1, `rgba(0,0,0,0)`),
+        (t.fillStyle = n),
+        t.fillRect(0, 0, 4, 64),
+        new ie(e)
+      );
+    })(),
+    v = (e, t) =>
+      new g({
+        map: e,
+        color: 0,
+        transparent: !0,
+        opacity: t,
+        depthWrite: !1,
+        fog: !1,
+        polygonOffset: !0,
+        polygonOffsetFactor: -4,
+        polygonOffsetUnits: -4,
+      }),
+    y = v(m, 0.45),
+    b = v(h, 0.5),
+    x = new ee(2, 2).rotateX(-Math.PI / 2),
+    S = [],
+    w = (e) => (S.push(e), o.add(e), e);
+  function D() {
+    for (let e of S) (o.remove(e), e.userData.ownGeo && e.geometry.dispose());
+    S = [];
+  }
+  function O({
+    beds: e = [],
+    pits: t = [],
+    kerbs: o = [],
+    footings: l = [],
+  } = {}) {
+    D();
+    let f = [],
+      m = [],
+      h = [],
+      g = [],
+      v = [],
+      S = [],
+      T = { rust: [], gold: [] },
+      O = new oe(),
+      k = new C(),
+      j = new s(),
+      M = new s(),
+      te = new s(0, 1, 0),
+      N = (e, t, n, r, i, o, s) =>
+        e.push(
+          new a(n - t, i - r, s - o).translate(
+            (t + n) / 2,
+            (r + i) / 2,
+            (o + s) / 2,
+          ),
+        ),
+      ie = (e, t, n, r) =>
+        v.push(new oe().compose(j.set(e, t, n), k.identity(), M.set(r, 1, r))),
+      ae = (e, t, n, r, i, a, o) => {
+        for (let s = 0; s < r; s++) {
+          let r = c(o + s, 1) * 6.283,
+            l = n * Math.sqrt(c(o + s, 2));
+          S.push([
+            e + Math.cos(r) * l,
+            i,
+            t + Math.sin(r) * l,
+            a[(c(o + s, 3) * a.length) | 0],
+            o + s,
+          ]);
+        }
+      };
+    (e.forEach((e, t) => {
+      let { x: n, z: r, y: i, hw: a, hd: o } = e,
+        s = me.wall,
+        l = i + me.height,
+        u = l - 0.08;
+      (N(f, n - a, n + a, i - 0.1, l, r - o, r - o + s),
+        N(f, n - a, n + a, i - 0.1, l, r + o - s, r + o),
+        N(f, n - a, n - a + s, i - 0.1, l, r - o, r + o),
+        N(f, n + a - s, n + a, i - 0.1, l, r - o, r + o),
+        N(m, n - a + s, n + a - s, i - 0.1, u, r - o + s, r + o - s));
+      let d = a >= o,
+        p = (d ? a : o) * 2 - 1.2,
+        h = Math.max(1, Math.round(p / 1.9)),
+        g = c(t, 7) < 0.55 ? `rust` : `gold`,
+        _ = 0;
+      for (let e = 0; e < h; e++)
+        for (let i of [-1, 1]) {
+          let l = -p / 2 + (e + 0.5) * (p / h),
+            f = i * ((d ? o : a) - s - 0.55);
+          if (Math.abs(l) < 1.3) continue;
+          let m = d ? n + l : n + f,
+            v = d ? r + f : r + l;
+          (T[g].push(
+            new oe().compose(
+              j.set(m, u, v),
+              k.setFromAxisAngle(
+                te,
+                (d ? 0 : Math.PI / 2) + (c(t, 20 + e) - 0.5) * 0.4,
+              ),
+              M.setScalar(1),
+            ),
+          ),
+            ie(m, u + 0.005, v, 0.9),
+            _++);
+        }
+      if (!_)
+        for (let e of c(t, 9) < 0.5 ? [1, -1] : [-1, 1]) {
+          let i = n + e * (a - s - 0.42),
+            l = r + e * (o - s - 0.42) * (c(t, 10) < 0.5 ? 1 : -1);
+          (T[g].push(
+            new oe().compose(
+              j.set(i, u, l),
+              k.setFromAxisAngle(te, c(t, 11 + e) * 6.28),
+              M.setScalar(0.62),
+            ),
+          ),
+            ie(i, u + 0.005, l, 0.6));
+        }
+      ae(
+        n,
+        r,
+        Math.min(a, o) - s,
+        Math.round(a * o * 4 * 6),
+        u + 0.012,
+        Lr,
+        6e4 + t * 400,
+      );
+    }),
+      t.forEach(({ x: e, z: t, y: n, size: r = 1.6 }, i) => {
+        let a = r / 2,
+          o = 0.14,
+          s = n + 0.006;
+        (N(m, e - a + o, e + a - o, s - 0.2, s - 0.02, t - a + o, t + a - o),
+          N(h, e - a, e + a, s - 0.2, s, t - a, t - a + o),
+          N(h, e - a, e + a, s - 0.2, s, t + a - o, t + a),
+          N(h, e - a, e - a + o, s - 0.2, s, t - a, t + a),
+          N(h, e + a - o, e + a, s - 0.2, s, t - a, t + a),
+          ie(e, s + 0.01, t, 1.2),
+          ae(e, t, 3.2, 70, s + 0.012, Rr, 9e4 + i * 97));
+      }));
+    let se = (e, t, n, r, i, a, o, s, l, u) => {
+      let d = Math.hypot(n - e, r - t),
+        f = Math.round(d * l);
+      for (let l = 0; l < f; l++) {
+        let f = c(u + l, 1),
+          p = s * c(u + l, 2) ** 1.5,
+          m = c(u + l, 3);
+        (Math.sin(f * d * 0.9 + u) + Math.sin(f * d * 0.37 + 1.3) < -0.6 &&
+          m < 0.7) ||
+          S.push([
+            e + (n - e) * f + i * p,
+            o + 0.024 + 0.01 * m,
+            t + (r - t) * f + a * p,
+            Rr[(m * Rr.length) | 0],
+            u + l,
+          ]);
+      }
+    };
+    (o.forEach((e, t) =>
+      se(e.ax, e.az, e.bx, e.bz, e.nx, e.nz, e.y, 0.5, 5, 1e4 + t * 997),
+    ),
+      l.forEach((e, t) => {
+        [
+          [e.x0, e.z1, e.x1, e.z1, 0, 1],
+          [e.x1, e.z0, e.x0, e.z0, 0, -1],
+          [e.x0, e.z0, e.x0, e.z1, -1, 0],
+          [e.x1, e.z1, e.x1, e.z0, 1, 0],
+        ].forEach(([n, r, i, a, o, s], c) => {
+          let l = Math.hypot(i - n, a - r),
+            u = 1.6;
+          (g.push(
+            new ee(l, u)
+              .rotateX(-Math.PI / 2)
+              .translate(0, 0, u / 2)
+              .rotateY(Math.atan2(o, s))
+              .translate(
+                (n + i) / 2 + o * 0.02,
+                e.y + 0.03,
+                (r + a) / 2 + s * 0.02,
+              ),
+          ),
+            se(
+              n + o * 0.25,
+              r + s * 0.25,
+              i + o * 0.25,
+              a + s * 0.25,
+              o,
+              s,
+              e.y,
+              0.45,
+              3,
+              4e4 + t * 53 + c * 11,
+            ));
+        });
+      }));
+    let ce = (e, t, r, i) => {
+      if (!e.length) return;
+      let a = ne(e);
+      (e.forEach((e) => e.dispose()), i && be(a, i));
+      let o = w(new n(a, t));
+      return (
+        (o.name = r),
+        (o.receiveShadow = !0),
+        (o.castShadow = r === `town_bed_kerbs`),
+        (o.userData.ownGeo = !0),
+        o
+      );
+    };
+    (ce(f, u.kerbStone, `town_bed_kerbs`, Ce.kerbStone.scale),
+      ce(m, u.mulch, `town_beds`, Ce.mulch.scale),
+      ce(h, u.grate, `town_pits`, Ce.grate.scale));
+    let le = ce(g, b, `town_footing_shade`);
+    le && (le.renderOrder = 1);
+    for (let [e, t] of Object.entries(T)) {
+      if (!t.length) continue;
+      let n = w(new re(p(e).leaves, r, t.length));
+      (t.forEach((e, t) => n.setMatrixAt(t, e)),
+        (n.castShadow = !0),
+        (n.receiveShadow = !0),
+        (n.name = `town_shrubs_${e}`),
+        n.computeBoundingSphere());
+    }
+    if (v.length) {
+      let e = w(new re(x, y, v.length));
+      (v.forEach((t, n) => e.setMatrixAt(n, t)),
+        (e.renderOrder = 1),
+        (e.name = `town_contact`),
+        e.computeBoundingSphere());
+    }
+    if (S.length) {
+      let e = new ee(1, 1),
+        t = e.attributes.uv;
+      for (let e = 0; e < t.count; e++)
+        t.setXY(e, 0.5 + t.getX(e) * 0.5, t.getY(e) * 0.5);
+      let n = w(new re(e, d, S.length));
+      ((n.userData.ownGeo = !0),
+        (n.instanceColor = new E(new Float32Array(S.length * 3), 3)));
+      let r = new A(),
+        a = new _();
+      (S.forEach(([e, t, o, s, c], l) => {
+        (r.set(
+          -Math.PI / 2 + (I(c, 3, i) - 0.5) * 0.5,
+          0,
+          I(c, 4, i) * 6.28,
+          `XZY`,
+        ),
+          k.setFromEuler(r),
+          n.setMatrixAt(
+            l,
+            O.compose(j.set(e, t, o), k, M.setScalar(0.26 + 0.18 * I(c, 5, i))),
+          ),
+          n.setColorAt(l, a.set(s).multiplyScalar(0.72 + 0.3 * I(c, 6, i))));
+      }),
+        (n.receiveShadow = !0),
+        (n.name = `town_leaves`),
+        n.computeBoundingSphere());
+    }
+  }
+  let k = [u.kerbStone, u.mulch, u.grate, d],
+    j = k.map((e) => e.color.clone());
+  return {
+    group: o,
+    addStreets: O,
+    setNight(e) {
+      k.forEach((t, n) => t.color.copy(j[n]).multiply(e));
+    },
+    dispose() {
+      D();
+      for (let e of [...Object.values(u), d, y, b]) e.dispose();
+      for (let e of Object.values(f)) e.leaves.dispose();
+      (x.dispose(), m.dispose(), h.dispose());
+    },
+  };
+}
+var Br = 2500,
+  Vr = 2e4,
+  Hr = 1,
+  Ur = (e) => (118 + 110 * e) * Hr,
+  Wr = (e) => (330 + 300 * e) * Hr,
+  Gr = (e) => (26 + 22 * e) * Hr,
+  Kr = 6.5,
+  qr = (e) => (70 + 60 * e) * Hr,
+  Jr = 47,
+  Yr = 0.4,
+  Xr = [30, 45],
+  Zr = 210,
+  Qr = 600;
+function $r(e, t, n, r) {
+  let i = r[0] - n[0],
+    a = r[1] - n[1],
+    o = i * i + a * a,
+    s = o > 0 ? ((e - n[0]) * i + (t - n[1]) * a) / o : 0;
+  return (
+    (s = s < 0 ? 0 : s > 1 ? 1 : s),
+    Math.hypot(e - (n[0] + i * s), t - (n[1] + a * s))
+  );
+}
+function ei(e, t, n) {
+  let r = Math.ceil(e / n) + 1,
+    i = new Int32Array(r * r).fill(-1),
+    a = [],
+    o = [],
+    s = [];
+  return {
+    add(e, c) {
+      let l = L(((e + t) / n) | 0, 0, r - 1),
+        u = L(((c + t) / n) | 0, 0, r - 1) * r + l;
+      (a.push(i[u]), o.push(e), s.push(c), (i[u] = o.length - 1));
+    },
+    ok(e, c, l) {
+      let u = l * l,
+        d = L(((e + t) / n) | 0, 0, r - 1),
+        f = L(((c + t) / n) | 0, 0, r - 1),
+        p = Math.max(1, Math.ceil(l / n));
+      for (let t = f - p; t <= f + p; t++)
+        if (!(t < 0 || t >= r)) {
+          for (let n = d - p; n <= d + p; n++)
+            if (!(n < 0 || n >= r))
+              for (let l = i[t * r + n]; l !== -1; l = a[l]) {
+                let t = o[l] - e,
+                  n = s[l] - c;
+                if (t * t + n * n < u) return !1;
+              }
+        }
+      return !0;
+    },
+  };
+}
+var ti = (e) => (
+  (e.instanceColor = new E(
+    new Float32Array(e.instanceMatrix.count * 3).fill(1),
+    3,
+  )),
+  e
+);
+function* ni(e, t, n, r, a, c, l) {
+  let u = j(),
+    p = !!u;
+  ((Hr = u?.lodK ?? 1),
+    u
+      ? ((Jr = u.grass.r), (Yr = u.grass.cell), (Xr = u.grass.fade))
+      : ((Jr = 47), (Yr = 0.4), (Xr = [30, 45])),
+    e.opts?.grass === !1 && (Jr = 0));
+  let m = ce(n).fork(`terrain:scatter`),
+    { waterLevel: g, material: v, noScatter: y, riverDist: b } = e,
+    x = new T();
+  x.name = `scatter`;
+  let S = [0, 1, 0],
+    w = n | 0,
+    E = e.half,
+    O = Ft(),
+    k = e.opts?.biome === `snow`,
+    ee = e.opts?.biome === `jungle`,
+    A = e.opts?.biome === `tropical`,
+    M =
+      e.opts?.biome === `quarry` && e.quarry
+        ? (t, n) => e.quarry.dist(t, n) < e.quarry.pitch * e.quarry.steps + 20
+        : null,
+    te = (e, t, n) => {
+      let r = (e + E) / n,
+        i = (t + E) / n,
+        a = Math.floor(r),
+        o = Math.floor(i),
+        s = r - a,
+        l = i - o,
+        u = -E + a * n,
+        d = -E + o * n,
+        f = c(u, d),
+        p = c(u + n, d),
+        m = c(u, d + n),
+        h = c(u + n, d + n),
+        g = f + (p - f) * s;
+      return g + (m + (h - m) * s - g) * l;
+    },
+    ne = l || (() => 0),
+    ie = (t, n) => [e.getHeight(t, n) + ne(t, n), te(t, n, 4), te(t, n, 8)],
+    ae = (e, t) => {
+      let n = de(e.y0, e.y1, P(Zr * 0.78, Zr * 0.97, t));
+      return de(n, e.y2, P(Qr * 0.78, Qr * 0.97, t));
+    },
+    se = [];
+  if (r) {
+    let e = (e, t) => [
+      r[0] + Math.sin((t * Math.PI) / 180) * e,
+      r[2] + Math.cos((t * Math.PI) / 180) * e,
+    ];
+    se.push(
+      { a: [r[0], r[2]], b: [r[0], r[2]], r: 6.5 },
+      { a: e(5, 20), b: e(5, 20), r: 5.5 },
+      { a: [r[0], r[2]], b: e(50, 30), r: 5 },
+      { a: e(50, 30), b: e(50, 30), r: 9 },
+    );
+  }
+  let ue = (e, t) => se.some((n) => $r(e, t, n.a, n.b) < n.r),
+    me = [9, 13, 17],
+    he = e.opts?.foliage === `autumn`,
+    R = e.opts?.foliage === `tropical`,
+    _e = he || R,
+    ve = he && e.opts?.forestDress === `classic`,
+    ye = ve ? ze({}) : null,
+    be = he
+      ? yield* we(un)
+      : R
+        ? Or()
+        : ze({
+            snow: e.opts?.biome === `snow`,
+            jungle: e.opts?.biome === `jungle`,
+            tropical: e.opts?.biome === `tropical`,
+          }),
+    xe = new o({
+      vertexColors: !0,
+      flatShading: !0,
+      roughness: 0.9,
+      metalness: 0,
+    });
+  ge(xe, a, { key: `terrain-tree-v5`, detail: 0.075 });
+  let Se = _e ? Me(a, ge) : null,
+    Ce = _e ? Ae(a, ge, { key: `terrain-autumn-leaf-v1` }) : null,
+    z = _e
+      ? Ae(a, ge, { key: `terrain-autumn-leaf-v1`, map: R ? gn() : Lt() })
+      : null,
+    Te = (e, t) => (Array.isArray(e) ? e[Math.min(t, e.length - 1)] : e),
+    Ee = (e) =>
+      e.isBufferGeometry
+        ? [[e, xe]]
+        : [
+            [e.wood, Se],
+            [e.leaves, e.cat ? z : Ce],
+          ].filter((e) => e[0]),
+    De = (e) => Ee(e).map((e) => e[0]),
+    Oe = R ? [Gr, qr] : he ? [Gr, Ur] : [Ur, Wr],
+    B = [],
+    ke = (e, t) =>
+      he && e.planted && e.sp === 0 ? (I(t, 3, w + 771) < 0.6 ? 1 : 2) : e.sp,
+    je = (e, t, n, r, i) => {
+      let a = be[e].weights;
+      if (!a) return null;
+      let o = (i && a.town.some((e) => e > 0) ? a.town : a.forest).map(
+          (e, r) => e * Math.exp(2.2 * le(t / 38, n / 38, w + 811 + r * 37)),
+        ),
+        s = I(r, 5, w + 823) * o.reduce((e, t) => e + t, 0);
+      for (let e = 0; e < o.length; e++) if ((s -= o[e]) < 0) return e;
+      return o.length - 1;
+    };
+  if (e.opts?.forest)
+    for (let [t, n] of pe(e).entries()) {
+      let e = ie(n.x, n.z);
+      if (ve && !n.planted) {
+        B.push({ ...n, classic: !0, y0: e[0], y1: e[1], y2: e[2] });
+        continue;
+      }
+      let r = ke(n, t);
+      B.push({
+        ...n,
+        sp: r,
+        v: je(r, n.x, n.z, t, n.planted) ?? n.v,
+        y0: e[0],
+        y1: e[1],
+        y2: e[2],
+      });
+    }
+  else {
+    let t = [],
+      n = ei(e.size, E, 5);
+    for (let i of me)
+      for (let a = -E + 26; a < E - 26; a += i) {
+        let o = Math.round((a + E) / i),
+          s = (I(o, 17, w + 91) - 0.5) * i;
+        for (let o = -E + 26; o < E - 26; o += i) {
+          let c = o + s + m.range(-0.9, 0.9) * i,
+            l = a + m.range(-0.9, 0.9) * i;
+          if (c < -E + 20 || c > E - 20 || l < -E + 20 || l > E - 20) continue;
+          let u = e.cellIndex(c, l),
+            d = v[u];
+          if (
+            y[u] ||
+            d === fe.WATER ||
+            d === fe.ROAD ||
+            d === fe.SAND ||
+            d === fe.ROCK
+          )
+            continue;
+          let f = e.getHeight(c, l);
+          if (
+            f < g + 1.2 ||
+            f > 168 ||
+            (e.getNormal(c, l, S), S[1] < 0.8) ||
+            ue(c, l) ||
+            (M && M(c, l)) ||
+            !n.ok(c, l, 4)
+          )
+            continue;
+          let p = e.roadDist[u];
+          if (p < 46 && p < 12 + 30 * (0.5 + 0.5 * le(c / 41, l / 41, w + 603)))
+            continue;
+          let h =
+              0.5 +
+              0.5 * F(c / 168, l / 168, 3, w + 601) +
+              0.3 * F(c / 47, l / 47, 2, w + 602),
+            _ = L((h - 0.54) * 2.9, 0, 1);
+          if ((b[u] < 140 && (_ *= 1 + 0.55 * (1 - b[u] / 140)), r)) {
+            let e = Math.hypot(c - r[0] + 40, l - r[2] + 50);
+            _ += 0.34 * Math.exp(-(e * e) / 45e3);
+          }
+          let x = L(_, 0, 1.4),
+            C = x * (0.3 + 0.7 * m.next());
+          if (C <= 0.06) continue;
+          n.add(c, l);
+          let T = b[u] < 90,
+            D,
+            O = m.next();
+          D =
+            f > 60 + 20 * le(c / 200, l / 200, w + 9) || (O < 0.28 && f > 30)
+              ? 0
+              : T && O < 0.42
+                ? 2
+                : O < 0.9
+                  ? 1
+                  : 2;
+          let k = m.next() < 0.035,
+            ee = 1 - L(x, 0, 1),
+            A = k
+              ? m.range(1.28, 1.58)
+              : 0.5 + m.range(0, 0.55) * (0.85 + 0.75 * ee),
+            j = ie(c, l);
+          t.push({
+            x: c,
+            y0: j[0],
+            y1: j[1],
+            y2: j[2],
+            z: l,
+            sp: D,
+            w: C,
+            v: m.int(0, 2),
+            s: A * (D === 0 ? 1.05 : 1),
+            sxz: m.range(0.85, 1.2),
+            sy: m.range(0.88, 1.18),
+            rot: m.range(0, 6.2831),
+            tiltA: m.range(0, 6.2831),
+            tilt: m.range(0.02, 0.11),
+            tint: 0.84 + 0.3 * m.next(),
+          });
+        }
+      }
+    t.sort((e, t) => t.w - e.w);
+    for (let e = 0; e < Math.min(Br, t.length); e++) B.push(t[e]);
+  }
+  if (R && e.opts?.forest) {
+    let t = e.opts.forest,
+      n = t.clearings ?? [],
+      r = t.lanes ?? [];
+    for (let i = -E + 12; i < E - 12; i += Kr)
+      for (let a = -E + 12; a < E - 12; a += Kr) {
+        let o = Math.round(a / Kr),
+          s = Math.round(i / Kr),
+          c = a + (I(o, s, w + 901) - 0.5) * Kr,
+          l = i + (I(o, s, w + 902) - 0.5) * Kr,
+          u = e.cellIndex(c, l),
+          d = v[u];
+        if (y[u] || (d !== fe.GRASS && d !== fe.DIRT)) continue;
+        let f = e.getHeight(c, l);
+        if (
+          f < g + 1 ||
+          f > (t.treeLine ?? 150) ||
+          (e.getNormal(c, l, S),
+          S[1] < 0.8 || e.roadDist[u] < 6 + 4 * I(o, s, w + 903)) ||
+          n.some((e) => Math.hypot(c - e.x, l - e.z) < e.r * 0.9) ||
+          r.some((e) => $r(c, l, [e[0], e[1]], [e[2], e[3]]) < (e[4] ?? 14) / 2)
+        )
+          continue;
+        let p =
+          0.5 +
+          0.5 * F(c / 150, l / 150, 3, w + 701) +
+          0.3 * F(c / 23, l / 23, 2, w + 905);
+        if (I(o, s, w + 904) > L((p - 0.42) * 1.6, 0, 0.85)) continue;
+        let m = ie(c, l),
+          h = B.length,
+          _ = (e) => I(o, s, w + 910 + e);
+        B.push({
+          x: c,
+          z: l,
+          sp: 3,
+          v: je(3, c, l, h, !1),
+          under: !0,
+          s: 0.7 + 0.55 * _(1),
+          sxz: 0.85 + 0.3 * _(2),
+          sy: 0.85 + 0.3 * _(3),
+          rot: _(4) * 6.2831,
+          tiltA: _(5) * 6.2831,
+          tilt: 0.03 * _(6),
+          tint: 0.86 + 0.24 * _(7),
+          y0: m[0],
+          y1: m[1],
+          y2: m[2],
+        });
+      }
+  }
+  if (p && e.bounds) {
+    let [t, n, r, i] = e.bounds,
+      a = (t + r) / 2,
+      o = (n + i) / 2,
+      s = ((r - t) / 2) * 0.72,
+      c = ((i - n) / 2) * 0.72;
+    for (let e = B.length - 1; e >= 0; e--) {
+      let t = B[e];
+      (Math.abs(t.x - a) > s || Math.abs(t.z - o) > c) && B.splice(e, 1);
+    }
+  }
+  let Ne = new _(1, 1, 1),
+    V = [],
+    Pe = ve ? B.filter((e) => !e.classic) : B,
+    H = _e
+      ? {
+          tiers: [0, 1, 2].map((e) => {
+            let t = be.map((t) => [t.near, t.mid, t.far][e]),
+              n = new Map();
+            return (
+              t.forEach((e, t) =>
+                e.forEach((e, r) =>
+                  Ee(e).forEach(([e, i]) => {
+                    let a = n.get(i);
+                    (a || n.set(i, (a = { mat: i, geos: [] })),
+                      a.geos.push({ si: t, vi: r, geo: e }));
+                  }),
+                ),
+              ),
+              [...n.values()].map(({ mat: t, geos: n }) => {
+                let r = n.reduce(
+                    (e, t) => e + t.geo.attributes.position.count,
+                    0,
+                  ),
+                  i = n.reduce(
+                    (e, t) => e + (t.geo.index ? t.geo.index.count : 0),
+                    0,
+                  ),
+                  a = Pe.length + 512,
+                  o = new d(a, r, i || void 0, t);
+                ((o.castShadow = e < 2),
+                  (o.receiveShadow = !0),
+                  (o.frustumCulled = !1),
+                  (o.perObjectFrustumCulled = !1),
+                  (o.sortObjects = !1),
+                  (o.name = `trees_batch_${[`near`, `mid`, `far`][e]}_${t === Se ? `wood` : t === Ce ? `leaves` : `catleaves`}`));
+                let s = new Map();
+                for (let e of n) s.set(`${e.si}:${e.vi}`, o.addGeometry(e.geo));
+                let c = s.values().next().value;
+                for (let e = 0; e < a; e++) {
+                  let e = o.addInstance(c);
+                  (o.setColorAt(e, Ne), o.setVisibleAt(e, !1));
+                }
+                return (x.add(o), { bm: o, gid: s, n: 0, shown: 0 });
+              })
+            );
+          }),
+        }
+      : null,
+    Fe = H ? ye : be,
+    Ie = Fe
+      ? Fe.map((e, t) => {
+          let n = B.filter((e) => e.sp === t && (!H || e.classic)),
+            r = (t, n, r, i) =>
+              Ee(t).map(([t, a], o) => {
+                let s = ti(new re(t, a, Math.max(1, n)));
+                return (
+                  (s.castShadow = i),
+                  (s.receiveShadow = !0),
+                  (s.frustumCulled = !1),
+                  (s.count = 0),
+                  s.instanceMatrix.setUsage(N),
+                  (s.name = `trees_${e.name}_${r}${o ? `_leaves` : ``}`),
+                  x.add(s),
+                  s
+                );
+              }),
+            i = (e) => n.filter((t) => t.v === e).length,
+            a = (e, t, a) =>
+              Array.isArray(e)
+                ? e.map((e, n) => r(e, i(n), `${t}${n}`, a))
+                : [r(e, n.length, t, a)],
+            o = [
+              e.near.map((e, t) => r(e, i(t), `${t}`, !0)),
+              a(e.mid, `mid`, he && !H),
+              a(e.far, `far`, !1),
+            ];
+          return {
+            list: n,
+            tiers: o,
+            counts: o.map((e) => Array(e.length).fill(0)),
+          };
+        })
+      : [],
+    Le = he
+      ? Fr({
+          hf: e,
+          trees: Pe,
+          species: be,
+          mic: ne,
+          excluded: () => O,
+          U: a,
+          injectSurface: ge,
+          seed: w,
+        })
+      : null;
+  Le && x.add(Le.group);
+  let Ve =
+    he && e.opts?.paving
+      ? zr({ U: a, injectSurface: ge, leafMat: Ce, seed: w })
+      : null;
+  Ve && x.add(Ve.group);
+  let He = null;
+  function Ue() {
+    He && ((He = null), (V = []), (mt = null), Le?.setExtra([]));
+  }
+  function We(e) {
+    if ((Ue(), !he || !e?.length)) return !1;
+    let t = be[1].near.length;
+    He = { meshes: [] };
+    let n = e.map((e, n) =>
+      Math.min(e.v ?? je(1, e.x, e.z, 9e3 + n, !0) ?? n % t, t - 1),
+    );
+    return (
+      (V = e.slice(0, 512).map((e, t) => ({
+        x: e.x,
+        z: e.z,
+        y0: e.y + 0.05,
+        y1: e.y + 0.05,
+        y2: e.y + 0.05,
+        sp: 1,
+        v: n[t],
+        s: e.s,
+        sxz: 1,
+        sy: 1,
+        rot: e.rot ?? 0,
+        tilt: 0,
+        tiltA: 0,
+        tint: 0.94 + 0.08 * I(t, 9, w + 829),
+        hidden: !1,
+      }))),
+      (mt = null),
+      Le?.setExtra(
+        e.map((e, t) => ({
+          x: e.x,
+          z: e.z,
+          y0: e.y,
+          sp: 1,
+          v: n[t],
+          s: e.s,
+          sxz: 1,
+          sy: 1,
+        })),
+      ),
+      !0
+    );
+  }
+  function Ge(e, t) {
+    let n = V[e];
+    return n
+      ? ((n.hidden = !t), (mt = null), Le?.setExtraVisible(e, t), !0)
+      : !1;
+  }
+  let U = new oe(),
+    Ke = new C(),
+    qe = new C(),
+    Je = new s(),
+    Ye = new s(),
+    Xe = new s(0, 1, 0),
+    Ze = new s(),
+    Qe = new _(),
+    $e = new i();
+  function et(e, t) {
+    let n = ae(e, t);
+    (Ke.setFromAxisAngle(Xe, e.rot),
+      Ze.set(Math.cos(e.tiltA), 0, Math.sin(e.tiltA)),
+      qe.setFromAxisAngle(Ze, e.tilt),
+      Ke.premultiply(qe),
+      U.compose(
+        Je.set(e.x, n - 0.25, e.z),
+        Ke,
+        Ye.set(e.s * e.sxz, e.s * e.sy, e.s * e.sxz),
+      ),
+      Qe.setRGB(
+        e.tint * (0.93 + 0.07 * I(e.x | 0, e.z | 0, 6)),
+        e.tint,
+        e.tint * (0.88 + 0.11 * I(e.x | 0, e.z | 0, 7)),
+      ));
+  }
+  function tt(e, t, n) {
+    for (let e of H.tiers) for (let t of e) t.n = 0;
+    for (let r of [Pe, V])
+      for (let i of r) {
+        if (i.excluded || i.hidden) continue;
+        let r = i.x - e.x,
+          a = i.z - e.z,
+          o = i.y0 - e.y,
+          s = r * r + a * a + o * o;
+        if (s > n * n || (i.under && s > 6400 * Hr * Hr)) continue;
+        let c = Math.sqrt(s);
+        if (
+          ($e.center.set(i.x, i.y0 + 5 * i.s, i.z),
+          ($e.radius = 7 * i.s),
+          !t.intersectsSphere($e))
+        )
+          continue;
+        et(i, c);
+        let l = c < Oe[0](i.s) ? 0 : c < Oe[1](i.s) ? 1 : 2,
+          u = (i.bk ??= `${i.sp}:${i.v}`);
+        for (let e of H.tiers[l]) {
+          let t = e.gid.get(u);
+          if (t === void 0) continue;
+          let n = e.n++;
+          (e.bm.getGeometryIdAt(n) !== t &&
+            (e.bm.setGeometryIdAt(n, t), (e.regeo = !0)),
+            e.bm.setMatrixAt(n, U),
+            e.bm.setColorAt(n, Qe),
+            n >= e.shown && e.bm.setVisibleAt(n, !0));
+        }
+      }
+    for (let e of H.tiers)
+      for (let t of e) {
+        for (let e = t.n; e < t.shown; e++) t.bm.setVisibleAt(e, !1);
+        ((t.shown = t.n),
+          (t.bm.visible = t.n > 0),
+          (t.regeo &&= ((t.bm._visibilityChanged = !0), !1)));
+      }
+  }
+  function nt(e, t, n) {
+    H && tt(e, t, n);
+    let r = H ? [Ur, Wr] : Oe;
+    for (let { list: i, tiers: a, counts: o } of Ie) {
+      for (let e of o) e.fill(0);
+      for (let s of i) {
+        if (s.excluded) continue;
+        let i = s.x - e.x,
+          c = s.z - e.z,
+          l = s.y0 - e.y,
+          u = i * i + c * c + l * l;
+        if (u > n * n) continue;
+        let d = Math.sqrt(u);
+        if (
+          ($e.center.set(s.x, s.y0 + 5 * s.s, s.z),
+          ($e.radius = 7 * s.s),
+          !t.intersectsSphere($e))
+        )
+          continue;
+        et(s, d);
+        let f = d < r[0](s.s) ? 0 : d < r[1](s.s) ? 1 : 2,
+          p = Math.min(s.v, a[f].length - 1),
+          m = o[f][p]++;
+        for (let e of a[f][p]) (e.setMatrixAt(m, U), e.setColorAt(m, Qe));
+      }
+      a.forEach((e, t) =>
+        e.forEach((e, n) => {
+          for (let r of e)
+            ((r.count = o[t][n]),
+              (r.visible = r.count > 0),
+              (r.instanceMatrix.needsUpdate = !0),
+              r.instanceColor && (r.instanceColor.needsUpdate = !0));
+        }),
+      );
+    }
+  }
+  let rt = [],
+    it = null;
+  if (r) {
+    let t = Re(),
+      n = [],
+      i = m.fork(`reeds`);
+    for (let t = 0; t < 260; t++) {
+      let t = i.range(0, 6.2831),
+        a = 3 + i.range(0, 26),
+        o = r[0] + Math.cos(t) * a,
+        s = r[2] + Math.sin(t) * a,
+        c = e.cellIndex(o, s),
+        l = e.getHeight(o, s);
+      if (
+        !(l < g + 0.05 || l > g + 1.9) &&
+        !(y[c] || v[c] === fe.ROAD) &&
+        (n.push({
+          x: o,
+          y: l - 0.05,
+          z: s,
+          s: i.range(0.7, 1.5),
+          rot: i.range(0, 6.2831),
+        }),
+        n.length >= 90)
+      )
+        break;
+    }
+    if (n.length) {
+      let r = ti(new re(t, xe, n.length));
+      ((r.castShadow = !1),
+        (r.receiveShadow = !0),
+        (r.frustumCulled = !0),
+        (r.name = `reeds`),
+        n.forEach((t, n) => {
+          (Ke.setFromAxisAngle(Xe, t.rot),
+            U.compose(
+              Je.set(t.x, t.y, t.z),
+              Ke,
+              Ye.set(t.s, t.s * m.range(0.85, 1.2), t.s),
+            ),
+            r.setMatrixAt(n, U),
+            k
+              ? Qe.setRGB(1.15, 0.85, 0.5)
+              : ee
+                ? Qe.setRGB(0.72, 1.12, 0.62)
+                : A
+                  ? Qe.setRGB(0.86, 1.1, 0.64)
+                  : e.opts?.biome === `desert`
+                    ? Qe.setRGB(1.08, 0.95, 0.7)
+                    : Qe.setRGB(0.95, 1, 0.85),
+            r.setColorAt(n, Qe));
+        }),
+        (r.count = n.length),
+        x.add(r),
+        (it = { im: r, geo: t, matrices: r.instanceMatrix.array.slice() }));
+    } else t.dispose();
+  }
+  let at = [Be(0), Be(1), Be(2), Be(3)],
+    ot = new o({
+      vertexColors: !0,
+      flatShading: !1,
+      roughness: 1,
+      metalness: 0,
+      side: 0,
+    });
+  ge(ot, a, {
+    key: `terrain-grass-v3`,
+    detail: 0,
+    vertexDecl: `uniform vec2 uFade;`,
+    extraVertex: `
+      {
+        vec3 iw = (modelMatrix * instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
+        float dcam = distance(iw, cameraPosition);
+        float fade = 1.0 - smoothstep(uFade.x, uFade.y, dcam);
+        fade *= fade;
+        float sway = sin(uTime * 1.6 + iw.x * 0.35 + iw.z * 0.27) * 0.6 + sin(uTime * 2.7 + iw.x * 1.1 - iw.z * 0.8) * 0.3;
+        transformed.x += sway * 0.15 * position.y;
+        transformed.z += sway * 0.09 * position.y;
+        transformed *= fade;
+      }`,
+    uniforms: { uFade: { value: new h(Xr[0], Xr[1]) } },
+  });
+  let st = at.map((e, t) => {
+    let n = ti(new re(e, ot, Math.ceil(Vr * 0.42) + 64));
+    return (
+      (n.frustumCulled = !1),
+      (n.receiveShadow = !1),
+      (n.castShadow = !1),
+      (n.name = `grass_${t}`),
+      n.instanceMatrix.setUsage(N),
+      (n.count = 0),
+      x.add(n),
+      n
+    );
+  });
+  function ct(n) {
+    let r = n.x,
+      i = n.z,
+      a = Math.floor((r - Jr) / Yr),
+      o = Math.ceil((r + Jr) / Yr),
+      s = Math.floor((i - Jr) / Yr),
+      c = Math.ceil((i + Jr) / Yr),
+      l = [0, 0, 0, 0],
+      u = Math.ceil(Vr * 0.42),
+      d = Jr * Jr;
+    for (let n = s; n <= c; n++) {
+      let s = I(n, 5, w + 95) * Yr;
+      for (let c = a; c <= o; c++) {
+        let a = I(c, n, w + 1),
+          o = I(c, n, w + 2),
+          f = I(c, n, w + 3),
+          p = I(c, n, w + 4),
+          m = I(c, n, w + 5),
+          h = (c + 0.1 + 0.8 * a) * Yr + s,
+          _ = (n + 0.1 + 0.8 * o) * Yr,
+          b = h - r,
+          x = _ - i;
+        if (b * b + x * x > d) continue;
+        let C = e.cellIndex(h, _),
+          T = v[C];
+        if (
+          y[C] ||
+          O(h - 0.75, _ - 0.75, h + 0.75, _ + 0.75) ||
+          (T !== fe.GRASS && !(T === fe.DIRT && f < 0.22)) ||
+          (k && m > 0.1) ||
+          (M && m > 0.18 && M(h, _))
+        )
+          continue;
+        let E = le(h / 9, _ / 9, w + 77) + 0.35 * le(h / 2.7, _ / 2.7, w + 78);
+        if (E < -0.3) continue;
+        let D = e.sampleSmooth(h, _),
+          j = e.getHeight(h, _) + ne(h, _);
+        if (
+          j < g + 0.55 ||
+          Math.abs(j - D) > 0.5 ||
+          (e.getNormal(h, _, S), S[1] < 0.72)
+        )
+          continue;
+        let te = 0;
+        if (
+          (f > 0.8
+            ? (te = 1)
+            : f < 0.17 || E > 0.75
+              ? (te = 2)
+              : m > 0.62 && (te = 3),
+          l[te] >= u)
+        )
+          continue;
+        let N = (0.7 + 0.7 * f) * (1 + 0.18 * L(E, -0.3, 0.8));
+        (Ke.setFromAxisAngle(Xe, p * 6.2831),
+          U.compose(
+            Je.set(h, j - 0.02, _),
+            Ke,
+            Ye.set(
+              N * (0.86 + 0.3 * m),
+              N * (0.82 + 0.44 * o),
+              N * (0.86 + 0.3 * o),
+            ),
+          ));
+        let re = st[te];
+        (re.setMatrixAt(l[te], U),
+          k
+            ? Qe.setRGB(1 + 0.2 * a, 0.8, 0.5)
+            : ee
+              ? Qe.setRGB(
+                  t[C * 3] * 0.86,
+                  t[C * 3 + 1] * 1.1,
+                  t[C * 3 + 2] * 0.8,
+                )
+              : A
+                ? Qe.setRGB(
+                    t[C * 3] * 0.95,
+                    t[C * 3 + 1] * 1.13,
+                    t[C * 3 + 2] * 0.82,
+                  )
+                : e.opts?.biome === `desert`
+                  ? Qe.setRGB(
+                      t[C * 3] * 1.08,
+                      t[C * 3 + 1] * 1.04,
+                      t[C * 3 + 2] * 0.86,
+                    )
+                  : Qe.setRGB(
+                      t[C * 3] * 1.04,
+                      t[C * 3 + 1] * 1.09,
+                      t[C * 3 + 2] * 0.94,
+                    ),
+          re.setColorAt(l[te], Qe),
+          l[te]++);
+      }
+    }
+    for (let e = 0; e < st.length; e++)
+      ((st[e].count = l[e]),
+        (st[e].instanceMatrix.needsUpdate = !0),
+        st[e].instanceColor && (st[e].instanceColor.needsUpdate = !0));
+    return l[0] + l[1] + l[2] + l[3];
+  }
+  let lt = new s(),
+    ut = new s(),
+    dt = new s(0, 0, 0),
+    ft = new D(),
+    pt = new oe(),
+    mt = null,
+    ht = null,
+    gt = 0,
+    _t = new f(),
+    vt = (e) => (
+      e.boundingBox || e.computeBoundingBox(),
+      _t.copy(e.boundingBox).applyMatrix4(U),
+      O(_t.min.x, _t.min.z, _t.max.x, _t.max.z)
+    );
+  function yt(e = []) {
+    ((O = Ft(e)), Le && Le.reset());
+    for (let e of B) {
+      et(e, 0);
+      let t = (e.classic ? ye : be)[e.sp];
+      e.excluded = [t.near[e.v], Te(t.mid, e.v), Te(t.far, e.v)]
+        .flatMap(De)
+        .some(vt);
+    }
+    if (it) {
+      let e = 0;
+      for (let t = 0; t < it.matrices.length; t += 16)
+        (U.fromArray(it.matrices, t), vt(it.geo) || it.im.setMatrixAt(e++, U));
+      ((it.im.count = e),
+        (it.im.instanceMatrix.needsUpdate = !0),
+        it.im.computeBoundingSphere());
+    }
+    mt = ht = null;
+  }
+  let bt = new _(3160138);
+  function xt(e) {
+    let t = L(e, 0, 1);
+    (xe.color.setRGB(1, 1, 1).lerp(bt, t * 0.4),
+      Se &&
+        (Se.color.copy(xe.color),
+        Ce.color.copy(xe.color),
+        z.color.copy(xe.color)),
+      Le && Le.setNight(xe.color),
+      Ve && Ve.setNight(xe.color),
+      ot.color.setRGB(1, 1, 1).lerp(bt, t * 0.4));
+  }
+  function St(t) {
+    if (
+      (t.getWorldPosition(lt),
+      t.getWorldDirection(ut),
+      t.updateMatrixWorld(),
+      pt.multiplyMatrices(t.projectionMatrix, t.matrixWorldInverse),
+      ft.setFromProjectionMatrix(pt),
+      !mt || lt.distanceToSquared(mt) > 64 || ut.dot(dt) < 0.9985)
+    ) {
+      let t =
+        p && lt.y - e.getHeight(lt.x, lt.z) < 60
+          ? u.treeFar
+          : L(760 + Math.max(0, lt.y - 40) * 1.9, 760, 2700);
+      (nt(lt, ft, t), (mt = mt ? mt.copy(lt) : lt.clone()), dt.copy(ut));
+    }
+    let n = lt.y - e.getHeight(lt.x, lt.z) > 130;
+    if (n) {
+      if (gt) {
+        for (let e of st) e.count = 0;
+        gt = 0;
+      }
+      ht = null;
+    } else
+      (!ht || lt.distanceToSquared(ht) > 25) &&
+        ((gt = ct(lt)), (ht = ht ? ht.copy(lt) : lt.clone()));
+    Le && Le.update(lt, n);
+  }
+  function Ct() {
+    for (let { tiers: e } of Ie)
+      for (let t of e) for (let e of t) for (let t of e) t.dispose();
+    if (H) for (let e of H.tiers) for (let t of e) t.bm.dispose();
+    (Ue(), Le && Le.dispose(), Ve && Ve.dispose());
+    for (let e of st) e.dispose();
+    it && (it.im.dispose(), it.geo.dispose());
+    for (let e of be)
+      for (let t of [...e.near, ...[e.mid, e.far].flat()])
+        for (let e of De(t)) e.dispose();
+    for (let e of at) e.dispose();
+    (xe.dispose(),
+      ot.dispose(),
+      Se && (Se.dispose(), Ce.dispose(), z.dispose()));
+  }
+  let wt = B.filter((e) => !e.under);
+  return {
+    group: x,
+    update: St,
+    dispose: Ct,
+    setNight: xt,
+    setExclusions: yt,
+    plantDecor: We,
+    setDecorVisible: Ge,
+    addTownStreets: (e) => (Ve ? (Ve.addStreets(e), !0) : !1),
+    counts: {
+      trees: wt.length,
+      understory: B.length - wt.length,
+      rocks: rt.length,
+      grass: () => gt,
+    },
+    trees: wt,
+    rocks: rt,
+  };
+}
+var ri = `
+  varying vec3 vDir;
+  void main() {
+    vDir = normalize(position);
+    vec4 mv = modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * mv;
+    gl_Position.z = gl_Position.w; // always at the far plane
+  }`,
+  ii = `
+  uniform vec3 uZenith, uHorizon, uGround, uSunDir, uSunColor;
+  uniform float uSunGlow, uDisc;
+  varying vec3 vDir;
+  void main() {
+    vec3 d = normalize(vDir);
+    float y = d.y;
+    float up = pow(clamp(y, 0.0, 1.0), 0.55);
+    vec3 col = mix(uHorizon, uZenith, up);
+    col = mix(col, uGround, smoothstep(0.0, -0.09, y));
+    float s = max(dot(d, uSunDir), 0.0);
+    float horizonBoost = 1.0 - clamp(abs(y) * 3.0, 0.0, 1.0);
+    col += uSunColor * (pow(s, 5.0) * 0.34 * uSunGlow + pow(s, 42.0) * 0.55 * uSunGlow) * (0.5 + 0.5 * horizonBoost + 0.5 * step(0.0, y));
+    col += uSunColor * pow(s, 1800.0) * uDisc * step(0.0, y);
+    gl_FragColor = vec4(col, 1.0);
+    #include <tonemapping_fragment>
+    #include <colorspace_fragment>
+  }`,
+  ai = [
+    {
+      h: 0,
+      sun: 10796270,
+      sunI: 1.25,
+      hs: 5531802,
+      hg: 3028552,
+      hi: 1.55,
+      zen: 396316,
+      hor: 1582143,
+      gnd: 1054247,
+      fc: 1845056,
+      fw: 2568782,
+      den: 0.0016,
+      ex: 1.08,
+      ni: 1,
+    },
+    {
+      h: 4.6,
+      sun: 10926306,
+      sunI: 1.15,
+      hs: 5926558,
+      hg: 3291208,
+      hi: 1.5,
+      zen: 1386568,
+      hor: 4477039,
+      gnd: 2436158,
+      fc: 3884903,
+      fw: 6117232,
+      den: 0.0022,
+      ex: 1.06,
+      ni: 0.86,
+    },
+    {
+      h: 5.9,
+      sun: 16740408,
+      sunI: 1.7,
+      hs: 8688324,
+      hg: 6510671,
+      hi: 1.2,
+      zen: 2376832,
+      hor: 14062728,
+      gnd: 8221832,
+      fc: 11573154,
+      fw: 15244163,
+      den: 0.0034,
+      ex: 1.06,
+      ni: 0.24,
+    },
+    {
+      h: 6.9,
+      sun: 16754792,
+      sunI: 3.2,
+      hs: 9150157,
+      hg: 7626828,
+      hi: 1.25,
+      zen: 2905235,
+      hor: 14919298,
+      gnd: 9207692,
+      fc: 12560814,
+      fw: 16167548,
+      den: 0.0026,
+      ex: 1.1,
+      ni: 0.02,
+    },
+    {
+      h: 8.2,
+      sun: 16765858,
+      sunI: 2.6,
+      hs: 9942755,
+      hg: 7302224,
+      hi: 1.02,
+      zen: 3043531,
+      hor: 13884907,
+      gnd: 9544117,
+      fc: 12440037,
+      fw: 15523008,
+      den: 0.0021,
+      ex: 1.04,
+      ni: 0,
+    },
+    {
+      h: 10,
+      sun: 16773344,
+      sunI: 2.55,
+      hs: 10339572,
+      hg: 6451279,
+      hi: 0.8,
+      zen: 2056392,
+      hor: 12375792,
+      gnd: 9150650,
+      fc: 11060968,
+      fw: 13489886,
+      den: 0.0013,
+      ex: 1.04,
+      ni: 0,
+    },
+    {
+      h: 12.3,
+      sun: 16774372,
+      sunI: 2.45,
+      hs: 10930415,
+      hg: 6976589,
+      hi: 0.92,
+      zen: 2780109,
+      hor: 12769516,
+      gnd: 9677244,
+      fc: 11717604,
+      fw: 14604998,
+      den: 0.0016,
+      ex: 1.02,
+      ni: 0,
+    },
+    {
+      h: 14,
+      sun: 16768166,
+      sunI: 2.25,
+      hs: 11058646,
+      hg: 8484172,
+      hi: 0.88,
+      zen: 4356284,
+      hor: 14210244,
+      gnd: 10591894,
+      fc: 13355450,
+      fw: 15915688,
+      den: 0.002,
+      ex: 1,
+      ni: 0,
+    },
+    {
+      h: 16.2,
+      sun: 16765078,
+      sunI: 2.15,
+      hs: 11386072,
+      hg: 8613962,
+      hi: 0.92,
+      zen: 4224187,
+      hor: 14994342,
+      gnd: 10721932,
+      fc: 14076080,
+      fw: 16763792,
+      den: 0.0023,
+      ex: 1,
+      ni: 0,
+    },
+    {
+      h: 18,
+      sun: 16755546,
+      sunI: 2.5,
+      hs: 11055314,
+      hg: 8218180,
+      hi: 0.86,
+      zen: 3957416,
+      hor: 15512702,
+      gnd: 10522499,
+      fc: 13218204,
+      fw: 16758122,
+      den: 0.0019,
+      ex: 1,
+      ni: 0.02,
+    },
+    {
+      h: 19.3,
+      sun: 16742196,
+      sunI: 1.7,
+      hs: 10128317,
+      hg: 7164226,
+      hi: 1.05,
+      zen: 3689619,
+      hor: 15898740,
+      gnd: 9204352,
+      fc: 13082532,
+      fw: 16749143,
+      den: 0.003,
+      ex: 0.98,
+      ni: 0.16,
+    },
+    {
+      h: 20.2,
+      sun: 13922460,
+      sunI: 1.1,
+      hs: 9075638,
+      hg: 5130846,
+      hi: 1.2,
+      zen: 2899324,
+      hor: 13466772,
+      gnd: 7363945,
+      fc: 10255766,
+      fw: 14253196,
+      den: 0.0032,
+      ex: 1,
+      ni: 0.46,
+    },
+    {
+      h: 21.4,
+      sun: 10796270,
+      sunI: 1.5,
+      hs: 6058660,
+      hg: 3423310,
+      hi: 1.7,
+      zen: 1055800,
+      hor: 3095127,
+      gnd: 1712178,
+      fc: 2831698,
+      fw: 4144476,
+      den: 0.0022,
+      ex: 1.1,
+      ni: 0.92,
+    },
+    {
+      h: 24,
+      sun: 10796270,
+      sunI: 1.5,
+      hs: 5531802,
+      hg: 3028552,
+      hi: 1.7,
+      zen: 396316,
+      hor: 1582143,
+      gnd: 1054247,
+      fc: 1845056,
+      fw: 2568782,
+      den: 0.0016,
+      ex: 1.1,
+      ni: 1,
+    },
+  ],
+  oi = 5.8,
+  si = 60,
+  ci = 1,
+  li = 0.45,
+  ui = 2.05,
+  di = 44;
+function fi(t, i, a, o, c = {}) {
+  let l = t.scene,
+    u = new e(16773596, 3);
+  ((u.name = `terrainShowcaseSun`),
+    (u.castShadow = !0),
+    u.shadow.mapSize.set(4096, 4096),
+    (u.shadow.bias = -42e-5),
+    (u.shadow.normalBias = 0.05),
+    (u.shadow.camera.near = 1),
+    (u.shadow.camera.far = 900));
+  let d = new y();
+  (l.add(d), (u.target = d), l.add(u));
+  let f = new M(10405100, 6187588, 0.9);
+  ((f.name = `terrainShowcaseHemi`), l.add(f));
+  let p = new w(12178410, 0.00108),
+    m = l.fog,
+    h = l.background,
+    g = t.renderer.toneMappingExposure;
+  l.fog = p;
+  let v = new _(12178410);
+  l.background = v;
+  let b = new _(),
+    x = {
+      uZenith: { value: new _(4161488) },
+      uHorizon: { value: new _(12375790) },
+      uGround: { value: new _(9414072) },
+      uSunDir: { value: new s(0, 1, 0) },
+      uSunColor: { value: new _(16774112) },
+      uSunGlow: { value: 1 },
+      uDisc: { value: 6 },
+    },
+    C = new S({
+      uniforms: x,
+      vertexShader: ri,
+      fragmentShader: ii,
+      side: 1,
+      depthWrite: !1,
+      depthTest: !1,
+      fog: !1,
+    }),
+    T = new r(1e3, 32, 16),
+    E = new n(T, C);
+  ((E.name = `terrainShowcaseSky`),
+    (E.renderOrder = -1e3),
+    (E.frustumCulled = !1),
+    l.add(E));
+  let D = ai.map((e) => ({
+      h: e.h,
+      sunI: e.sunI,
+      hi: e.hi,
+      den: e.den,
+      ex: e.ex,
+      ni: e.ni,
+      sun: new _(e.sun),
+      hs: new _(e.hs),
+      hg: new _(e.hg),
+      zen: new _(e.zen),
+      hor: new _(e.hor),
+      gnd: new _(e.gnd),
+      fc: new _(e.fc),
+      fw: new _(e.fw),
+    })),
+    O = new _(),
+    k = new _(),
+    ee = new _(),
+    A = new _(),
+    j = new _(),
+    te = new _(),
+    N = new _(),
+    ne = new _();
+  function re(e) {
+    let t = ((e % 24) + 24) % 24,
+      n = 0;
+    for (; n < D.length - 2 && D[n + 1].h < t;) n++;
+    let r = D[n],
+      i = D[n + 1],
+      a = L((t - r.h) / Math.max(1e-4, i.h - r.h), 0, 1),
+      o = a * a * (3 - 2 * a);
+    return (
+      O.copy(r.sun).lerp(i.sun, o),
+      k.copy(r.hs).lerp(i.hs, o),
+      ee.copy(r.hg).lerp(i.hg, o),
+      A.copy(r.zen).lerp(i.zen, o),
+      j.copy(r.hor).lerp(i.hor, o),
+      te.copy(r.gnd).lerp(i.gnd, o),
+      N.copy(r.fc).lerp(i.fc, o),
+      ne.copy(r.fw).lerp(i.fw, o),
+      {
+        sunI: de(r.sunI, i.sunI, o),
+        hi: de(r.hi, i.hi, o),
+        den: de(r.den, i.den, o),
+        ex: de(r.ex, i.ex, o),
+        ni: de(r.ni, i.ni, o),
+      }
+    );
+  }
+  let ie = 14,
+    ae = new s(0, 1, 0),
+    oe = 45;
+  function se(e) {
+    ie = e;
+    let n = (Math.PI * (e - oi)) / 13.8,
+      r = e > 5.55 && e < 19.85 ? si * Math.max(0, Math.sin(n)) ** +ci : -12,
+      i = n + li,
+      s = re(e);
+    if (((oe = r), r > -2)) {
+      let e = (Math.max(r, 1.2) * Math.PI) / 180;
+      u.position.set(
+        Math.cos(i) * Math.cos(e),
+        Math.sin(e),
+        Math.sin(i) * Math.cos(e),
+      );
+    } else {
+      let e = (di * Math.PI) / 180;
+      u.position.set(
+        Math.cos(ui) * Math.cos(e),
+        Math.sin(e),
+        Math.sin(ui) * Math.cos(e),
+      );
+    }
+    return (
+      u.color.copy(O),
+      (u.intensity = s.sunI),
+      f.color.copy(k),
+      f.groundColor.copy(ee),
+      (f.intensity = s.hi),
+      b.copy(j),
+      v.copy(b),
+      p.color.copy(N),
+      (p.density = 6e-4),
+      x.uZenith.value.copy(A),
+      x.uHorizon.value.copy(j),
+      x.uGround.value.copy(te),
+      ae.copy(u.position).normalize(),
+      x.uSunDir.value.copy(ae),
+      x.uSunColor.value.copy(O),
+      (x.uSunGlow.value = de(1.8, 0.6, P(4, 40, r))),
+      (x.uDisc.value = r > -2 ? de(9, 4, P(2, 30, r)) : 1.6),
+      (t.renderer.toneMappingExposure = s.ex),
+      a.uFogCool.value.copy(N),
+      a.uFogWarm.value.copy(ne),
+      a.uSunDirW.value.copy(ae),
+      a.uFogSky.value.copy(A).lerp(j, 0.45),
+      (a.uFogWarmMix.value = L(P(-6, 8, r), 0, 1)),
+      (a.uFogDensity.value = s.den),
+      (a.uFogHeight.value = de(115, 82, P(0, 40, r))),
+      o &&
+        ((a.uSunElev.value = r > -2 ? o.encodeElev(r) : 1),
+        (a.uSunSoft.value = de(0.135, 0.062, P(2, 34, r))),
+        (a.uSkyOcc.value = r > -2 ? de(0.58, 0.8, P(4, 40, r)) : 1),
+        r > -2 && o.setAzimuth(i)),
+      c.onNight && c.onNight(s.ni),
+      s
+    );
+  }
+  let ce = new s(),
+    le = new s();
+  function F() {
+    let e = t.camera;
+    (E.position.copy(e.position), e.getWorldDirection(ce));
+    let n = [e.position.x, e.position.y, e.position.z],
+      r = [ce.x, ce.y, ce.z],
+      a = i.raycast(n, r, 1500),
+      o;
+    a
+      ? (le.set(a.point[0], a.point[1], a.point[2]), (o = a.dist))
+      : (le.copy(e.position).addScaledVector(ce, 140), (o = 140));
+    let s = Math.min(430, Math.max(85, 40 + o * 0.45));
+    (d.position.copy(le), u.position.copy(le).addScaledVector(ae, 340 + s));
+    let c = u.shadow.camera;
+    (c.left !== -s &&
+      ((c.left = -s),
+      (c.right = s),
+      (c.top = s),
+      (c.bottom = -s),
+      (c.far = 700 + s * 2),
+      c.updateProjectionMatrix()),
+      d.updateMatrixWorld());
+  }
+  function ue() {
+    (l.remove(u),
+      l.remove(d),
+      l.remove(f),
+      l.remove(E),
+      u.dispose(),
+      f.dispose(),
+      T.dispose(),
+      C.dispose(),
+      l.fog === p && (l.fog = m),
+      (l.background = h),
+      (t.renderer.toneMappingExposure = g));
+  }
+  return (
+    se(t.world?.time?.tod ?? 14),
+    {
+      sun: u,
+      hemi: f,
+      fog: p,
+      sky: b,
+      dome: E,
+      setTimeOfDay: se,
+      update: F,
+      dispose: ue,
+      getTimeOfDay: () => ie,
+      getElevation: () => oe,
+    }
+  );
+}
+function pi(e, t) {
+  let { n, heights: r } = e,
+    i = (n - 1) / t,
+    a = (e, t) => {
+      ((e = Math.max(0, Math.min(n - 1, e))),
+        (t = Math.max(0, Math.min(n - 1, t))));
+      let i = Math.min(n - 2, Math.floor(e)),
+        a = Math.min(n - 2, Math.floor(t)),
+        o = e - i,
+        s = t - a,
+        c = a * n + i;
+      return (
+        (r[c] + (r[c + 1] - r[c]) * o) * (1 - s) +
+        (r[c + n] + (r[c + n + 1] - r[c + n]) * o) * s
+      );
+    },
+    o = new Float32Array(t * t);
+  for (let e = 0; e < t; e++)
+    for (let n = 0; n < t; n++) {
+      let r = n * i,
+        s = (n + 1) * i,
+        c = e * i,
+        l = (e + 1) * i,
+        u = -1 / 0;
+      for (let e = Math.floor(c); e <= Math.ceil(l); e++)
+        for (let t = Math.floor(r); t <= Math.ceil(s); t++)
+          u = Math.max(
+            u,
+            a(Math.max(r, Math.min(s, t)), Math.max(c, Math.min(l, e))),
+          );
+      o[e * t + n] = u;
+    }
+  return {
+    maxHeights: o,
+    receiverHeight: (e, t) => a((e + 0.5) * i, (t + 0.5) * i),
+  };
+}
+var Q = 768,
+  mi = -10,
+  hi = 80;
+function gi(e) {
+  let n = e.size / Q,
+    { n: r, heights: i } = e,
+    { maxHeights: a, receiverHeight: o } = pi(e, Q),
+    s = new Float32Array(Q * Q),
+    c = new Float32Array(Q * Q),
+    l = new Uint8Array(Q * Q),
+    u = new v(l, Q, Q, O, ae);
+  ((u.minFilter = t),
+    (u.magFilter = t),
+    (u.wrapS = p),
+    (u.wrapT = p),
+    (u.generateMipmaps = !1),
+    (u.needsUpdate = !0));
+  let d = [];
+  {
+    let e = 9;
+    for (; e < 1150;) (d.push(e), (e *= 1.235));
+  }
+  let f = NaN;
+  function m(e, t) {
+    if (e < 0 || t < 0 || e > 766.999 || t > 766.999) return -1e9;
+    let n = e,
+      r = t,
+      i = n | 0,
+      o = r | 0,
+      s = n - i,
+      c = r - o,
+      l = o * Q + i,
+      u = a[l] + (a[l + 1] - a[l]) * s;
+    return u + (a[l + Q] + (a[l + Q + 1] - a[l + Q]) * s - u) * c;
+  }
+  function h(e) {
+    if (
+      Number.isFinite(f) &&
+      Math.abs(Math.atan2(Math.sin(e - f), Math.cos(e - f))) < 0.035
+    )
+      return !1;
+    f = e;
+    let t = Math.cos(e) / n,
+      r = Math.sin(e) / n;
+    for (let e = 0; e < Q; e++)
+      for (let n = 0; n < Q; n++) {
+        let i = e * Q + n,
+          a = o(n, e) + 1.8,
+          c = -20;
+        for (let i = 0; i < d.length; i++) {
+          let o = d[i],
+            s = m(n + t * o, e + r * o);
+          if (s < -1e8) break;
+          let l = (s - a) / o;
+          l > c && (c = l);
+        }
+        s[i] = Math.atan(c) * 57.29578;
+      }
+    for (let e = 0; e < 4; e++) {
+      for (let e = 0; e < Q; e++)
+        for (let t = 0; t < Q; t++) {
+          let n = t > 0 ? t - 1 : t,
+            r = t < 767 ? t + 1 : t;
+          c[e * Q + t] = (s[e * Q + n] + s[e * Q + t] + s[e * Q + r]) / 3;
+        }
+      for (let e = 0; e < Q; e++)
+        for (let t = 0; t < Q; t++) {
+          let n = t > 0 ? t - 1 : t,
+            r = t < 767 ? t + 1 : t;
+          s[t * Q + e] = (c[n * Q + e] + c[t * Q + e] + c[r * Q + e]) / 3;
+        }
+    }
+    for (let e = 0; e < Q * Q; e++) l[e] = L((s[e] - mi) / hi, 0, 1) * 255;
+    return ((u.needsUpdate = !0), !0);
+  }
+  let g = (e) => L((e - mi) / hi, 0, 1),
+    _ = r - 1,
+    y = new Uint8Array(_ * _);
+  for (let t = 0; t < _; t++)
+    for (let n = 0; n < _; n++)
+      y[t * _ + n] = L((e.waterLevel - i[t * r + n]) / 14, 0, 1) * 255;
+  let b = new v(y, _, _, O, ae);
+  return (
+    (b.minFilter = t),
+    (b.magFilter = t),
+    (b.wrapS = b.wrapT = p),
+    (b.generateMipmaps = !1),
+    (b.needsUpdate = !0),
+    h(0.7),
+    {
+      sunVis: u,
+      bedTex: b,
+      bedRange: 14,
+      setAzimuth: h,
+      encodeElev: g,
+      resolution: Q,
+      horizonAt(t, r) {
+        let i = L(Math.floor((t + e.half) / n), 0, 767),
+          a = L(Math.floor((r + e.half) / n), 0, 767);
+        return s[a * Q + i];
+      },
+      dispose() {
+        (u.dispose(), b.dispose());
+      },
+    }
+  );
+}
+var $ = {
+    ctx: null,
+    hf: null,
+    seed: 1,
+    opts: Ve,
+    root: null,
+    terrain: null,
+    water: null,
+    scatter: null,
+    surround: null,
+    lighting: null,
+    U: null,
+    mapData: null,
+    scenic: null,
+    offTod: null,
+    built: !1,
+    builds: 0,
+  },
+  _i = 0;
+function vi(e) {
+  let t = e.river,
+    n = { score: 1 / 0, p: null },
+    r = Math.floor(t.length * 0.3),
+    i = Math.floor(t.length * 0.8),
+    a = [0, 1, 0],
+    o = e.waterLevel,
+    s = (t, n, r, i) => {
+      let s = e.cellIndex(t, n);
+      if (e.noScatter[s] || e.material[s] !== 0) return !1;
+      let c = e.getHeight(t, n);
+      return c < o + 1 || c > r ? !1 : (e.getNormal(t, n, a), a[1] >= i);
+    };
+  for (let a = r; a < i; a++) {
+    let r = t[a - 1],
+      i = t[a + 1],
+      c = i[0] - r[0],
+      l = i[1] - r[1],
+      u = Math.hypot(c, l) || 1,
+      d = l / u,
+      f = -c / u;
+    d < 0 && ((d = -d), (f = -f));
+    let p = e.riverWidthAt(a) + e.bankWidthAt(a) * 0.9 + 3;
+    for (let r = 0; r <= 12; r += 4) {
+      let i = t[a][0] + d * (p + r),
+        c = t[a][1] + f * (p + r);
+      if (
+        !s(i, c, o + 6.5, 0.95) ||
+        !s(i + 1.71, c + 4.7, o + 7, 0.93) ||
+        !s(i + 0.9, c + 2.4, o + 7, 0.93) ||
+        e.roadDist[e.cellIndex(i, c)] < 30
+      )
+        continue;
+      let l = e.getHeight(i, c),
+        u = Math.abs(c - 110) + Math.abs(i) * 0.15 + r * 2;
+      u < n.score && ((n.score = u), (n.p = [i, l + 1, c]));
+    }
+  }
+  return n.p || [0, e.getHeight(0, 0) + 1, 0];
+}
+function yi(e, t) {
+  (e.world.map.setHeightfield({
+    getHeight: t.getHeight,
+    getNormal: t.getNormal,
+    raycast: t.raycast,
+    waterLevel: t.waterLevel,
+  }),
+    (e.world.map.waterLevel = t.waterLevel),
+    (e.world.map.size = t.size),
+    (e.world.map.bounds = t.bounds.slice()));
+}
+function bi() {
+  let { ctx: e } = $;
+  ($.root && e && e.scene.remove($.root),
+    $.terrain && $.terrain.dispose(),
+    $.water && $.water.dispose(),
+    $.scatter && $.scatter.dispose(),
+    $.surround && $.surround.dispose(),
+    $.mapData && $.mapData.dispose(),
+    ($.terrain = $.water = $.scatter = $.surround = $.root = $.mapData = null));
+}
+function xi(e, t) {
+  (($.lighting = fi(e, $.hf, $.U, $.mapData, {
+    onNight: (e) => {
+      ($.scatter && $.scatter.setNight(e), $.water && $.water.setNight(e));
+    },
+  })),
+    $.lighting.setTimeOfDay(t),
+    $.lighting.update());
+}
+function Si(e, t, n) {
+  let r = wi(e, t, n),
+    i;
+  do i = r.next();
+  while (!i.done);
+  return i.value;
+}
+async function Ci(
+  e,
+  t,
+  n,
+  { yieldTask: r, budgetMs: i = 40, now: a = () => performance.now() },
+) {
+  let o = wi(e, t, n),
+    s = a();
+  try {
+    for (;;) {
+      let e = o.next();
+      if (e.done) return e.value;
+      a() - s >= i && (await r(), (s = a()));
+    }
+  } finally {
+    o.return();
+  }
+}
+function* wi(e, t, n) {
+  let r = ++_i,
+    i = $.lighting ? $.lighting.getTimeOfDay() : null;
+  (($.lighting &&= ($.lighting.dispose(), null)), ($.built = !1), bi());
+  let a = {},
+    o = !1;
+  try {
+    let s = performance.now(),
+      c = ue(t, n),
+      l = performance.now();
+    yield;
+    let u = vi(c),
+      d = _e(c),
+      f = (a.mapData = gi(c));
+    ((d.uSunVis.value = f.sunVis), yield);
+    let p = new T();
+    ((p.name = `terrainRoot`), (a.root = p));
+    let m = (a.terrain = bt(c, t, d));
+    (p.add(m.group), yield);
+    let h = (a.surround = xt(c, t, d, m.colors));
+    (p.add(h.mesh), yield);
+    let g = (a.water = Pt(c, d, f));
+    (p.add(g.mesh), yield);
+    let _ = (a.scatter = yield* ni(c, m.colors, t, u, d, m.hAt, m.micro));
+    if (
+      (p.add(_.group), yield, (p.visible = !n?.hidden), r !== _i || $.ctx !== e)
+    )
+      throw Error(`Terrain construction superseded`);
+    return (
+      Object.assign($, { hf: c, seed: t, opts: n, scenic: u, U: d, ...a }),
+      yi(e, c),
+      e.scene.add(p),
+      m.update(e.camera),
+      _.update(e.camera),
+      g.update(e.camera),
+      i != null && xi(e, i),
+      e.log(
+        `generated seed=${t} in ${(l - s).toFixed(0)} ms (+${(performance.now() - l).toFixed(0)} ms render prep); h=[${c.minHeight.toFixed(1)}, ${c.maxHeight.toFixed(1)}] water=${c.waterLevel} trees=${$.scatter.counts.trees} rocks=${$.scatter.counts.rocks}`,
+      ),
+      ($.built = !0),
+      $.builds++,
+      (o = !0),
+      c
+    );
+  } finally {
+    if (!o) {
+      a.root?.removeFromParent();
+      for (let e of [`terrain`, `water`, `scatter`, `surround`, `mapData`])
+        a[e]?.dispose();
+      $.root === a.root &&
+        (($.terrain =
+          $.water =
+          $.scatter =
+          $.surround =
+          $.root =
+          $.mapData =
+            null),
+        ($.built = !1));
+    }
+  }
+}
+var Ti = {
+  getHeight: (e, t) => ($.hf ? $.hf.getHeight(e, t) : 0),
+  getNormal: (e, t, n) =>
+    $.hf
+      ? $.hf.getNormal(e, t, n)
+      : n
+        ? ((n[0] = 0), (n[1] = 1), (n[2] = 0), n)
+        : [0, 1, 0],
+  raycast: (e, t, n) => ($.hf ? $.hf.raycast(e, t, n) : null),
+  getMaterialAt: (e, t) => ($.hf ? $.hf.getMaterialAt(e, t) : `grass`),
+  generate(e, t) {
+    return $.ctx ? Si($.ctx, e ?? $.seed, t ?? Ve) : null;
+  },
+  get bounds() {
+    return $.hf ? $.hf.bounds.slice() : [-1024, -1024, 1024, 1024];
+  },
+  get waterLevel() {
+    return $.hf ? $.hf.waterLevel : 0;
+  },
+  getHeightfield: () => $.hf,
+  getWater: () => $.water,
+  getSurfaceUniforms: () => $.U,
+  surroundHeight: (e, t) =>
+    $.surround?.heightAt
+      ? $.surround.heightAt(e, t)
+      : $.hf
+        ? $.hf.getHeight(e, t)
+        : 0,
+  surroundFloor: () => $.surround?.floor ?? 0,
+  usesDefinition: (e, t) => $.built && $.seed === e && $.opts === t,
+  getBuildCount: () => $.builds,
+  getScenicPoint: () => ($.scenic ? $.scenic.slice() : null),
+  getScatter: () =>
+    $.scatter ? { trees: $.scatter.trees, rocks: $.scatter.rocks } : null,
+  plantDecorTrees: (e) => !!$.scatter?.plantDecor?.(e),
+  setDecorTreeVisible: (e, t) => !!$.scatter?.setDecorVisible?.(e, t),
+  addTownStreets: (e) => !!$.scatter?.addTownStreets?.(e),
+  setScatterExclusions(e) {
+    ($.scatter?.setExclusions(e),
+      $.scatter && $.ctx && $.scatter.update($.ctx.camera));
+  },
+  sunVisibility(e, t) {
+    if (!$.mapData || !$.U) return 1;
+    let n = $.mapData.horizonAt(e, t),
+      r = $.U.uSunElev.value * 80 - 10;
+    return L((r - n) / 6 + 0.5, 0, 1);
+  },
+  defaultMap: Ve,
+};
+function Ei(e) {
+  let t = e.modules.get(`environment`);
+  if (!t || typeof t.getSun != `function` || !$.U || !$.mapData) return;
+  let n = null;
+  try {
+    n = t.getSun();
+  } catch {
+    return;
+  }
+  if (!n || !n.dir) return;
+  let r = n.dir,
+    i = Math.hypot(r[0], r[1], r[2]) || 1,
+    a = r[0] / i,
+    o = r[1] / i,
+    s = r[2] / i;
+  $.U.uSunDirW.value.set(a, o, s);
+  let c = Math.asin(L(o, -1, 1)) * 57.29578;
+  (($.U.uSunElev.value = c > -2 ? $.mapData.encodeElev(c) : 1),
+    c > -2 && $.mapData.setAzimuth(Math.atan2(s, a)),
+    e.scene.fog &&
+      e.scene.fog.color &&
+      ($.U.uFogCool.value.copy(e.scene.fog.color),
+      $.U.uFogWarm.value.copy(e.scene.fog.color)));
+}
+var Di = {
+  name: `terrain`,
+  deps: [],
+  async init(e, t = {}) {
+    (($.ctx = e), ($.builds = 0));
+    let n =
+      t.yieldTask ??
+      (
+        await se(
+          async () => {
+            let { yieldToBrowser: e } = await import(
+              `./index-D8RniaPa.js`
+            ).then((e) => e.p);
+            return { yieldToBrowser: e };
+          },
+          __vite__mapDeps([0, 1]),
+        )
+      ).yieldToBrowser;
+    await Ci(
+      e,
+      e.config?.seed ?? e.world?.seed ?? 1,
+      e.config?.initialTerrain ?? Ve,
+      { ...t, yieldTask: n },
+    );
+  },
+  tick() {},
+  update(e, t) {
+    $.built &&
+      (($.U.uTime.value += Math.min(t || 0, 0.1)),
+      $.root?.visible !== !1 &&
+        ($.terrain.update(e.camera),
+        $.scatter.update(e.camera),
+        $.water.update(e.camera)),
+      $.lighting
+        ? ($.lighting.update(), $.water.setSkyTint($.lighting.sky))
+        : (Ei(e),
+          e.scene.background &&
+            e.scene.background.isColor &&
+            $.water.setSkyTint(e.scene.background)));
+  },
+  showcase(e, t) {
+    $.built &&
+      (e.modules.get(`environment`) ||
+        xi(e, t && t.tod != null ? t.tod : (e.world.time.tod ?? 14)),
+      ($.offTod = e.events.on(`env:timeOfDay`, (e) => {
+        $.lighting && $.lighting.setTimeOfDay(e.tod);
+      })),
+      e.setCameraFocus($.scenic),
+      e.log(
+        `showcase focus at [${$.scenic.map((e) => e.toFixed(1)).join(`, `)}]`,
+      ));
+  },
+  dispose(e) {
+    (_i++,
+      ($.offTod &&= ($.offTod(), null)),
+      ($.lighting &&= ($.lighting.dispose(), null)),
+      bi(),
+      ($.built = !1),
+      ($.ctx = $.hf = $.U = $.scenic = null),
+      ($.opts = Ve));
+  },
+  api: Ti,
+};
+export { Di as default };
+//# sourceMappingURL=terrain-D4VU5r38.js.map

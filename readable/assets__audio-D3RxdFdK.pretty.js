@@ -1,0 +1,3917 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import {
+  $ as e,
+  A as t,
+  An as n,
+  Bt as r,
+  F as i,
+  Fn as a,
+  Gt as o,
+  H as s,
+  Hn as c,
+  I as l,
+  Jn as u,
+  K as d,
+  Vt as f,
+  W as p,
+  _n as m,
+  cn as h,
+  dt as g,
+  gn as _,
+  jt as v,
+  k as y,
+  kn as b,
+  mt as x,
+  pt as S,
+  q as C,
+  rn as w,
+  st as T,
+  tt as E,
+  v as D,
+  vt as O,
+  z as k,
+  zt as A,
+} from "./graphics-quality-CrL3qbU3.js";
+import { v as ee } from "./sim-CCeMdhLh.js";
+import { t as j } from "./sim-aWA3uwbl.js";
+import { r as te, t as M } from "./hostility-BAA0I7XB.js";
+import { r as N } from "./squads-7-3V4T83.js";
+import { n as P, t as F } from "./acoustics-BfYC1rA2.js";
+import {
+  a as ne,
+  c as re,
+  d as I,
+  i as ie,
+  l as L,
+  n as R,
+  o as z,
+  r as B,
+  s as V,
+  t as ae,
+  u as H,
+} from "./synth-B52TAiVy.js";
+import { t as oe } from "./grenade-sim-CyMT7Itf.js";
+import { i as se, n as ce } from "./rotor-spool-BGBN_bun.js";
+var le = Object.freeze({
+    threshold: -3,
+    ratio: 20,
+    attack: 0,
+    knee: 0,
+    release: 0.08,
+    trim: 0.819,
+  }),
+  ue = (e) => {
+    let t = Math.abs(e);
+    return (
+      Math.sign(e) *
+      (t <= 0.8 ? t : 0.8 + 0.18 * (1 - Math.exp(-(t - 0.8) / 0.18)))
+    );
+  };
+function de(e) {
+  let t = e.createWaveShaper(),
+    n = new Float32Array(4097),
+    r = e.createDynamicsCompressor(),
+    i = e.createGain(),
+    a = e.createGain();
+  for (let e of [`threshold`, `ratio`, `attack`, `knee`, `release`])
+    r[e].value = le[e];
+  ((i.gain.value = le.trim), (a.gain.value = 1 / 2));
+  for (let e = 0; e < n.length; e++)
+    n[e] = ue(((e / (n.length - 1)) * 2 - 1) * 2);
+  return (
+    r.connect(i),
+    i.connect(a),
+    a.connect(t),
+    (t.curve = n),
+    (t.oversample = `2x`),
+    (t.input = r),
+    t
+  );
+}
+var fe = 1.35;
+function U(e, t) {
+  let n = Math.max(0, t),
+    r = e.ref;
+  if (!r) return 1;
+  if (e.rangeFalloff) return (r / (r + n)) ** +fe;
+  let i = r / (r + Math.max(n - r, 0));
+  if ((e.falloff && (i **= +e.falloff), e.fade)) {
+    let t = Math.min(1, Math.max(0, (n - 0.5 * e.fade) / (0.5 * e.fade)));
+    i *= 1 - t * t * (3 - 2 * t);
+  }
+  return e.layered ? Math.sqrt(i) : i;
+}
+function pe(e) {
+  return Math.max(160, 6e3 * 0.5 ** (Math.max(0, e - 10) / 18));
+}
+async function me(e, t, n = 3) {
+  for (let r = 1; ; r++)
+    try {
+      let n = await fetch(e, { signal: t });
+      if (!n.ok) throw Error(`${e.split(`/`).pop()}: HTTP ${n.status}`);
+      return await n.arrayBuffer();
+    } catch (e) {
+      if (t.aborted || r >= n) throw e;
+      await new Promise((e) => setTimeout(e, 1500 * r));
+    }
+}
+var he = `/assets/audio/movement/`,
+  W = {
+    concrete: `road`,
+    stone: `road`,
+    rock: `road`,
+    mud: `dirt`,
+    leaves: `grass`,
+  },
+  G = class {
+    constructor() {
+      ((this.banks = new Map()),
+        (this.last = new Map()),
+        (this.rotor = null),
+        (this.disposed = !1),
+        (this.abort = new AbortController()),
+        (this.failures = []));
+    }
+    async load(e) {
+      let t = this.abort.signal,
+        n = setTimeout(() => this.abort.abort(), 18e4);
+      try {
+        let n = await fetch(he + `manifest.json`, {
+          signal: t,
+          cache: `no-store`,
+        });
+        if (!n.ok) throw Error(`manifest HTTP ${n.status}`);
+        let r = await n.json(),
+          i = new Map(),
+          a = (n) => (
+            i.has(n.file) ||
+              i.set(
+                n.file,
+                (async () => ({
+                  buffer: await e.decodeAudioData(await me(he + n.file, t)),
+                  file: n.file,
+                }))(),
+              ),
+            i.get(n.file)
+          );
+        await Promise.all([
+          ...Object.entries(r.footsteps).map(async ([e, t]) => {
+            let n = await Promise.allSettled(t.map(a));
+            if (this.disposed) return;
+            let r = n
+              .filter((e) => e.status === `fulfilled`)
+              .map((e) => e.value);
+            for (let e of n)
+              e.status === `rejected` && this.failures.push(String(e.reason));
+            r.length && this.banks.set(e, r);
+          }),
+          a(r.rotor)
+            .then((e) => {
+              this.disposed || (this.rotor = e);
+            })
+            .catch((e) => this.failures.push(String(e))),
+        ]);
+      } catch (e) {
+        this.disposed || this.failures.push(String(e));
+      } finally {
+        clearTimeout(n);
+      }
+    }
+    build(e, t, n, r, i, a) {
+      if (this.disposed) return;
+      if (e === `vehicle_rotor` && this.rotor) {
+        let e = t.createBufferSource(),
+          o = t.createGain();
+        ((e.buffer = this.rotor.buffer), (e.loop = !0));
+        let s = Math.max(0, Math.min(1, i.rpm ?? 0.3));
+        return (
+          e.playbackRate.setValueAtTime(0.96 + s * 0.1, r),
+          o.gain.setValueAtTime(0, r),
+          o.gain.linearRampToValueAtTime(0.75 + s * 0.25, r + 0.25),
+          e.connect(o),
+          o.connect(n),
+          a(e),
+          (i.handle.setRpm = (t, n) => {
+            (e.playbackRate.setTargetAtTime(0.96 + t * 0.1, n, 0.3),
+              o.gain.setTargetAtTime(
+                0.75 + t * 0.25,
+                Math.max(n, r + 0.25),
+                0.3,
+              ));
+          }),
+          e.start(r, (i.rand?.() ?? 0) * e.buffer.duration),
+          (i.sample = this.rotor.file),
+          1 / 0
+        );
+      }
+      if (e !== `footstep` && !e.startsWith(`footstep_`)) return;
+      let o = i.surface ?? (e === `footstep` ? `dirt` : e.slice(9)),
+        s = W[o] ?? o,
+        c = this.banks.get(s);
+      if (!c?.length) return;
+      let l = Math.min(c.length - 1, Math.floor((i.rand?.() ?? 0) * c.length));
+      (c.length > 1 && l === this.last.get(s) && (l = (l + 1) % c.length),
+        this.last.set(s, l));
+      let { buffer: u, file: d } = c[l],
+        f = t.createBufferSource();
+      f.buffer = u;
+      let p =
+        Math.max(0.75, Math.min(1.25, i.pitch ?? 1)) *
+        (0.97 + (i.rand?.() ?? 0.5) * 0.06);
+      return (
+        f.playbackRate.setValueAtTime(p, r),
+        f.connect(n),
+        a(f),
+        f.start(r),
+        (i.sample = d),
+        r + u.duration / p
+      );
+    }
+    stats() {
+      return {
+        banks: Object.fromEntries(
+          [...this.banks].map(([e, t]) => [e, t.length]),
+        ),
+        rotor: !!this.rotor,
+        failures: this.failures.slice(),
+      };
+    }
+    dispose() {
+      ((this.disposed = !0),
+        this.abort.abort(),
+        this.banks.clear(),
+        this.last.clear(),
+        (this.rotor = null));
+    }
+  },
+  ge = `/assets/audio/voice/`,
+  _e = [`lewis/manifest.json`, `manifest.json`];
+async function ve(e, t, n = 4) {
+  let r = Array(e.length),
+    i = 0;
+  return (
+    await Promise.all(
+      Array.from({ length: Math.min(n, e.length) }, async () => {
+        for (;;) {
+          let n = i++;
+          if (n >= e.length) return;
+          try {
+            r[n] = { status: `fulfilled`, value: await t(e[n], n) };
+          } catch (e) {
+            r[n] = { status: `rejected`, reason: e };
+          }
+        }
+      }),
+    ),
+    r
+  );
+}
+var ye = class {
+    constructor() {
+      ((this.banks = new Map()),
+        (this.last = new Map()),
+        (this.disposed = !1),
+        (this.abort = new AbortController()),
+        (this.failures = []),
+        (this.loading = null));
+    }
+    async load(e) {
+      return ((this.loading ||= this._load(e)), this.loading);
+    }
+    async _load(e) {
+      let t = this.abort.signal,
+        n = setTimeout(() => this.abort.abort(), 18e4);
+      try {
+        let n = await Promise.all(
+            _e.map(async (e) => {
+              let n = await fetch(ge + e, { signal: t, cache: `no-store` });
+              if (!n.ok) throw Error(`${e} HTTP ${n.status}`);
+              return (await n.json()).voices ?? {};
+            }),
+          ),
+          r = {};
+        for (let e of n) for (let [t, n] of Object.entries(e)) r[t] ??= n;
+        let i = await ve(
+          Object.entries(r).flatMap(([e, t]) =>
+            t.map((t, n) => ({ key: e, entry: t, index: n })),
+          ),
+          async ({ key: n, entry: r, index: i }) => ({
+            key: n,
+            index: i,
+            buffer: await e.decodeAudioData(await me(ge + r.file, t)),
+            file: r.file,
+            loop: !!r.loop,
+          }),
+        );
+        if (this.disposed) return;
+        let a = new Map();
+        for (let e of i) {
+          if (e.status === `rejected`) {
+            this.failures.push(String(e.reason));
+            continue;
+          }
+          let { key: t, index: n, ...r } = e.value;
+          (a.has(t) || a.set(t, []), (a.get(t)[n] = r));
+        }
+        for (let [e, t] of a) {
+          let n = t.filter(Boolean);
+          n.length && this.banks.set(e, n);
+        }
+      } catch (e) {
+        this.disposed || this.failures.push(String(e));
+      } finally {
+        clearTimeout(n);
+      }
+    }
+    has(e) {
+      return this.banks.has(e);
+    }
+    build(e, t, n, r, i, a) {
+      if (this.disposed || !e.startsWith(`voice_`)) return;
+      let o = e.slice(6),
+        s = this.banks.get(o);
+      if (!s?.length) return;
+      let c = Math.min(s.length - 1, Math.floor((i.rand?.() ?? 0) * s.length));
+      (s.length > 1 && c === this.last.get(o) && (c = (c + 1) % s.length),
+        this.last.set(o, c));
+      let { buffer: l, file: u, loop: d } = s[c],
+        f = t.createBufferSource();
+      f.buffer = l;
+      let p = Math.max(0.8, Math.min(1.2, i.pitch ?? 1));
+      return (
+        f.playbackRate.setValueAtTime(p, r),
+        f.connect(n),
+        a(f),
+        (i.sample = u),
+        d
+          ? ((f.loop = !0), f.start(r, (i.rand?.() ?? 0) * l.duration), 1 / 0)
+          : (f.start(r), r + l.duration / p)
+      );
+    }
+    stats() {
+      return {
+        banks: Object.fromEntries(
+          [...this.banks].map(([e, t]) => [e, t.length]),
+        ),
+        failures: this.failures.slice(),
+      };
+    }
+    dispose() {
+      ((this.disposed = !0),
+        this.abort.abort(),
+        this.banks.clear(),
+        this.last.clear());
+    }
+  },
+  be = `/assets/audio/sfx/`,
+  xe = class {
+    constructor() {
+      ((this.banks = new Map()),
+        (this.last = new Map()),
+        (this.disposed = !1),
+        (this.abort = new AbortController()),
+        (this.failures = []),
+        (this.loading = null));
+    }
+    load(e) {
+      return (this.loading ??= this._load(e));
+    }
+    async _load(e) {
+      let t = this.abort.signal,
+        n = setTimeout(() => this.abort.abort(), 18e4);
+      try {
+        let n = await fetch(be + `manifest.json`, {
+          signal: t,
+          cache: `no-store`,
+        });
+        if (!n.ok) throw Error(`manifest HTTP ${n.status}`);
+        let r = (await n.json()).sounds ?? {};
+        await Promise.all(
+          Object.entries(r).map(async ([n, r]) => {
+            let i = await Promise.allSettled(
+              r.map(async (n) => ({
+                buffer: await e.decodeAudioData(await me(be + n.file, t)),
+                file: n.file,
+                gain: n.gain ?? 1,
+                layered: !!n.layered,
+                farSynth: !!n.farSynth,
+              })),
+            );
+            if (this.disposed) return;
+            for (let e of i)
+              e.status === `rejected` && this.failures.push(String(e.reason));
+            let a = i
+              .filter((e) => e.status === `fulfilled`)
+              .map((e) => e.value);
+            a.length && this.banks.set(n, a);
+          }),
+        );
+      } catch (e) {
+        this.disposed || this.failures.push(String(e));
+      } finally {
+        clearTimeout(n);
+      }
+    }
+    has(e) {
+      return this.banks.has(e);
+    }
+    build(e, t, n, r, i, a, o) {
+      let s = this.disposed ? null : this.banks.get(e);
+      if (!s?.length) return;
+      let c = this._pick(e, s, i);
+      if (!c.layered)
+        return ((i.sample = c.file), this._play(c, t, n, r, c.gain, 2e4, a));
+      let l = i.d ?? 0,
+        u = i.layerScale ?? 1,
+        d = V(l, u),
+        f = r + d.delay,
+        p = this.banks.get(e + `_far`),
+        m = !p && c.farSynth && o?.build,
+        h = p || m ? Math.min(1, Math.max(0, (l / u - 25) / 135)) : 0,
+        g = h * h * (3 - 2 * h),
+        _ = f;
+      if (
+        (g < 0.98 &&
+          ((i.sample = c.file),
+          (_ = Math.max(
+            _,
+            this._play(c, t, n, f, c.gain * Math.sqrt(1 - g), d.lp, a),
+          ))),
+        g > 0.02 && m)
+      ) {
+        let e = t.createGain();
+        ((e.gain.value = Math.sqrt(g)),
+          e.connect(n),
+          (_ = Math.max(_, o.build(t, e, r, i) ?? f)));
+      } else if (g > 0.02) {
+        let r = this._pick(e + `_far`, p, i);
+        ((i.sample ??= r.file),
+          (_ = Math.max(
+            _,
+            this._play(
+              r,
+              t,
+              n,
+              f,
+              r.gain * Math.sqrt(g),
+              V(Math.max(0, l - 60), u).lp,
+              a,
+            ),
+          )));
+      }
+      return _;
+    }
+    _pick(e, t, n) {
+      let r = Math.min(t.length - 1, Math.floor((n.rand?.() ?? 0) * t.length));
+      return (
+        t.length > 1 && r === this.last.get(e) && (r = (r + 1) % t.length),
+        this.last.set(e, r),
+        t[r]
+      );
+    }
+    _play({ buffer: e }, t, n, r, i, a, o) {
+      let s = t.createBufferSource(),
+        c = t.createGain();
+      if (((s.buffer = e), (c.gain.value = i), s.connect(c), o(s), a < 19e3)) {
+        let e = t.createBiquadFilter();
+        ((e.type = `lowpass`),
+          (e.frequency.value = a),
+          (e.Q.value = 0.5),
+          c.connect(e),
+          e.connect(n));
+      } else c.connect(n);
+      return (s.start(r), r + e.duration);
+    }
+    stats() {
+      return {
+        banks: Object.fromEntries(
+          [...this.banks].map(([e, t]) => [e, t.length]),
+        ),
+        failures: this.failures.slice(),
+      };
+    }
+    dispose() {
+      ((this.disposed = !0),
+        this.abort.abort(),
+        this.banks.clear(),
+        this.last.clear());
+    }
+  },
+  K = [0, 15, 30, 45, 62, 82, 105, 135, 175, 230, 320, 480, 750],
+  Se = 3,
+  Ce = 0.05,
+  we = (e, t) =>
+    e.startsWith(`gun_`) && e !== `gun_tail` && typeof t?.build == `function`,
+  Te = class {
+    constructor() {
+      ((this.banks = new Map()),
+        (this.queue = []),
+        (this.busy = !1),
+        (this.disposed = !1),
+        (this.baked = 0),
+        (this.failed = 0),
+        (this.ms = 0));
+    }
+    has(e) {
+      return !!this.banks.get(e);
+    }
+    want(e, t, n) {
+      this.disposed ||
+        this.banks.has(e) ||
+        !we(e, t) ||
+        this.queue.some((t) => t.id === e) ||
+        (this.banks.set(e, null),
+        this.queue.push({ id: e, def: t, sampleRate: n }),
+        this._pump());
+    }
+    async _pump() {
+      if (!this.busy) {
+        for (
+          this.busy = !0, await new Promise((e) => setTimeout(e, 0));
+          this.queue.length && !this.disposed;
+        ) {
+          let { id: e, def: t, sampleRate: n } = this.queue.shift(),
+            r = performance.now();
+          try {
+            (this.banks.set(e, await De(t, n)), this.baked++);
+          } catch {
+            (this.failed++, this.banks.delete(e));
+          }
+          ((this.ms += performance.now() - r),
+            await new Promise((e) => setTimeout(e, 30)));
+        }
+        this.busy = !1;
+      }
+    }
+    build(e, t, n, r, i, a) {
+      let o = this.disposed ? null : this.banks.get(e);
+      if (!o) return;
+      let s = i.d ?? 0,
+        c = s / (i.layerScale ?? 1),
+        l = i.pitch ?? 1,
+        u = 0;
+      for (; u < K.length - 1 && c >= K[u + 1];) u++;
+      let d = r + Math.min(s / 343, 2.5),
+        f = Math.floor((i.rand?.() ?? Math.random()) * Se) % Se,
+        p = o[u][f],
+        m = t.createBufferSource();
+      ((m.buffer = p), (m.playbackRate.value = l), a(m));
+      let h = n;
+      if (u < K.length - 1) {
+        let e = Math.min(1, (c - K[u]) / (K[u + 1] - K[u])),
+          n = (o.levels[u + 1] - o.levels[u]) * e;
+        if (Math.abs(n) > 0.3) {
+          let e = t.createGain();
+          ((e.gain.value = 10 ** (n / 20)), e.connect(h), (h = e));
+        }
+      }
+      let g = V(c).lp;
+      if (g < V(K[u]).lp * 0.97) {
+        let e = t.createBiquadFilter();
+        ((e.type = `lowpass`),
+          (e.frequency.value = g),
+          (e.Q.value = 0.5),
+          m.connect(e),
+          e.connect(h));
+      } else m.connect(h);
+      return (m.start(d), (i.sample = `baked:` + e), d + p.duration / l);
+    }
+    stats() {
+      return {
+        baked: this.baked,
+        failed: this.failed,
+        queued: this.queue.length,
+        ms: Math.round(this.ms),
+      };
+    }
+    dispose() {
+      ((this.disposed = !0), (this.queue.length = 0), this.banks.clear());
+    }
+  },
+  Ee = () => new Promise((e) => setTimeout(e, 0));
+async function De(e, t) {
+  let n = (e) => {
+      let t = 1 + e * 7919;
+      return () => (t = (t * 16807) % 2147483647) / 2147483647;
+    },
+    r = [],
+    i = [];
+  for (let a = 0; a < K.length; a++) {
+    await Ee();
+    let o = K[a],
+      s = Math.min(o / 343, 2.5),
+      c = new OfflineAudioContext(1, 1, t),
+      l = [];
+    for (let t = 0; t < Se; t++) {
+      let r = e.build(c, c.destination, 0, {
+        d: o,
+        rand: n(t),
+        pitch: 1,
+        volume: 1,
+      });
+      l.push({
+        k: t,
+        len: Math.min(4, Math.max(0.2, (Number.isFinite(r) ? r : 3) - s)) + Ce,
+      });
+    }
+    let u = 0;
+    for (let e of l) ((e.at = u), (u += s + e.len));
+    let d = new OfflineAudioContext(1, Math.ceil(u * t), t);
+    for (let t of l)
+      e.build(d, d.destination, t.at, {
+        d: o,
+        rand: n(t.k),
+        pitch: 1,
+        volume: 1,
+      });
+    let f = (await d.startRendering()).getChannelData(0),
+      p = [],
+      m = 0;
+    for (let e of l) {
+      let n = Math.round((e.at + s) * t),
+        r = f.subarray(
+          n,
+          Math.min(f.length, Math.round((e.at + s + e.len) * t)),
+        ),
+        i = 0;
+      for (let e of r) i = Math.max(i, Math.abs(e));
+      let a = r.length - 1;
+      for (; a > 0 && Math.abs(r[a]) < i * 3e-4;) a--;
+      let o = Math.max(64, Math.min(r.length, a + Math.round(0.01 * t))),
+        c = new AudioBuffer({ length: o, numberOfChannels: 1, sampleRate: t }),
+        l = r.slice(0, o),
+        u = Math.min(o, Math.round(0.005 * t));
+      for (let e = 0; e < u; e++) l[o - 1 - e] *= e / u;
+      (c.copyToChannel(l, 0), (p[e.k] = c));
+      for (let e of l) m += e * e;
+    }
+    (r.push(p), i.push(10 * Math.log10(m / Se + 1e-12)));
+  }
+  return ((r.levels = i), r);
+}
+var Oe = 0.025,
+  ke = 0.1,
+  Ae = 48,
+  je = 8,
+  Me = 6,
+  Ne = class {
+    constructor(e, t) {
+      let n = e.ac;
+      ((this.index = t),
+        (this.input = n.createGain()),
+        (this.filter = n.createBiquadFilter()),
+        (this.filter.type = `lowpass`),
+        (this.filter.Q.value = 0.7),
+        (this.occlusion = n.createGain()),
+        (this.panner = n.createPanner()),
+        (this.panner.panningModel = `equalpower`),
+        (this.panner.distanceModel = `linear`),
+        (this.panner.rolloffFactor = 0),
+        (this.panner.refDistance = 1),
+        (this.panner.maxDistance = 1e5),
+        (this.busy = !1),
+        (this.pri = 0),
+        (this.end = 0),
+        (this.start = 0),
+        (this.touch = 0),
+        (this.id = null),
+        (this.pos = null),
+        (this.sources = []),
+        (this.handle = null),
+        (this.positional = !1),
+        (this.bus = null),
+        (this.serial = 0));
+    }
+    route(e, t) {
+      try {
+        this.input.disconnect();
+      } catch {}
+      try {
+        this.panner.disconnect();
+      } catch {}
+      try {
+        (this.filter.disconnect(), this.occlusion.disconnect());
+      } catch {}
+      (e
+        ? (this.input.connect(this.filter),
+          this.filter.connect(this.occlusion),
+          this.occlusion.connect(this.panner),
+          this.panner.connect(t))
+        : this.input.connect(t),
+        (this.positional = e),
+        (this.bus = t));
+    }
+    place(e) {
+      let t = this.panner;
+      t.positionX
+        ? ((t.positionX.value = e[0]),
+          (t.positionY.value = e[1]),
+          (t.positionZ.value = e[2]))
+        : t.setPosition(e[0], e[1], e[2]);
+    }
+    kill(e) {
+      let t = this.input.gain;
+      try {
+        (t.cancelAndHoldAtTime
+          ? t.cancelAndHoldAtTime(e)
+          : (t.cancelScheduledValues(e), t.setValueAtTime(t.value, e)),
+          t.setTargetAtTime(0, e, 0.001),
+          t.setValueAtTime(0, e + 0.006));
+      } catch {}
+      for (let t of this.sources)
+        try {
+          t.stop(e + 0.007);
+        } catch {}
+      ((this.sources.length = 0),
+        (this.busy = !1),
+        (this.handle = null),
+        (this.end = 0),
+        (this.id = null),
+        (this.pos = null));
+    }
+    free(e) {
+      this.kill(e);
+    }
+  },
+  Pe = class {
+    constructor(e, { ownsContext: t = !0 } = {}) {
+      ((this.ctx = e),
+        (this.ownsContext = t),
+        (this.disposed = !1),
+        (this.ok = !1),
+        (this.ac = null),
+        (this.listener = null),
+        (this.analyser = null),
+        (this.compressor = null),
+        (this.busses = {}),
+        (this.voices = []),
+        (this.rng = e.rng.fork(`audio`)),
+        (this.rand = () => this.rng.next()),
+        (this.recent = []),
+        (this.played = 0),
+        (this.stolen = 0),
+        (this.culled = 0),
+        (this.health = `none`),
+        (this._rate = { t0: 0, n: 0 }),
+        (this._lastCt = -1),
+        (this._lastAdvance = 0),
+        (this._lastResumeTry = 0),
+        (this._warned = new Set()),
+        (this._tmp = new c()),
+        (this._gestureOff = null),
+        (this.offlineBuffer = null),
+        (this.offlineRate = 0),
+        (this._offlinePromise = null),
+        (this.listenerOverride = null),
+        (this.movementSamples = new G()),
+        (this.voiceSamples = new ye()),
+        (this.sfxSamples = new xe()),
+        (this.bakedVoices = new Te()));
+      try {
+        this._build();
+      } catch (t) {
+        (e.warn(`audio unavailable:`, t?.message ?? t), (this.ok = !1));
+      }
+    }
+    _build() {
+      let e = window.AudioContext || window.webkitAudioContext;
+      if (!e) {
+        this.ctx.warn(`no AudioContext in this browser`);
+        return;
+      }
+      if (this.ownsContext)
+        try {
+          y.setContext(new e({ latencyHint: Oe }));
+        } catch {}
+      ((this.listener = new t()), (this.ac = this.listener.context));
+      let n = this.ac,
+        r = n.createGain();
+      r.gain.value = 0.85;
+      let i = n.createGain();
+      i.gain.value = 1;
+      let a = n.createGain();
+      a.gain.value = 0.7;
+      let o = n.createGain();
+      o.gain.value = 0.8;
+      let s = n.createDynamicsCompressor();
+      ((s.threshold.value = -10),
+        (s.knee.value = 16),
+        (s.ratio.value = 6),
+        (s.attack.value = 0.002),
+        (s.release.value = 0.14));
+      let c = n.createAnalyser();
+      ((c.fftSize = 2048), (c.smoothingTimeConstant = 0.55));
+      let l = n.createBiquadFilter();
+      ((l.type = `lowpass`), (l.frequency.value = 2e4), (l.Q.value = 0.5));
+      let u = n.createGain();
+      u.gain.value = 1;
+      let d = n.createGain();
+      ((d.gain.value = 1),
+        i.connect(l),
+        a.connect(l),
+        l.connect(u),
+        u.connect(d),
+        d.connect(r),
+        o.connect(r),
+        (this.muffle = l),
+        (this.muffleGain = u),
+        (this.presence = d));
+      let f = de(n);
+      ((this.outputLimiter = f),
+        r.connect(s),
+        s.connect(f.input),
+        f.connect(c),
+        c.connect(this.listener.getInput()),
+        (this.busses = { master: r, sfx: i, ambience: a, ui: o }),
+        (this.analyser = c),
+        (this.compressor = s),
+        this.ctx.camera.add(this.listener));
+      for (let e = 0; e < 48; e++) this.voices.push(new Ne(this, e));
+      ((this._td = new Float32Array(c.fftSize)),
+        (this._lastAdvance = performance.now()),
+        (this.ok = !0),
+        (this.health = n.state),
+        this._installGestureResume());
+    }
+    _installGestureResume() {
+      try {
+        navigator.audioSession && (navigator.audioSession.type = `playback`);
+      } catch {}
+      let e = () => {
+          this.resume();
+        },
+        t = [`pointerdown`, `keydown`, `touchstart`, `click`];
+      for (let n of t) window.addEventListener(n, e, { passive: !0 });
+      ((this._gestureOff = () => {
+        for (let n of t) window.removeEventListener(n, e);
+      }),
+        this.resume());
+    }
+    resume() {
+      let e = this.ac;
+      if (!e) return Promise.resolve(!1);
+      if (e.state === `running`) return Promise.resolve(!0);
+      try {
+        let t = e.resume();
+        return t && typeof t.then == `function`
+          ? t.then(() => e.state === `running`).catch(() => !1)
+          : Promise.resolve(e.state === `running`);
+      } catch {
+        return Promise.resolve(!1);
+      }
+    }
+    listenerPosition(e = [0, 0, 0]) {
+      if (this.listenerOverride)
+        return (
+          (e[0] = this.listenerOverride[0]),
+          (e[1] = this.listenerOverride[1]),
+          (e[2] = this.listenerOverride[2]),
+          e
+        );
+      let t = this.ctx.camera.getWorldPosition(this._tmp);
+      return ((e[0] = t.x), (e[1] = t.y), (e[2] = t.z), e);
+    }
+    distanceTo(e) {
+      let t = this.listenerPosition((this._lpos ??= [0, 0, 0])),
+        n = e[0] - t[0],
+        r = e[1] - t[1],
+        i = e[2] - t[2];
+      return Math.sqrt(n * n + r * r + i * i);
+    }
+    ids() {
+      return B.slice();
+    }
+    has(e) {
+      return !!R[e];
+    }
+    setBus(e, t) {
+      let n = this.busses[e];
+      if (!n) return !1;
+      let r = z(+t || 0, 0, 2);
+      try {
+        n.gain.setTargetAtTime(r, this.ac.currentTime, 0.03);
+      } catch {
+        n.gain.value = r;
+      }
+      return !0;
+    }
+    getBus(e) {
+      return this.busses[e]?.gain.value ?? 0;
+    }
+    setMuffle(e, t = 0.3) {
+      if (!this.muffle) return !1;
+      let n = z(+e || 0, 0, 1),
+        r = this.ac.currentTime,
+        i = Math.max(0.005, t / 3);
+      try {
+        (this.muffle.frequency.cancelScheduledValues(r),
+          this.muffleGain.gain.cancelScheduledValues(r),
+          this.muffle.frequency.setTargetAtTime(2e4 * (420 / 2e4) ** n, r, i),
+          this.muffleGain.gain.setTargetAtTime(1 - 0.5 * n, r, i));
+      } catch {
+        return !1;
+      }
+      return !0;
+    }
+    setPresent(e, t = 0.3) {
+      if (!this.presence) return !1;
+      let n = this.ac.currentTime;
+      try {
+        (this.presence.gain.cancelScheduledValues(n),
+          this.presence.gain.setTargetAtTime(+!!e, n, Math.max(0.005, t / 3)));
+      } catch {
+        return !1;
+      }
+      return !0;
+    }
+    play(e, t = {}) {
+      if (!this.ok) return null;
+      try {
+        let n = R[e];
+        if (!n)
+          return (
+            this._warned.has(e) ||
+              (this._warned.add(e), this.ctx.warn(`unknown sound id '${e}'`)),
+            null
+          );
+        let r = this.ac,
+          i = r.currentTime,
+          a = t.pos && t.pos.length >= 3 ? t.pos : null,
+          o = !!a && n.bus !== `ui` && !t.local,
+          s = 0;
+        if (
+          (t.dist == null
+            ? o && (s = this.distanceTo(a))
+            : (s = Math.max(0, +t.dist || 0)),
+          s > (n.max ?? 1 / 0) ||
+            (o &&
+              (i - this._rate.t0 > ke &&
+                ((this._rate.t0 = i), (this._rate.n = 0)),
+              ++this._rate.n > Ae && (t.priority ?? n.pri) < 8)))
+        )
+          return (this.culled++, null);
+        let c = U(n, s),
+          l = z((t.volume ?? 1) * c * (n.level ?? 1), 0, 4);
+        if (l < 0.003) return (this.culled++, null);
+        let u = t.priority ?? n.pri,
+          d = o ? u * (0.45 + 0.55 * Math.min(1, c * 3)) : u,
+          f = e.startsWith(`footstep`) || e === `land`,
+          p = this._acquire(d, i, o || f ? d : Math.max(d, je));
+        if (!p) return (this.culled++, null);
+        let m = this.busses[t.bus ?? n.bus] ?? this.busses.sfx;
+        (p.route(o, m),
+          o &&
+            ((p.panner.panningModel = n.hrtf ? `HRTF` : `equalpower`),
+            p.place(a)));
+        let h =
+          o && !t.open
+            ? P(this.ctx.world.map, this.listenerPosition(), a)
+            : { blocked: !1, gain: 1, cutoff: 2e4 };
+        ((p.open = !!t.open),
+          (p.air = o && !!n.air),
+          p.filter.frequency.setValueAtTime(
+            p.air ? Math.min(h.cutoff, pe(s)) : h.cutoff,
+            i,
+          ),
+          p.occlusion.gain.setValueAtTime(h.gain, i));
+        let g = i + 0.012 + Math.max(0, +t.delay || 0),
+          _ = p.input.gain;
+        try {
+          _.setValueAtTime(l, g - 0.004);
+        } catch {
+          _.value = l;
+        }
+        let v = ++p.serial;
+        p.handle = { setRpm: null };
+        let y = {
+            d: s,
+            rand: this.rand,
+            pitch: t.pitch ?? 1,
+            volume: l,
+            surface: t.surface,
+            wp: t.wp,
+            rpm: t.rpm,
+            size: t.size,
+            handle: p.handle,
+            layerScale: t.layerScale,
+            duration: t.duration,
+          },
+          b;
+        H((e) => p.sources.push(e));
+        let x = (e) => p.sources.push(e);
+        this.bakedVoices.want(e, n, r.sampleRate);
+        let S = this.bakedVoices.has(e)
+          ? {
+              ...n,
+              build: (t, r, i, a) =>
+                this.bakedVoices.build(e, t, r, i, a, x) ?? n.build(t, r, i, a),
+            }
+          : n;
+        try {
+          b =
+            this.movementSamples.build(e, r, p.input, g, y, x) ??
+            this.voiceSamples.build(e, r, p.input, g, y, x) ??
+            this.sfxSamples.build(e, r, p.input, g, y, x, S) ??
+            S.build(r, p.input, g, y);
+        } finally {
+          H(null);
+        }
+        ((p.busy = !0),
+          (p.id = e),
+          (p.pri = d),
+          (p.end = b ?? g + 1),
+          (p.start = i),
+          (p.touch = i),
+          (p.pos = a ? [a[0], a[1], a[2]] : null),
+          this.played++,
+          this._record(e, a, s, n.bus, t.kind),
+          Object.assign(this.recent.at(-1), {
+            surface: t.surface,
+            sample: y.sample ?? null,
+            occluded: h.blocked,
+            pathGain: h.gain,
+            cutoff: h.cutoff,
+          }));
+        let C = this,
+          w = () => {
+            p.touch = C.ac.currentTime;
+          };
+        return {
+          id: e,
+          voice: p.index,
+          stop() {
+            p.serial === v && p.busy && p.kill(C.ac.currentTime);
+          },
+          setRpm(e) {
+            p.serial === v &&
+              p.handle?.setRpm &&
+              (w(), p.handle.setRpm(z(e, 0, 1), C.ac.currentTime));
+          },
+          setParam(e, t) {
+            p.serial === v &&
+              p.handle?.setParam &&
+              (w(), p.handle.setParam(e, t, C.ac.currentTime));
+          },
+          setVolume(e) {
+            if (C.ok && p.serial === v && p.busy) {
+              w();
+              try {
+                p.input.gain.setTargetAtTime(
+                  z(e, 0, 4),
+                  C.ac.currentTime,
+                  0.05,
+                );
+              } catch {}
+            }
+          },
+          setPosition(e) {
+            if (C.ok && p.serial === v && p.busy && p.positional) {
+              if ((w(), p.place(e), (p.pos = e.slice()), p.open)) return;
+              let t = P(C.ctx.world.map, C.listenerPosition(), e);
+              (p.filter.frequency.setTargetAtTime(
+                p.air ? Math.min(t.cutoff, pe(C.distanceTo(e))) : t.cutoff,
+                C.ac.currentTime,
+                0.06,
+              ),
+                p.occlusion.gain.setTargetAtTime(
+                  t.gain,
+                  C.ac.currentTime,
+                  0.06,
+                ));
+            }
+          },
+          alive() {
+            return p.serial === v && p.busy;
+          },
+        };
+      } catch (t) {
+        return (
+          this._warned.has(`err:` + e) ||
+            (this._warned.add(`err:` + e),
+            this.ctx.warn(`play('${e}') failed:`, t?.message ?? t)),
+          null
+        );
+      }
+    }
+    _acquire(e, t, n = e) {
+      let r = null;
+      for (let e of this.voices) {
+        if (!e.busy) return e;
+        if (e.end <= t) return (e.free(t), e);
+      }
+      for (let t of this.voices)
+        t.pri > n ||
+          (t.end === 1 / 0 && t.pri >= e) ||
+          ((!r || t.pri < r.pri || (t.pri === r.pri && t.end < r.end)) &&
+            (r = t));
+      return r ? (r.kill(t), this.stolen++, r) : null;
+    }
+    _record(e, t, n, r, i) {
+      let a = this.recent;
+      (a.push({
+        id: e,
+        t: performance.now() / 1e3,
+        pos: t ? [t[0], t[1], t[2]] : null,
+        d: n,
+        bus: r,
+        kind: i ?? Fe(e),
+      }),
+        a.length > 96 && a.splice(0, a.length - 96));
+    }
+    activeVoices() {
+      let e = this.ac?.currentTime ?? 0,
+        t = 0;
+      for (let n of this.voices) n.busy && n.end > e && t++;
+      return t;
+    }
+    level() {
+      if (!this.ok) return 0;
+      let e = this.analyser,
+        t = this._td;
+      e.getFloatTimeDomainData(t);
+      let n = 0;
+      for (let e = 0; e < t.length; e++) n += t[e] * t[e];
+      return Math.sqrt(n / t.length);
+    }
+    update() {
+      if (!this.ok) return;
+      let e = this.ac,
+        t = e.currentTime;
+      for (let e of this.voices)
+        e.busy &&
+          (e.end <= t
+            ? e.free(t)
+            : e.end === 1 / 0 && t - e.touch > Me && e.kill(t));
+      let n = performance.now();
+      e.state === `running`
+        ? t === this._lastCt
+          ? n - this._lastAdvance > 800 && (this.health = `stalled`)
+          : ((this._lastCt = t),
+            (this._lastAdvance = n),
+            (this.health = `running`))
+        : ((this.health = e.state),
+          e.state === `suspended` &&
+            n - this._lastResumeTry > 1e3 &&
+            ((this._lastResumeTry = n), this.resume()));
+    }
+    renderOffline(e = 3.2, t = 22050) {
+      if (this._offlinePromise) return this._offlinePromise;
+      let n = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      return n
+        ? ((this._offlinePromise = (async () => {
+            let r = new n(1, Math.ceil(e * t), t),
+              i = r.createGain();
+            i.gain.value = 0.8;
+            let a = r.createDynamicsCompressor();
+            ((a.threshold.value = -10),
+              (a.ratio.value = 6),
+              i.connect(a),
+              a.connect(r.destination));
+            let o = this.ctx.rng.fork(`audio-offline`),
+              s = () => o.next(),
+              c = [
+                [`gun_ar`, 0.05, { d: 0 }],
+                [`gun_ar`, 0.14, { d: 0 }],
+                [`gun_ar`, 0.23, { d: 0 }],
+                [`impact_rock`, 0.3, {}],
+                [`footstep_grass`, 0.55, {}],
+                [`footstep_rock`, 0.85, {}],
+                [`footstep_water`, 1.1, {}],
+                [`reload`, 1.2, {}],
+                [`gun_sniper`, 1.55, { d: 140 }],
+                [`whizz`, 1.6, {}],
+                [`explosion`, 1.95, { d: 45 }],
+                [`hit_confirm`, 2.4, {}],
+                [`kill_headshot`, 2.6, {}],
+                [`ui_tick`, 3, {}],
+              ];
+            H(null);
+            for (let [e, t, n] of c) {
+              let a = R[e];
+              if (!a) continue;
+              let o = r.createGain();
+              ((o.gain.value = 0.7 * (a.level ?? 1)), o.connect(i));
+              try {
+                a.build(r, o, t, {
+                  d: 0,
+                  rand: s,
+                  pitch: 1,
+                  volume: 0.7,
+                  ...n,
+                });
+              } catch {}
+            }
+            let l = await r.startRendering();
+            return this.disposed
+              ? null
+              : ((this.offlineBuffer = l.getChannelData(0)),
+                (this.offlineRate = t),
+                this.offlineBuffer);
+          })().catch(() => null)),
+          this._offlinePromise)
+        : Promise.resolve(null);
+    }
+    dispose() {
+      if (!this.disposed) {
+        ((this.disposed = !0),
+          this.movementSamples.dispose(),
+          this.voiceSamples.dispose(),
+          this.sfxSamples.dispose(),
+          this.bakedVoices.dispose());
+        try {
+          this._gestureOff?.();
+        } catch {}
+        for (let e of this.voices)
+          try {
+            e.kill(this.ac.currentTime);
+          } catch {}
+        for (let e of this.voices)
+          for (let t of [e.input, e.filter, e.occlusion, e.panner])
+            try {
+              t.disconnect();
+            } catch {}
+        try {
+          this.listener?.removeFromParent();
+        } catch {}
+        for (let e of [
+          ...Object.values(this.busses),
+          this.muffle,
+          this.muffleGain,
+          this.compressor,
+          this.outputLimiter,
+          this.analyser,
+        ])
+          try {
+            e?.disconnect();
+          } catch {}
+        try {
+          this.listener?.getInput().disconnect();
+        } catch {}
+        if (this.ownsContext && this.ac) {
+          y.getContext() === this.ac && y.setContext(void 0);
+          try {
+            this.ac.close()?.catch?.(() => {});
+          } catch {}
+        }
+        ((this.ok = !1),
+          (this.health = `closed`),
+          (this.ctx = null),
+          (this.ac = null),
+          (this.listener = null),
+          (this.voices.length = 0),
+          (this.recent.length = 0),
+          (this.busses = {}),
+          (this.analyser = this.compressor = this.outputLimiter = null),
+          (this.offlineBuffer =
+            this._offlinePromise =
+            this._gestureOff =
+              null));
+      }
+    }
+  };
+function Fe(e) {
+  return e.startsWith(`gun`)
+    ? `gun`
+    : e.startsWith(`footstep`) || e === `jump` || e === `land`
+      ? `foot`
+      : e.startsWith(`explosion`) || e === `collapse`
+        ? `explosion`
+        : e.startsWith(`impact`) ||
+            e === `ricochet` ||
+            e === `whizz` ||
+            e === `crack` ||
+            e.startsWith(`reload`) ||
+            e === `mag_out` ||
+            e === `mag_in` ||
+            e === `bolt` ||
+            e === `dry_fire` ||
+            e === `body_fall`
+          ? `impact`
+          : e.startsWith(`ui`) ||
+              e === `hit_confirm` ||
+              e === `kill_headshot` ||
+              e === `damage` ||
+              e === `death` ||
+              e === `heartbeat`
+            ? `ui`
+            : e.startsWith(`vehicle`)
+              ? `vehicle`
+              : `ambience`;
+}
+function Ie(e, t) {
+  let n = e.modules.get(`terrain`),
+    r = n?.getScatter?.()?.trees ?? [],
+    i = null,
+    a = 45;
+  for (let e of r) {
+    let n = Math.hypot(e.x - t[0], e.z - t[2]);
+    n < a && ((i = e), (a = n));
+  }
+  for (let n of e.modules.get(`demo`)?.getDefinition?.()?.objects ?? []) {
+    if (n.material !== `orchard`) continue;
+    let e = Math.hypot(n.x - t[0], n.z - t[2]);
+    e < a && ((i = n), (a = e));
+  }
+  let o = n?.getMaterialAt?.(t[0], t[2]),
+    s = e.world.map.raycast(t, [0, 1, 0], 12),
+    c = !!s && s.colliderId != null && s.colliderId !== `terrain`;
+  return {
+    foliage: i ? Math.max(0, 1 - a / 45) : 0,
+    sheltered: c,
+    vegetation: +!![`grass`, `dirt`].includes(o),
+    birdPos: i ? [i.x, (i.y0 ?? i.y ?? t[1]) + 5, i.z] : null,
+  };
+}
+var Le = class e {
+    constructor(e) {
+      ((this.e = e),
+        (this.ac = e.ac),
+        (this.started = !1),
+        (this.tod = 14),
+        (this.w = { wind: 0, birds: 0, crickets: 0, rumble: 0 }),
+        (this.rng = e.ctx.rng.fork(`ambience`)),
+        (this.rand = () => this.rng.next()),
+        (this.next = { bird: 0, cricket: 0, gust: 0, rumble: 0 }),
+        (this.layers = null),
+        (this._lastBoom = null),
+        (this.lfos = []),
+        (this.habitat = {
+          foliage: 0,
+          vegetation: 0,
+          sheltered: !1,
+          birdPos: null,
+        }),
+        (this.nextHabitat = 0),
+        (this.war = null),
+        (this.next.battle = 0),
+        (this.sea = null),
+        (this.next.salvo = 0),
+        (this.next.slam = 0));
+    }
+    _layer(e, t, n, r, i, a = 0) {
+      let o = this.ac,
+        s = this.e.busses.ambience,
+        c = o.createBufferSource();
+      ((c.buffer = e), (c.loop = !0));
+      let l = o.createBiquadFilter();
+      ((l.type = t), (l.frequency.value = n), (l.Q.value = r));
+      let u = o.createGain();
+      u.gain.value = 0.6;
+      let d = o.createGain();
+      d.gain.value = 0;
+      let f = d;
+      if (o.createStereoPanner) {
+        let e = o.createStereoPanner();
+        ((e.pan.value = i), d.connect(e), (f = e));
+      }
+      return (
+        c.connect(l),
+        l.connect(u),
+        u.connect(d),
+        f.connect(s),
+        c.start(0, a),
+        { src: c, filter: l, mod: u, layer: d, out: f }
+      );
+    }
+    _seaStart(e) {
+      let t = re(this.ac),
+        n = this.ac,
+        r = {
+          swell: this._layer(t.brown, `lowpass`, 220, 0.8, 0, 1.1),
+          wash: this._layer(t.pink, `bandpass`, 850, 0.55, -0.35, 0.3),
+        };
+      (this._lfo(0.071, 0.62, r.swell.mod.gain),
+        this._lfo(0.113, 0.4, r.wash.mod.gain));
+      let i = n.createOscillator(),
+        a = n.createOscillator(),
+        o = n.createGain();
+      ((i.type = `sine`),
+        (i.frequency.value = 46),
+        (a.type = `triangle`),
+        (a.frequency.value = 92.6),
+        (o.gain.value = 0),
+        i.connect(o),
+        a.connect(o),
+        o.connect(this.e.busses.ambience),
+        i.start(),
+        a.start(),
+        (r.hum = { src: i, src2: a, layer: o, out: o }),
+        (this.sea = { sc: e, L: r }));
+    }
+    _seaMix() {
+      let e = this.sea;
+      if (!e) return;
+      let t = e.sc,
+        n = this.habitat.sheltered,
+        r = this.e.listenerPosition([0, 0, 0]),
+        i = Math.max(0, Math.min(1, (-(r[0] ?? 0) - 40) / 60)),
+        a = this.ac.currentTime,
+        o = (e, t) => {
+          try {
+            e.gain.setTargetAtTime(t, a, 0.8);
+          } catch {
+            e.gain.value = t;
+          }
+        };
+      (o(e.L.swell.layer, (n ? 0.008 : 0.018) * (t.sea ?? 1)),
+        o(e.L.wash.layer, 0),
+        o(e.L.hum.layer, (0.005 + 0.012 * i + (n ? 0.008 : 0)) * (t.hum ?? 1)));
+    }
+    _shipEvents(e, t, n) {
+      let r = this.next,
+        i = this.rand,
+        a = this._l0(),
+        o = a[0],
+        s = a[2],
+        c = a[1] - 1.5,
+        l = { kind: `ambience` },
+        u = (e, n, a) => (r[e] ?? (r[e] = t + n + i() * (a - n)), t >= r[e]),
+        d = (e, t, n) => {
+          let r = i() * Math.PI * 2,
+            a = e + i() * (t - e);
+          return [o + Math.cos(r) * a, n, s + Math.sin(r) * a];
+        };
+      (u(`horn`, 40, 120) &&
+        (this.e.play(`ship_horn`, {
+          ...l,
+          pos: d(400, 700, a[1] + 10),
+          volume: 0.5 * n,
+          priority: 1,
+          open: !0,
+        }),
+        (r.horn = t + 90 + i() * 90)),
+        u(`groan`, 6, 20) &&
+          (this.e.play(`hull_groan`, {
+            ...l,
+            pos: d(2, 7, c),
+            volume: 0.16,
+            priority: 1,
+          }),
+          (r.groan = t + 12 + i() * 18)),
+        u(`clank`, 4, 12) &&
+          (this.e.play(`chain_clank`, {
+            ...l,
+            pos: d(3, 10, c + 0.5 + i() * 4),
+            volume: 0.2 * n,
+            priority: 1,
+          }),
+          (r.clank = t + 8 + i() * 12)),
+        u(`door`, 10, 30) &&
+          (this.e.play(`door_bang`, {
+            ...l,
+            pos: d(15, 50, c + 1 + i() * 4),
+            volume: 0.25 * n,
+            priority: 1.5,
+          }),
+          (r.door = t + 20 + i() * 25)));
+      let f = e.house;
+      if (f && u(`bell`, 8, 20)) {
+        if (o < f.near) {
+          let e = Math.max(f.y[0] + 1.2, Math.min(f.y[1] - 1, a[1] + 0.8));
+          this.e.play(`alarm_bell`, {
+            ...l,
+            pos: [f.x + (i() - 0.5) * 6, e, f.z + (i() - 0.5) * 8],
+            volume: this.habitat.sheltered ? 0.15 : 0.06,
+            priority: 1.5,
+          });
+        }
+        r.bell = t + 15 + i() * 15;
+      }
+      let p = e.fire;
+      if (p && u(`fire`, 0, 2)) {
+        let e = Math.hypot(p[0] - o, p[1] - a[1], p[2] - s);
+        (e < 45 &&
+          this.e.play(`ship_fire`, {
+            ...l,
+            pos: [p[0] + (i() - 0.5) * 6, p[1] + i(), p[2] + (i() - 0.5) * 2],
+            volume: 0.18 * (1 - e / 45),
+            priority: 1,
+          }),
+          (r.fire = t + 1.5 + i() * 2.5));
+      }
+    }
+    _lfo(e, t, n, r = `sine`) {
+      let i = this.ac,
+        a = i.createOscillator();
+      ((a.type = r), (a.frequency.value = e));
+      let o = i.createGain();
+      return (
+        (o.gain.value = t),
+        a.connect(o),
+        o.connect(n),
+        a.start(),
+        this.lfos.push({ o: a, g: o }),
+        a
+      );
+    }
+    start() {
+      if (!this.started && this.e.ok)
+        try {
+          let e = re(this.ac),
+            t = this._layer(e.brown, `lowpass`, 70, 0.9, 0, 0.4);
+          ((t.mod.gain.value = 0.9),
+            this._lfo(0.031, 0.35, t.mod.gain),
+            (this.layers = { rumble: t }),
+            (this.started = !0),
+            this.setTod(this.tod, !0));
+        } catch (e) {
+          this.e.ctx.warn(`ambience start failed:`, e?.message ?? e);
+        }
+    }
+    stop() {
+      if (this.started) {
+        for (let e of Object.values(this.layers))
+          try {
+            (e.src.stop(), e.out.disconnect());
+          } catch {}
+        for (let { o: e, g: t } of this.lfos)
+          try {
+            (e.stop(), e.disconnect(), t.disconnect());
+          } catch {}
+        if (((this.lfos.length = 0), (this.nextHabitat = 0), this.war)) {
+          try {
+            this.war.stop();
+          } catch {}
+          this.war = null;
+        }
+        if (this.sea) {
+          for (let e of Object.values(this.sea.L))
+            try {
+              (e.src.stop(), e.src2?.stop(), e.out.disconnect());
+            } catch {}
+          this.sea = null;
+        }
+        ((this.layers = null), (this.started = !1));
+      }
+    }
+    static WAR_BED = 0.5;
+    static weights(e) {
+      e = ((e % 24) + 24) % 24;
+      let t = I(5.2, 7.6, e) * (1 - I(18.2, 20.6, e)),
+        n = 1 - t,
+        r = I(5.5, 7, e) * (1 - I(9, 12, e));
+      return {
+        day: t,
+        night: n,
+        wind: 0.7 + 0.3 * n,
+        birds: t * (0.55 + 0.45 * r),
+        crickets: n,
+        rumble: 0,
+      };
+    }
+    setTod(t, n = !1) {
+      this.tod = t;
+      let r = e.weights(t),
+        i = this.habitat,
+        a = i.sheltered ? 0.12 : 1;
+      if (
+        ((r.wind *= a * (1 - i.foliage * 0.45)),
+        (r.birds *= a * i.foliage),
+        (r.crickets *= a * i.vegetation),
+        (this.w = r),
+        !this.started)
+      )
+        return;
+      let o = this.ac.currentTime,
+        s = n ? 0.05 : 1.2;
+      ((e, t) => {
+        try {
+          e.setTargetAtTime(t, o, s);
+        } catch {
+          e.value = t;
+        }
+      })(this.layers.rumble.layer.gain, 0.8 * r.rumble);
+    }
+    _l0() {
+      return this.e.listenerPosition([0, 0, 0]);
+    }
+    _around(e, t, n, r) {
+      let i = this.e.listenerPosition([0, 0, 0]),
+        a = this.rand() * Math.PI * 2,
+        o = e + this.rand() * (t - e);
+      return [
+        i[0] + Math.cos(a) * o,
+        i[1] + n + this.rand() * (r - n),
+        i[2] + Math.sin(a) * o,
+      ];
+    }
+    update() {
+      if (!this.started) return;
+      let t = this.ac.currentTime;
+      if (t >= this.nextHabitat) {
+        ((this.habitat = Ie(this.e.ctx, this.e.listenerPosition([0, 0, 0]))),
+          this.setTod(this.tod),
+          (this.nextHabitat = t + 0.5));
+        let e = this.e.ctx.modules.get(`demo`)?.getDefinition?.()?.soundscape;
+        if (e && !this.sea)
+          try {
+            this._seaStart(e);
+          } catch (t) {
+            (this.e.ctx.warn(`sea soundscape failed:`, t?.message ?? t),
+              (this.sea = { sc: e, L: {} }));
+          }
+        this._seaMix();
+      }
+      if (this.e.ctx.modules.get(`demo`)?.getDefinition?.()?.quietAmbience) {
+        this.war?.alive?.() && this.war.setVolume(0);
+        return;
+      }
+      let n = this.sea?.sc,
+        r = !!n,
+        i = this.w,
+        a = this.next,
+        o = this.rand,
+        s = () => this._l0(),
+        c = this.e.voiceSamples,
+        l = this.habitat.sheltered ? 0.35 : 1;
+      if (c?.has?.(`war_ambience`)) {
+        let t = e.WAR_BED * l * (n?.battle ?? 1);
+        !this.war || !this.war.alive()
+          ? (this.war = this.e.play(`voice_war_ambience`, {
+              volume: t,
+              kind: `ambience`,
+            }))
+          : this.war.setVolume(t);
+      }
+      if (c?.has?.(`war_distant`) && t >= a.battle) {
+        let e = 500 + o() * 700,
+          n = o() * Math.PI * 2,
+          i = this.e.listenerPosition([0, 0, 0]);
+        (this.e.play(`voice_war_distant`, {
+          pos: [i[0] + Math.cos(n) * e, i[1] + 6, i[2] + Math.sin(n) * e],
+          volume: (r ? 1 : 0.7) * l,
+          priority: 2,
+          kind: `ambience`,
+          open: r,
+        }),
+          (a.battle = t + (r ? 7 + o() * 11 : 16 + o() * 22)));
+      }
+      if (r && t >= a.salvo) {
+        let e = o() * Math.PI * 2,
+          n = 550 + o() * 650,
+          i = s(),
+          u = 2 + Math.floor(o() * 3);
+        for (let t = 0; t < u; t++) {
+          let a = [
+              i[0] + Math.cos(e) * n + (o() - 0.5) * 120,
+              i[1] + 8,
+              i[2] + Math.sin(e) * n + (o() - 0.5) * 120,
+            ],
+            s = t * (0.25 + o() * 0.65);
+          this.e.play(
+            t % 2 && c?.has?.(`blast_heavy`)
+              ? `voice_blast_heavy`
+              : `explosion_large`,
+            {
+              pos: a,
+              delay: s,
+              volume: (2.2 - t * 0.3) * l,
+              priority: 2,
+              kind: `ambience`,
+              open: r,
+            },
+          );
+        }
+        a.salvo = t + 3.5 + o() * 6;
+      }
+      if (
+        (r && n.ship && this._shipEvents(n.ship, t, l),
+        i.birds > 0.05 &&
+          t >= a.bird &&
+          (this.e.play(`bird_chirp`, {
+            pos: this.habitat.birdPos,
+            volume: 0.45 * i.birds,
+            kind: `ambience`,
+          }),
+          (a.bird = t + 3 + o() * 7)),
+        i.crickets > 0.05 &&
+          t >= a.cricket &&
+          (this.e.play(`cricket`, {
+            pos: this._around(3, 12, -0.5, 0.5),
+            volume: 0.3 * i.crickets,
+            kind: `ambience`,
+          }),
+          (a.cricket = t + 1 + o() * 2)),
+        i.rumble > 0 && t >= a.rumble)
+      ) {
+        let e = 650 + o() * 900,
+          n = o() * Math.PI * 2,
+          r = this.e.listenerPosition([0, 0, 0]);
+        ((this._lastBoom = this.e.play(
+          o() < 0.3 ? `explosion_large` : `explosion`,
+          {
+            pos: [r[0] + Math.cos(n) * e, r[1] + 5, r[2] + Math.sin(n) * e],
+            volume: 0.7,
+            priority: 2,
+            kind: `ambience`,
+          },
+        )),
+          (a.rumble = t + 8 + o() * 14));
+      }
+    }
+  },
+  q = {
+    gun: `#f0a030`,
+    gunfar: `#c8383a`,
+    foot: `#7fd44a`,
+    explosion: `#ff6a2a`,
+    impact: `#4a8fd8`,
+    ui: `#b06ae0`,
+    ambience: `#79b8b0`,
+    vehicle: `#d8c060`,
+  },
+  Re = {
+    grass: 6262586,
+    dirt: 8018490,
+    rock: 8224642,
+    sand: 13218425,
+    road: 4869200,
+    water: 3833776,
+  },
+  ze = 6.2,
+  Be = 1.8,
+  Ve = (e) => (e.index ? e.toNonIndexed() : e),
+  He = (e) => D(e.map(Ve), !1),
+  J = (e, t = {}) =>
+    new o({
+      color: e,
+      roughness: 0.85,
+      metalness: 0.05,
+      flatShading: !0,
+      ...t,
+    });
+function Y(e, t, n = 0) {
+  let r = new p(t),
+    i = e.attributes.position.count,
+    a = new Float32Array(i * 3);
+  for (let e = 0; e < i; e++) {
+    let t = 1 - n * ((e % 7) / 7) * 0.5;
+    ((a[e * 3] = r.r * t), (a[e * 3 + 1] = r.g * t), (a[e * 3 + 2] = r.b * t));
+  }
+  return (e.setAttribute(`color`, new l(a, 3)), e);
+}
+function Ue(e, t, n, o, l) {
+  let u = e.scene,
+    m = e.rng.fork(`audio-showcase`),
+    v = () => m.next(),
+    y = new g();
+  ((y.name = `audioShowcase`), u.add(y));
+  let b = [],
+    S = (e) => (b.push(e), e);
+  (e.debugGround(200), e.setCameraFocus([0, 0.8, 0]));
+  {
+    let e = new s(1400, 48);
+    (e.rotateX(-Math.PI / 2), Y(e, 6189136, 0.15));
+    let t = new r(S(Ve(e)), S(J(16777215, { vertexColors: !0 })));
+    ((t.position.y = -0.3), (t.receiveShadow = !0), y.add(t));
+  }
+  let D = u.fog;
+  u.fog = new T(8890568, 180, 1500);
+  let k = Ge(e, u, S);
+  {
+    let e = [];
+    ie.forEach((t, n) => {
+      let r = (n / 6) * Math.PI * 2,
+        i = ((n + 1) / 6) * Math.PI * 2,
+        a = new _(ze - Be / 2, 7.1000000000000005, 10, 1, r, i - r);
+      (a.rotateX(-Math.PI / 2), e.push(Y(a, Re[t], 0.35)));
+    });
+    let t = S(He(e)),
+      n = new r(t, S(J(16777215, { vertexColors: !0 })));
+    ((n.position.y = 0.035), (n.receiveShadow = !0), y.add(n));
+    let i = new a(ze - Be / 2 - 0.08, 0.08, 4, 36);
+    i.rotateX(Math.PI / 2);
+    let o = new a(7.180000000000001, 0.08, 4, 36);
+    o.rotateX(Math.PI / 2);
+    let s = S(He([Y(i, 10130564), Y(o, 10130564)])),
+      c = new r(s, S(J(16777215, { vertexColors: !0 })));
+    ((c.position.y = 0.08), (c.castShadow = !0), y.add(c));
+  }
+  let ee = [
+      {
+        key: `gun`,
+        name: `gunshots · near`,
+        pos: [11, 0, -3],
+        color: q.gun,
+        r: 0.8,
+        ped: 1,
+        lab: 1.6,
+      },
+      {
+        key: `gunfar`,
+        name: `gunshots · far 120 m`,
+        pos: [-42, 0, -112],
+        color: q.gunfar,
+        r: 1.8,
+        ped: 5.5,
+        lab: 1.2,
+      },
+      {
+        key: `explosion`,
+        name: `explosions · 4 s`,
+        pos: [-13, 0, -9],
+        color: q.explosion,
+        r: 0.95,
+        ped: 1,
+        lab: 2.4,
+      },
+      {
+        key: `impact`,
+        name: `impacts · whizz · reload`,
+        pos: [14, 0, 12],
+        color: q.impact,
+        r: 0.8,
+        ped: 1,
+        lab: 0.9,
+      },
+      {
+        key: `ui`,
+        name: `ui · hit confirm · kill`,
+        pos: [-10, 0, 9],
+        color: q.ui,
+        r: 0.8,
+        ped: 1,
+        lab: 1.3,
+      },
+    ],
+    j = new Map(),
+    te = [];
+  {
+    let e = [],
+      t = S(new x(1, 1));
+    for (let n of ee) {
+      let i = new C(0.42, 0.55, n.ped, 8, 1);
+      (i.translate(n.pos[0], n.ped / 2, n.pos[2]), e.push(Y(i, 3882822, 0.3)));
+      let a = new C(0.62, 0.42, 0.14, 8, 1);
+      (a.translate(n.pos[0], n.ped + 0.07, n.pos[2]),
+        e.push(Y(a, 5264733, 0.2)));
+      let o = S(
+          J(n.color, {
+            emissive: new p(n.color),
+            emissiveIntensity: 0.25,
+            roughness: 0.5,
+          }),
+        ),
+        s = new r(t, o);
+      (s.scale.setScalar(n.r),
+        s.position.set(n.pos[0], n.ped + 0.14 + n.r, n.pos[2]),
+        (s.castShadow = !0),
+        y.add(s));
+      let c = new w(n.color, 0, 9 + n.r * 4, 2);
+      (c.position.set(n.pos[0], n.ped + 0.14 + n.r, n.pos[2]),
+        y.add(c),
+        j.set(n.key, { ...n, mesh: s, mat: o, flash: 0, baseR: n.r, pool: c }),
+        te.push(
+          We(
+            n.name,
+            n.color,
+            [n.pos[0], n.ped + 0.14 + n.r * 2 + n.lab, n.pos[2]],
+            S,
+            y,
+          ),
+        ));
+    }
+    let n = S(He(e)),
+      i = new r(n, S(J(16777215, { vertexColors: !0 })));
+    ((i.castShadow = !0), (i.receiveShadow = !0), y.add(i));
+  }
+  let M = new g();
+  {
+    let e = S(J(6056767, { roughness: 0.9 })),
+      t = new r(S(new i(0.44, 0.62, 0.26)), e);
+    ((t.position.y = 1.12), (t.castShadow = !0));
+    let n = new r(S(new i(0.36, 0.2, 0.24)), S(J(4869946)));
+    n.position.y = 0.78;
+    let a = S(new i(0.16, 0.7, 0.18));
+    a.translate(0, -0.35, 0);
+    let o = new r(a, S(J(5199427)));
+    (o.position.set(-0.11, 0.72, 0), (o.castShadow = !0));
+    let s = new r(a, o.material);
+    (s.position.set(0.11, 0.72, 0), (s.castShadow = !0));
+    let c = S(new i(0.12, 0.56, 0.14));
+    c.translate(0, -0.26, 0);
+    let l = new r(c, e);
+    l.position.set(-0.3, 1.38, 0);
+    let u = new r(c, e);
+    u.position.set(0.3, 1.38, 0);
+    let d = S(
+        J(q.foot, {
+          emissive: new p(q.foot),
+          emissiveIntensity: 0.25,
+          roughness: 0.5,
+        }),
+      ),
+      f = new r(S(new x(0.24, 1)), d);
+    ((f.position.y = 1.67),
+      (f.castShadow = !0),
+      M.add(t, n, o, s, l, u, f),
+      (M.userData = {
+        legL: o,
+        legR: s,
+        armL: l,
+        armR: u,
+        head: f,
+        headMat: d,
+      }),
+      y.add(M),
+      j.set(`foot`, {
+        key: `foot`,
+        name: `footsteps (6 surfaces)`,
+        color: q.foot,
+        mesh: f,
+        mat: d,
+        flash: 0,
+        baseR: 1,
+        pos: [ze, 0, 0],
+      }));
+    let m = We(`footsteps · 6 surfaces`, q.foot, [0, 2.45, 0], S, y);
+    ((m.follow = M), te.push(m));
+  }
+  {
+    let e = new C(1.1, 1.3, 0.12, 12, 1);
+    Y(e, 9080698, 0.2);
+    let t = [e],
+      n = [...ee.map((e) => e.pos), [0, 0, 0]],
+      i = (e, t, r) => n.every((n) => Math.hypot(n[0] - e, n[2] - t) > r),
+      a = (e, n, r, i) => {
+        let a = new C(0.16, 0.24, r * 0.35, 6);
+        (a.translate(e, r * 0.175, n), t.push(Y(a, 5916212, 0.3)));
+        let o = new d(1.3 + v() * 0.6, r * 0.5, 7);
+        o.translate(e, r * 0.35 + r * 0.25, n);
+        let s = new d(0.9 + v() * 0.4, r * 0.4, 7);
+        s.translate(e, r * 0.35 + r * 0.5 + r * 0.1, n);
+        let c = [4160058, 4885060, 3502138][i % 3];
+        t.push(Y(o, c, 0.5), Y(s, c, 0.5));
+      },
+      o = (e, n, r, i) => {
+        let a = new x(r, 0);
+        (a.scale(1, 0.65 + v() * 0.3, 0.8 + v() * 0.4),
+          a.rotateY(v() * 6.28),
+          a.translate(e, r * 0.35, n),
+          t.push(Y(a, [7301728, 8091243, 6249298][i % 3], 0.5)));
+      },
+      s = 0,
+      c = 0;
+    for (; s < 14 && c++ < 200;) {
+      let e = v() * Math.PI * 2,
+        t = 13 + v() * 34,
+        r = Math.cos(e) * t,
+        c = Math.sin(e) * t;
+      i(r, c, 4) &&
+        (v() < 0.55 ? o(r, c, 0.7 + v() * 1.6, s) : a(r, c, 3.5 + v() * 3, s),
+        n.push([r, 0, c]),
+        s++);
+    }
+    for (c = 0; s < 62 && c++ < 600;) {
+      let e = v() * Math.PI * 2,
+        t = 50 + v() ** 0.7 * 140,
+        r = Math.cos(e) * t,
+        c = Math.sin(e) * t;
+      i(r, c, 6) &&
+        (v() < 0.3 ? o(r, c, 1 + v() * 2.2, s) : a(r, c, 4 + v() * 4.5, s),
+        n.push([r, 0, c]),
+        s++);
+    }
+    let l = S(He(t)),
+      u = new r(l, S(J(16777215, { vertexColors: !0 })));
+    ((u.castShadow = !0), (u.receiveShadow = !0), y.add(u));
+    let f = [];
+    for (let e = 0; e < 26; e++) {
+      let t = (e / 26) * Math.PI * 2 + (v() - 0.5) * 0.2,
+        n = 300 + v() * 320,
+        r = 70 + v() * 120,
+        i = 14 + v() * 34,
+        a = new x(1, 1);
+      (a.scale(r, i, r * (0.7 + v() * 0.5)),
+        a.rotateY(v() * 6.28),
+        a.translate(Math.cos(t) * n, -i * 0.25, Math.sin(t) * n),
+        f.push(Y(a, [5597258, 5202246, 5991502][e % 3], 0.6)));
+    }
+    let p = new r(S(He(f)), S(J(16777215, { vertexColors: !0, roughness: 1 })));
+    ((p.receiveShadow = !1), y.add(p));
+  }
+  let N = S(new _(0.82, 1, 28));
+  N.rotateX(-Math.PI / 2);
+  let P = S(
+      new f({
+        color: 16777215,
+        transparent: !0,
+        opacity: 0.9,
+        blending: 2,
+        depthWrite: !1,
+        side: 2,
+      }),
+    ),
+    F = new O(N, P, 40);
+  (F.instanceMatrix.setUsage(E), (F.frustumCulled = !1));
+  let ne = Array.from({ length: 40 }, () => ({
+      life: 0,
+      max: 1,
+      pos: [0, 0, 0],
+      color: new p(),
+      size: 1,
+    })),
+    re = new A().makeScale(0, 0, 0);
+  for (let e = 0; e < 40; e++)
+    (F.setMatrixAt(e, re), F.setColorAt(e, new p(0, 0, 0)));
+  y.add(F);
+  let I = 0,
+    L = (e, t, n = 1, r = 1) => {
+      let i = ne[I];
+      ((I = (I + 1) % 40),
+        (i.life = r),
+        (i.max = r),
+        (i.pos = [e[0], 0.06, e[2]]),
+        i.color.set(t),
+        (i.size = n));
+    },
+    R = S(
+      J(16747066, {
+        emissive: new p(16734746),
+        emissiveIntensity: 1.2,
+        transparent: !0,
+        opacity: 0.7,
+        depthWrite: !1,
+      }),
+    ),
+    B = new r(S(new x(1, 1)), R);
+  ((B.visible = !1), y.add(B));
+  let V = 0,
+    ae = new w(16752720, 0, 40, 2);
+  (ae.position.set(-13, 2.5, -9), y.add(ae));
+  let H = new w(16760944, 0, 14, 2);
+  (H.position.set(11, 2.2, -3), y.add(H));
+  let oe = Ke(e, n, o),
+    se = {
+      t: 0,
+      started: !1,
+      near: {
+        next: 0.05,
+        burstLeft: 5,
+        gap: 0,
+        weapon: `gun_ar`,
+        setsLeft: 2,
+        reloading: 0,
+      },
+      far: { next: 0.12 },
+      expl: { next: 0.03, n: 0 },
+      ui: { tick: 0.02, msg: 1.4, kill: 0.6 },
+      collapse: { next: 12.5 },
+      walker: { ang: 0.3, stepPhase: 0.97, lastSector: -1 },
+    },
+    ce = [
+      `gun_ar`,
+      `gun_carbine`,
+      `gun_smg`,
+      `gun_pistol`,
+      `gun_lmg`,
+      `gun_shotgun`,
+    ],
+    le = [`gun_sniper`, `gun_dmr`, `gun_lmg`],
+    ue = {
+      gun_ar: 0.085,
+      gun_carbine: 0.08,
+      gun_smg: 0.065,
+      gun_pistol: 0.19,
+      gun_lmg: 0.095,
+      gun_shotgun: 0.55,
+    },
+    de = j.get(`gun`).pos,
+    fe = j.get(`gunfar`).pos,
+    U = j.get(`explosion`).pos,
+    pe = j.get(`impact`).pos,
+    me = j.get(`ui`).pos,
+    he = [`dirt`, `rock`, `metal`, `wood`, `sand`, `grass`, `road`, `water`],
+    W = (e) => {
+      let t = j.get(e);
+      t && (t.flash = 1);
+    },
+    G = (e, t = 1.6) => [e[0], t, e[2]],
+    ge = new Set(),
+    _e = (e, t) => {
+      let n = setTimeout(() => {
+        (ge.delete(n), ve || t());
+      }, e);
+      ge.add(n);
+    },
+    ve = !1;
+  function ye(e) {
+    let r = se;
+    r.t += e;
+    let i = r.t,
+      a = r.near;
+    if (i >= a.next) {
+      if (a.burstLeft > 0) {
+        (t.play(a.weapon, { pos: G(de), volume: 0.9 }),
+          W(`gun`),
+          L(de, q.gun, 3.2, 0.7),
+          (H.intensity = 30),
+          a.burstLeft--,
+          (a.next = i + ue[a.weapon]));
+        let e = v();
+        if (e < 0.55) {
+          let e = he[Math.floor(v() * he.length)];
+          _e(60 + v() * 60, () => {
+            (t.play(`impact_` + e, { pos: G(pe, 1) }),
+              W(`impact`),
+              L(pe, q.impact, 1.6, 0.5));
+          });
+        } else if (e < 0.72) {
+          let e = n.listenerPosition([0, 0, 0]);
+          _e(30, () => {
+            (t.play(`whizz`, {
+              pos: [e[0] + (v() - 0.5) * 3, e[1], e[2] + (v() - 0.5) * 3],
+            }),
+              W(`impact`));
+          });
+        }
+        (v() < 0.35 &&
+          _e(120, () => {
+            (t.play(`hit_confirm`), W(`ui`), L(me, q.ui, 1.2, 0.4));
+          }),
+          a.burstLeft === 0 &&
+            (a.setsLeft--,
+            a.setsLeft <= 0
+              ? ((a.next = i + 0.5), (a.reloading = 1))
+              : (a.next = i + 0.9 + v() * 2.2)));
+      } else
+        a.reloading
+          ? (t.play(a.weapon === `gun_pistol` ? `reload_pistol` : `reload`, {
+              pos: G(de, 1.3),
+            }),
+            W(`impact`),
+            L(de, q.impact, 1.4, 0.8),
+            (a.reloading = 0),
+            (a.setsLeft = 2 + Math.floor(v() * 3)),
+            (a.weapon = ce[Math.floor(v() * ce.length)]),
+            (a.next = i + 2 + v() * 0.8))
+          : ((a.burstLeft =
+              a.weapon === `gun_pistol` || a.weapon === `gun_shotgun`
+                ? 1 + Math.floor(v() * 3)
+                : 3 + Math.floor(v() * 5)),
+            (a.next = i));
+    }
+    if (i >= r.far.next) {
+      let e = le[Math.floor(v() * le.length)],
+        n = e === `gun_lmg` ? 4 + Math.floor(v() * 4) : 1;
+      for (let r = 0; r < n; r++)
+        _e(r * 95, () => {
+          (t.play(e, { pos: G(fe, 7) }), W(`gunfar`), L(fe, q.gunfar, 6, 1.2));
+        });
+      r.far.next = i + (e === `gun_lmg` ? 4.5 : 2.2) + v() * 2.5;
+    }
+    if (i >= r.expl.next) {
+      let e = r.expl.n % 3 == 2 ? `explosion_large` : `explosion`;
+      (t.play(e, { pos: G(U, 1.5) }),
+        W(`explosion`),
+        L(U, q.explosion, e === `explosion_large` ? 9 : 6.5, 1.4),
+        (V = 1),
+        (B.visible = !0),
+        B.position.set(U[0], 2, U[2]),
+        (ae.intensity = 60),
+        r.expl.n++,
+        (r.expl.next += 4));
+    }
+    (i >= r.collapse.next &&
+      (t.play(`collapse`, { pos: G(U, 1) }),
+      W(`explosion`),
+      L(U, q.explosion, 5, 2.5),
+      (r.collapse.next = i + 13 + v() * 4)),
+      i >= r.ui.tick && (t.play(`ui_tick`), W(`ui`), (r.ui.tick = i + 1.5)),
+      i >= r.ui.msg &&
+        (t.play(v() < 0.3 ? `ui_confirm` : `ui_message`),
+        W(`ui`),
+        L(me, q.ui, 1.6, 0.6),
+        (r.ui.msg = i + 5 + v() * 4)),
+      i >= r.ui.kill &&
+        (t.play(`kill_headshot`),
+        W(`ui`),
+        L(me, q.ui, 2.4, 1),
+        (r.ui.kill = i + 9 + v() * 5)));
+    let o = r.walker;
+    o.ang += (1.4 / ze) * e;
+    let s = Math.cos(o.ang) * ze,
+      c = Math.sin(o.ang) * ze;
+    (M.position.set(s, 0, c), (M.rotation.y = -o.ang - Math.PI / 2 + Math.PI));
+    let l = o.stepPhase;
+    o.stepPhase += e * 2;
+    let u = Math.sin(o.stepPhase * Math.PI),
+      d = M.userData;
+    if (
+      ((d.legL.rotation.x = u * 0.55),
+      (d.legR.rotation.x = -u * 0.55),
+      (d.armL.rotation.x = -u * 0.4),
+      (d.armR.rotation.x = u * 0.4),
+      (M.position.y = Math.abs(Math.sin(o.stepPhase * Math.PI)) * 0.04),
+      Math.floor(l) !== Math.floor(o.stepPhase))
+    ) {
+      let e =
+          Math.floor(
+            ((((o.ang % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) /
+              (Math.PI * 2)) *
+              6,
+          ) % 6,
+        n = ie[e];
+      (t.play(`footstep`, { pos: [s, 0.1, c], surface: n, volume: 0.9 }),
+        W(`foot`),
+        L([s, 0, c], q.foot, 0.9, 0.5),
+        (o.lastSector = e));
+    }
+  }
+  let be = e.world.time.tod ?? l?.tod ?? 14;
+  (o.start(), o.setTod(be, !0), k.apply(be));
+  try {
+    e.renderer.domElement.click();
+  } catch {}
+  n.resume();
+  let xe = !1,
+    K = 0,
+    Se = !1,
+    Ce = new A(),
+    we = new h(),
+    Te = new c(),
+    Ee = new c(),
+    De = new p(),
+    Oe = new c();
+  function ke(t) {
+    ((t = Math.min(t, 0.05)), (K += t), ye(t));
+    let r = 0.25 + 0.55 * (1 - k.day);
+    for (let e of j.values()) {
+      (e.flash > 0 && (e.flash = Math.max(0, e.flash - t * 4)),
+        (e.mat.emissiveIntensity = r + e.flash * 2.2),
+        e.pool && (e.pool.intensity = (1 - k.day) * (5 + e.flash * 14)));
+      let n = e.baseR * (1 + e.flash * 0.25);
+      e.key !== `foot` && e.mesh.scale.setScalar(n);
+    }
+    e.camera.getWorldPosition(Oe);
+    let i = Math.tan((e.camera.fov * Math.PI) / 360);
+    for (let e of te) {
+      e.follow &&
+        e.sprite.position.set(
+          e.follow.position.x,
+          e.base[1],
+          e.follow.position.z,
+        );
+      let t = Oe.distanceTo(e.sprite.position),
+        n = z(0.072 * t * i, 0.5, 4.5);
+      (e.sprite.scale.set(n * e.aspect, n, 1), (e.sprite.visible = t < 170));
+    }
+    let a = !1;
+    for (let e = 0; e < 40; e++) {
+      let n = ne[e];
+      if (n.life <= 0) continue;
+      ((n.life -= t), (a = !0));
+      let r = 1 - Math.max(0, n.life) / n.max,
+        i = 0.3 + n.size * (0.2 + r * 1);
+      (Ee.set(n.pos[0], n.pos[1], n.pos[2]),
+        Te.set(i, 1, i),
+        F.setMatrixAt(e, n.life > 0 ? Ce.compose(Ee, we, Te) : re),
+        De.copy(n.color).multiplyScalar((1 - r) ** 1.5 * 0.8),
+        F.setColorAt(e, De));
+    }
+    if (
+      (a &&
+        ((F.instanceMatrix.needsUpdate = !0),
+        F.instanceColor && (F.instanceColor.needsUpdate = !0)),
+      V > 0)
+    ) {
+      V -= t * 1.6;
+      let e = 1 - Math.max(0, V);
+      (B.scale.setScalar(0.8 + e * 6.5),
+        (R.opacity = Math.max(0, 0.75 * (1 - e) * (1 - e))),
+        (R.emissiveIntensity = 1.4 * (1 - e)),
+        V <= 0 && (B.visible = !1));
+    }
+    ((ae.intensity = Math.max(0, ae.intensity - t * 220)),
+      (H.intensity = Math.max(0, H.intensity - t * 600)),
+      !xe &&
+        K > 0.9 &&
+        ((xe = !0),
+        n.health !== `running` &&
+          n.renderOffline().then((t) => {
+            t &&
+              !Se &&
+              ((Se = !0),
+              e.log(
+                `offline-rendered`,
+                `${t.length} samples @ ${n.offlineRate} Hz (context ${n.health})`,
+              ));
+          })),
+      oe.draw(t));
+  }
+  function Ae(e) {
+    k.apply(e);
+  }
+  function je() {
+    ve = !0;
+    for (let e of ge) clearTimeout(e);
+    (ge.clear(), oe.dispose(), k.dispose(), (u.fog = D), u.remove(y));
+    for (let e of b)
+      try {
+        e.dispose();
+      } catch {}
+  }
+  return {
+    update: ke,
+    dispose: je,
+    setTod: Ae,
+    emitters: j,
+    pulse: L,
+    seq: se,
+  };
+}
+function We(e, t, r, i, a) {
+  let o = document.createElement(`canvas`);
+  ((o.width = 512), (o.height = 96));
+  let s = o.getContext(`2d`);
+  ((s.font = `600 40px "Segoe UI", system-ui, -apple-system, sans-serif`),
+    (s.textAlign = `center`),
+    (s.textBaseline = `middle`));
+  let c = Math.min(500, s.measureText(e).width + 56),
+    l = 256 - c / 2;
+  (s.beginPath(),
+    s.moveTo(l + 18, 12),
+    s.lineTo(l + c - 18, 12),
+    s.quadraticCurveTo(l + c, 12, l + c, 30),
+    s.lineTo(l + c, 66),
+    s.quadraticCurveTo(l + c, 84, l + c - 18, 84),
+    s.lineTo(l + 18, 84),
+    s.quadraticCurveTo(l, 84, l, 66),
+    s.lineTo(l, 30),
+    s.quadraticCurveTo(l, 12, l + 18, 12),
+    s.closePath(),
+    (s.fillStyle = `rgba(9,13,18,0.82)`),
+    s.fill(),
+    (s.lineWidth = 5),
+    (s.strokeStyle = t),
+    s.stroke(),
+    (s.fillStyle = `#eef2f6`),
+    s.fillText(e, 256, 49));
+  let u = i(new k(o));
+  ((u.colorSpace = m), (u.anisotropy = 4), (u.minFilter = v));
+  let d = i(new n({ map: u, transparent: !0, depthWrite: !1, depthTest: !1 })),
+    f = new b(d);
+  return (
+    f.position.set(r[0], r[1], r[2]),
+    (f.renderOrder = 10),
+    a.add(f),
+    { sprite: f, aspect: 512 / 96, base: r, follow: null }
+  );
+}
+function Ge(t, n, r) {
+  let i = n.getObjectByName(`debugSun`),
+    a = null;
+  n.traverse((e) => {
+    e.isHemisphereLight && !a && (a = e);
+  });
+  let o = [];
+  (i ||
+    ((i = new e(16773853, 2.5)),
+    (i.name = `audioSun`),
+    (i.castShadow = !0),
+    i.shadow.mapSize.set(2048, 2048),
+    (i.shadow.camera.left = -80),
+    (i.shadow.camera.right = 80),
+    (i.shadow.camera.top = 80),
+    (i.shadow.camera.bottom = -80),
+    (i.shadow.camera.far = 400),
+    n.add(i),
+    o.push(i)),
+    a || ((a = new S(11061503, 5596740, 0.8)), n.add(a), o.push(a)),
+    (i.shadow.bias = -5e-4),
+    (i.shadow.normalBias = 0.02));
+  let s =
+      n.background && n.background.isColor
+        ? n.background.clone()
+        : n.background,
+    c = {
+      pos: i.position.clone(),
+      color: i.color.clone(),
+      intensity: i.intensity,
+    },
+    l = {
+      color: a.color.clone(),
+      ground: a.groundColor.clone(),
+      intensity: a.intensity,
+    },
+    u = t.renderer.toneMappingExposure,
+    d = new p(1317944),
+    f = new p(4872844),
+    m = new p(14256728),
+    h = new p(8890568),
+    g = new p(16752725),
+    _ = new p(16773853),
+    v = new p(10794730),
+    y = null;
+  n.traverse((e) => {
+    e.isGridHelper && !y && (y = e);
+  });
+  let b = y ? y.material.color.clone() : null,
+    x = new p(),
+    C = new p(),
+    w = {
+      day: 1,
+      tod: 14,
+      apply(e) {
+        w.tod = e;
+        let r = ((e - 6) / 12) * Math.PI,
+          o = Math.sin(r),
+          s = I(-0.06, 0.3, o);
+        ((w.day = s),
+          o < 0
+            ? x
+                .copy(d)
+                .lerp(f, I(-0.8, -0.1, o))
+                .lerp(m, 0.7 * I(-0.2, 0.05, o))
+            : x.copy(m).lerp(h, I(0, 0.32, o)),
+          n.background && n.background.isColor
+            ? n.background.copy(x)
+            : (n.background = x.clone()),
+          n.fog && n.fog.color.copy(x),
+          o > -0.05
+            ? (i.position.set(
+                Math.cos(r) * 120,
+                Math.max(0.08, o) * 150 + 8,
+                55,
+              ),
+              i.color.copy(g).lerp(_, I(0.04, 0.5, o)),
+              (i.intensity = 0.25 + 2.5 * I(-0.05, 0.35, o)))
+            : (i.position.set(-Math.cos(r) * 90, 70 + 40 * Math.min(1, -o), 45),
+              i.color.copy(v),
+              (i.intensity = 0.8)),
+          a.color.copy(x).lerp(C.set(11061503), 0.5),
+          a.groundColor
+            .copy(C.set(5596740))
+            .lerp(C.set(1712168), 1 - s)
+            .multiplyScalar(0.5 + 0.5 * s),
+          (a.intensity = 0.45 + 0.45 * s),
+          (t.renderer.toneMappingExposure = L(1.25, 1, s)),
+          y && y.material.color.copy(b).multiplyScalar(0.25 + 0.75 * s));
+      },
+      dispose() {
+        for (let e of o) n.remove(e);
+        (o.includes(i) ||
+          (i.position.copy(c.pos),
+          i.color.copy(c.color),
+          (i.intensity = c.intensity)),
+          o.includes(a) ||
+            (a.color.copy(l.color),
+            a.groundColor.copy(l.ground),
+            (a.intensity = l.intensity)),
+          s && s.isColor && n.background && n.background.isColor
+            ? n.background.copy(s)
+            : (n.background = s),
+          (t.renderer.toneMappingExposure = u),
+          y && y.material.color.copy(b));
+      },
+    };
+  return w;
+}
+function Ke(e, t, n) {
+  let r = e.ui ?? document.body,
+    i = 1e3,
+    a = document.createElement(`div`);
+  ((a.id = `audio-showcase-panel`),
+    (a.style.cssText = `position:absolute;left:24px;bottom:24px;width:${i}px;height:262px;pointer-events:none;border-radius:8px;
+    background:rgba(9,13,18,0.84);border:1px solid rgba(240,160,48,0.5);box-shadow:0 8px 30px rgba(0,0,0,0.45);overflow:hidden`));
+  let o = document.createElement(`canvas`),
+    s = Math.min(window.devicePixelRatio || 1, 2);
+  ((o.width = i * s),
+    (o.height = 262 * s),
+    (o.style.cssText = `width:${i}px;height:262px;display:block`),
+    a.appendChild(o),
+    r.appendChild(a));
+  let c = o.getContext(`2d`);
+  c.scale(s, s);
+  let l = t.analyser,
+    u = new Float32Array(l ? l.fftSize : 2048),
+    d = new Uint8Array(l ? l.frequencyBinCount : 1024),
+    f = new Float32Array(u.length),
+    p = 0,
+    m = 99,
+    h = ``,
+    g = 0,
+    _ = [],
+    v = `"Segoe UI", system-ui, -apple-system, sans-serif`,
+    y = `"Cascadia Mono", Consolas, monospace`,
+    b = 0,
+    x = 1024,
+    S = new Float32Array(x),
+    C = new Float32Array(x),
+    w = new Uint8Array(x / 2),
+    T = new Float32Array(x);
+  for (let e = 0; e < x; e++)
+    T[e] = 0.5 - 0.5 * Math.cos((2 * Math.PI * e) / 1023);
+  let E = 0,
+    D = new Float32Array(64),
+    O = (e) => 20 * Math.log10(e + 1e-6);
+  function k(e) {
+    let n = t.offlineBuffer,
+      r = t.offlineRate;
+    b = (b + e * r) % n.length;
+    let i = Math.floor(b);
+    for (let e = 0; e < u.length; e++) u[e] = n[(i + e) % n.length];
+    for (let e = 0; e < x; e++) ((S[e] = u[e] * T[e]), (C[e] = 0));
+    qe(S, C);
+    for (let e = 0; e < x / 2; e++) {
+      let t = Math.hypot(S[e], C[e]) / (x / 4);
+      w[e] = Math.max(0, Math.min(255, ((O(t) + 90) / 80) * 255));
+    }
+    return { rate: r, freq: w, bins: x / 2 };
+  }
+  function A(r) {
+    E += r;
+    let a = t.ok && t.health === `running`,
+      o = null;
+    a
+      ? (l.getFloatTimeDomainData(u),
+        l.getByteFrequencyData(d),
+        (o = { rate: t.ac.sampleRate, freq: d, bins: d.length }))
+      : t.offlineBuffer
+        ? (o = k(r))
+        : u.fill(0);
+    let s = 0,
+      b = 0;
+    for (let e = 0; e < u.length; e++) {
+      let t = u[e];
+      s += t * t;
+      let n = t < 0 ? -t : t;
+      n > b && (b = n);
+    }
+    for (
+      s = Math.sqrt(s / u.length), _.push({ t: E, rms: s });
+      _.length && _[0].t < E - 12;
+    )
+      _.shift();
+    g = Math.max(b, g * Math.exp(-r * 0.9));
+    let x = z(0.85 / (g + 0.002), 1, 40);
+    if (((m += r), b > 0.06 && (b > p * 0.85 || m > 2.5))) {
+      (f.set(u), (p = b), (m = 0));
+      let e = t.recent;
+      h = e.length ? e[e.length - 1].id : ``;
+    }
+    (c.clearRect(0, 0, i, 262),
+      (c.font = `600 13px ${v}`),
+      (c.fillStyle = `#f0a030`),
+      (c.textBaseline = `middle`),
+      c.fillText(`AUDIO MONITOR`, 16, 16),
+      (c.font = `12px ${v}`),
+      (c.fillStyle = `#9aa4ae`),
+      c.fillText(`procedural synthesis · equalpower · 48 voices`, 122, 16));
+    let S = t.ok ? t.health : `unavailable`,
+      C = a ? `live` : t.offlineBuffer ? `offline render` : `starting`,
+      w = e.world.time.tod ?? 14,
+      T = n?.w ?? {},
+      A = `ctx ${S} · ${C} · ${t.ac ? Math.round(t.ac.sampleRate / 100) / 10 : 0} kHz · voices ${t.activeVoices()}/48 · played ${t.played} · stolen ${t.stolen} · tod ${F(w)}`;
+    ((c.font = `12px ${y}`),
+      (c.fillStyle = `#c8d0d8`),
+      (c.textAlign = `right`),
+      c.fillText(A, 984, 16),
+      (c.textAlign = `left`),
+      ee(16, 34, 520, 118),
+      (c.strokeStyle = `rgba(255,255,255,0.08)`),
+      c.beginPath(),
+      c.moveTo(16, 93),
+      c.lineTo(536, 93),
+      c.stroke());
+    let N = Math.max(1, Math.floor(u.length / 520));
+    if (p > 0) {
+      ((c.strokeStyle = `rgba(240,160,48,0.42)`),
+        (c.lineWidth = 1),
+        c.beginPath());
+      let e = 0.92 / p;
+      for (let t = 0, n = 0; t < f.length; t += N, n++) {
+        let r = 93 - z(f[t] * e, -1, 1) * 56;
+        n === 0 ? c.moveTo(16 + n, r) : c.lineTo(16 + n, r);
+      }
+      c.stroke();
+    }
+    ((c.strokeStyle = a ? `#7fe0c0` : `#e0c27f`),
+      (c.lineWidth = 1.4),
+      c.beginPath());
+    for (let e = 0, t = 0; e < u.length; e += N, t++) {
+      let n = 93 - z(u[e] * x, -1, 1) * 56;
+      t === 0 ? c.moveTo(16 + t, n) : c.lineTo(16 + t, n);
+    }
+    (c.stroke(),
+      (c.lineWidth = 1),
+      j(
+        `master waveform  ·  rms ${O(s).toFixed(1)} dBFS  ·  peak ${O(b).toFixed(1)} dBFS  ·  view ×${x.toFixed(1)}`,
+        24,
+        44,
+      ),
+      p > 0 &&
+        ((c.font = `11px ${v}`),
+        (c.fillStyle = `rgba(240,160,48,0.85)`),
+        c.fillText(
+          `held: last transient  ${h}  ${O(p).toFixed(1)} dBFS  ${m.toFixed(1)} s ago`,
+          24,
+          142,
+        )));
+    let ne = z((O(s) + 60) / 60, 0, 1);
+    if (
+      ((c.fillStyle = `rgba(127,224,192,0.25)`),
+      c.fillRect(526, 148 - ne * 110, 6, ne * 110),
+      ee(548, 34, 436, 118),
+      o)
+    )
+      for (let e = 0; e < 64; e++) {
+        let t = 30 * (16e3 / 30) ** (e / 64),
+          n = 30 * (16e3 / 30) ** ((e + 1) / 64),
+          i = Math.floor((t / (o.rate / 2)) * o.bins),
+          a = Math.max(i + 1, Math.floor((n / (o.rate / 2)) * o.bins)),
+          s = 0;
+        for (let e = i; e < a && e < o.bins; e++) s = Math.max(s, o.freq[e]);
+        let l = s / 255;
+        D[e] = Math.max(l, D[e] - r * 1.8);
+        let u = D[e] ** 1.2 * 96;
+        ((c.fillStyle = M(e / 64, 0.9)),
+          c.fillRect(548 + e * 6.8125 + 1, 148 - u, 4.8125, u));
+      }
+    (j(`spectrum 30 Hz – 16 kHz (log)`, 556, 44),
+      (c.font = `10px ${y}`),
+      (c.fillStyle = `#6f7a86`));
+    for (let [e, t] of [
+      [60, `60`],
+      [250, `250`],
+      [1e3, `1k`],
+      [4e3, `4k`],
+      [12e3, `12k`],
+    ]) {
+      let n = (Math.log(e / 30) / Math.log(16e3 / 30)) * 436;
+      c.fillText(t, 548 + n - 6, 160);
+    }
+    (ee(16, 170, 968, 38), c.beginPath(), c.moveTo(16, 208));
+    for (let e of _) {
+      let t = 16 + ((e.t - (E - 12)) / 12) * 968;
+      c.lineTo(t, 208 - z((O(e.rms) + 60) / 60, 0, 1) * 34);
+    }
+    (c.lineTo(984, 208),
+      c.closePath(),
+      (c.fillStyle = `rgba(127,224,192,0.22)`),
+      c.fill());
+    for (let e of t.recent) {
+      let t = e.t - (performance.now() / 1e3 - E);
+      if (t < E - 12) continue;
+      let n = 16 + ((t - (E - 12)) / 12) * 968;
+      ((c.fillStyle = te(e)),
+        c.fillRect(n - 1, 172, 2, e.kind === `ambience` ? 6 : 12));
+    }
+    j(`level (-60..0 dBFS) · last 12 s · events by type`, 24, 178);
+    let re = [
+        [`gun`, `gunshot near`],
+        [`gunfar`, `gunshot far`],
+        [`foot`, `footsteps`],
+        [`explosion`, `explosion`],
+        [`impact`, `impact / reload`],
+        [`ui`, `ui / feedback`],
+        [`ambience`, `ambience`],
+      ],
+      I = 16;
+    c.font = `11px ${v}`;
+    for (let [e, t] of re)
+      ((c.fillStyle = q[e]),
+        c.beginPath(),
+        c.arc(I + 5, 224, 4.5, 0, 6.283),
+        c.fill(),
+        (c.fillStyle = `#c8d0d8`),
+        c.fillText(t, I + 14, 224),
+        (I += 14 + c.measureText(t).width + 18));
+    let ie = `ambience  wind ${P(T.wind)}  birds ${P(T.birds)}  crickets ${P(T.crickets)}  rumble ${P(T.rumble)}     busses  master ${t.getBus(`master`).toFixed(2)}  sfx ${t.getBus(`sfx`).toFixed(2)}  ambience ${t.getBus(`ambience`).toFixed(2)}  ui ${t.getBus(`ui`).toFixed(2)}`;
+    ((c.font = `11px ${y}`),
+      (c.fillStyle = `#8f9aa6`),
+      c.fillText(ie, 16, 245));
+  }
+  function ee(e, t, n, r) {
+    ((c.fillStyle = `rgba(0,0,0,0.35)`),
+      c.fillRect(e, t, n, r),
+      (c.strokeStyle = `rgba(255,255,255,0.09)`),
+      c.strokeRect(e + 0.5, t + 0.5, n - 1, r - 1));
+  }
+  function j(e, t, n) {
+    ((c.font = `11px ${v}`), (c.fillStyle = `#8f9aa6`), c.fillText(e, t, n));
+  }
+  function te(e) {
+    return q[e.kind === `gun` && e.d > 60 ? `gunfar` : e.kind] ?? `#aaa`;
+  }
+  function M(e, t) {
+    let n = [240, 160, 48],
+      r = [127, 224, 192],
+      i = e < 0.5 ? N(n, r, e * 2) : N(r, [176, 106, 224], (e - 0.5) * 2);
+    return `rgba(${i[0] | 0},${i[1] | 0},${i[2] | 0},${t})`;
+  }
+  function N(e, t, n) {
+    return [
+      e[0] + (t[0] - e[0]) * n,
+      e[1] + (t[1] - e[1]) * n,
+      e[2] + (t[2] - e[2]) * n,
+    ];
+  }
+  function P(e) {
+    return `${Math.round((e ?? 0) * 100)}%`;
+  }
+  function F(e) {
+    let t = Math.floor(e),
+      n = Math.floor((e - t) * 60);
+    return `${String(t).padStart(2, `0`)}:${String(n).padStart(2, `0`)}`;
+  }
+  return {
+    draw: A,
+    dispose() {
+      a.remove();
+    },
+  };
+}
+function qe(e, t) {
+  let n = e.length;
+  for (let r = 1, i = 0; r < n; r++) {
+    let a = n >> 1;
+    for (; i & a; a >>= 1) i ^= a;
+    if (((i ^= a), r < i)) {
+      let n = e[r];
+      ((e[r] = e[i]), (e[i] = n), (n = t[r]), (t[r] = t[i]), (t[i] = n));
+    }
+  }
+  for (let r = 2; r <= n; r <<= 1) {
+    let i = (-2 * Math.PI) / r,
+      a = Math.cos(i),
+      o = Math.sin(i);
+    for (let i = 0; i < n; i += r) {
+      let n = 1,
+        s = 0;
+      for (let c = 0; c < r / 2; c++) {
+        let l = i + c,
+          u = l + r / 2,
+          d = e[u] * n - t[u] * s,
+          f = e[u] * s + t[u] * n;
+        ((e[u] = e[l] - d), (t[u] = t[l] - f), (e[l] += d), (t[l] += f));
+        let p = n * a - s * o;
+        ((s = n * o + s * a), (n = p));
+      }
+    }
+  }
+}
+var Je = [0, 1, 0],
+  Ye = Array.from({ length: 8 }, (e, t) => [
+    Math.cos((t * Math.PI) / 4),
+    0,
+    Math.sin((t * Math.PI) / 4),
+  ]),
+  Xe = 30,
+  Ze = 9,
+  Qe = new Map();
+function $e(e, t) {
+  if (!e?.raycast) return { roof: 0, enc: 0, near: 15 };
+  let n = [t[0], t[1] + 1.4, t[2]],
+    r = +!!e.raycast(n, Je, Ze),
+    i = 0,
+    a = 0;
+  for (let t of Ye) {
+    let r = e.raycast(n, t, Xe);
+    r && (i++, (a += r.dist ?? r.distance ?? Xe));
+  }
+  return { roof: r, enc: i / Ye.length, near: i ? a / i : Xe };
+}
+function et(e, t, n, r) {
+  let i = Qe.get(t);
+  if (
+    (!i ||
+      r - i.time > 1.5 ||
+      Math.hypot(n[0] - i.pos[0], n[1] - i.pos[1], n[2] - i.pos[2]) > 2) &&
+    ((i = { pos: n.slice(), time: r, space: $e(e, n) }),
+    Qe.set(t, i),
+    Qe.size > 256)
+  )
+    for (let [e, t] of Qe) r - t.time > 10 && Qe.delete(e);
+  return i.space;
+}
+function tt(e) {
+  if (e === 2) return `tank_cannon`;
+  let t = j[e]?.gun;
+  return t === 2 ? `rocket_launch` : t === 1 ? `gun_lmg` : null;
+}
+function nt() {
+  let e = null,
+    t = -1 / 0,
+    n = (e, n, r) => (e - t < 3 ? null : ((t = e), { id: n, volume: r }));
+  return {
+    message(e, t) {
+      return e?.kind === `error` ? n(t, `ui_error`, 0.3) : null;
+    },
+    objective() {
+      return null;
+    },
+    phase(t, r) {
+      let i = t?.phase;
+      if (!i || i === e) return null;
+      let a = e;
+      return (
+        (e = i),
+        a === null
+          ? null
+          : n(r, i === `live` ? `ui_confirm` : `ui_message`, 0.3)
+      );
+    },
+  };
+}
+function rt(e, t, n, r) {
+  if (
+    ![e, t, r].every(
+      (e) => Array.isArray(e) && e.length === 3 && e.every(Number.isFinite),
+    ) ||
+    !Number.isFinite(n) ||
+    n <= 0
+  )
+    return null;
+  let i = Math.hypot(...t);
+  if (i < 0.001) return null;
+  let a = t.map((e) => e / i),
+    o = r.reduce((t, n, r) => t + (n - e[r]) * a[r], 0);
+  if (o <= 3 || o >= n) return null;
+  let s = e.map((e, t) => e + a[t] * o),
+    c = Math.hypot(...r.map((e, t) => e - s[t]));
+  if (c >= 4) return null;
+  if (c < 0.35) {
+    let e = c > 0.01 ? s.map((e, t) => (e - r[t]) / c) : [-a[2], 0, a[0]];
+    if (c <= 0.01) {
+      let t = Math.hypot(...e);
+      e = t > 0.001 ? e.map((e) => e / t) : [1, 0, 0];
+    }
+    ((s = r.map((t, n) => t + e[n] * 0.35)), (c = 0.35));
+  }
+  return { pos: s, volume: 0.75 * (1 - c / 5), delay: o / 850 };
+}
+var it = [
+    `launcher`,
+    `suppressed`,
+    `shotgun`,
+    `sniper`,
+    `dmr`,
+    `lmg`,
+    `smg`,
+    `pistol`,
+    `carbine`,
+    `ar`,
+  ],
+  at = [`ar`, `carbine`, `dmr`, `sniper`, `lmg`, `smg`, `pistol`];
+function ot(e, t, n) {
+  if (!e) return null;
+  let r =
+    t?.attachments?.muzzle === `suppressor` ||
+    (t?.suppressed && t?.attachments?.muzzle === `standard`);
+  if (!r && t?.key && n(`gun_own_${t.key}`)) return `gun_own_${t.key}`;
+  let i = e;
+  return (
+    (i === `gun_sniper` || i === `gun_pistol` || (i === `gun_smg` && !r)) &&
+      t?.report &&
+      n(`${i}_${t.report}`) &&
+      (i = `${i}_${t.report}`),
+    r &&
+      [`gun_ar`, `gun_carbine`, `gun_dmr`, `gun_lmg`, `gun_smg`].includes(i) &&
+      (i += `_suppressed`),
+    i
+  );
+}
+function st(e, t) {
+  if (t == null) return `ar`;
+  let n = null;
+  if (
+    (e &&
+      (n = Array.isArray(e)
+        ? (e.find((e) => e?.id === t) ?? e.find((e) => e?.name === t) ?? null)
+        : (e[t] ?? null)),
+    n?.class === `tool` || n?.class === `defib`)
+  )
+    return null;
+  let r = String(
+    n?.class ?? n?.type ?? n?.category ?? n?.name ?? t,
+  ).toLowerCase();
+  for (let e of it) if (r.includes(e)) return e;
+  return typeof t == `number` ? at[Math.abs(t | 0) % at.length] : `ar`;
+}
+function ct(e, t) {
+  let n = e.events.on(`squad:callout`, (n) => {
+    typeof n?.text != `string` ||
+      te(e.world) ||
+      (e.modules?.get?.(`player`)?.getLocalEntity?.() &&
+        (t.getBus(`master`) * t.getBus(`ui`) <= 0 ||
+          t.play(`ui_message`, { volume: 0.35, local: !0 })));
+  });
+  return () => n?.();
+}
+var lt =
+    /frag|c4|claymore|rocket|rpg|launcher|cannon|destroyed|explosion|shell/i,
+  ut = /^squad_(attack|defend|hold|regroup|cancelled)(_[A-Z])?$/;
+function dt(e = () => performance.now() / 1e3) {
+  let t = new Map();
+  return (n, r) => {
+    let i = e();
+    return i - (t.get(n) ?? -1e9) < r ? !1 : (t.set(n, i), !0);
+  };
+}
+function ft(e = () => performance.now() / 1e3) {
+  let t = new Map();
+  return {
+    pass(n) {
+      let r = e(),
+        i = t.get(n) ?? [];
+      for (i.push(r); i.length && r - i[0] > 3;) i.shift();
+      return (t.set(n, i), i.length < 4 ? !1 : ((i.length = 0), !0));
+    },
+    forget(e) {
+      t.delete(e);
+    },
+  };
+}
+function pt(e, t, n = {}) {
+  let r = e.world,
+    i = n.now ?? (() => performance.now() / 1e3),
+    a = () => e.modules.get(`player`)?.getLocalEntity?.(),
+    o = () => r.byType(`soldier`),
+    s = (e) => [e.pos[0], e.pos[1] + 1.5 * ee(), e.pos[2]],
+    c = (e) => e && e.hp > 0 && !(e.state & u.DEAD),
+    l = () => t.rand(),
+    d = () => 0.96 + l() * 0.08,
+    f = dt(i),
+    p = ft(i),
+    m = (e) =>
+      0.93 + (((Math.imul(e.id | 0, 2654435761) >>> 0) % 1e3) / 1e3) * 0.14,
+    h = (
+      e,
+      n,
+      { volume: r = 1, allowDead: i = !1, delay: o, own: l = !1 } = {},
+    ) => {
+      if (!n || (!i && !c(n))) return null;
+      let u = a(),
+        f = u && u.id === n.id,
+        p = (l ? m(n) : 1) * d();
+      return t.play(
+        e,
+        f
+          ? { local: !0, volume: r * 0.55, pitch: p, delay: o }
+          : { pos: s(n), volume: r, pitch: p, delay: o },
+      );
+    },
+    g = () => !te(r),
+    _ = (e) => {
+      let t = a();
+      return !!t && !!e && t.id === e.id;
+    },
+    v = (e) => {
+      let t = a();
+      return !!t && !!e && g() && e.team === t.team && t.id !== e.id;
+    },
+    y = (e, t, n) => (v(t) ? h(e, t, { ...n, own: !0 }) : null),
+    b = (e, { delay: n = 0, volume: r = 0.7 } = {}) => {
+      if (!g() || !a()) return null;
+      let i = /_([A-Z])$/.exec(e)?.[1];
+      if (i && !ae.includes(i)) {
+        if (/^obj_/.test(e)) return null;
+        e = e.slice(0, -2);
+      }
+      return f(`radioline`, 2.5)
+        ? t.play(`voice_` + e, { local: !0, volume: r, delay: n })
+        : null;
+    },
+    x = (e, t) => Math.hypot(e.pos[0] - t.pos[0], e.pos[2] - t.pos[2]),
+    S = (e, t, n) => {
+      let r = a(),
+        i = null,
+        s = t;
+      for (let t of o()) {
+        if (
+          t.id === n ||
+          !r ||
+          t.id === r.id ||
+          t.team !== r.team ||
+          !c(t) ||
+          t.state & u.IN_VEHICLE
+        )
+          continue;
+        let a = Math.hypot(t.pos[0] - e[0], t.pos[2] - e[2]);
+        a < s && ((s = a), (i = t));
+      }
+      return i;
+    },
+    C = [],
+    w = -1e9,
+    T = i() + 30 + l() * 40,
+    E = 0,
+    D = 0,
+    O = null,
+    k = new Set(),
+    A = new Set(),
+    j = new Map(),
+    M = new Map(),
+    P = new Map(),
+    F = new Map();
+  (C.push(
+    e.events.on(`player:death`, (e) => {
+      let t = r.get(e?.victimId);
+      if (!t || e.weapon === `Redeploy`) return;
+      let n = a(),
+        i = n && n.id === t.id;
+      if (lt.test(String(e.weapon ?? ``)) && f(`scream`, 3))
+        return h(`voice_scream`, t, { allowDead: !0, volume: 0.9 });
+      l() > 0.1 ||
+        (!i && !f(`death`, 1.6)) ||
+        h(`voice_death`, t, { allowDead: !0 });
+    }),
+  ),
+    C.push(
+      e.events.on(`medic:call`, (e) => {
+        let t = r.get(e?.entityId);
+        t &&
+          f(`medicCall:` + t.id, 4) &&
+          (f(`medic:` + t.id, 30), y(`voice_medic`, t, { volume: 0.95 }));
+      }),
+    ),
+    C.push(
+      e.events.on(`weapon:reload`, (e) => {
+        let t = r.get(e?.entityId),
+          n = a();
+        !t ||
+          !n ||
+          !c(t) ||
+          t.state & u.IN_VEHICLE ||
+          Math.hypot(t.pos[0] - n.pos[0], t.pos[2] - n.pos[2]) > 45 ||
+          (o().some(
+            (e) =>
+              e.team !== t.team &&
+              c(e) &&
+              Math.hypot(e.pos[0] - t.pos[0], e.pos[2] - t.pos[2]) < 28,
+          ) &&
+            v(t) &&
+            f(`cover:` + t.id, 18) &&
+            f(`cover`, 6) &&
+            y(`voice_cover`, t, { volume: 0.9 }));
+      }),
+    ),
+    C.push(
+      e.events.on(`match:phase`, (e) => {
+        e?.phase === `live` &&
+          (f(`warhorn`, 4) &&
+            t.play(`voice_warhorn`, { local: !0, volume: 0.5 }),
+          b(`match_start`, { delay: 1.4 }));
+        let n = a();
+        e?.phase === `ended` &&
+          n &&
+          (e.winner === 0 || e.winner === 1) &&
+          b(e.winner === n.team ? `match_won` : `match_lost`, { delay: 0.6 });
+      }),
+    ),
+    C.push(
+      e.events.on(`objective:changed`, (e) => {
+        let n = e?.objectiveId ?? e?.id;
+        if (
+          n == null ||
+          !Number.isInteger(e.team) ||
+          e.team < 0 ||
+          (e.progress != null && e.progress < 1)
+        )
+          return;
+        let i = P.get(n);
+        if ((P.set(n, e.team), i === void 0 || i === e.team)) return;
+        let s = a();
+        if (!s) return;
+        let d = e.team === s.team;
+        f(`warhorn`, 4) &&
+          t.play(`voice_warhorn`, {
+            local: !0,
+            volume: d ? 0.34 : 0.22,
+            pitch: d ? 1 : 0.85,
+          });
+        let p = r.match?.objectives?.find((e) => e.id === n),
+          m = p?.pos;
+        if (
+          (p?.letter &&
+            b((d ? `obj_captured_` : `obj_lost_`) + p.letter, { delay: 0.9 }),
+          !d || !m)
+        )
+          return;
+        let h = o().filter(
+          (e) =>
+            e.id !== s.id &&
+            e.team === s.team &&
+            c(e) &&
+            !(e.state & u.IN_VEHICLE) &&
+            Math.hypot(e.pos[0] - m[0], e.pos[2] - m[2]) < 30,
+        );
+        h.length &&
+          g() &&
+          f(`roar`, 10) &&
+          y(
+            l() < 0.5 ? `voice_captured` : `voice_roar`,
+            h[Math.floor(l() * h.length)],
+            { volume: 0.85 },
+          );
+      }),
+    ),
+    C.push(
+      e.events.on(`player:death`, (e) => {
+        let t = a(),
+          n = r.get(e?.victimId),
+          i = r.get(e?.killerId);
+        if (
+          t &&
+          n &&
+          (i &&
+            i.id !== n.id &&
+            i.team !== n.team &&
+            v(i) &&
+            x(i, t) < 50 &&
+            l() < 0.35 &&
+            f(`kill:` + i.id, 10) &&
+            f(`kill`, 5) &&
+            y(`voice_kill`, i, { delay: 0.35 }),
+          n.id !== t.id && v(n) && x(n, t) < 40 && l() < 0.5)
+        ) {
+          let e = S(n.pos, 25, n.id);
+          e && f(`mandown`, 8) && y(`voice_man_down`, e, { delay: 0.5 });
+        }
+      }),
+    ),
+    C.push(
+      e.events.on(`spot:target`, (e) => {
+        if (e?.carried) return;
+        let t = r.get(r.players.get(e?.spotterId)?.entityId),
+          n = r.get(e?.targetId);
+        t &&
+          n &&
+          f(`spot:` + t.id, 4) &&
+          f(`spot`, 1.5) &&
+          y(
+            n.type === `vehicle`
+              ? n.weapon >= 3
+                ? `voice_spotted_air`
+                : `voice_spotted_vehicle`
+              : `voice_spotted`,
+            t,
+            { volume: 0.9 },
+          );
+      }),
+    ),
+    C.push(
+      e.events.on(`medic:revive`, (e) => {
+        let t = r.get(e?.medicId),
+          n = r.get(e?.entityId);
+        (t &&
+          f(`revive:` + t.id, 6) &&
+          y(`voice_revive_give`, t, { volume: 0.85 }),
+          n &&
+            l() < 0.6 &&
+            f(`thanks:` + n.id, 6) &&
+            y(`voice_revive_thanks`, n, { volume: 0.85, delay: 1.3 }));
+      }),
+    ),
+    C.push(
+      e.events.on(`player:damage`, (e) => {
+        let t = a();
+        t && e?.targetId === t.id && e.amount > 0 && (w = i());
+      }),
+    ),
+    C.push(
+      e.events.on(`squad:callout`, (e) => {
+        let n = a(),
+          i = n && N(r, n.owner),
+          p = i && r.get(r.players.get(i.leaderId)?.entityId),
+          m = _(p) && ut.test(e?.line ?? ``);
+        if (
+          (typeof e?.line == `string` && !m && b(e.line, { delay: 0.25 }),
+          !/^Squad, (attack|regroup)/.test(e?.text ?? ``) ||
+            !p ||
+            !v(p) ||
+            !f(`go:` + p.id, 8) ||
+            (y(`voice_go`, p, { delay: 1.8 }),
+            !/attack/.test(e.text) || l() > 0.45 || !f(`roar`, 10)))
+        )
+          return;
+        let h = o().filter(
+            (e) =>
+              e.id !== p.id &&
+              e.team === n.team &&
+              c(e) &&
+              !(e.state & u.IN_VEHICLE) &&
+              N(r, e.owner)?.id === i.id &&
+              Math.hypot(e.pos[0] - n.pos[0], e.pos[2] - n.pos[2]) < 40,
+          ),
+          g = h[Math.floor(l() * h.length)];
+        g &&
+          g.id !== n.id &&
+          t.play(`voice_roar`, {
+            pos: s(g),
+            volume: 0.8,
+            pitch: d(),
+            delay: 2.6,
+          });
+      }),
+    ),
+    C.push(
+      e.events.on(`weapon:fire`, (e) => {
+        if (!e?.origin || !e.dir || !(e.dist > 0) || e.replay) return;
+        let t = a();
+        if (!t) return;
+        let n = r.get(e.entityId);
+        for (let r of o()) {
+          if (
+            !c(r) ||
+            r.state & u.IN_VEHICLE ||
+            r.id === e.entityId ||
+            (n && n.team === r.team)
+          )
+            continue;
+          let i = r.pos[0] - t.pos[0],
+            a = r.pos[2] - t.pos[2];
+          i * i + a * a > 3600 ||
+            (rt(e.origin, e.dir, e.dist, s(r)) &&
+              p.pass(r.id) &&
+              v(r) &&
+              f(`pinned:` + r.id, 20) &&
+              f(`pinned`, 5) &&
+              y(`voice_pinned`, r));
+        }
+      }),
+    ));
+  function ne() {
+    let e = r.byType(`projectile`);
+    for (let t of e) {
+      if (t.weapon !== oe.id || k.has(t.id)) continue;
+      k.add(t.id);
+      let e = o().find((e) => e.owner === t.owner && c(e));
+      !e ||
+        Math.hypot(e.pos[0] - t.pos[0], e.pos[2] - t.pos[2]) >= 4 ||
+        !f(`grunt:` + e.id, 2) ||
+        (v(e) && l() < 0.6 && f(`fragout`, 3)
+          ? y(`voice_frag_out`, e, { volume: 0.9 })
+          : h(`voice_grunt`, e, { volume: 0.8 }));
+    }
+    let t = a();
+    if (t && g())
+      for (let n of e) {
+        if (n.weapon !== oe.id || A.has(n.id)) continue;
+        let e = r.players.get(n.owner)?.team;
+        if (e == null || e === t.team) continue;
+        let i = S(n.pos, 7);
+        i && f(`grenade`, 3) && (A.add(n.id), y(`voice_grenade`, i));
+      }
+    if (k.size > 256) {
+      let t = new Set(e.map((e) => e.id));
+      for (let e of k) t.has(e) || k.delete(e);
+      for (let e of A) t.has(e) || A.delete(e);
+    }
+  }
+  function re(e) {
+    for (let t of r.byType(`vehicle`)) {
+      let n = j.get(t.id);
+      if (
+        (j.set(t.id, t.hp),
+        !(n > 0) ||
+          t.hp > 0 ||
+          t.team < 0 ||
+          t.team === e.team ||
+          x(t, e) > 150)
+      )
+        continue;
+      let r = S(t.pos, 80);
+      r && f(`vdown`, 6) && y(`voice_vehicle_down`, r, { delay: 0.6 });
+    }
+  }
+  function I(e) {
+    for (let t of r.byType(`vehicle`)) {
+      if (t.hp <= 0 || t.team < 0 || t.team === e.team) continue;
+      let n = Math.hypot(t.vel[0], t.vel[2]);
+      if (!(n < 4))
+        for (let r of o()) {
+          if (r.team !== e.team || !c(r) || r.state & u.IN_VEHICLE) continue;
+          let i = r.pos[0] - t.pos[0],
+            a = r.pos[2] - t.pos[2],
+            o = Math.hypot(i, a);
+          o > 16 ||
+            (i * t.vel[0] + a * t.vel[2]) / (o * n + 1e-6) < 0.5 ||
+            (v(r) &&
+              f(`lookout:` + r.id, 20) &&
+              f(`lookout`, 6) &&
+              y(`voice_lookout`, r));
+        }
+    }
+  }
+  function ie(e) {
+    let t = i();
+    for (let n of o()) {
+      if (!c(n) || n.state & u.IN_VEHICLE || n.hp > (n.maxHp ?? 200) * 0.25) {
+        M.delete(n.id);
+        continue;
+      }
+      let r = n.pos[0] - e.pos[0],
+        i = n.pos[2] - e.pos[2];
+      if (r * r + i * i > 1600) continue;
+      let a = M.get(n.id);
+      if (a == null) {
+        (M.set(n.id, t + 4 + l() * 6),
+          v(n) &&
+            f(`medic:` + n.id, 30) &&
+            f(`medic`, 5) &&
+            y(`voice_medic`, n, { volume: 0.9 }));
+        continue;
+      }
+      t < a ||
+        (M.set(n.id, t + 9 + l() * 7), h(`voice_cough`, n, { volume: 0.8 }));
+    }
+  }
+  function L(e) {
+    let t = i();
+    if (t < T || ((T = t + 45 + l() * 45), t - w < 10) || !g()) return;
+    let n = o().filter(
+      (t) =>
+        t.id !== e.id &&
+        t.team === e.team &&
+        c(t) &&
+        !(t.state & u.IN_VEHICLE) &&
+        Math.hypot(t.vel[0], t.vel[2]) < 0.5 &&
+        Math.hypot(t.pos[0] - e.pos[0], t.pos[2] - e.pos[2]) < 25,
+    );
+    if (!n.length) return;
+    let r = n[Math.floor(l() * n.length)];
+    y(r.team === 1 ? `voice_banter_cobalt` : `voice_banter_amber`, r, {
+      volume: 0.7,
+    });
+  }
+  function R(e) {
+    let n = e.state & u.IN_VEHICLE ? e.seat : null,
+      i = O;
+    if (((O = n), n == null || n === i)) return;
+    let a = r.get(n);
+    !a ||
+      a.type !== `vehicle` ||
+      !(a.weapon >= 3) ||
+      a.hp <= 0 ||
+      (f(`radio`, 30) && t.play(`voice_radio`, { local: !0, volume: 0.4 }));
+  }
+  function z(e) {
+    for (let t of o()) {
+      let n = t.pos[0] - e.pos[0],
+        i = t.pos[2] - e.pos[2],
+        a =
+          c(t) &&
+          !(t.state & u.IN_VEHICLE) &&
+          n * n + i * i < 12100 &&
+          t.vel[1] < -9 &&
+          t.pos[1] - r.map.getHeight(t.pos[0], t.pos[2]) > 6,
+        o = F.get(t.id) ?? !1;
+      (F.set(t.id, a),
+        a &&
+          !o &&
+          f(`fall:` + t.id, 6) &&
+          f(`scream`, 1.5) &&
+          h(`voice_scream`, t, { volume: 0.8 }));
+    }
+  }
+  return {
+    update(e) {
+      if (((D += e), D >= 0.1 && ((D = 0), ne()), (E += e), E < 0.5)) return;
+      E = 0;
+      let t = a();
+      t && (I(t), ie(t), L(t), R(t), z(t), re(t));
+    },
+    dispose() {
+      for (let e of C) e?.();
+    },
+  };
+}
+var mt = null,
+  ht = null,
+  X = null,
+  Z = null,
+  gt = null,
+  _t = null,
+  vt = {
+    explosion_grenade: `blast_sharp`,
+    explosion_claymore: `blast_sharp`,
+    explosion_small: `blast_sharp`,
+    explosion_cannon: null,
+  };
+function yt(e, t) {
+  let n = vt[e] === void 0 ? `blast_heavy` : vt[e];
+  n &&
+    X?.voiceSamples?.has?.(n) &&
+    X.play(`voice_` + n, {
+      pos: t.pos,
+      local: t.local,
+      volume: (t.volume ?? 1) * 0.9,
+      kind: t.kind,
+      delay: t.delay,
+      open: t.open,
+    });
+}
+var bt = new Map(),
+  Q = new Map(),
+  xt = new Map(),
+  St = new Map(),
+  Ct = -1,
+  wt = 0;
+function Tt(e) {
+  return st(_t?.modules.get(`weapons`)?.weaponDefs, e);
+}
+var Et = (e) => {
+    let t = Tt(e);
+    return t ? `gun_` + t : null;
+  },
+  Dt = () => _t?.modules.get(`player`)?.getLocalEntity?.() ?? null,
+  $ = (e) => {
+    let t = Dt();
+    return !!t && t.id === e;
+  },
+  Ot = (e) => _t?.world.get(e)?.pos ?? null;
+function kt(e, t = `dirt`) {
+  let n = _t?.modules.get(`terrain`);
+  try {
+    let t = n?.getMaterialAt?.(e[0], e[2]);
+    if (t) return t;
+  } catch {}
+  return t;
+}
+var At = {
+  play(e, t) {
+    if (!X) return null;
+    let n = X.play(e, t ?? {});
+    return (e.startsWith(`explosion`) && yt(e, t ?? {}), n);
+  },
+  setBus(e, t) {
+    return X ? X.setBus(e, t) : !1;
+  },
+  getBus(e) {
+    return X ? X.getBus(e) : 0;
+  },
+  setMuffle(e, t) {
+    return X ? X.setMuffle(e, t) : !1;
+  },
+  setPresent(e, t) {
+    return X ? X.setPresent(e, t) : !1;
+  },
+  get busses() {
+    return X ? X.busses : {};
+  },
+  ids() {
+    return B.slice();
+  },
+  has(e) {
+    return B.includes(e);
+  },
+  hasSample(e) {
+    return !!X?.sfxSamples?.has(e);
+  },
+  get analyser() {
+    return X?.analyser ?? null;
+  },
+  get context() {
+    return X?.ac ?? null;
+  },
+  get listener() {
+    return X?.listener ?? null;
+  },
+  resume() {
+    return X ? X.resume() : Promise.resolve(!1);
+  },
+  level() {
+    return X ? X.level() : 0;
+  },
+  state() {
+    return X?.health ?? `none`;
+  },
+  stats() {
+    return {
+      state: X?.health ?? `none`,
+      voices: X?.activeVoices() ?? 0,
+      played: X?.played ?? 0,
+      stolen: X?.stolen ?? 0,
+      culled: X?.culled ?? 0,
+      ambience: Z?.w ?? null,
+      ambienceBed: !!Z?.war?.alive?.(),
+      movementSamples: X?.movementSamples.stats() ?? null,
+      voiceSamples: X?.voiceSamples.stats() ?? null,
+      sfxSamples: X?.sfxSamples.stats() ?? null,
+      bakedVoices: X?.bakedVoices.stats() ?? null,
+    };
+  },
+  recent() {
+    return X?.recent ?? [];
+  },
+  weaponSound: Et,
+  weaponParams: ne,
+  setAmbienceTod(e) {
+    Z?.setTod(e);
+  },
+  startAmbience() {
+    Z?.start();
+  },
+  stopAmbience() {
+    Z?.stop();
+  },
+  ambienceWeights: (e) => Le.weights(e),
+  setListenerOverride(e) {
+    X && (X.listenerOverride = e ? [e[0], e[1], e[2]] : null);
+  },
+  renderOffline: (e, t) => (X ? X.renderOffline(e, t) : Promise.resolve(null)),
+};
+function jt(e) {
+  let t = e.events,
+    n = nt(),
+    r = (e, t) => {
+      let r = n[e](t, X.ac.currentTime);
+      r && X.play(r.id, { volume: r.volume });
+    };
+  (t.on(`weapon:fire`, (t) => {
+    if (!t) return;
+    let n = Et(t.weaponId);
+    if (!n) return;
+    let r = t.origin ?? Ot(t.entityId),
+      i = e.world.get(t.entityId),
+      a = e.modules.get(`weapons`)?.equippedDefinition?.(t.weaponId, i),
+      o = a?.reportVolume ?? 1,
+      s = n;
+    n = ot(s, a, (e) => !!X.has?.(e));
+    let c = n.startsWith(`gun_own_`)
+        ? s === `gun_sniper`
+          ? 1.5
+          : s === `gun_pistol`
+            ? 0.7
+            : s === `gun_lmg`
+              ? 1.2
+              : 1
+        : n.startsWith(`gun_sniper`)
+          ? 1.5
+          : n.includes(`_su`)
+            ? 0.35
+            : n === `gun_pistol` || n.startsWith(`gun_pistol`)
+              ? 0.7
+              : n === `gun_lmg`
+                ? 1.2
+                : 1,
+      l = r
+        ? et(e.world.map, t.entityId ?? -1, r, e.world.time.tick / 60)
+        : null;
+    if ($(t.entityId)) {
+      (X.play(n, { local: !0, volume: 0.85 * o }),
+        l &&
+          X.play(`gun_tail`, {
+            local: !0,
+            space: l,
+            size: c,
+            volume: 0.85 * o,
+          }));
+      return;
+    }
+    if (!r) return;
+    (X.play(n, { pos: r, volume: o }),
+      X.play(`gun_tail`, { pos: r, space: l, size: c, volume: o }));
+    let u = rt(r, t.dir, t.dist, X.listenerPosition([0, 0, 0]));
+    u && X.play(`whizz`, u);
+  }),
+    t.on(`weapon:hit`, (e) => {
+      e &&
+        e.point &&
+        (e.targetId == null
+          ? X.play(`impact`, {
+              pos: e.point,
+              surface: e.surface ?? kt(e.point),
+            })
+          : X.play(`impact_flesh`, { pos: e.point, volume: 0.8 }));
+    }),
+    t.on(`ui:hitmarker`, (t) => {
+      e.config.showcase === `weapons` && t && Mt();
+    }),
+    t.on(`weapon:reload`, (e) => {
+      if (!e) return;
+      let t = Tt(e.weaponId),
+        n = X.has(`reload_${t}`) ? `reload_${t}` : `reload`,
+        r =
+          e.duration ??
+          _t.modules
+            .get(`weapons`)
+            ?.weaponDefs?.find((t) => t.id === e.weaponId)?.reload;
+      St.get(e.entityId)?.handle.stop();
+      let i = Ot(e.entityId),
+        a = $(e.entityId)
+          ? X.play(n, { local: !0, volume: 1, priority: 8, duration: r })
+          : i
+            ? X.play(n, { pos: i, duration: r })
+            : null;
+      a && St.set(e.entityId, { handle: a, weapon: e.weaponId });
+    }),
+    t.on(`player:damage`, (e) => {
+      !e ||
+        !Number.isFinite(e.amount) ||
+        e.amount <= 0 ||
+        ($(e.targetId) &&
+          X.play(`damage`, {
+            volume: Math.min(1, 0.5 + (e.amount ?? 20) / 80),
+          }),
+        $(e.attackerId) && Mt());
+    }),
+    t.on(`player:death`, (e) => {
+      if (!e) return;
+      $(e.victimId)
+        ? X.play(`death`)
+        : $(e.killerId) && e.headshot && X.play(`kill_headshot`);
+      let t = Ot(e.victimId);
+      t && !$(e.victimId) && X.play(`body_fall`, { pos: t });
+    }),
+    t.on(`player:spawn`, (e) => {
+      e &&
+        $(e.entityId) &&
+        e.anchorId !== `revive` &&
+        X.play(`ui_confirm`, { volume: 0.6 });
+    }),
+    t.on(`destruction:collapse`, (e) => {
+      e?.pos && X.play(`collapse`, { pos: e.pos });
+    }),
+    t.on(`destruction:damage`, (e) => {
+      e?.pos && X.play(`impact_wood`, { pos: e.pos, volume: 0.6 });
+    }));
+  let i = (e) => e?.pos ?? Ot(e?.vehicleId) ?? Ot(e?.entityId);
+  (t.on(`vehicle:enter`, (e) => {
+    let t = i(e);
+    t && X.play(`vehicle_enter`, $(e?.entityId) ? { local: !0 } : { pos: t });
+  }),
+    t.on(`vehicle:exit`, (e) => {
+      let t = i(e);
+      t && X.play(`vehicle_exit`, $(e?.entityId) ? { local: !0 } : { pos: t });
+    }),
+    t.on(`vehicle:horn`, (e) => {
+      let t = i(e);
+      t && X.play(`vehicle_horn`, { pos: t });
+    }),
+    t.on(`vehicle:fire`, (t) => {
+      let n = t?.mg ? `gun_lmg` : tt(e.world.get(t?.vehicleId)?.weapon);
+      if (!t?.pos || !n) return;
+      let r = e.modules.get(`player`)?.getLocalEntity?.(),
+        i = r && r.state & u.IN_VEHICLE && r.seat === t.vehicleId;
+      X.play(
+        n,
+        i
+          ? { local: !0, volume: t.mg ? 0.8 : 1.1, dist: 3 }
+          : { pos: t.pos, volume: t.mg ? 0.7 : 0.9 },
+      );
+    }),
+    t.on(`vehicle:crash`, (e) => {
+      let t = i(e);
+      t &&
+        X.play(`vehicle_crash`, {
+          pos: t,
+          volume: Math.min(1.2, 0.4 + (e?.speed ?? 10) / 20),
+        });
+    }),
+    t.on(`vehicle:damage`, (e) => {
+      let t = i(e);
+      t && X.play(`impact_metal`, { pos: t });
+    }),
+    t.on(`audio:play`, (e) => {
+      e?.id && X.play(e.id, e);
+    }),
+    t.on(`ui:message`, (e) => {
+      r(`message`, e);
+    }),
+    t.on(`objective:changed`, (e) => r(`objective`, e)),
+    t.on(`score:award`, (t) => {
+      /^(Captured|Neutralized) /.test(t?.reason ?? ``) &&
+        (X.setMuffle(0.42, 0.12),
+        setTimeout(() => {
+          let t = e.modules.get(`player`)?.getLocalEntity?.();
+          t && t.hp > 0 && !(t.state & u.DEAD) && X.setMuffle(0, 1.3);
+        }, 420));
+    }),
+    t.on(`match:phase`, (e) => r(`phase`, e)),
+    t.on(`env:timeOfDay`, (e) => {
+      e && typeof e.tod == `number` && (Z?.setTod(e.tod), gt?.setTod?.(e.tod));
+    }));
+}
+function Mt() {
+  let e = performance.now();
+  e - Ct < 40 || ((Ct = e), X.play(`hit_confirm`));
+}
+function Nt(e, t) {
+  let n = X.listenerPosition([0, 0, 0]),
+    r = Dt(),
+    i = bt.size ? new Set() : null;
+  for (let a of e.world.sorted()) {
+    if (a.type !== `soldier`) continue;
+    let o = a.pos[0] - n[0],
+      s = a.pos[2] - n[2];
+    if (o * o + s * s > 4900 || a.state & (u.DEAD | u.IN_VEHICLE | u.SWIMMING))
+      continue;
+    let c = bt.get(a.id);
+    (c || ((c = { stride: 0, gear: 0, grounded: !0 }), bt.set(a.id, c)),
+      i?.add(a.id));
+    let l = (a.state & u.GROUNDED) !== 0 || (a.state & u.JUMPING) === 0,
+      d = r && r.id === a.id,
+      f = !d && (!r || M(e.world, r, a));
+    if (
+      (!c.grounded &&
+        l &&
+        X.play(
+          `land`,
+          d
+            ? { local: !0, volume: 0.35, surface: F(e, a.pos) }
+            : { pos: a.pos, surface: F(e, a.pos) },
+        ),
+      (c.grounded = l),
+      !l)
+    ) {
+      ((c.stride = 0), (c.gear = 0));
+      continue;
+    }
+    let p = Math.hypot(a.vel[0], a.vel[2]);
+    if (p < 0.4) {
+      ((c.stride = 0), (c.gear = 0));
+      continue;
+    }
+    c.stride += p * t;
+    let m = a.stance === 2 ? 0.7 : a.stance === 1 ? 0.9 : p > 5 ? 1.9 : 1.6;
+    if (c.stride >= m) {
+      c.stride -= m;
+      let t = F(e, a.pos),
+        n = a.stance === 2 ? 0.35 : a.stance === 1 ? 0.6 : p > 5 ? 1.1 : 0.9,
+        r = 0.94 + Math.min(0.12, p * 0.018),
+        i = f ? 1.35 : 0.4;
+      X.play(
+        `footstep`,
+        d
+          ? { local: !0, surface: t, volume: n * 0.13, pitch: r }
+          : {
+              pos: a.pos,
+              surface: t,
+              volume: n * (p > 5 ? 0.92 : 0.76) * i,
+              pitch: r,
+              ...(f ? { priority: 5 } : {}),
+            },
+      );
+    }
+    if (!d && a.stance === 0 && p >= 2) {
+      c.gear += p * t;
+      let e = p > 5 ? 3.8 : 5.4;
+      c.gear >= e &&
+        ((c.gear -= e),
+        X.play(`movement_gear`, {
+          pos: [a.pos[0], a.pos[1] + 1.25, a.pos[2]],
+          volume: (p > 5 ? 0.3 : 0.18) * (f ? 1.2 : 0.35),
+          pitch: 0.94 + Math.min(0.12, p * 0.018),
+        }));
+    } else c.gear = 0;
+  }
+  if (i) for (let e of bt.keys()) i.has(e) || bt.delete(e);
+}
+function Pt(e, t) {
+  if (((wt += t), wt < 0.1)) return;
+  let n = wt;
+  wt = 0;
+  let r = performance.now();
+  for (let t of e.world.sorted()) {
+    if (t.type !== `vehicle`) continue;
+    let e = Math.hypot(t.vel[0], t.vel[1], t.vel[2]),
+      i = t.weapon >= 3 ? (xt.has(t.id) ? se(xt.get(t.id), t, n) : ce(t)) : 1;
+    t.weapon >= 3 && xt.set(t.id, i);
+    let a =
+        t.weapon >= 3
+          ? i > 0.02
+          : t.hp > 0 && (t.ext?.engineOn ?? (e > 0.3 || t.owner >= 0)),
+      o = X.distanceTo(t.pos),
+      s = Q.get(t.id),
+      c = t.weapon >= 3 ? `vehicle_rotor` : `vehicle_engine`;
+    if (a && o < R[c].max) {
+      let n = Math.min(1, 0.15 + e / 22) * (0.35 + 0.65 * i),
+        a = t.weapon >= 3 && !!X.movementSamples.rotor;
+      if (
+        (s && s.sampled !== a && (s.handle.stop(), Q.delete(t.id), (s = null)),
+        !s || !s.handle.alive())
+      ) {
+        let e = X.play(c, { pos: t.pos, rpm: n, volume: 0.55 });
+        if (!e) continue;
+        ((s = { handle: e, sampled: a }), Q.set(t.id, s));
+      }
+      (s.handle.setPosition(t.pos),
+        s.handle.setRpm(n),
+        s.handle.setVolume(0.55 * i * U(R[c], o)),
+        (s.t = r));
+    } else s && (s.handle.stop(), Q.delete(t.id));
+  }
+  for (let [e, t] of Q) r - t.t > 500 && (t.handle.stop(), Q.delete(e));
+  for (let t of xt.keys()) e.world.get(t) || xt.delete(t);
+}
+var Ft = {
+  name: `audio`,
+  deps: [],
+  async init(e) {
+    if (((_t = e), (X = new Pe(e)), !X.ok))
+      e.warn(`audio engine unavailable; api is a no-op`);
+    else {
+      let t = X,
+        n = () => {
+          X === t && (t.movementSamples.load(t.ac), t.sfxSamples.load(t.ac));
+        },
+        r = () => {
+          X === t && t.voiceSamples.load(t.ac);
+        };
+      if (e.config.showcase) (n(), r());
+      else {
+        let i = Date.now(),
+          a = () => {
+            X === t &&
+              (globalThis.__game?.ready || Date.now() - i > 9e4
+                ? n()
+                : setTimeout(a, 500));
+          };
+        (a(), e.events.on(`player:local`, r));
+      }
+      ((Z = new Le(X)),
+        (Z.tod = e.world.time.tod ?? e.config.tod ?? 14),
+        e.config.showcase || Z.start(),
+        jt(e),
+        (mt = ct(e, At)),
+        (ht = pt(e, X)));
+      try {
+        e.renderer.domElement.click();
+      } catch {}
+      let i = X;
+      i.resume()
+        .then((t) => {
+          X === i &&
+            e.log(
+              `context ${t ? `running` : i.ac?.state} · ${B.length} sound ids · ${i.voices.length} voices`,
+            );
+        })
+        .catch((t) => {
+          X === i && e.warn(`audio resume failed`, t?.message);
+        });
+    }
+  },
+  tick(e, t) {
+    if (X?.ok) {
+      for (let [t, n] of St) {
+        let r = e.world.get(t);
+        (!n.handle.alive() ||
+          !r ||
+          r.hp <= 0 ||
+          !(r.state & u.RELOADING) ||
+          r.weapon !== n.weapon) &&
+          (n.handle.stop(), St.delete(t));
+      }
+      try {
+        Nt(e, t);
+      } catch (t) {
+        e.warn(`footsteps`, t?.message);
+      }
+    }
+  },
+  update(e, t) {
+    if (X?.ok) {
+      try {
+        (X.update(), Z?.update());
+      } catch (t) {
+        e.warn(`update`, t?.message);
+      }
+      try {
+        Pt(e, t);
+      } catch (t) {
+        e.warn(`vehicles`, t?.message);
+      }
+      try {
+        ht?.update(t);
+      } catch (t) {
+        e.warn(`voices`, t?.message);
+      }
+      if (gt)
+        try {
+          gt.update(t);
+        } catch (t) {
+          e.warn(`showcase`, t?.message);
+        }
+    }
+  },
+  async showcase(e, t) {
+    if (!X?.ok) {
+      (e.debugGround(200), e.warn(`showcase without audio context`));
+      return;
+    }
+    gt = Ue(e, At, X, Z, t);
+  },
+  dispose(e) {
+    (mt?.(), (mt = null), ht?.dispose(), (ht = null));
+    for (let e of St.values()) e.handle.stop();
+    (St.clear(), bt.clear());
+    for (let e of Q.values()) e.handle.stop();
+    (Q.clear(), xt.clear());
+    try {
+      gt?.dispose();
+    } catch {}
+    try {
+      Z?.stop();
+    } catch {}
+    try {
+      X?.dispose();
+    } catch {}
+    ((gt = null), (Z = null), (X = null), (_t = null));
+  },
+  api: At,
+};
+export { vt as BLAST_LAYER, Ft as default, Tt as weaponClass };
+//# sourceMappingURL=audio-D3RxdFdK.js.map

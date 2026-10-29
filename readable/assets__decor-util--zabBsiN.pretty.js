@@ -1,0 +1,302 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import {
+  Bt as e,
+  Dn as t,
+  F as n,
+  Gt as r,
+  Hn as i,
+  In as a,
+  P as o,
+  Tt as s,
+  V as c,
+  Vn as l,
+  W as u,
+  _n as d,
+  nn as f,
+  q as p,
+  rt as m,
+  xn as h,
+  z as g,
+} from "./graphics-quality-CrL3qbU3.js";
+import { t as _ } from "./RoundedBoxGeometry-Dl8Nj5I-.js";
+function v(e) {
+  let t = (Math.imul(e | 0, 2654435761) ^ 2654435769) >>> 0,
+    n = () => (t = (Math.imul(t, 1664525) + 1013904223) >>> 0) / 4294967296;
+  return (
+    n(),
+    n(),
+    (n.range = (e, t) => e + (t - e) * n()),
+    (n.int = (e, t) => Math.floor(e + (t - e + 1) * n())),
+    (n.pick = (e) => e[Math.floor(n() * e.length)]),
+    (n.chance = (e) => n() < e),
+    n
+  );
+}
+var y = new Map();
+function b(e, t = 0.8, n = 0, i = {}) {
+  let a = typeof e == `string` ? new u(e).getHex() : e,
+    o = `${a}|${t}|${n}|${JSON.stringify(i)}`;
+  return (
+    y.has(o) || y.set(o, new r({ color: a, roughness: t, metalness: n, ...i })),
+    y.get(o)
+  );
+}
+var x = (e, t = 1.5) => b(e, 0.4, 0, { emissive: e, emissiveIntensity: t }),
+  S = (e = 13624298, t = 0.28, n = 0.05) =>
+    b(e, n, 0.1, { transparent: !0, opacity: t, depthWrite: !1 }),
+  C = () => b(14278112, 0.18, 1),
+  w = () => b(11120048, 0.38, 0.9),
+  T = () => b(2500394, 0.45, 0.7),
+  E = (e = 15263456) => b(e, 0.55),
+  D = () => b(15265522, 0.02, 1),
+  O = {
+    oak: 11897432,
+    walnut: 6176555,
+    cherry: 9062958,
+    maple: 13808004,
+    ash: 13482908,
+    espresso: 3811874,
+    pine: 13081182,
+    white: 15526112,
+    black: 2762790,
+  },
+  k = [
+    7305862, 10134426, 4082266, 12168601, 8084037, 5991246, 13157046, 9060154,
+    3095350, 14076853, 5069683, 10517076, 6316128, 9211808,
+  ],
+  A = [
+    15328472, 2899536, 10467240, 13201226, 4157299, 14201706, 2039586, 12043471,
+    9329530, 15855593, 7109208,
+  ];
+function j(t, n, r, i = 0, a = 0, o = 0, s = 0, c = 0, l = 0) {
+  let u = new e(n, r);
+  return (
+    u.position.set(i, a, o),
+    u.rotation.set(s, c, l),
+    (u.castShadow = u.receiveShadow = !0),
+    t.add(u),
+    u
+  );
+}
+var M = (e, t, r, i, a, o = 0, s = 0, c = 0, l = 0) =>
+    j(e, new n(t, r, i), a, o, s + r / 2, c, 0, l),
+  N = (e, t, r, i, a, o = 0, s = 0, c = 0, l = 0, u = 0, d = 0) =>
+    j(e, new n(t, r, i), a, o, s, c, l, u, d),
+  P = (e, t, n, r, i, a, o = 0, s = 0, c = 0, l = 0) =>
+    j(
+      e,
+      new _(
+        t,
+        n,
+        r,
+        2,
+        Math.min(i, t / 2 - 0.001, n / 2 - 0.001, r / 2 - 0.001),
+      ),
+      a,
+      o,
+      s + n / 2,
+      c,
+      0,
+      l,
+    ),
+  F = (e, t, n, r, i, a, o = 0, s = 0, c = 0, l = 0, u = 0, d = 0) =>
+    j(
+      e,
+      new _(
+        t,
+        n,
+        r,
+        2,
+        Math.min(i, t / 2 - 0.001, n / 2 - 0.001, r / 2 - 0.001),
+      ),
+      a,
+      o,
+      s,
+      c,
+      l,
+      u,
+      d,
+    ),
+  I = (e, t, n, r, i, a = 0, o = 0, s = 0, c = 20) =>
+    j(e, new p(t, n, r, c), i, a, o + r / 2, s),
+  L = (e, n, r, i = 0, a = 0, o = 0, s = 16) =>
+    j(e, new t(n, s, Math.max(6, s >> 1)), r, i, a, o);
+function R(e, t, n, r = 0, i = 0, a = 0, o = 28) {
+  return j(
+    e,
+    new s(
+      t.map(([e, t]) => new l(Math.max(e, 0), t)),
+      o,
+    ),
+    B(n),
+    r,
+    i,
+    a,
+  );
+}
+var z = new WeakMap();
+function B(e) {
+  if (e.side === 2) return e;
+  if (!z.has(e)) {
+    let t = e.clone();
+    ((t.side = 2), z.set(e, t));
+  }
+  return z.get(e);
+}
+function V(t, n, r, a, o, s = 8) {
+  let c = new i(...n),
+    l = new i(...r),
+    u = c.distanceTo(l),
+    d = new e(new p(a, a, u, s), o);
+  return (
+    d.position.copy(c).add(l).multiplyScalar(0.5),
+    d.quaternion.setFromUnitVectors(
+      new i(0, 1, 0),
+      l.clone().sub(c).normalize(),
+    ),
+    (d.castShadow = d.receiveShadow = !0),
+    t.add(d),
+    d
+  );
+}
+function H(e, t, n, r, o = 24, s = 6) {
+  let l = new c(t.map((e) => new i(...e)));
+  return j(e, new a(l, o, n, s, !1), r);
+}
+function U(e, t, n, r, i = 0, a = 0, o = 0, s = 0) {
+  let c = new h(t.map(([e, t]) => new l(e, t)));
+  return j(
+    e,
+    new m(c, {
+      depth: n,
+      bevelEnabled: s > 0,
+      bevelSize: s,
+      bevelThickness: s,
+      bevelSegments: 1,
+      curveSegments: 12,
+    }),
+    r,
+    i,
+    a,
+    o,
+  );
+}
+function W(e, t, n, { opaquePanel: r = !1 } = {}) {
+  let i = document.createElement(`canvas`);
+  ((i.width = e), (i.height = t), n(i.getContext(`2d`), e, t));
+  let a = new g(i);
+  return (
+    (a.colorSpace = d),
+    (a.anisotropy = 8),
+    r && (a.userData.opaquePanel = !0),
+    a
+  );
+}
+function G(
+  t,
+  n,
+  i,
+  a,
+  o = 0,
+  s = 0,
+  c = 0,
+  {
+    rough: l = 0.7,
+    emissive: u = 0,
+    metal: d = 0,
+    ry: p = 0,
+    transparent: m = !1,
+  } = {},
+) {
+  let h = new r({
+      map: a,
+      roughness: l,
+      metalness: d,
+      transparent: m,
+      emissive: u ? 16777215 : 0,
+      emissiveMap: u ? a : null,
+      emissiveIntensity: u,
+    }),
+    g = new e(new f(n, i), h);
+  return (
+    g.position.set(o, s, c),
+    (g.rotation.y = p),
+    (g.receiveShadow = !0),
+    t.add(g),
+    g
+  );
+}
+var K = (e) => `#` + new u(e).getHexString();
+function q(e, t) {
+  let n = new u(e);
+  return (n.multiplyScalar(t), n.getHex());
+}
+function J(e, t, n) {
+  return new u(e).lerp(new u(t), n).getHex();
+}
+function Y(e, t = {}) {
+  let n = new o().setFromObject(e),
+    r = n.getSize(new i());
+  return (
+    (e.userData.size = [r.x, r.y, r.z]),
+    (e.userData.box = n),
+    Object.assign(e.userData, t),
+    e
+  );
+}
+function X(e, t, n, r, i, a, { depth: o = 0.2, lean: s = !0 } = {}) {
+  let c = [
+      8072486, 3099245, 3889722, 13082698, 2763306, 14275267, 9067051, 5914475,
+      10697515, 3960442, 14731686, 4476764,
+    ],
+    l = n;
+  for (; l < n + a - 0.03;) {
+    let u = t.range(0.018, 0.045),
+      d = t.range(0.17, 0.27),
+      f = o * t.range(0.75, 1);
+    if (l + u > n + a) break;
+    if (s && t.chance(0.06) && l + d * 0.5 < n + a) {
+      (M(e, d * 0.95, u, f, b(t.pick(c), 0.75), l + d * 0.475, r, i),
+        (l += d * 0.95 + 0.004));
+      continue;
+    }
+    (M(e, u, d, f, b(t.pick(c), 0.75), l + u / 2, r, i),
+      (l += u + 0.002),
+      t.chance(0.08) && (l += t.range(0.03, 0.1)));
+  }
+  return l - n;
+}
+export {
+  L as A,
+  J as C,
+  v as D,
+  P as E,
+  V as O,
+  D as S,
+  E as T,
+  S as _,
+  T as a,
+  R as b,
+  w as c,
+  C as d,
+  F as f,
+  U as g,
+  B as h,
+  j as i,
+  H as j,
+  q as k,
+  W as l,
+  Y as m,
+  A as n,
+  X as o,
+  I as p,
+  O as r,
+  M as s,
+  k as t,
+  N as u,
+  x as v,
+  G as w,
+  b as x,
+  K as y,
+};
+//# sourceMappingURL=decor-util--zabBsiN.js.map

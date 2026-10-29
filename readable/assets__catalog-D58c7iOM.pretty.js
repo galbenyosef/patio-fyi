@@ -1,0 +1,759 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import {
+  a as e,
+  c as t,
+  g as n,
+  i as r,
+  n as i,
+  r as a,
+  t as o,
+} from "./attachments-BlZum_KH.js";
+var s = `salient.reticle.v1`,
+  c = new Set(),
+  l = (e, t, n, r) =>
+    e.line([
+      [Math.cos(t) * n, Math.sin(t) * n],
+      [Math.cos(t) * r, Math.sin(t) * r],
+    ]),
+  u = (e, t, n, r = [0, 1, 2, 3]) => {
+    for (let i of r) l(e, (i * Math.PI) / 2, t, n);
+  },
+  d = {
+    default: { name: `Sight default`, level: 1 },
+    dot: { name: `Dot`, level: 1, dot: 9 },
+    cross: { name: `Cross dot`, level: 1, path: (e) => u(e, 26, 72) },
+    circle: { name: `Circle dot`, level: 3, path: (e) => e.arc(100) },
+    chevron: {
+      name: `Chevron`,
+      level: 5,
+      dot: 0,
+      width: 9,
+      path: (e) =>
+        e.line([
+          [-44, 44],
+          [0, 0],
+          [44, 44],
+        ]),
+    },
+    horseshoe: {
+      name: `Horseshoe`,
+      level: 7,
+      path: (e) => e.arc(92, 2.4, Math.PI * 2 + 0.74),
+    },
+    tee: { name: `Tee`, level: 9, path: (e) => u(e, 26, 76, [0, 1, 2]) },
+    saltire: {
+      name: `Saltire`,
+      level: 11,
+      path: (e) => {
+        for (let t = 0; t < 4; t++)
+          l(e, Math.PI / 4 + (t * Math.PI) / 2, 24, 68);
+      },
+    },
+    brackets: {
+      name: `Brackets`,
+      level: 13,
+      path: (e) => {
+        for (let t of [-1, 1])
+          e.line([
+            [t * 48, -44],
+            [t * 68, -44],
+            [t * 68, 44],
+            [t * 48, 44],
+          ]);
+      },
+    },
+    diamond: {
+      name: `Diamond`,
+      level: 15,
+      path: (e) =>
+        e.line(
+          [
+            [0, -62],
+            [62, 0],
+            [0, 62],
+            [-62, 0],
+          ],
+          !0,
+        ),
+    },
+    triangle: {
+      name: `Delta`,
+      level: 18,
+      path: (e) =>
+        e.line(
+          [
+            [0, -66],
+            [58, 36],
+            [-58, 36],
+          ],
+          !0,
+        ),
+    },
+    arrow: {
+      name: `Arrowhead`,
+      level: 21,
+      path: (e) =>
+        e.line([
+          [-42, -8],
+          [0, -50],
+          [42, -8],
+        ]),
+    },
+    segments: {
+      name: `Split ring`,
+      level: 24,
+      path: (e) => {
+        for (let t = 0; t < 4; t++)
+          e.arc(
+            94,
+            (t * Math.PI) / 2 + 0.35,
+            (t * Math.PI) / 2 + Math.PI / 2 - 0.35,
+          );
+      },
+    },
+    ticked: {
+      name: `Ticked ring`,
+      level: 28,
+      path: (e) => {
+        (e.arc(84), u(e, 84, 112));
+      },
+    },
+    rings: {
+      name: `Double ring`,
+      level: 32,
+      path: (e) => {
+        (e.arc(104), e.arc(58));
+      },
+    },
+    square: {
+      name: `Box`,
+      level: 36,
+      path: (e) =>
+        e.line(
+          [
+            [-58, -58],
+            [58, -58],
+            [58, 58],
+            [-58, 58],
+          ],
+          !0,
+        ),
+    },
+    post: {
+      name: `Post`,
+      level: 40,
+      dot: 0,
+      path: (e) => {
+        (e.line([
+          [0, 6],
+          [0, 112],
+        ]),
+          u(e, 34, 112, [0, 2]));
+      },
+    },
+    chevronring: {
+      name: `Chevron ring`,
+      level: 45,
+      dot: 0,
+      width: 8,
+      path: (e) => {
+        (e.arc(100),
+          e.line([
+            [-40, 40],
+            [0, 0],
+            [40, 40],
+          ]));
+      },
+    },
+    crossring: {
+      name: `Ringed cross`,
+      level: 50,
+      path: (e) => {
+        (e.arc(96), u(e, 26, 96));
+      },
+    },
+    mildot: {
+      name: `Mil-dot`,
+      level: 60,
+      width: 5,
+      path: (e) => u(e, 22, 112),
+      dots: [44, 78].flatMap((e) => [
+        [e, 0],
+        [-e, 0],
+        [0, e],
+        [0, -e],
+      ]),
+    },
+    constellation: {
+      name: `Constellation`,
+      level: 70,
+      dots: Array.from({ length: 8 }, (e, t) => [
+        Math.cos((t * Math.PI) / 4) * 82,
+        Math.sin((t * Math.PI) / 4) * 82,
+      ]),
+    },
+    crown: {
+      name: `Crown`,
+      level: 85,
+      path: (e) => {
+        (e.arc(98, Math.PI + 0.5, Math.PI * 2 - 0.5),
+          e.line([
+            [-34, -34],
+            [0, -6],
+            [34, -34],
+          ]));
+      },
+    },
+  },
+  f = Object.freeze(
+    Object.fromEntries(
+      Object.entries(d).map(([e, t]) => [
+        e,
+        Object.freeze({ name: t.name, level: t.level }),
+      ]),
+    ),
+  ),
+  p = Object.freeze({
+    default: { name: `Sight default`, css: null },
+    red: { name: `Red`, css: `#ff3b2f` },
+    green: { name: `Green`, css: `#44ff5c` },
+    amber: { name: `Amber`, css: `#ffb640` },
+    cyan: { name: `Cyan`, css: `#3fe6ff` },
+    magenta: { name: `Magenta`, css: `#ff4fd8` },
+    white: { name: `White`, css: `#f4f4f0` },
+  }),
+  m = Object.freeze({ min: 0.3, max: 1.6, step: 0.05 }),
+  ee = { small: 0.75, medium: 1, large: 1.35 },
+  h = (e) => {
+    let t = typeof e == `string` ? ee[e] : e;
+    return Number.isFinite(t)
+      ? Math.min(m.max, Math.max(m.min, Math.round(t * 100) / 100))
+      : null;
+  },
+  g = Object.freeze({ shape: `default`, color: `default`, size: 1 }),
+  _ = (e, t) =>
+    !!f[e] && (t?.admin === !0 || (t?.rank?.level ?? 1) >= f[e].level),
+  v = { ...g };
+try {
+  let e = JSON.parse(localStorage.getItem(s));
+  e &&
+    typeof e == `object` &&
+    (f[e.shape] && (v.shape = e.shape),
+    p[e.color] && (v.color = e.color),
+    h(e.size) != null && (v.size = h(e.size)));
+} catch {}
+var y = () => ({ ...v });
+function b(e) {
+  let t = { ...v };
+  for (let [n, r] of [
+    [`shape`, f],
+    [`color`, p],
+  ])
+    e?.[n] && r[e[n]] && (t[n] = e[n]);
+  (e?.size != null && h(e.size) != null && (t.size = h(e.size)), (v = t));
+  try {
+    localStorage.setItem(s, JSON.stringify(v));
+  } catch {}
+  for (let e of c) e(y());
+}
+var x = (e) => (c.add(e), () => c.delete(e)),
+  S = {
+    reflex: [`dot`, `#ff3b2f`],
+    holo: [`circle`, `#ffb640`],
+    prism: [`chevron`, `#ff3b2f`],
+    scope: [`cross`, `#0c0e10`],
+  },
+  C = Object.freeze(Object.keys(S).filter((e) => e !== `scope`));
+function w(e, t = v) {
+  let [n, r] = S[e] ?? S.reflex;
+  return {
+    shape: d[t.shape] && t.shape !== "default" ? t.shape : n,
+    css: p[t.color]?.css ?? r,
+    scale: h(t.size) ?? 1,
+  };
+}
+var T = 0.075;
+function E(e, t, n) {
+  let r = t / 2,
+    i = t / 256,
+    a = d[n.shape] ?? d.dot;
+  (e.clearRect(0, 0, t, t), (e.lineCap = `round`), (e.lineJoin = `round`));
+  let o = {
+      line(t, n = !1) {
+        (t.forEach(([t, n], a) =>
+          e[a ? `lineTo` : `moveTo`](r + t * i, r + n * i),
+        ),
+          n && e.closePath());
+      },
+      arc(t, n = 0, a = Math.PI * 2) {
+        (e.moveTo(r + Math.cos(n) * t * i, r + Math.sin(n) * t * i),
+          e.arc(r, r, t * i, n, a));
+      },
+    },
+    s = a.width ?? 7,
+    c = a.dot ?? 6.5,
+    l = a.dots ?? [];
+  for (let t of [`edge`, `lit`]) {
+    let u = t === `edge`;
+    ((e.strokeStyle = e.fillStyle = u ? `rgba(8,10,12,.55)` : n.css),
+      (e.shadowColor = u ? `transparent` : n.css),
+      (e.shadowBlur = u ? 0 : 5 * i),
+      (e.lineWidth = (s + (u ? 5 : 0)) * i),
+      a.path && (e.beginPath(), a.path(o), e.stroke()),
+      e.beginPath(),
+      c > 0 && o.arc(c + (u ? 2.5 : 0)));
+    for (let [t, n] of l)
+      (e.moveTo(r + (t + 5.5 + (u ? 2.5 : 0)) * i, r + n * i),
+        e.arc(r + t * i, r + n * i, (5.5 + (u ? 2.5 : 0)) * i, 0, Math.PI * 2));
+    e.fill();
+  }
+  e.shadowBlur = 0;
+}
+var D = o,
+  O = !(typeof process < `u` && {}.REAL_UNLOCKS === `1`),
+  k = Object.freeze({ 1: 1, 2: 3, 3: 6, 4: 10, 5: 15, 6: 20 }),
+  A = Object.freeze([`optic`, `muzzle`, `grip`, `mag`]),
+  j = { optic: e, muzzle: r, grip: i, mag: a },
+  M = Object.freeze({
+    optic: Object.freeze({
+      reflex: 10,
+      romeo5: 15,
+      micro: 25,
+      mro: 35,
+      holo: 40,
+      deltapoint: 55,
+      e553: 60,
+      acog: 75,
+      ta11: 100,
+      ta01: 125,
+      scope8: 40,
+      lpvo: 15,
+      thermal: 150,
+    }),
+    muzzle: Object.freeze({ brake: 20, suppressor: 50, heavy: 100 }),
+    grip: Object.freeze({ vertical: 30, angled: 65, bipod: 15 }),
+    mag: Object.freeze({ short: 5, extended: 30 }),
+  }),
+  N = Object.freeze({ lpvo: 10, scope8: 25, thermal: 100 }),
+  P = (e, t, r) => t === `optic` && n[e]?.class === `sniper` && N[r] != null,
+  F = (e, t, n = null) =>
+    t === `standard`
+      ? 0
+      : n != null && P(n, e, t)
+        ? N[t]
+        : (M[e]?.[t] ?? 1 / 0),
+  I = (e, t) => Math.max(0, Number(e?.weapons?.[n[t]?.name]?.kills) || 0),
+  L = o.filter((e) => n[e]?.class === `sniper`),
+  R = (e) => L.reduce((t, n) => t + I(e, n), 0),
+  z = (e, t, n, r) => (P(t, n, r) ? R(e) : I(e, t)),
+  te =
+    (e, t = !1) =>
+    (n, r, i) =>
+      t || O || z(e, n, r, i) >= F(r, i, n),
+  ne = (e, t, n, r) =>
+    r === `standard` ||
+    O ||
+    e?.admin === !0 ||
+    (P(t, n, r) ? (e?.sniperKills ?? 0) : (e?.weapons?.[t]?.kills ?? 0)) >=
+      F(n, r, t),
+  B = (e) => (n[e] ? (n[e].unlockLevel ?? k[n[e].tier] ?? 1) : 1 / 0),
+  V = (e, t = 1, r = !1) => !!n[e] && !n[e].retired && (r || O || t >= B(e)),
+  H = (e, t) => V(t, e?.rank?.level ?? 1, e?.admin === !0),
+  U = (e) => (e <= 1 ? 0 : Math.round(25 * (e - 1) ** 1.7) * 10),
+  W = [
+    `Recruit`,
+    `Private`,
+    `Lance Corporal`,
+    `Corporal`,
+    `Sergeant`,
+    `Staff Sergeant`,
+    `Master Sergeant`,
+    `Warrant Officer`,
+    `Lieutenant`,
+    `Captain`,
+    `Major`,
+    `Lieutenant Colonel`,
+    `Colonel`,
+    `Brigadier`,
+    `Major General`,
+    `Lieutenant General`,
+    `General`,
+    `Field Marshal`,
+    `Warlord`,
+    `Legend`,
+  ];
+function G(e) {
+  let t = Math.max(0, e | 0),
+    n = 1;
+  for (; n < 100 && t >= U(n + 1);) n++;
+  let r = U(n),
+    i = n < 100 ? U(n + 1) : null;
+  return {
+    level: n,
+    name: W[Math.min(W.length - 1, Math.floor((n - 1) / 5))],
+    xp: t,
+    floor: r,
+    next: i,
+    fraction: i ? (t - r) / (i - r) : 1,
+  };
+}
+var K = (e, t, n, r, i, a = null) =>
+    Object.freeze({
+      id: e,
+      name: t,
+      tier: n,
+      pattern: r,
+      colors: Object.freeze(i),
+      finish: a,
+    }),
+  q = [
+    [K(`olive`, `Olive Drab`, `base`, `solid`, [4870707]), `kills`, 25],
+    [
+      K(
+        `woodland`,
+        `Woodland`,
+        `base`,
+        `blotch`,
+        [3885610, 5917230, 2041368, 7041093],
+      ),
+      `kills`,
+      75,
+    ],
+    [
+      K(
+        `desert`,
+        `Desert`,
+        `base`,
+        `blotch`,
+        [12032616, 9072455, 13942670, 6969144],
+      ),
+      `kills`,
+      150,
+    ],
+    [
+      K(
+        `arctic`,
+        `Arctic`,
+        `base`,
+        `blotch`,
+        [14673642, 10135472, 16185593, 6253685],
+      ),
+      `kills`,
+      300,
+    ],
+    [
+      K(
+        `urban`,
+        `Urban Digital`,
+        `base`,
+        `digital`,
+        [7173499, 3817542, 10726320, 1908772],
+      ),
+      `kills`,
+      500,
+    ],
+    [
+      K(`tiger`, `Tiger`, `base`, `stripe`, [13206059, 1446412]),
+      `headshots`,
+      25,
+    ],
+    [
+      K(`redtiger`, `Red Tiger`, `base`, `stripe`, [10558749, 1181704]),
+      `headshots`,
+      75,
+    ],
+    [
+      K(`bloodline`, `Bloodline`, `base`, `split`, [855311, 11735578]),
+      `headshots`,
+      150,
+    ],
+  ],
+  J = K(`gold`, `Gold`, `mastery`, `solid`, [14263585], {
+    metalness: 1,
+    roughness: 0.22,
+  }),
+  Y = K(`platinum`, `Platinum`, `mastery`, `solid`, [14212578], {
+    metalness: 1,
+    roughness: 0.16,
+  }),
+  X = K(
+    `obsidian`,
+    `Obsidian`,
+    `mastery`,
+    `digital`,
+    [723728, 2757188, 1315868, 5974671],
+    { metalness: 0.85, roughness: 0.2 },
+  ),
+  Z = [
+    [
+      K(
+        `veteran`,
+        `Veteran`,
+        `career`,
+        `blotch`,
+        [3030351, 1450027, 5204614, 790807],
+      ),
+      `Play for 24 hours`,
+      (e) => [e.seconds / 3600, 24],
+    ],
+    [
+      K(`victor`, `Victor`, `career`, `split`, [15921902, 1925032]),
+      `Win 100 rounds`,
+      (e) => [e.wins, 100],
+    ],
+    [
+      K(`reaper`, `Reaper`, `career`, `stripe`, [1052688, 8026746]),
+      `Reach a 15 kill streak`,
+      (e) => [e.bestStreak, 15],
+    ],
+    [
+      K(
+        `headhunter`,
+        `Headhunter`,
+        `career`,
+        `digital`,
+        [3869194, 13908522, 1508356, 9051158],
+      ),
+      `1,000 career headshots`,
+      (e) => [e.headshots, 1e3],
+    ],
+    [
+      K(`duelist`, `Duelist`, `career`, `split`, [1193019, 14727244]),
+      `Eliminate 500 real players`,
+      (e) => [e.humanKills, 500],
+    ],
+    [
+      K(
+        `officer`,
+        `Officer`,
+        `career`,
+        `blotch`,
+        [2306122, 12097082, 988710, 3952504],
+      ),
+      `Reach level 50`,
+      (e) => [G(e.score).level, 50],
+    ],
+  ],
+  re = Object.freeze(
+    Object.fromEntries(
+      [...q.map((e) => e[0]), J, Y, X, ...Z.map((e) => e[0])].map((e) => [
+        e.id,
+        e,
+      ]),
+    ),
+  ),
+  ie = [
+    [`Rifleman`, `100 kills`, (e) => [e.kills, 100]],
+    [`Hardened`, `500 kills`, (e) => [e.kills, 500]],
+    [`Warfighter`, `1,000 kills`, (e) => [e.kills, 1e3]],
+    [`Executioner`, `5,000 kills`, (e) => [e.kills, 5e3]],
+    [`One-Man Army`, `10,000 kills`, (e) => [e.kills, 1e4]],
+    [`Marksman`, `100 headshots`, (e) => [e.headshots, 100]],
+    [`Deadeye`, `500 headshots`, (e) => [e.headshots, 500]],
+    [`Surgeon`, `2,500 headshots`, (e) => [e.headshots, 2500]],
+    [`Regular`, `Play for 1 hour`, (e) => [e.seconds / 3600, 1]],
+    [`Enlisted`, `Play for 10 hours`, (e) => [e.seconds / 3600, 10]],
+    [`Lifer`, `Play for 50 hours`, (e) => [e.seconds / 3600, 50]],
+    [`No Life`, `Play for 100 hours`, (e) => [e.seconds / 3600, 100]],
+    [`Winner`, `10 round wins`, (e) => [e.wins, 10]],
+    [`Champion`, `50 round wins`, (e) => [e.wins, 50]],
+    [`Unstoppable`, `10 kill streak`, (e) => [e.bestStreak, 10]],
+    [`Untouchable`, `25 kill streak`, (e) => [e.bestStreak, 25]],
+    [`Match MVP`, `30 kills in one round`, (e) => [e.bestRoundKills, 30]],
+  ],
+  Q = (e, t) => {
+    let n = Math.max(0, Number(e) || 0);
+    return { have: Math.min(n, t), need: t, done: n >= t };
+  },
+  ae = {
+    kills: 0,
+    deaths: 0,
+    headshots: 0,
+    humanKills: 0,
+    seconds: 0,
+    score: 0,
+    rounds: 0,
+    wins: 0,
+    bestStreak: 0,
+    bestRoundKills: 0,
+    weapons: {},
+  },
+  $ = (e, t) => e.weapons?.[n[t]?.name] ?? { kills: 0, headshots: 0 };
+function oe(e, t) {
+  let r = $(e, t),
+    i = n[t].class === `launcher`;
+  return q.map(([e, t, n]) => {
+    let a = t === `kills` || i,
+      o = t === `headshots` && i ? n * 2 : n;
+    return {
+      ...e,
+      requirement: `${o} ${a ? `kills` : `headshots`} with this weapon`,
+      ...Q(a ? r.kills : r.headshots, o),
+    };
+  });
+}
+function se(e, { unlockAll: r = !1 } = {}) {
+  let i = r;
+  r ||= O;
+  let a = { ...ae, ...(e && typeof e == `object` ? e : null) },
+    o = Object.fromEntries(D.map((e) => [e, oe(a, e)])),
+    s = D.filter((e) => o[e].every((e) => e.done)).length,
+    c = Z.map(([e, t, n]) => ({ ...e, requirement: t, ...Q(...n(a)) })),
+    l = {};
+  for (let e of D) {
+    let n = o[e].filter((e) => e.done).length;
+    ((l[e] = {
+      ...$(a, e),
+      camos: [
+        ...o[e],
+        {
+          ...J,
+          requirement: `Unlock every base camo on this weapon`,
+          ...Q(n, q.length),
+        },
+        { ...Y, requirement: `Gold on 3 weapons`, ...Q(s, 3) },
+        {
+          ...X,
+          requirement: `Gold on all ${D.length} weapons`,
+          ...Q(s, D.length),
+        },
+        ...c,
+      ],
+    }),
+      (l[e].attachments = A.flatMap((n) =>
+        t(e, n)
+          .filter((e) => e !== `standard`)
+          .map((t) => {
+            let r = F(n, t, e),
+              i = P(e, n, t);
+            return {
+              id: t,
+              slot: n,
+              name: j[n][t].name,
+              requirement: `${r} kills with ${i ? `any sniper rifle` : `this weapon`}`,
+              ...Q(z(a, e, n, t), r),
+            };
+          }),
+      ).sort((e, t) => e.need - t.need)));
+  }
+  let u = (e) =>
+      /headshot/.test(e)
+        ? `headshots`
+        : /streak|one round/.test(e)
+          ? `streak`
+          : /^Play/.test(e)
+            ? `time`
+            : /wins/.test(e)
+              ? `wins`
+              : `kills`,
+    d = ie.map(([e, t, n]) => ({
+      name: e,
+      kind: u(t),
+      requirement: t,
+      ...Q(...n(a)),
+    })),
+    f = G(a.score),
+    p = W.map((e, t) => ({
+      name: e,
+      tier: t,
+      level: t * 5 + 1,
+      requirement: t ? `Reach level ${t * 5 + 1}` : `Starting rank`,
+      ...Q(f.xp, U(t * 5 + 1)),
+      done: f.level >= t * 5 + 1,
+    }));
+  if (r)
+    for (let e of [
+      ...Object.values(l).flatMap((e) => [
+        ...(i ? e.camos : []),
+        ...e.attachments,
+      ]),
+      ...d,
+      ...p,
+    ])
+      e.done = !0;
+  let m = O && !i;
+  return {
+    row: a,
+    rank: f,
+    ranks: p,
+    weapons: l,
+    titles: d,
+    golds: s,
+    arsenal: Object.values(n)
+      .filter((e) => e.tier && !e.retired)
+      .map((e) => {
+        let t = B(e.id),
+          n = U(t),
+          i = f.level >= t;
+        return {
+          id: e.id,
+          name: e.name,
+          tier: e.tier,
+          level: t,
+          requirement:
+            t === 1 ? `Available from the start` : `Reach level ${t}`,
+          ...Q(f.xp, n),
+          earned: i,
+          testingAccess: m && !i,
+          done: V(e.id, f.level, r),
+        };
+      }),
+    admin: i,
+    testingAccess: m,
+    sniperKills: R(a),
+  };
+}
+var ce = (e, t, n) =>
+  !n || !!e?.weapons?.[t]?.camos.find((e) => e.id === n)?.done;
+function le(e) {
+  let t = new Map();
+  for (let n of e.arsenal ?? [])
+    n.done && t.set(`weapon:${n.id}`, `Weapon · ${n.name}`);
+  for (let [r, i] of Object.entries(e.weapons))
+    for (let e of i.camos)
+      e.done &&
+        t.set(
+          e.tier === `base` || e.id === `gold`
+            ? `camo:${r}:${e.id}`
+            : `camo:${e.id}`,
+          e.tier === `base` || e.id === `gold`
+            ? `${n[r].name} · ${e.name} camo`
+            : `${e.name} camo`,
+        );
+  for (let [r, i] of Object.entries(e.weapons))
+    for (let e of i.attachments ?? [])
+      e.done &&
+        t.set(`attachment:${r}:${e.slot}:${e.id}`, `${n[r].name} · ${e.name}`);
+  for (let n of e.titles)
+    n.done && t.set(`title:${n.name}`, `Title · ${n.name}`);
+  for (let [n, r] of Object.entries(f))
+    _(n, e) && t.set(`reticle:${n}`, `Reticle · ${r.name}`);
+  return (
+    t.set(`level:${e.rank.level}`, `Level ${e.rank.level} · ${e.rank.name}`),
+    t
+  );
+}
+export {
+  y as _,
+  ce as a,
+  _ as b,
+  le as c,
+  p as d,
+  T as f,
+  E as g,
+  m as h,
+  re as i,
+  V as l,
+  C as m,
+  te as n,
+  se as o,
+  f as p,
+  ne as r,
+  G as s,
+  D as t,
+  H as u,
+  x as v,
+  b as x,
+  w as y,
+};
+//# sourceMappingURL=catalog-D58c7iOM.js.map

@@ -1,0 +1,999 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import { N as e, o as t, p as n } from "./sim-CCeMdhLh.js";
+var r = 0.3,
+  i = n + 0.02,
+  a = 0.22,
+  o = 1.1,
+  s = 0.7,
+  c = 8,
+  l = 0.9,
+  u = 4.5,
+  d = 2.5,
+  f = 0.7,
+  p = 240,
+  m = 2,
+  h = 75,
+  g = new WeakMap(),
+  _ = new WeakMap();
+function v(e, n, s = !1) {
+  let [l, u, d, f] = n.bounds,
+    p = n.y,
+    m = Math.floor((d - l) / r),
+    h = Math.floor((f - u) / r),
+    g = m * h,
+    _ = new Float32Array(g),
+    v = [],
+    y = [],
+    b = [],
+    x = [];
+  for (let n of e.map.colliders.values()) {
+    if (n.overrideGround) {
+      let e = n.aabb;
+      e &&
+        (s || (e[1] <= p + 0.1 && e[4] >= p - 0.1)) &&
+        e[3] > l &&
+        e[0] < d &&
+        e[5] > u &&
+        e[2] < f &&
+        n.floorHeight?.((e[0] + e[3]) / 2, (e[2] + e[5]) / 2) < p - 1 &&
+        y.push(e);
+      continue;
+    }
+    if (n.noPlayer || n.solid === !1) continue;
+    if (n.navDynamic) {
+      let e = n.movementIndexBounds ?? n.aabb;
+      e &&
+        e[3] > l - 2 &&
+        e[0] < d + 2 &&
+        e[5] > u - 2 &&
+        e[2] < f + 2 &&
+        x.push(n);
+      continue;
+    }
+    if (!s && n.floorHeight && n.floorThickness > 0) continue;
+    let e = n.movementAabb ?? n.aabb;
+    !e ||
+      e[4] <= p + 0.35 ||
+      e[1] >= p + t[0] ||
+      e[3] < l - 2 ||
+      e[0] > d + 2 ||
+      e[5] < u - 2 ||
+      e[2] > f + 2 ||
+      (s && n.floorHeight ? b.push(n) : v.push(e));
+  }
+  for (let e of y) v.push(e);
+  let C = s ? (n.clear ?? a) : i,
+    T = s ? w(n, b, l, u, m, h, p) : null;
+  if (T)
+    for (let e = 0; e < g; e++) {
+      if (!T[e]) continue;
+      let t = e % m,
+        n = (e - t) / m,
+        i = !1;
+      for (let e = -1; e <= 1 && !i; e++)
+        for (let r = -1; r <= 1; r++) {
+          let a = t + r,
+            o = n + e;
+          if (a >= 0 && o >= 0 && a < m && o < h && !T[o * m + a]) {
+            i = !0;
+            break;
+          }
+        }
+      if (i) {
+        let e = l + t * r,
+          i = u + n * r;
+        v.push([e, 0, i, e + r, 0, i + r]);
+      }
+    }
+  let E = new Float32Array(g).fill(9);
+  for (let e of v) {
+    let t = Math.max(0, Math.floor((e[0] - o - l) / r)),
+      n = Math.min(m - 1, Math.ceil((e[3] + o - l) / r)),
+      i = Math.max(0, Math.floor((e[2] - o - u) / r)),
+      a = Math.min(h - 1, Math.ceil((e[5] + o - u) / r));
+    for (let o = i; o <= a; o++)
+      for (let i = t; i <= n; i++) {
+        let t = l + (i + 0.5) * r,
+          n = u + (o + 0.5) * r,
+          a = Math.max(e[0] - t, 0, t - e[3]),
+          s = Math.max(e[2] - n, 0, n - e[5]),
+          c = Math.hypot(a, s),
+          d = o * m + i;
+        c < E[d] && (E[d] = c);
+      }
+  }
+  let D = Math.ceil((m * r) / c),
+    O = new Uint16Array(g);
+  for (let e = 0; e < g; e++) {
+    let t = e % m,
+      n = (e - t) / m;
+    O[e] = Math.floor((n * r) / c) * D + Math.floor((t * r) / c);
+  }
+  let k = {
+    hw: s ? (n.heuristic ?? 2.2) : 1.25,
+    x0: l,
+    z0: u,
+    nx: m,
+    nz: h,
+    y: p,
+    clear: C,
+    cost: _,
+    near: E,
+    district: O,
+    districts: D * Math.ceil((h * r) / c),
+    near0: E.slice(),
+    off: T,
+    dyn: x,
+    dynUp: new Uint8Array(x.length),
+    dynTick: -1,
+    dynGen: 0,
+    dynMoves: x.some((e) => e.navMoves),
+    dynAt: new Float64Array(x.length * 2),
+    dynMoveAt: -1e9,
+    gs: new Float32Array(g),
+    from: new Int32Array(g),
+    seen: new Uint32Array(g),
+    shut: new Uint32Array(g),
+    gen: 0,
+    crowd: new Float32Array(g),
+    crowdGen: new Uint32Array(g),
+    hk: new Float64Array(g * 4),
+    hv: new Int32Array(g * 4),
+  };
+  return (S(k, !0), k);
+}
+var y = (e, n) => {
+    let r = e.aabb;
+    return !!r && r[4] > n + 0.35 && r[1] < n + t[0];
+  },
+  b = 0.6,
+  x = 30;
+function S(e, t = !1, n = 0) {
+  let { dyn: i, dynUp: a, y: c } = e,
+    l = t;
+  for (let e = 0; e < i.length; e++) {
+    let t = +!!y(i[e], c);
+    t !== a[e] && ((a[e] = t), (l = !0));
+  }
+  if (!l && e.dynMoves && n - e.dynMoveAt >= x) {
+    let t = e.dynAt;
+    for (let e = 0; e < i.length; e++) {
+      if (!a[e]) continue;
+      let n = i[e].aabb;
+      if (Math.abs(n[0] - t[e * 2]) > b || Math.abs(n[2] - t[e * 2 + 1]) > b) {
+        l = !0;
+        break;
+      }
+    }
+  }
+  if (!l) return;
+  if (e.dynMoves) {
+    e.dynMoveAt = n;
+    for (let t = 0; t < i.length; t++) {
+      let n = i[t].aabb;
+      ((e.dynAt[t * 2] = n?.[0] ?? 0), (e.dynAt[t * 2 + 1] = n?.[2] ?? 0));
+    }
+  }
+  let {
+      near: u,
+      near0: d,
+      cost: f,
+      off: p,
+      nx: m,
+      nz: h,
+      x0: g,
+      z0: _,
+      clear: v,
+    } = e,
+    S = m * h;
+  u.set(d);
+  for (let e = 0; e < i.length; e++) {
+    if (!a[e]) continue;
+    let t = i[e].aabb,
+      n = Math.max(0, Math.floor((t[0] - o - g) / r)),
+      s = Math.min(m - 1, Math.ceil((t[3] + o - g) / r)),
+      c = Math.max(0, Math.floor((t[2] - o - _) / r)),
+      l = Math.min(h - 1, Math.ceil((t[5] + o - _) / r));
+    for (let e = c; e <= l; e++)
+      for (let i = n; i <= s; i++) {
+        let n = g + (i + 0.5) * r,
+          a = _ + (e + 0.5) * r,
+          o = Math.max(t[0] - n, 0, n - t[3]),
+          s = Math.max(t[2] - a, 0, a - t[5]),
+          c = Math.hypot(o, s),
+          l = e * m + i;
+        c < u[l] && (u[l] = c);
+      }
+  }
+  for (let e = 0; e < S; e++)
+    f[e] =
+      u[e] >= v && !(p && p[e])
+        ? 1 + (u[e] < o ? s * (1 - (u[e] - v) / (o - v)) : 0)
+        : 0;
+  t || e.dynGen++;
+}
+var C = (e, t) => {
+  if (!t.dyn.length) return t;
+  let n = e.time?.tick ?? 0;
+  return (t.dynTick !== n && ((t.dynTick = n), S(t, !1, n)), t);
+};
+function w(e, n, i, a, o, s, c) {
+  let l = new Uint8Array(o * s),
+    u = (e, t, n) => t >= e[0] && t <= e[2] && n >= e[1] && n <= e[3],
+    d = (e, t, n) => {
+      let r = Math.hypot(t - e[0], n - e[1]);
+      return r >= e[2] && r <= e[3];
+    };
+  for (let t = 0; t < l.length; t++) {
+    let n = t % o,
+      s = (t - n) / o,
+      c = i + (n + 0.5) * r,
+      f = a + (s + 0.5) * r;
+    (((e.floors || e.rings) &&
+      !(
+        e.floors?.some((e) => u(e, c, f)) || e.rings?.some((e) => d(e, c, f))
+      )) ||
+      e.holes?.some((e) => u(e, c, f))) &&
+      (l[t] = 1);
+  }
+  for (let e of n) {
+    let n = e.movementAabb ?? e.aabb,
+      u = Math.max(0, Math.floor((n[0] - i) / r)),
+      d = Math.min(o - 1, Math.floor((n[3] - i) / r)),
+      f = Math.max(0, Math.floor((n[2] - a) / r)),
+      p = Math.min(s - 1, Math.floor((n[5] - a) / r));
+    for (let s = f; s <= p; s++)
+      for (let f = u; f <= d; f++) {
+        let u = i + (f + 0.5) * r,
+          d = a + (s + 0.5) * r;
+        if (u < n[0] || u > n[3] || d < n[2] || d > n[5]) continue;
+        let p = e.floorHeight(u, d);
+        if (!(p > -1e5)) continue;
+        let m = e.floorThickness > 0 ? p - e.floorThickness : n[1];
+        p > c + 0.35 && m < c + t[0] && (l[s * o + f] = 1);
+      }
+  }
+  return l;
+}
+function T(e, t = null, n = null, r = null) {
+  let i = e.map.floorNav;
+  if (!i) return null;
+  if (i.levels) {
+    let n = t == null ? i.levels[0] : i.levels.find((e) => e.id === t);
+    return n ? E(e, n) : null;
+  }
+  let a = t,
+    o = a != null && n != null ? (i.levelAt?.(n, a, r) ?? null) : null;
+  if (o == null && ((o = i.y), a != null)) {
+    for (let e of i.stacked ?? []) Math.abs(e - a) < Math.abs(o - a) && (o = e);
+    if (Math.abs(o - a) > 1.5) return null;
+  }
+  let s = g.get(i);
+  s || ((s = new Map()), g.set(i, s));
+  let c = o + `:` + (i.version?.() ?? 0),
+    l = s.get(c);
+  return (l || ((l = v(e, { ...i, y: o })), s.set(c, l)), C(e, l));
+}
+function E(e, t) {
+  let n = g.get(t);
+  return (n || ((n = v(e, t, !0)), (n.level = t), g.set(t, n)), C(e, n));
+}
+var D = (e, t, n) => {
+    let i = Math.floor((t - e.x0) / r),
+      a = Math.floor((n - e.z0) / r);
+    return i < 0 || a < 0 || i >= e.nx || a >= e.nz ? -1 : a * e.nx + i;
+  },
+  O = (e, t) => [
+    e.x0 + ((t % e.nx) + 0.5) * r,
+    e.z0 + (Math.floor(t / e.nx) + 0.5) * r,
+  ];
+function k(e, t, n, i = e.clear) {
+  let a = D(e, t, n);
+  if (a >= 0 && e.cost[a] && e.near[a] >= i) return a;
+  let o = Math.floor((t - e.x0) / r),
+    s = Math.floor((n - e.z0) / r);
+  for (let r = 1; r <= 8; r++) {
+    let a = -1,
+      c = 1 / 0;
+    for (let l = s - r; l <= s + r; l++)
+      for (let u = o - r; u <= o + r; u++) {
+        if (
+          u < 0 ||
+          l < 0 ||
+          u >= e.nx ||
+          l >= e.nz ||
+          Math.max(Math.abs(u - o), Math.abs(l - s)) !== r
+        )
+          continue;
+        let d = l * e.nx + u;
+        if (!e.cost[d] || e.near[d] < i) continue;
+        let [f, p] = O(e, d),
+          m = Math.hypot(f - t, p - n);
+        m < c && ((c = m), (a = d));
+      }
+    if (a >= 0) return a;
+  }
+  return -1;
+}
+function A(e, t, n, i, a, o = e.clear) {
+  let s = Math.hypot(i - t, a - n),
+    c = Math.ceil(s / (r * 0.5));
+  for (let r = 0; r <= c; r++) {
+    let s = c ? r / c : 0,
+      l = D(e, t + (i - t) * s, n + (a - n) * s);
+    if (l < 0 || !e.cost[l] || e.near[l] < o) return !1;
+  }
+  return !0;
+}
+var j = (e, t) => {
+    let n = (e * 374761393 + t * 668265263) | 0;
+    return (
+      (n = Math.imul(n ^ (n >>> 13), 1274126177)),
+      ((n ^ (n >>> 16)) >>> 0) / 4294967296
+    );
+  },
+  M = { plans: 0, fails: 0, pops: 0 };
+function N(e, t, n, i = null, a = null, o = null) {
+  M.plans++;
+  let s = k(e, t[0], t[1]),
+    c = k(e, n[0], n[1]);
+  if (s < 0 || c < 0) return null;
+  let p = ++e.gen,
+    {
+      gs: m,
+      from: h,
+      seen: g,
+      shut: _,
+      hk: v,
+      hv: y,
+      cost: b,
+      nx: x,
+      nz: S,
+    } = e,
+    C =
+      i == null
+        ? null
+        : Float32Array.from({ length: e.districts }, (e, t) => 1 + l * j(t, i)),
+    { crowd: w, crowdGen: T } = e,
+    E = Math.ceil(u / r),
+    D = !1;
+  for (let t of a ?? []) {
+    let n = Math.floor((t[0] - e.x0) / r),
+      i = Math.floor((t[2] - e.z0) / r);
+    for (let a = Math.max(0, i - E); a <= Math.min(S - 1, i + E); a++)
+      for (let i = Math.max(0, n - E); i <= Math.min(x - 1, n + E); i++) {
+        let n = Math.hypot(
+          e.x0 + (i + 0.5) * r - t[0],
+          e.z0 + (a + 0.5) * r - t[2],
+        );
+        if (n >= u) continue;
+        let o = a * x + i;
+        (T[o] !== p && ((T[o] = p), (w[o] = 0)),
+          (w[o] += d * (1 - n / u)),
+          (D = !0));
+      }
+  }
+  o &&
+    !e.avGen &&
+    ((e.avGen = new Uint32Array(e.nx * e.nz)),
+    (e.avHit = new Uint8Array(e.nx * e.nz)));
+  let N = e.avGen,
+    P = e.avHit,
+    F = 0,
+    I = (e, t) => {
+      let n = F++;
+      for (v[n] = t, y[n] = e; n;) {
+        let e = (n - 1) >> 1;
+        if (v[e] <= t) break;
+        ((v[n] = v[e]), (y[n] = y[e]), (n = e));
+      }
+      ((v[n] = t), (y[n] = e));
+    },
+    L = () => {
+      let e = y[0];
+      if ((F--, F)) {
+        let e = v[F],
+          t = y[F],
+          n = 0;
+        for (;;) {
+          let t = 2 * n + 1,
+            r = t + 1,
+            i = n,
+            a = e;
+          if (
+            (t < F && v[t] < a && ((i = t), (a = v[t])),
+            r < F && v[r] < a && (i = r),
+            i === n)
+          )
+            break;
+          ((v[n] = v[i]), (y[n] = y[i]), (n = i));
+        }
+        ((v[n] = e), (y[n] = t));
+      }
+      return e;
+    },
+    R = c % x,
+    z = (c - R) / x,
+    B = (t) => {
+      let n = t % x,
+        r = Math.abs(n - R),
+        i = Math.abs((t - n) / x - z);
+      return (r > i ? r + 0.4142 * i : i + 0.4142 * r) * e.hw;
+    };
+  for (g[s] = p, m[s] = 0, h[s] = -1, I(s, B(s)); F;) {
+    let t = L();
+    if (_[t] === p) continue;
+    if (((_[t] = p), M.pops++, t === c)) break;
+    if (F > v.length - 9) return null;
+    let n = t % x,
+      r = (t - n) / x;
+    for (let i = -1; i <= 1; i++)
+      for (let a = -1; a <= 1; a++) {
+        if (!a && !i) continue;
+        let s = n + a,
+          l = r + i;
+        if (s < 0 || l < 0 || s >= x || l >= S) continue;
+        let u = l * x + s;
+        if (!b[u] || _[u] === p || (a && i && (!b[r * x + s] || !b[l * x + n])))
+          continue;
+        if (o && u !== c) {
+          if (N[u] !== p) {
+            N[u] = p;
+            let [t, n] = O(e, u);
+            P[u] = +!!o(t, e.y, n);
+          }
+          if (P[u]) continue;
+        }
+        let d = b[u] * (C ? C[e.district[u]] : 1);
+        D && T[u] === p && (d += w[u]);
+        let f = m[t] + (a && i ? 1.4142 : 1) * d;
+        (g[u] !== p || f < m[u]) &&
+          ((g[u] = p), (m[u] = f), (h[u] = t), I(u, f + B(u)));
+      }
+  }
+  if (_[c] !== p)
+    return (
+      M.fails++,
+      M.log &&
+        M.log.length < 400 &&
+        M.log.push([e.y, t[0], t[1], n[0], n[1]].map((e) => +e.toFixed(1))),
+      null
+    );
+  let V = [];
+  for (let e = c; e >= 0; e = h[e]) V.push(e);
+  V.reverse();
+  let H = V.map((t) => O(e, t)),
+    U = [H[0]],
+    W = 0;
+  for (let t = 2; t < H.length; t++)
+    A(e, H[W][0], H[W][1], H[t][0], H[t][1], f) || ((W = t - 1), U.push(H[W]));
+  return (H.length > 1 && U.push(H[H.length - 1]), U);
+}
+function P(e, t, n, r, i = []) {
+  if (e.map.floorNav?.levels) return ie(e, e.map.floorNav, t, n, r, i);
+  let a = e.time.tick,
+    o = n.pos,
+    s = T(e, o[1], o[0], o[2]);
+  if (!s) return ((t.floorRoute = null), null);
+  let c = t.floorRoute;
+  (c && c.g !== s && (c = t.floorRoute = null),
+    c &&
+      Math.hypot(o[0] - c.mark[0], o[2] - c.mark[1]) > 0.6 &&
+      ((c.mark = [o[0], o[2]]), (c.markAt = a)));
+  let l = c && a - c.markAt > h;
+  if (!l && A(s, o[0], o[2], r[0], r[2], f)) return ((t.floorRoute = null), r);
+  if (
+    !c ||
+    l ||
+    c.dyn !== s.dynGen ||
+    Math.hypot(c.goal[0] - r[0], c.goal[2] - r[2]) > 3 ||
+    a - c.at > p
+  ) {
+    let n = _.get(e);
+    if (
+      ((!n || n.tick !== a) && ((n = { tick: a, left: m }), _.set(e, n)),
+      n.left <= 0)
+    )
+      return c ? F(s, c, o, r) : r;
+    n.left--;
+    let u = i.filter((e) => Math.hypot(e[0] - o[0], e[2] - o[2]) < 40),
+      d = N(
+        s,
+        [o[0], o[2]],
+        [r[0], r[2]],
+        (t.index ?? 0) * 7919 + (t.roamStep | 0) * 131,
+        u,
+      );
+    if (!d) return ((t.floorRoute = null), r);
+    let p = D(s, o[0], o[2]);
+    if (l || p < 0 || s.near[p] < f) {
+      let e = k(s, o[0], o[2], f);
+      e >= 0 && d.unshift(O(s, e));
+    }
+    c = t.floorRoute = {
+      g: s,
+      dyn: s.dynGen,
+      goal: r.slice(),
+      at: a,
+      pts: d,
+      i: +!l,
+      mark: [o[0], o[2]],
+      markAt: a,
+    };
+  }
+  return F(s, c, o, r);
+}
+function F(e, t, n, r) {
+  for (
+    ;
+    t.i < t.pts.length - 1 &&
+    (Math.hypot(t.pts[t.i][0] - n[0], t.pts[t.i][1] - n[2]) < 0.6 ||
+      A(e, n[0], n[2], t.pts[t.i + 1][0], t.pts[t.i + 1][1], f));
+  )
+    t.i++;
+  if (t.i >= t.pts.length - 1 && A(e, n[0], n[2], r[0], r[2])) return r;
+  let i = t.pts[Math.min(t.i, t.pts.length - 1)];
+  return [i[0], r[1], i[1]];
+}
+var I = 1.6,
+  L = 0.5,
+  R = 1.3,
+  z = 2.5,
+  B = 1,
+  V = 3,
+  H = 240,
+  U = 1.6,
+  W = 1.6,
+  ee = 600,
+  G = (e, t) => Math.hypot(e[0] - t[0], e[1] - t[1], e[2] - t[2]),
+  K = (e, t) =>
+    Math.hypot(e[0] - t[0], e[2] - t[2]) < L && Math.abs(e[1] - t[1]) < R;
+function q(e, t, n, r) {
+  let i = null,
+    a = I;
+  for (let o of e.levels) {
+    let e = o.bounds;
+    if (t < e[0] || t > e[2] || r < e[1] || r > e[3]) continue;
+    let s = Math.abs(n - o.y);
+    s <= a && ((a = s), (i = o));
+  }
+  return i;
+}
+var J = (e, t) => !e.map.navLinkOpen || e.map.navLinkOpen(t) !== !1,
+  Y = (e) => {
+    let t = 0;
+    for (let n = 1; n < e.length; n++) t += G(e[n - 1], e[n]);
+    return t;
+  };
+function te(e, t, n, r, i, a, o, s, c) {
+  let l = e.map.navBlock ?? null,
+    u = t.links.filter((t) => J(e, t) && !s.has(t.id)),
+    d = (n, r) => {
+      let i = t.levels.find((e) => e.id === n);
+      if (!i) return -1;
+      let a = E(e, i),
+        o = X(e, a, l),
+        s = k(a, r[0], r[2]);
+      return s < 0 ? -1 : o[s];
+    },
+    f = [
+      { lv: n.id, q: i },
+      { lv: r.id, q: a },
+    ];
+  for (let e of u) {
+    let t = Y(e.pts) + (o?.has(e.id) ? 1e4 : 0);
+    f.push(
+      { lv: e.from, q: e.pts[0], l: e, end: 0, len: t },
+      { lv: e.to, q: e.pts[e.pts.length - 1], l: e, end: 1, len: t },
+    );
+  }
+  for (let e of f) e.r = d(e.lv, e.q);
+  let p = f.length,
+    m = new Float64Array(p).fill(1 / 0),
+    h = new Int32Array(p).fill(-1),
+    g = new Uint8Array(p);
+  for (m[0] = 0; ;) {
+    let e = -1;
+    for (let t = 0; t < p; t++)
+      !g[t] && m[t] < 1 / 0 && (e < 0 || m[t] < m[e]) && (e = t);
+    if (e < 0 || e === 1) break;
+    g[e] = 1;
+    let t = f[e];
+    for (let n = 1; n < p; n++) {
+      if (g[n]) continue;
+      let r = f[n],
+        i;
+      if (t.l && r.l === t.l) i = t.len;
+      else if (
+        t.lv === r.lv &&
+        (t.r < 0 || r.r < 0 || t.r === r.r) &&
+        (c || e || n !== 1)
+      )
+        i = G(t.q, r.q);
+      else continue;
+      m[e] + i < m[n] && ((m[n] = m[e] + i), (h[n] = e));
+    }
+  }
+  if (m[1] === 1 / 0) return null;
+  let _ = null;
+  for (let e = 1; e > 0; e = h[e]) {
+    let t = h[e];
+    f[t].l && f[e].l === f[t].l && (_ = f[t]);
+  }
+  return _ && { id: _.l.id, pts: _.end ? _.l.pts.slice().reverse() : _.l.pts };
+}
+function ne(t, n, r, i, a, o) {
+  let s = t.time.tick,
+    c =
+      a.linkWay &&
+      s - a.linkWay.tick < ee &&
+      Math.hypot(a.linkWay.goal[0] - i[0], a.linkWay.goal[2] - i[2]) < 3
+        ? a.linkWay.end
+        : null,
+    l = t.map.navBlock ?? null,
+    u = o ? E(t, o) : null,
+    d = u ? X(t, u, l) : null,
+    f = u ? k(u, i[0], i[2]) : -1,
+    p = (e) => {
+      if (!o) return 0;
+      if (q(n, e[0], e[1], e[2]) !== o) return 200;
+      if (f < 0) return 0;
+      let t = k(u, e[0], e[2]);
+      return t >= 0 && d[t] !== d[f] ? 200 : 0;
+    },
+    m = null,
+    h = 1 / 0;
+  for (let a of n.links)
+    if (J(t, a))
+      for (let n = 0; n + 1 < a.pts.length; n++) {
+        let o = a.pts[n],
+          s = a.pts[n + 1],
+          l = s[0] - o[0],
+          u = s[2] - o[2],
+          d = l * l + u * u,
+          f =
+            d > 1e-9
+              ? Math.max(
+                  0,
+                  Math.min(1, ((r[0] - o[0]) * l + (r[2] - o[2]) * u) / d),
+                )
+              : 0,
+          g = o[0] + l * f,
+          _ = o[2] + u * f,
+          v = o[1] + (s[1] - o[1]) * f,
+          y = Math.hypot(r[0] - g, r[2] - _);
+        if (
+          !(y > (a.joinRadius ?? B) || Math.abs(r[1] - v) > R) &&
+          !(y > B && !e(t, r, [g, v, _]))
+        )
+          for (let e of [!1, !0]) {
+            let t = e ? a.pts.slice().reverse() : a.pts,
+              r = e ? a.pts.length - 1 - n : n + 1,
+              o = t[t.length - 1],
+              s =
+                Y([[g, v, _], ...t.slice(r)]) +
+                G(o, i) +
+                p(o) -
+                (c && G(o, c) < 0.5 ? 400 : 0);
+            s < h && ((h = s), (m = { pts: t, li: r }));
+          }
+      }
+  return m;
+}
+function re(e, t) {
+  for (; e.li < e.link.length && K(e.link[e.li], t);) e.li++;
+  if (e.li >= e.link.length) return null;
+  let n = e.link[e.li],
+    r = e.link[e.li - 1];
+  if (!r) return [n[0], n[1], n[2]];
+  let i = n[0] - r[0],
+    a = n[2] - r[2],
+    o = i * i + a * a,
+    s =
+      o > 1e-9
+        ? Math.max(0, Math.min(1, ((t[0] - r[0]) * i + (t[2] - r[2]) * a) / o))
+        : 1;
+  if (o * 4 < (n[1] - r[1]) ** 2) return [n[0], n[1], n[2]];
+  if (t[1] < r[1] + (n[1] - r[1]) * s - W) return null;
+  if (o < U * U) return [n[0], n[1], n[2]];
+  let c = Math.min(1, s + U / Math.sqrt(o));
+  return [r[0] + i * c, r[1] + (n[1] - r[1]) * c, r[2] + a * c];
+}
+function ie(e, t, n, r, i, a) {
+  let o = e.time.tick,
+    s = r.pos,
+    c = n.floorRoute;
+  (c && !c.multi && (c = n.floorRoute = null),
+    c &&
+      Math.hypot(s[0] - c.mark[0], s[2] - c.mark[1]) > 0.6 &&
+      ((c.mark = [s[0], s[2]]), (c.markAt = o)));
+  let l = !!c && o - c.markAt > h;
+  if (c && c.mode === `link`) {
+    let e = l ? null : re(c, s);
+    if (e) return e;
+    (M.aborts &&
+      c.li < c.link.length &&
+      M.aborts.push([s[0], s[1], s[2], c.li, +!!l].map((e) => +e.toFixed(1))),
+      c.li < c.link.length &&
+        (n.linkWay = {
+          end: c.link[c.link.length - 1],
+          goal: i.slice(),
+          tick: o,
+        }),
+      (c.mode = `grid`),
+      (c.need = !0),
+      (c.link = null));
+  }
+  let u = q(t, s[0], s[1], s[2]),
+    d = Number.isFinite(i[1]) ? q(t, i[0], i[1], i[2]) : u,
+    g = () => {
+      let r = ne(e, t, s, i, n, d);
+      if (!r) return null;
+      n.floorRoute = {
+        multi: !0,
+        mode: `link`,
+        link: r.pts,
+        li: r.li,
+        goal: i.slice(),
+        at: o,
+        level: null,
+        need: !1,
+        mark: [s[0], s[2]],
+        markAt: o,
+      };
+      let a = r.pts[r.li];
+      return [a[0], a[1], a[2]];
+    };
+  if (!u) return ((n.floorRoute = null), g());
+  if (!d) return ((n.floorRoute = null), null);
+  let v = E(e, u),
+    y = e.map.navBlock ? X(e, v, e.map.navBlock) : null,
+    b =
+      !y ||
+      (() => {
+        let e = k(v, s[0], s[2]),
+          t = k(v, i[0], i[2]);
+        return e < 0 || t < 0 || y[e] === y[t];
+      })();
+  if (y && e.map.navBlock(s[0], s[1], s[2])) {
+    let e = ae(v, y, s, n, o);
+    if (e) return e;
+  }
+  if (u === d && !l && b && A(v, s[0], s[2], i[0], i[2], f))
+    return ((n.floorRoute = null), i);
+  let x = () => (u === d && b ? i : [s[0], s[1], s[2]]);
+  if (!c && n.floorHold > o) return g() ?? x();
+  if (
+    !c ||
+    c.need ||
+    l ||
+    c.level !== u.id ||
+    c.goalLevel !== d.id ||
+    Math.hypot(c.goal[0] - i[0], c.goal[2] - i[2]) > 3 ||
+    o - c.at > p
+  ) {
+    let r = _.get(e);
+    if (
+      ((!r || r.tick !== o) && ((r = { tick: o, left: m }), _.set(e, r)),
+      r.left <= 0)
+    )
+      return c && !c.need && c.level === u.id ? $(v, c, s, i) : x();
+    r.left--;
+    let p = oe(e, t, v, n, s, u, d, i, a);
+    if (!p) return ((n.floorRoute = null), (n.floorHold = o + 30), g() ?? x());
+    let h = p.pts,
+      y = D(v, s[0], s[2]);
+    if (l || y < 0 || v.near[y] < f) {
+      let e = k(v, s[0], s[2], f);
+      e >= 0 && h.unshift(O(v, e));
+    }
+    c = n.floorRoute = {
+      multi: !0,
+      mode: `grid`,
+      goal: i.slice(),
+      goalLevel: d.id,
+      at: o,
+      level: u.id,
+      pts: h,
+      i: +!l,
+      link: p.link,
+      li: 0,
+      need: !1,
+      mark: [s[0], s[2]],
+      markAt: o,
+    };
+  }
+  return $(v, c, s, i);
+}
+function ae(e, t, n, i, a) {
+  let o = i.offBlock;
+  if (
+    o &&
+    a - o.tick < 30 &&
+    Math.hypot(o.from[0] - n[0], o.from[1] - n[2]) < 4
+  )
+    return o.pt;
+  let s = Math.floor((n[0] - e.x0) / r),
+    c = Math.floor((n[2] - e.z0) / r),
+    l = null;
+  for (let r = 1; r <= 60 && !l; r++) {
+    let i = 1 / 0;
+    for (let a = c - r; a <= c + r; a++) {
+      let o = a === c - r || a === c + r;
+      for (let c = s - r; c <= s + r; c += o ? 1 : 2 * r) {
+        if (c < 0 || a < 0 || c >= e.nx || a >= e.nz) continue;
+        let r = a * e.nx + c;
+        if (
+          !t[r] ||
+          e.near[r] < e.clear ||
+          c < 2 ||
+          a < 2 ||
+          c + 2 >= e.nx ||
+          a + 2 >= e.nz ||
+          t[r - 2] !== t[r] ||
+          t[r + 2] !== t[r] ||
+          t[r - 2 * e.nx] !== t[r] ||
+          t[r + 2 * e.nx] !== t[r]
+        )
+          continue;
+        let [o, s] = O(e, r),
+          u = Math.hypot(o - n[0], s - n[2]);
+        u < i && ((i = u), (l = [o, n[1], s]));
+      }
+    }
+  }
+  return ((i.offBlock = { tick: a, from: [n[0], n[2]], pt: l }), l);
+}
+function X(e, t, n) {
+  let r = (n ? `b` : `n`) + (e.map.navBlockGen ?? 0),
+    i = e.time.tick;
+  if (t.regKey === r && (t.regDyn === t.dynGen || i - t.regAt < 120))
+    return t.reg;
+  ((t.regDyn = t.dynGen), (t.regAt = i));
+  let { nx: a, nz: o, cost: s } = t,
+    c = (t.reg ??= new Int32Array(a * o)),
+    l = new Uint8Array(a * o),
+    u = new Int32Array(a * o);
+  c.fill(0);
+  for (let e = 0; e < a * o; e++)
+    if (s[e]) {
+      let [r, i] = O(t, e);
+      l[e] = +!n?.(r, t.y, i);
+    }
+  let d = 0;
+  for (let e = 0; e < a * o; e++) {
+    if (!l[e] || c[e]) continue;
+    d++;
+    let t = 0,
+      n = 0;
+    for (u[n++] = e, c[e] = d; t < n;) {
+      let e = u[t++],
+        r = e % a,
+        i = (e - r) / a;
+      for (let e = -1; e <= 1; e++)
+        for (let t = -1; t <= 1; t++) {
+          if (!t && !e) continue;
+          let s = r + t,
+            f = i + e;
+          if (s < 0 || f < 0 || s >= a || f >= o) continue;
+          let p = f * a + s;
+          l[p] &&
+            !c[p] &&
+            (!t || !e || (l[i * a + s] && l[f * a + r])) &&
+            ((c[p] = d), (u[n++] = p));
+        }
+    }
+  }
+  return ((t.regKey = r), c);
+}
+function oe(e, t, n, r, i, a, o, s, c) {
+  let l = e.map.navAvoid ?? null,
+    u = e.map.navBlock ?? null,
+    d =
+      (r.index ?? 0) * 7919 +
+      (r.roamStep | 0) * 131 +
+      (r.spawnSerial | 0) * 104729,
+    f = u && l ? (e, t, n) => u(e, t, n) || l(e, t, n) : (u ?? l),
+    p = u,
+    m = X(e, n, u),
+    h = (e) => {
+      if (!m || !u) return !1;
+      let t = k(n, i[0], i[2]),
+        r = k(n, e[0], e[2]);
+      return t >= 0 && r >= 0 && m[t] !== m[r];
+    },
+    g = c.filter(
+      (e) =>
+        Math.hypot(e[0] - i[0], e[2] - i[2]) < 40 && Math.abs(e[1] - i[1]) < I,
+    ),
+    _ = (e, t) =>
+      h(e) ? null : N(n, [i[0], i[2]], [e[0], e[2]], d, g, t ?? p);
+  if (a === o) {
+    let t = r.sameLevelFail;
+    if (!(
+      t &&
+      t.level === a.id &&
+      t.dyn === n.dynGen &&
+      e.time.tick - t.tick < H &&
+      Math.hypot(t.goal[0] - s[0], t.goal[2] - s[2]) < 3
+    )) {
+      let t = (f && _(s, f)) || _(s, null);
+      if (t) return ((r.sameLevelFail = null), { pts: t, link: null });
+      r.sameLevelFail = {
+        level: a.id,
+        dyn: n.dynGen,
+        tick: e.time.tick,
+        goal: s.slice(),
+      };
+    }
+  }
+  let v = null;
+  if (f) {
+    v = new Set();
+    for (let e of t.links)
+      e.pts.some((e) => G(e, i) > 1.5 && f(e[0], e[1], e[2])) && v.add(e.id);
+  }
+  let y = new Set(),
+    b = null;
+  for (let n = 0; n < V; n++) {
+    let n = te(e, t, a, o, i, s, v, y, a !== o);
+    if (!n) break;
+    b ??= n;
+    let r = _(n.pts[0], f) || (a === o ? _(n.pts[0], null) : null);
+    if (r) return { pts: r, link: n.pts };
+    y.add(n.id);
+  }
+  if (b && f && a !== o) {
+    let e = _(b.pts[0], null);
+    if (e) return { pts: e, link: b.pts };
+  }
+  return null;
+}
+function se(e, t, n, r, i) {
+  if (!e.map.navDropGuard || !e.map.floorNav?.levels || !(r || i)) return !1;
+  let a = n.pos,
+    o = t.floorRoute,
+    s = o?.link
+      ? o.link[o.mode === `link` ? Math.min(o.li, o.link.length - 1) : 0]
+      : null;
+  if (
+    (s && s[1] < a[1] - 1.2 && Math.hypot(s[0] - a[0], s[2] - a[2]) < z) ||
+    a[1] - e.map.getHeight(a[0], a[2]) < Q
+  )
+    return !1;
+  let c = Math.hypot(r, i),
+    l = r / c,
+    u = i / c,
+    d = (t, n) => {
+      let r = e.map.raycast([t, a[1] + 0.4, n], ce, Q + 0.4);
+      return r ? (r.dist < 0.05 ? 2 : 1) : 0;
+    },
+    f = d(a[0] + l * Z, a[2] + u * Z);
+  return f === 2
+    ? !d(a[0] - u * Z, a[2] + l * Z) || !d(a[0] + u * Z, a[2] - l * Z)
+    : !f;
+}
+var Z = 0.7,
+  Q = 2,
+  ce = Object.freeze([0, -1, 0]);
+function $(e, t, n, r) {
+  if (!t.link) return F(e, t, n, r);
+  let i = t.link[0];
+  if (K(i, n)) {
+    ((t.mode = `link`), (t.li = 1));
+    let e = t.link[1] ?? i;
+    return [e[0], e[1], e[2]];
+  }
+  let a = [i[0], i[1], i[2]],
+    o = F(e, t, n, a);
+  if (o === a) return a;
+  let s = t.pts[t.pts.length - 1];
+  return t.i >= t.pts.length - 1 &&
+    Math.hypot(i[0] - n[0], i[2] - n[2]) < z &&
+    Math.abs(i[1] - n[1]) < R &&
+    Math.hypot(s[0] - n[0], s[1] - n[2]) < 0.6
+    ? a
+    : o;
+}
+export { q as i, P as n, se as r, T as t };
+//# sourceMappingURL=floor-nav-DVnO_N6E.js.map

@@ -1,0 +1,222 @@
+// assets__cube-soldier-DMHrHkZL 07 — math
+// Lines 1792-2011 of readable/assets__cube-soldier-DMHrHkZL.pretty.js (statement-aligned).
+var Yt = {
+    stand: {
+      hipY: 0.75,
+      hipPitch: 0,
+      torsoTilt: -0.04,
+      legAngle: 0.1,
+      knee: -0.2,
+      legSpread: 0.05,
+      headPitch: 0.02,
+      legSplit: 0,
+      kneeSplit: 0,
+      yaw: 0,
+    },
+    crouch: {
+      hipY: 0.42,
+      hipPitch: 0,
+      torsoTilt: -0.3,
+      legAngle: 0.65,
+      knee: -1.395,
+      legSpread: 0.14,
+      headPitch: 0.02,
+      legSplit: 0.8,
+      kneeSplit: 0.105,
+      yaw: 0.3,
+    },
+    crouchMove: {
+      hipY: 0.58,
+      hipPitch: -0.3,
+      torsoTilt: -0.32,
+      legAngle: 1.02,
+      knee: -1.32,
+      legSpread: 0.08,
+      headPitch: 0.32,
+      legSplit: 0,
+      kneeSplit: 0,
+      yaw: 0,
+    },
+    prone: {
+      hipY: 0.24,
+      hipPitch: -1.42,
+      torsoTilt: 0.06,
+      legAngle: -0.06,
+      knee: -0.1,
+      legSpread: 0.2,
+      headPitch: 1.42,
+      legSplit: 0,
+      kneeSplit: 0,
+      yaw: 0,
+    },
+    swim: {
+      hipY: 1.15,
+      hipPitch: -1.25,
+      torsoTilt: 0.1,
+      legAngle: -0.12,
+      knee: -0.35,
+      legSpread: 0.16,
+      headPitch: 1.28,
+      legSplit: 0,
+      kneeSplit: 0,
+      yaw: 0,
+    },
+  },
+  Xt = {
+    hipY: 0.22,
+    hipPitch: 1.55,
+    hipYaw: 0.15,
+    torsoTilt: -0.45,
+    torsoYaw: -0.12,
+    torsoRoll: 0.08,
+    legLx: -0.05,
+    legLz: 0.05,
+    shinL: -0.2,
+    legRx: -0.15,
+    legRz: 0.9,
+    shinR: -2.2,
+  },
+  Zt = {
+    ready: {
+      armLx: 0.85,
+      armLy: 0,
+      armLz: 0.19,
+      foreL: 0.2,
+      armRx: 0.55,
+      armRy: 0,
+      armRz: -0.45,
+      foreR: 0.55,
+      wpnX: 0.05,
+      wpnY: 0.28,
+      wpnZ: -0.12,
+      wpnPitch: -0.55,
+      wpnYaw: 0.35,
+      wpnRoll: 0.1,
+    },
+    aim: {
+      armLx: 1.52,
+      armLy: 0,
+      armLz: 0.55,
+      foreL: 0.15,
+      armRx: 0.35,
+      armRy: 0,
+      armRz: -0.3,
+      foreR: 1.5,
+      wpnX: 0.13,
+      wpnY: 0.42,
+      wpnZ: 0.02,
+      wpnPitch: 0,
+      wpnYaw: 0.04,
+      wpnRoll: 0,
+    },
+    hip: {
+      armLx: 1.3,
+      armLy: 0,
+      armLz: 0.5,
+      foreL: 0.25,
+      armRx: 0.2,
+      armRy: 0,
+      armRz: -0.4,
+      foreR: 1.2,
+      wpnX: 0.15,
+      wpnY: 0.27,
+      wpnZ: 0.06,
+      wpnPitch: 0.04,
+      wpnYaw: 0.07,
+      wpnRoll: 0.16,
+    },
+    sprint: {
+      armLx: 0.7,
+      armLy: 0,
+      armLz: 0.25,
+      foreL: 1.2,
+      armRx: 0.5,
+      armRy: 0,
+      armRz: -0.25,
+      foreR: 1.2,
+      wpnX: 0.02,
+      wpnY: 0.22,
+      wpnZ: -0.14,
+      wpnPitch: -0.9,
+      wpnYaw: 0.5,
+      wpnRoll: 0.3,
+    },
+    prone: {
+      armLx: 2.35,
+      armLy: 0.3,
+      armLz: 0.3,
+      foreL: 0.55,
+      armRx: 2.2,
+      armRy: -0.1,
+      armRz: 0.28,
+      foreR: 0.75,
+      wpnX: 0.1,
+      wpnY: 0.78,
+      wpnZ: -0.22,
+      wpnPitch: 1.4,
+      wpnYaw: 0.02,
+      wpnRoll: 0,
+    },
+    dead: {
+      armLx: 0.9,
+      armLy: 0.2,
+      armLz: 0.9,
+      foreL: 0.3,
+      armRx: -0.3,
+      armRy: 0,
+      armRz: 1.1,
+      foreR: 0.5,
+      wpnX: 0.45,
+      wpnY: 0.05,
+      wpnZ: -0.3,
+      wpnPitch: -0.2,
+      wpnYaw: 0.9,
+      wpnRoll: 1.2,
+    },
+  },
+  Qt = (e, t, n) => (e < t ? t : e > n ? n : e),
+  B = (e, t, n) => e + (t - e) * n,
+  $t = (e, t) => (e < 0 || e > t ? 0 : Math.sin((Math.PI * e) / t)),
+  V = { ...Yt.stand },
+  en = { ...Yt.stand },
+  H = { ...Zt.ready },
+  tn = { ...Zt.aim };
+function nn(e, t, n, r) {
+  for (let i in e) e[i] = B(t[i], n[i], r);
+  return e;
+}
+function rn(e) {
+  return e >= 1.3 ? 0 : 1 - Math.max(0, (e - 0.55) / 0.75);
+}
+function an(e, t = 0) {
+  return Qt((e - 4.6) / 1.6, 0, 1) * (1 - t);
+}
+var on = [0, 0];
+function sn(e) {
+  e += cn * Math.sin(e);
+  let t = Math.sin(e),
+    n = Math.cos(e);
+  on[0] = 0.32 + 0.78 * t + 0.18 * Math.max(0, n);
+  let r = Math.max(0, Math.cos(e + 0.45));
+  return ((on[1] = -0.32 - 1.85 * r * r - 0.38 * Math.max(0, -n)), on);
+}
+var cn = 0.35,
+  ln = 0.69,
+  un = 0.06,
+  dn = 2.05;
+function fn(e, t, n = 0) {
+  let r = B(Math.min(0.8, 0.18 + 0.085 * e), Qt(0.12 + 0.13 * e, 0, 0.42), t),
+    i = Qt(e / B(3.2, 2.2, t), 0, 1);
+  return {
+    amp: r,
+    stride: B(
+      B(
+        Math.max(B(0.3, 0.15, t), 4 * Pt * Math.sin(r * i) * B(1.15, 0.9, t)),
+        dn,
+        an(e, t),
+      ),
+      Ft,
+      n,
+    ),
+  };
+}

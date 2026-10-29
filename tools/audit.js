@@ -1,8 +1,8 @@
 // audit.js — integrity gate (PLAN §5), tailored to patio-fyi's shape.
 //
 // PATIO (https://play.patio.fyi/) is capture-class: a Vite production build of a
-// session-based 8v8 three.js shooter ("Friends session", ruleset r17-bascule-v1,
-// map Bascule), served at the origin root by Cloudflare. There is no authored
+// session-based 8v8 three.js shooter ("Friends session", ruleset r15-hangar-v1,
+// map Hangar Nine), served at the origin root by Cloudflare. There is no authored
 // source in the mirror, so the derived pipeline is:
 //
 //   capture assets/<name>.js|css -> readable/<name>.pretty.js|css   (pinned prettier 3.9.6, single pass)
@@ -564,8 +564,8 @@ if (manifest) {
 // the chunk's PUBLIC export table. The pair is what the frozen export gate
 // reads; a `file` that names a path nothing holds leaves the table invisible.
 const VENDOR_GUARDS = [
-  ["assets__graphics-quality-BsjABS0s", /WebGLRenderer/, /__THREE__/],
-  ["assets__graphics-quality-BsjABS0s", /REVISION\s*:\s*\(\)\s*=>\s*[`"']185[`"']/, /getContext/],
+  ["assets__graphics-quality-CrL3qbU3", /WebGLRenderer/, /__THREE__/],
+  ["assets__graphics-quality-CrL3qbU3", /REVISION\s*:\s*\(\)\s*=>\s*[`"']185[`"']/, /getContext/],
 ];
 for (const [tag, reA, reB] of VENDOR_GUARDS) {
   const sec = sections.find(
@@ -596,7 +596,7 @@ for (const [tag, reA, reB] of VENDOR_GUARDS) {
 
 // ── the hard rule: src/ import resolution against the capture ───────────
 // Known 404 gaps recorded by the capture (_mirror-report.json) are accepted as
-// such: the shipped raw player-sim source (assets/sim-DKJ0nrRU.js) imports
+// such: the shipped raw player-sim source (assets/sim-dCf7ngvf.js) imports
 // sibling source paths (./zipline.js, ../demo/*-sim.js, ../core/world.js) that
 // upstream never serves — the capture records them as unresolved; this gate
 // only fails on NEW unresolvable specifiers.

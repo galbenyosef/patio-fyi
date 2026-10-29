@@ -1,0 +1,45 @@
+// assets__streetlife-KYkvhSFp 01 — all
+// Lines 1-43 of readable/assets__streetlife-KYkvhSFp.pretty.js (statement-aligned).
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import { s as e } from "./combat-tuning-B4WclXDv.js";
+var t = 16757594,
+  n = 16752704,
+  r = 16767392,
+  i = 16764812,
+  a = 16773590,
+  o = 13623551,
+  s = 16722462,
+  c = 16727968,
+  l = 4190463,
+  u = 6094768,
+  d = 16742940,
+  f = [c, l, t, s, u, 16734937, 8370431],
+  p = [
+    `PATIO`,
+    `PATIO`,
+    `BAR`,
+    `CAFE`,
+    `HOTEL`,
+    `DINER`,
+    `OPEN`,
+    `PIZZA`,
+    `MARKET`,
+    `LIQUOR`,
+    `TACOS`,
+    `CLUB`,
+  ],
+  m = [
+    `car_sedan`,
+    `car_sedan`,
+    `car_hatchback`,
+    `car_wagon`,
+    `car_suv`,
+    `car_suv`,
+    `car_pickup`,
+    `car_taxi`,
+    `car_coupe`,
+  ],
+  h = [
+    16777215, 14080218, 3421754, 3821432, 9316906, 4020805, 12101768, 8159888,
+    16777215, 2763824,
+  ];

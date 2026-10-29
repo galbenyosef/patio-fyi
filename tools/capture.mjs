@@ -1,9 +1,9 @@
 // capture.mjs — byte-exact capture + runtime-closure fetch for PATIO.
 //
 // PATIO (https://play.patio.fyi/) is a Vite production build of a session-based
-// 8v8 three.js shooter ("Friends session", ruleset r17-bascule-v1, map
-// Bascule), served at the origin root by Cloudflare. The entry boots a module
-// loader (assets/index-CBqjwezZ.js) that pulls ~90 hashed chunks through a
+// 8v8 three.js shooter ("Friends session", ruleset r15-hangar-v1, map
+// Hangar Nine), served at the origin root by Cloudflare. The entry boots a module
+// loader (assets/index-D8RniaPa.js) that pulls ~90 hashed chunks through a
 // __vite__mapDeps table, plus a per-response session bootstrap at /session.js
 // (no-store) and the front-desk module. This tool fetches the entry document,
 // then iterates the runtime closure to a fixpoint over every captured

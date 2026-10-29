@@ -1,0 +1,92 @@
+/*! (c) 2026. All rights reserved. Not licensed for copying, rehosting, modification or redistribution. */
+import { b as e, f as t } from "./attachments-BlZum_KH.js";
+var n = [8],
+  r = [11, 35, 12, 37, 38, 14, 15, 42],
+  i = [...e],
+  a = [67, 68, 69, 70, 71, 72, 73],
+  o = [21, 22, 23, 24, 25],
+  s = [47, 50, 44, 49, 45, 48, 46],
+  c = Object.freeze([
+    {
+      id: `assault`,
+      name: `Assault`,
+      role: `Take ground with versatile rifles and offensive grenades`,
+      weapons: [[0, ...r, 1, ...i], a, n],
+      defaults: [0, 67, 8],
+      gadgets: [`frag`],
+    },
+    {
+      id: `support`,
+      name: `Support`,
+      role: `Hold ground with bipods, covering fire, squad ammunition and vehicle repairs`,
+      weapons: [[4, ...s], a, n],
+      defaults: [4, 67, 8],
+      gadgets: [`frag`, `ammo`],
+    },
+    {
+      id: `medic`,
+      name: `Medic`,
+      role: `Keep the push alive: G revive, O smoke, 3 medkit`,
+      weapons: [[...i], a],
+      defaults: [58, 67],
+      gadgets: [`defib`, `medkit`, `smoke`],
+    },
+    {
+      id: `sniper`,
+      name: `Recon`,
+      role: `Precision overwatch and squad respawn beacons`,
+      weapons: [[3, ...o], a],
+      defaults: [3, 67],
+      gadgets: [`frag`],
+    },
+  ]),
+  l = Object.freeze({ medic: [32], support: [33, 34], sniper: [66] }),
+  u = (e) => {
+    let t = e?.weapons ?? [],
+      n = l[e?.classId];
+    return !n || !t.length ? t : [...t, ...n];
+  },
+  d = [`Primary`, `Sidearm`, `Rocket`],
+  f = Object.freeze({
+    frag: `Frag grenade`,
+    defib: `Defibrillator (G)`,
+    medkit: `Medkit`,
+    ammo: `Ammo box / aimed teammate handoff`,
+    smoke: `Smoke grenade`,
+  });
+function p(e, { canEquip: n = () => !0, canAttach: r = null } = {}) {
+  let i = c.find((t) => t.id === e?.classId) ?? c[0],
+    a = i.weapons.map((t, r) =>
+      t.includes(e?.weapons?.[r]) && n(e.weapons[r])
+        ? e.weapons[r]
+        : i.defaults[r],
+    );
+  a[0] === a[1] && (a[1] = i.weapons[1].find((e) => e !== a[0]));
+  let o = g(i.id),
+    s = i.gadgets.map((t, n) =>
+      o[n].includes(e?.gadgets?.[n]) ? e.gadgets[n] : t,
+    );
+  return {
+    classId: i.id,
+    weapons: a,
+    gadgets: s,
+    attachments: t(e?.attachments, r),
+  };
+}
+var m = [`assault`, `sniper`, `support`, `assault`],
+  h = (e) => {
+    let t = Math.floor(e / 4),
+      n = e % 4;
+    return t % 2 == 1 && n === 0
+      ? `medic`
+      : n === 1 && t % 4 != 0
+        ? `assault`
+        : m[n];
+  };
+function g(e) {
+  return (c.find((t) => t.id === e) ?? c[0]).gadgets.map((t) =>
+    e === `support` && t === `frag` ? [`frag`, `smoke`] : [t],
+  );
+}
+export { h as a, p as c, d as i, l as n, g as o, f as r, u as s, c as t };
+//# sourceMappingURL=classes-CVJSEMDb.js.map

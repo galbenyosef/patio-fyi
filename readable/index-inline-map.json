@@ -5,12 +5,12 @@
       "file": "readable/index-inline-1.pretty.css",
       "source": "index.html",
       "kind": "style",
-      "byteStart": 829,
-      "byteEnd": 1907,
-      "bytes": 1078,
-      "sha256": "8c27318303e6103d8b6d83cf2dcdf55ebef9da71cd57c272cf4dd67f520279d7",
+      "byteStart": 861,
+      "byteEnd": 2159,
+      "bytes": 1298,
+      "sha256": "ac331f74de4b8bb0d4b5a09733acb518772dc57c86bfc494bc1f5376256accf9",
       "prettyFile": "readable/index-inline-1.pretty.css",
-      "prettyBytes": 1143
+      "prettyBytes": 1361
     }
   ]
 }
