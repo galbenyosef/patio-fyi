@@ -59,10 +59,17 @@ const UA = { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/126
 //     and `U="/assets/audio/movement/"` + fetch(U+"manifest.json") in
 //     assets/audio-*.js (the manifests then enumerate their .wav files,
 //     which the JSON scan closes over)
+//   - the weapon/explosion SFX bank: `be="/assets/audio/sfx/"` +
+//     fetch(be+"manifest.json") in assets/audio-*.js — found by the
+//     2026-11-06 offline probe (the browser asked for it; the scanner only
+//     saw the bare "manifest.json" literal and probed the wrong bases).
+//     Seeded here so the next capture closes the family; the manifest then
+//     enumerates its own .wav files, which the JSON scan follows.
 //   - greywater harbor skyline: `"/assets/greywater-harbor/" + file` in
 //     assets/greywater-harbor-*.js (5 stacked skyline plates + sky + near woods)
 const KNOWN = [
   "assets/audio/movement/manifest.json",
+  "assets/audio/sfx/manifest.json",
   "assets/audio/voice/manifest.json",
   "assets/audio/voice/lewis/manifest.json",
   "assets/greywater-harbor/sky.png",
@@ -195,6 +202,13 @@ function refsOf(relPath, text, external) {
   }
   if (isJs) {
     for (const m of text.matchAll(RE_QUOTED)) add(classifyUrl(m[1], baseDir, ""));
+    // CSS injected from a JS template literal (e.g. the first-run welcome
+    // screen's @font-face block: `var Eo = `@font-face{…src:url(/assets/fonts/
+    // saira-condensed/…woff2)}…``) has UNQUOTED url(…) targets, so RE_QUOTED
+    // never sees them and the CSS pass below only runs on .css files. Found by
+    // the 2026-11-06 offline probe: the browser asked for two webfonts the
+    // capture does not carry. Scan JS for the same url(…) form.
+    for (const m of text.matchAll(RE_CSS_URL)) add(classifyUrl(m[1], baseDir, ""));
     for (const m of text.matchAll(RE_SPECIFIER)) {
       const v = m[1];
       if (/^(\.{0,2}\/)/.test(v) || /\.(js|mjs|css|json|wasm)(\?|$)/i.test(v)) add(classifyUrl(v, baseDir, ""));
@@ -316,6 +330,15 @@ function checkClosure() {
       ext.add(k);
       if (!g.some((p) => have.has(p))) missing.push({ from: rel, candidates: g });
     }
+  }
+  // The KNOWN seeds are runtime-needed files the static scanner cannot see
+  // (base + name concatenation, CSS injected from a JS template). They are
+  // not "scanned references", but a capture that lacks one is not closed: the
+  // browser asks for it at runtime. Audit them too, so a seed that never got
+  // fetched cannot hide behind a green closure count.
+  for (const rel of KNOWN) {
+    groups++;
+    if (!have.has(rel)) missing.push({ from: "KNOWN seed", candidates: [rel] });
   }
   const novel = missing.filter((m) => !m.candidates.some((c) => recorded.has(c)));
   for (const m of missing)

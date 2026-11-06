@@ -41,8 +41,10 @@ Live backend (stays external — not part of the capture): the session bootstrap
 points the client at the origin's multiplayer WebSocket (`wss://<host>/socket`);
 the page also polls `/health`, the front-desk chunk fetches `/api/battlefield`
 for the map assignment (falling back to the captured
-`assets/maps/deployment/manifest-v4.json` when unreachable) and `session.js`
-POSTs best-effort boot telemetry to `/diag/boot`. A local static serve therefore
+`assets/maps/deployment/manifest-v4.json` when unreachable), `session.js` calls
+`/api/maps` / `/api/switch-map` for the solo map switch (owner decision
+2026-09-27), and `session.js` POSTs best-effort boot telemetry to `/diag/boot`.
+A local static serve therefore
 boots the UI but reports "Multiplayer server unavailable" — the build has no
 solo fallback; multiplayer needs the live host.
 
@@ -75,13 +77,18 @@ gaps (7 at this capture).
 - `src/` + `split-spec.json` — 1,101 statement-aligned slices with the recorded
   derivation spec (1,267 sections)
 - `docs/cover.png` — gameplay cover; `docs/boot-2026-10-12.png`,
-  `docs/boot-2026-10-27.png`, `docs/boot-2026-10-29-refresh.png` — boot evidence
+  `docs/boot-2026-10-27.png`, `docs/boot-2026-10-29-refresh.png`,
+  `docs/boot-2026-11-06.png` — boot evidence;
+  `docs/boot-2026-11-06-offline-probe.png` — the offline-path diagnostic
 - `legacy/2026-10-29/` — the five files the refresh replaced (previous
   `index.html` + `session.js`, three map JPEGs) plus
   `DROPPED-2026-10-29.txt` (the 146 upstream-gone files, sha256 + bytes; their
   bytes stay reachable in the previous commit)
 - `tools/capture.mjs` — byte-exact capture + runtime-closure fetch (`--check` for
-  a residual closure audit)
+  a residual closure audit, including the runtime-named `KNOWN` seeds)
+- `tools/boot-check.mjs` — offline boot over CDP with a real clock (screenshot +
+  request/404 accounting); `--force-offline` is the documented diagnostic that
+  exercises the app's own `offline=1` path without touching the capture
 - `tools/derive.mjs` — rebuild `readable/` + `src/` + `split-spec.json`
 - `tools/verify.mjs` — re-hash the capture against the manifest
 - `tools/update.mjs` — read-only drift probe against the live origin
@@ -174,6 +181,88 @@ bootstrap served byte-exact, the game refuses to start offline.
 - Gaps seen: none for captured assets — the served 404s are the live backend
   endpoints the capture does not include.
 
+## Boot test (2026-11-06) — CDP, real wait
+
+- Entry: `http://127.0.0.1:4740/` served by `tools/serve.mjs` with
+  `--host-resolver-rules="MAP * 127.0.0.1"` (strictly offline), headless Chrome
+  driven over CDP by `tools/boot-check.mjs` — a real clock, no
+  `--virtual-time-budget` (it does not advance the app's rAF loop). The GPU
+  interstitial the shipped bootstrap paints under SwiftShader was dismissed
+  with its own shipped "Try anyway" control, then the page was polled until it
+  settled.
+- Outcome: **blocked**, byte-for-byte the same screen as 2026-10-27/29 —
+  callsign + "Host options" above "The game could not start (Multiplayer server
+  unavailable. No solo fallback: return to the session lobby and reconnect.)",
+  Reload / "Return to session lobby". body 219 chars, canvas none.
+- Evidence: **86 distinct same-origin paths returned 200**, 89 same-origin
+  responses total, **0 blocked cross-origin attempts, 0 failed loads**. The only
+  non-200 responses are the live backend the capture does not include:
+  `404 /health ×2`, `404 /diag/boot ×1`, and the WebSocket handshake
+  `GET /socket?ruleset=r15-hangar-v1&reserve=1 → 404 ×3`. Screenshot
+  `docs/boot-2026-11-06.png`.
+- Conclusion: on the shipped URL the mirror serves every captured file the page
+  asks for; the boot stops at the host handshake, which is the documented
+  external.
+
+### Offline-path diagnostic (not the shipped URL)
+
+The build ships a dev offline mode (`offline=1`) that `session.js` disables
+(`url.searchParams.set('offline','0')`). `node tools/boot-check.mjs
+--force-offline` rewrites that one literal in the **response** the browser
+receives (the capture on disk is never touched) to exercise the app's own path
+and answer "is the capture complete, or only complete up to the gate?".
+
+- Result: the app **runs**. URL carries `offline=1`, canvas 1262×624 with a live
+  WebGL context, 1,291 chars of HUD text (HANGAR NINE · CONQUEST, tickets,
+  class/loadout panel, DEPLOY), the 3D scene behind the first-run "NEW RECRUIT"
+  sheet. 171 distinct same-origin paths 200, screenshot
+  `docs/boot-2026-11-06-offline-probe.png`.
+- Its 4 page-caused 404s are the audit's real finding: `/api/maps` (backend,
+  documented above) plus **three files the capture does not carry** —
+  `assets/audio/sfx/manifest.json` and two webfonts
+  (`assets/fonts/saira-condensed/saira-condensed-latin-{600,700}-normal.woff2`).
+  See "Gap audit (2026-11-06)".
+
+## Gap audit (2026-11-06)
+
+`_mirror-report.json` records **85 `unresolved` 404 paths (`missing`: none)**.
+Checked one by one against disk and against the chunk that names it, every one
+is a non-gap:
+
+| class | paths | why the 404 is not a capture gap |
+|---|---|---|
+| Freesound provenance filenames in `assets/audio/movement/manifest.json` `sources[].filename` | 14 | dead strings; the loader plays `footsteps[].file` (`concrete-213-1.wav` …), all captured |
+| `tools/deployment-images.mjs` provenance string in `manifest-v4.json` | 2 | dead string, never fetched |
+| module-loader virtual keys `../<module>/index.js` in the entry chunk | 14 | table keys (`"../animation/index.js"` → `assets/animation-Bs1XLGoh.js`); the hashed target of each is captured. Never requested as a URL |
+| `./assets/interior-kit/*.glb` lookup keys | 16 | `Object.assign({…})[`./assets/interior-kit/${e}.glb`]` is a lookup key; the URL is the hashed `assets/bed-iedD0U-X.glb` … — all 8 captured |
+| greywater-harbor plate names (`sky.png`, `near-woods.png`, …) probed at the wrong base | 14 | the reference is `"/assets/greywater-harbor/" + file`; all 7 plates are captured at that path |
+| voice-bank names (`manifest.json`, `lewis/manifest.json`) probed at the wrong base | 4 | the reference is `he = "/assets/audio/voice/" + name`; both manifests are captured under `assets/audio/voice/` |
+| Node-only server specifiers in the shipped raw sim / match chunks (`core/world.js`, `demo/*-sim.js`, `ladder.js`, `zipline.js`, `player/sim.js`, `src/*/server.js`, `shot-mesh-host.mjs`, plus their chunk-dir probes) | 21 | server-filesystem imports (see "One dangling import set"); upstream never serves them |
+
+So the claimed 85 are all accounted for, and the byte-exact boot has **zero**
+capture-gap 404s. The audit's real gaps are the three runtime fetches the
+closure seed list could not see, found by the offline probe:
+
+| path | named by | class |
+|---|---|---|
+| `assets/audio/sfx/manifest.json` | `be = "/assets/audio/sfx/"; fetch(be + "manifest.json")` in `assets/audio-D3RxdFdK.js` | runtime-named bank (same class as the movement bank fixed on 2026-10-12) — the scanner saw only the bare `"manifest.json"` literal and probed two wrong bases (the `manifest.json` records above) |
+| `assets/fonts/saira-condensed/saira-condensed-latin-600-normal.woff2`, `…-700-normal.woff2` | `@font-face{…src:url(/assets/fonts/saira-condensed/…)}` inside a JS template literal in `assets/ui-hhE6L1u7.js` (first-run welcome sheet) | static files, but the `url(…)` is unquoted inside a template string, so the JS scanner (quoted literals only) and the CSS pass (only `.css` files) both missed them |
+
+**Not fixed, and why it is not fabricatable:** the origin is down at audit
+time — `https://play.patio.fyi/` (and every path under it, including these
+three) answers **Cloudflare HTTP 530 / Error 1016 (origin DNS failure)**;
+`tools/update.mjs` reports `live entry https://play.patio.fyi/ -> HTTP 530`.
+The bytes cannot be fetched, and capturing them from anywhere else would be
+fabrication. The tooling half *is* fixed so the next capture closes them:
+`tools/capture.mjs` now seeds `assets/audio/sfx/manifest.json` in `KNOWN` (the
+manifest then enumerates its own WAVs through the JSON scan), scans unquoted
+`url(…)` targets in JS, and audits the `KNOWN` seeds themselves in `--check`.
+`node tools/capture.mjs --check` now reports exactly these three as
+`(NEW)` = **60 unresolved (3 new)** — an honest red for the capture gate until
+the origin returns. The shipped-URL boot does not request any of the three
+(the first-run sheet and the SFX bank only initialise on the offline path), so
+`docs/boot-2026-11-06.png` is unaffected.
+
 ## Verify
 
 ```
@@ -182,8 +271,15 @@ node tools/audit.js              # derived-layer integrity gate → AUDIT PASS
 node tools/check-exports.mjs     # the derived layer still exports every public name
 node tools/check-imports.mjs     # every relative import resolves to a chunk the layer carries
 node tools/check-links.mjs       # every export table names a binding the layer declares
-node tools/capture.mjs --check   # residual closure audit → 0 new unresolved
+node tools/capture.mjs --check   # residual closure audit (see the note below)
 ```
+
+`capture.mjs --check` is **red as of 2026-11-06**: `60 unresolved (3 new)` —
+the three runtime fetches in "Gap audit (2026-11-06)" that the origin cannot
+serve while it answers Cloudflare 530. It was green (57, 0 new) at capture
+time only because the seed list and the JS `url(…)` scan did not cover them.
+Every other reference group still resolves to a captured file or a recorded
+gap.
 
 `check-links.mjs` guards the EXPORT side of the layer graph, the side
 `check-exports.mjs` cannot see: `check-exports.mjs` compares a CAPTURE's
